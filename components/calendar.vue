@@ -3,8 +3,8 @@
 		<div class="bg-neutral-800 w-full h-full rounded-xl flex flex-col items-center justify-between gap-2 px-4 pb-4">
 			<div class="flex flex-col items-center">
 				<h2 class="w-full text-xl pt-3">Calendar</h2>
-				<VCalendar title-position="right" :attributes='attrs' :color="selectedClr" isDark="true" transparent borderless
-					class="mt-2">
+				<VCalendar expanded title-position="right" :attributes='attrs' :color="selectedClr" isDark="true" transparent
+					borderless class="mt-2">
 				</VCalendar>
 			</div>
 			<div class="rounded-xl w-full h-full flex flex-col gap-2">
