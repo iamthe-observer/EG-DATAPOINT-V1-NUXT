@@ -8,17 +8,16 @@
 				<span class="">Add a new Applicant</span>
 
 				<div class="text-md">
-					<div class="join rounded-2xl">
-						<button class="join-item btn">1</button>
-						<button class="join-item btn btn-active">2</button>
-						<button class="join-item btn">3</button>
-						<button class="join-item btn">4</button>
+					<div class="join grid grid-cols-2 rounded-2xl">
+						<button class="join-item btn bg-neutral-600 border-none">Previous page</button>
+						<button class="join-item btn bg-neutral-800 border-none">Next</button>
 					</div>
 				</div>
 			</h1>
 			<!-- text fields -->
-			<div class="__newApl w-full grid grid-cols-12 gap-1">
+			<div class="__newApl w-full grid grid-cols-12 gap-1 px-5">
 
+				<avatarSelect />
 			</div>
 
 		</div>

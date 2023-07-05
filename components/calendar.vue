@@ -1,7 +1,7 @@
 <template>
 	<div class="__calendar col-span-3 row-span-15 px-2 flex flex-col items-center">
 		<div class="bg-neutral-800 w-full h-full rounded-xl flex flex-col items-center justify-between gap-2 px-4 pb-4">
-			<div class="flex flex-col items-center">
+			<div class="flex flex-col items-center w-full min-h-1/2">
 				<h2 class="w-full text-xl pt-3">Calendar</h2>
 				<VCalendar expanded title-position="right" :attributes='attrs' :color="selectedClr" isDark="true" transparent
 					borderless class="mt-2">
