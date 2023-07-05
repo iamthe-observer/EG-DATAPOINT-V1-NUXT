@@ -1,0 +1,34 @@
+<template>
+	<section class="__navs bg-opacity-40 w-full flex-1 flex flex-col gap-8 items-center justify-center">
+		<NuxtLink to="/" class="__icons_container">
+			<SvgsHome class="__icons" />
+		</NuxtLink>
+		<NuxtLink to="/newApl" class="__icons_container">
+			<SvgsContact class="__icons" />
+		</NuxtLink>
+		<NuxtLink to="/database" class="__icons_container">
+			<SvgsDatabase class="__icons" />
+		</NuxtLink>
+
+		<!-- <div class="__icons_container"></div> -->
+	</section>
+</template>
+
+<style scoped>
+.__icons {
+	width: 100%;
+	height: 100%;
+	aspect-ratio: square;
+	;
+}
+
+.__icons_container {
+	width: 1.5rem;
+	aspect-ratio: square;
+	transition: all .3s ease-out;
+}
+
+.__icons_container:hover {
+	transform: scale(120%);
+}
+</style>
