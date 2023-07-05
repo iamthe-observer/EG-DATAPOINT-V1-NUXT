@@ -1,12 +1,12 @@
 <template>
 	<section class="__navs bg-opacity-40 w-full flex-1 flex flex-col gap-8 items-center justify-center">
-		<NuxtLink to="/" class="__icons_container">
+		<NuxtLink to="/" class="__icons_container tooltip tooltip-primary z-20 tooltip-right" data-tip="Dashboard">
 			<SvgsHome class="__icons" />
 		</NuxtLink>
-		<NuxtLink to="/newApl" class="__icons_container">
+		<NuxtLink to="/newApl" class="__icons_container tooltip tooltip-primary z-20 tooltip-right" data-tip="Add Applicant">
 			<SvgsContact class="__icons" />
 		</NuxtLink>
-		<NuxtLink to="/database" class="__icons_container">
+		<NuxtLink to="/database" class="__icons_container tooltip tooltip-primary z-20 tooltip-right" data-tip="Database">
 			<SvgsDatabase class="__icons" />
 		</NuxtLink>
 
