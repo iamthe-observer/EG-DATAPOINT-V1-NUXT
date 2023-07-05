@@ -16,7 +16,6 @@
 					</div>
 				</div>
 			</h1>
-
 			<!-- text fields -->
 			<div class="__newApl w-full grid grid-cols-12 gap-1">
 
