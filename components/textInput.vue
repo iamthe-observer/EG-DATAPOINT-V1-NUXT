@@ -5,6 +5,16 @@
 				<slot />
 			</span>
 		</label>
-		<input type="text" placeholder="" class="input input-bordered w-full bg-neutral-900 border-none" />
+		<!-- @ts-ignore -->
+		<input :value="modelValue" @input="$emit('update:modelValue', $event.target?.value)" type="text"
+			:placeholder="placeholder ? placeholder : ''" class="input input-bordered w-full bg-neutral-900 border-none" />
 	</div>
 </template>
+
+<script setup lang="ts">
+const emits = defineEmits(['update:modelValue'])
+defineProps<{
+	modelValue: string | number
+	placeholder?: string
+}>()
+</script>
