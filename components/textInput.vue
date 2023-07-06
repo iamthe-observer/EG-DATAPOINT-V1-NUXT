@@ -7,7 +7,7 @@
 		</label>
 		<!-- @ts-ignore -->
 		<input :value="modelValue" @input="$emit('update:modelValue', $event.target?.value)" type="text"
-			:placeholder="placeholder ? placeholder : ''" class="input input-bordered w-full bg-neutral-900 border-none" />
+			:placeholder="placeholder ? placeholder : ''" :class="`input input-bordered w-full border-none bg-${bg}`" />
 	</div>
 </template>
 
@@ -16,5 +16,6 @@ const emits = defineEmits(['update:modelValue'])
 defineProps<{
 	modelValue: string | number
 	placeholder?: string
+	bg?: string
 }>()
 </script>
