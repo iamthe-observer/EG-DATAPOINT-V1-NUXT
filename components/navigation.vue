@@ -7,18 +7,22 @@
 </template>
 
 <script setup lang="ts">
+import { useAppStore } from '@/store/app';
+
+const { _route, $router } = useNuxtApp()
+
 async function handleLogout() {
 	try {
 		let { error } = await useSupabaseClient().auth.signOut()
 		if (error) throw error
-		console.log('signed out');
+		// console.log('signed out');
+		console.log((await useSupabaseClient().auth.getSession()).data)
+		useAppStore().logged = false
+		$router.push('/')
 
-		// logged.value = ev;
-		// set(logged, ev)
-		useNuxtApp().$router.push('/')
+
 	} catch (error: any) {
 		console.log(error);
-
 	}
 }
 

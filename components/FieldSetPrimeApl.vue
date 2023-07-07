@@ -9,7 +9,11 @@
 		</div>
 
 		<div class="flex gap-4 col-span-10 pl-6 justify-center">
-			<TextInput @update:model-value="handleKeyPress" v-model="apl.pdob_day">Date of Birth</TextInput>
+			<DatePicker @click="handleKeyPress" dark :color="'purple'" is-dark v-model="pdob" mode="date">
+				<template #default="{ togglePopover }">
+					<TextInput :value="pdob ? formatDate(pdob) : ''" @click="togglePopover">Date of Birth</TextInput>
+				</template>
+			</DatePicker>
 			<TextInput @update:model-value="handleKeyPress" v-model="apl.pgender">Gender</TextInput>
 			<TextInput @update:model-value="handleKeyPress" v-model="apl.pcity_ob">City of Birth</TextInput>
 		</div>
@@ -30,7 +34,12 @@
 
 		<div class="flex gap-4 col-span-12 justify-center">
 			<TextInput @update:model-value="handleKeyPress" v-model="apl.ppassport_number">Passport Number</TextInput>
-			<TextInput @update:model-value="handleKeyPress" v-model="apl.passport_ex_day">Passport Expiration Date</TextInput>
+			<DatePicker @click="handleKeyPress" dark :color="'purple'" is-dark v-model="passport_ex" mode="date">
+				<template #default="{ togglePopover }">
+					<TextInput :value="passport_ex ? formatDate(passport_ex) : ''" @click="togglePopover">Passport Expiration Date
+					</TextInput>
+				</template>
+			</DatePicker>
 		</div>
 
 		<div class="flex gap-4 col-span-12 justify-center">
@@ -56,56 +65,60 @@
 </template>
 
 <script setup lang="ts">
-import { Applicant } from '@/interfaces/interfaces'
+import { PrimeApplicant } from '@/interfaces/interfaces'
+
 const emit = defineEmits(['apl'])
-const props = defineProps<{
-	apl_id: string
-}>()
-const logger = (log: any) => {
+
+const logger = (log: PrimeApplicant) => {
+	log.pdob = formatDate(pdob.value)
+	log.passport_ex = formatDate(passport_ex.value)
 	console.log(log)
 }
+
 const handleKeyPress = () => {
+	if (pdob.value) apl.pdob = formatDate(pdob.value)
+	if (passport_ex.value) apl.passport_ex = formatDate(passport_ex.value)
+	apl.fullName = `${apl.plastName} ${apl.pfirstName} ${apl.potherName}`.trimEnd()
 	emit('apl', apl)
 }
-const apl = reactive<Applicant>({
+
+const formatDate = (date: Date) => {
+	let day = date.getDate();
+	let month = date.getMonth() + 1;
+	let year = date.getFullYear();
+
+	return `${day}/${month}/${year}`;
+}
+
+const user = useSupabaseUser()
+const pdob = ref()
+const passport_ex = ref()
+const apl = reactive<PrimeApplicant>({
 	created_at: new Date(),
-	apl_id: props.apl_id,
+	// apl_id: props.apl_id,
 	plastName: '',
 	pfirstName: '',
 	potherName: '',
-	pdob_day: '',
-	pdob_month: '',
-	pdob_year: '',
+	pdob: '',
 	pcity_ob: '',
 	pcountry_ob: '',
 	pgender: '',
 	pconf_code: '',
 	pemail: '',
 	ppassport_number: '',
-	passport_ex_day: '',
-	passport_ex_month: '',
-	passport_ex_year: '',
+	passport_ex: '',
 	pcountry_live_today: '',
 	peducation_level: '',
 	ppostal: '',
 	pmarital_status: 'unmarried',
 	children_number: 0,
 	fullName: '',
-	user_id: 'useSupabaseClient().auth.user()!.id',
+	user_id: user.value?.id!,
 	pcontact: '',
-	slastName: '',
-	sfirstName: '',
-	sotherName: '',
-	scity_ob: '',
-	scountry_ob: '',
-	sgender: '',
 	wards: [],
-	sdob_day: '',
-	sdob_month: '',
-	sdob_year: '',
 	totalPayment: 0,
 	passportAvail: false,
-	created_at_date: new Date().toLocaleString().split(',')[0],
+	created_at_date: formatDate(new Date()),
 	pother_contact: '',
 	psocial_media: {
 		facebook: '',
@@ -117,6 +130,7 @@ const apl = reactive<Applicant>({
 		secPath: [],
 		wardsPath: [],
 	},
+
 })
 
 watchEffect(() => {
@@ -125,3 +139,4 @@ watchEffect(() => {
 	}
 })
 </script>
+

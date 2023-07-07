@@ -10,8 +10,8 @@
 				<steps v-if="prime_apl?.pmarital_status !== 'unmarried' || prime_apl?.children_number! > 0" class="text-sm" />
 
 				<div class="text-md">
-					<button v-if="prime_apl?.pmarital_status == 'unmarried' && prime_apl.children_number == 0"
-						class="btn btn-outline rounded-2xl">SUBMIT</button>
+					<button @click="handleSend" v-if="prime_apl?.pmarital_status == 'unmarried' && prime_apl.children_number == 0"
+						class="btn btn-outline rounded-xl">SUBMIT</button>
 
 					<div v-else class="join grid grid-cols-2 rounded-2xl">
 						<button class="join-item btn bg-neutral-600 border-none">Previous page</button>
@@ -28,19 +28,37 @@
 </template>
 
 <script setup lang='ts'>
-import { Applicant } from 'interfaces/interfaces';
+import { PrimeApplicant } from 'interfaces/interfaces';
+// @ts-ignore
 import { v4 as uuidv4 } from 'uuid'
 
 const apl_id = ref(uuidv4())
 const curr_page = ref('prime')
 const progress_btn = ref<HTMLDivElement>()
-const prime_apl = ref<Applicant>()
+const prime_apl = ref<PrimeApplicant>()
+const user = useSupabaseUser()
 
 // [ ] warning message when you have to leave the page with info on it
-const handleAplInput = (apl: Applicant) => {
+const handleAplInput = (apl: PrimeApplicant) => {
 	prime_apl.value = apl
 }
 
+const handleSend = async () => {
+	console.log(prime_apl.value);
+	await submitApl()
+}
+
+const submitApl = async () => {
+	try {
+		// @ts-ignore
+		const { error } = await useSupabaseClient().from('applicants').insert([prime_apl.value])
+
+		if (error) throw error
+	} catch (err: any) {
+		console.log(err);
+
+	}
+}
 </script>
 
 <style scoped>

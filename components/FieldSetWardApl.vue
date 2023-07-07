@@ -19,3 +19,18 @@
 		</div>
 	</div>
 </template>
+
+<script setup lang="ts">
+import { WardsApplicant } from 'interfaces/interfaces';
+
+const apl = reactive<WardsApplicant>({
+	wlastName: '',
+	wfirstName: '',
+	wotherName: '',
+	wcity_ob: '',
+	wcountry_ob: '',
+	wgender: '',
+	wdob: '',
+	index: 1
+})
+</script>

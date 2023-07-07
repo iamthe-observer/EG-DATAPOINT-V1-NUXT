@@ -1,5 +1,9 @@
 import { defineStore } from 'pinia'
 
 export const useAppStore = defineStore('app', () => {
-  return {}
+  const logged = ref<boolean>(false)
+
+  return {
+    logged,
+  }
 })

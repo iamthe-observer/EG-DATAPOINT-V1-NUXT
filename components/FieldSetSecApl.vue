@@ -20,3 +20,17 @@
 		</div>
 	</div>
 </template>
+
+<script setup lang="ts">
+import { SecApplicant } from 'interfaces/interfaces';
+
+const apl = reactive<SecApplicant>({
+	slastName: '',
+	sfirstName: '',
+	sotherName: '',
+	scity_ob: '',
+	scountry_ob: '',
+	sgender: '',
+	sdob: '',
+})
+</script>

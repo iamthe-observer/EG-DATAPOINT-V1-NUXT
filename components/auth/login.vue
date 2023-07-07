@@ -27,7 +27,6 @@ const email_ = ref('')
 const password = ref('')
 const { } = storeToRefs(useAppStore())
 const emit = defineEmits(['login'])
-const supabase = useSupabaseClient()
 
 const rules = computed(() => {
 	return {
@@ -74,7 +73,7 @@ async function loginUser() {
 		loading.value = false
 	}
 	try {
-		let { error } = await supabase.auth.signInWithPassword({
+		let { error } = await useSupabaseClient().auth.signInWithPassword({
 			email: email_.value,
 			password: password.value,
 		})
@@ -82,6 +81,8 @@ async function loginUser() {
 		console.log('Logged In!')
 		loading.value = false
 		useNuxtApp().$router.push('/dashboard')
+
+		emit('login')
 		return true
 	} catch (err: any) {
 		errMsg.value = err.message
@@ -95,6 +96,4 @@ async function loginUser() {
 		loading.value = false
 	}
 }
-
-// const { loginUser } = storeToRefs(useAppStore())
 </script>
