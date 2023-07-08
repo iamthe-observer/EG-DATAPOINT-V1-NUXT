@@ -1,10 +1,16 @@
 <template>
-	<div class="">
-		<ul class="steps steps-horizontal">
-			<li class="step step-primary">Primary</li>
-			<li class="step">Secondary</li>
-			<li class="step">Children</li>
-			<li class="step">Review</li>
-		</ul>
-	</div>
+	<ul class="steps steps-horizontal">
+		<li v-for="(step, i) in steps" :key="i" @click="$emit('step', step.page)" class="step">{{ step.name }}</li>
+	</ul>
 </template>
+
+<script setup lang="ts">
+defineEmits(['step'])
+defineProps<{
+	steps: {
+		name: string
+		page: string
+	}[]
+}>()
+
+</script>

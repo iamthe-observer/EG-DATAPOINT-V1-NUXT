@@ -22,12 +22,12 @@ export interface WardsApplicant {
   wfirstName: string
   wotherName: string
   wdob: string
-  // wdob_month: number>
-  // wdob_year: number>
   wgender: string
   wcity_ob: string
   wcountry_ob: string
   index: number
+  // wdob_month: number>
+  // wdob_year: number>
 }
 
 export interface SecApplicant {
@@ -36,6 +36,7 @@ export interface SecApplicant {
   sotherName: string
   scity_ob: string
   scountry_ob: string
+  scontact: string
   sgender: string
   sdob: string
 }

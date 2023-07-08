@@ -7,8 +7,8 @@
 		<div class="flex flex-col w-full h-full justify-center px-12">
 			<p class="w-full text-center text-2xl">Hello</p>
 			<p class="w-full text-center mb-5">Welcome back!</p>
-			<textInput :bg="'neutral-700'" v-model="email_" :placeholder="'Enter username / email'" />
-			<textInput :bg="'neutral-700'" v-model="password" :placeholder="'Password'" class="mb-2" />
+			<textInput :no_uppercase="true" :bg="'neutral-700'" v-model="email_" :placeholder="'Enter username / email'" />
+			<textInput :no_uppercase="true" :bg="'neutral-700'" v-model="password" :placeholder="'Password'" class="mb-2" />
 			<span class="w-full text-right mb-6">Recover Password</span>
 			<button @click="loginUser" class="btn mb-9">Sign In</button>
 			<span class="w-full text-center mb-4">Or continue with</span>

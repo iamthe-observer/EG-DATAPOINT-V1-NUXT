@@ -1,29 +1,51 @@
 <template>
-	<div class="__newApl relative w-full grid grid-cols-12 gap-2 px-5 py-2">
+	<div class="relative w-full grid grid-cols-12 gap-2 px-5 py-2 mb-10">
+		<h2 class="w-full col-span-full text-xl pb-2">Ward {{ idx }}</h2>
+
 		<avatarSelect class="col-span-2 row-span-2" />
 		<!-- name -->
 		<div class="flex gap-4 col-span-10 pl-6 justify-center">
-			<TextInput>First Name</TextInput>
-			<TextInput>Middle Name</TextInput>
-			<TextInput>Last Name</TextInput>
+			<TextInput @update:model-value="handleKeyPress" v-model="ward.wfirstName">First Name</TextInput>
+			<TextInput @update:model-value="handleKeyPress" v-model="ward.wotherName">Middle Name</TextInput>
+			<TextInput @update:model-value="handleKeyPress" v-model="ward.wlastName">Last Name</TextInput>
 		</div>
 
 		<div class="flex gap-4 col-span-10 pl-6 justify-center">
-			<TextInput>Date of Birth</TextInput>
-			<TextInput>Gender</TextInput>
-			<TextInput>City of Birth</TextInput>
+			<DatePicker @click="handleKeyPress" dark :color="'purple'" is-dark v-model="wdob" mode="date">
+				<template #default="{ togglePopover }">
+					<TextInput :value="wdob ? $formatDate(wdob) : ''" @click="togglePopover">Date of Birth
+					</TextInput>
+				</template>
+			</DatePicker>
+			<SelectInput :options="['MALE', 'FEMALE']" @update:model-value="handleKeyPress" v-model="ward.wgender">Gender
+			</SelectInput>
+			<TextInput @update:model-value="handleKeyPress" v-model="ward.wcity_ob">City of Birth</TextInput>
+			<SelectInput :options="$countries" @update:model-value="handleKeyPress" v-model="ward.wcountry_ob">Country of Birth
+			</SelectInput>
 		</div>
 
-		<div class="flex gap-4 col-span-12 justify-center">
+		<!-- <div class="flex gap-4 col-span-12 justify-center">
 			<TextInput>Country of Birth</TextInput>
-		</div>
+		</div> -->
 	</div>
 </template>
 
 <script setup lang="ts">
 import { WardsApplicant } from 'interfaces/interfaces';
 
-const apl = reactive<WardsApplicant>({
+const { $formatDate } = useNuxtApp()
+const wdob = ref()
+const props = defineProps<{
+	idx: number
+}>()
+const emit = defineEmits(['ward'])
+
+const handleKeyPress = () => {
+	if (wdob.value) ward.wdob = $formatDate(wdob.value)
+	emit('ward', ward)
+}
+
+const ward = reactive<WardsApplicant>({
 	wlastName: '',
 	wfirstName: '',
 	wotherName: '',
@@ -31,6 +53,6 @@ const apl = reactive<WardsApplicant>({
 	wcountry_ob: '',
 	wgender: '',
 	wdob: '',
-	index: 1
+	index: props.idx
 })
 </script>
