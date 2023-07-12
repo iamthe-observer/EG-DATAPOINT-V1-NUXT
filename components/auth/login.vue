@@ -35,31 +35,8 @@ const rules = computed(() => {
 	}
 })
 
-// interface LoginInUser {
-// 	(e: 'logIn'): void
-// }
-
-// interface AdminEmail {
-// 	id: number
-// 	created_at: Date
-// 	email: string
-// 	name: string
-// 	user_id: string
-// }
-
-// type UserLogin = {
-// 	email: string
-// 	password: string
-// }
-
 const loading = ref<boolean>(false)
 const errMsg = ref<string>('')
-function checkPassword(str: string) {
-	var re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/
-	return re.test(str)
-}
-
-
 
 async function loginUser() {
 	// loading.value = true
@@ -96,4 +73,5 @@ async function loginUser() {
 		loading.value = false
 	}
 }
+
 </script>

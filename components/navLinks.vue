@@ -9,10 +9,9 @@
 		<NuxtLink to="/database" class="__icons_container tooltip tooltip-primary z-20 tooltip-right" data-tip="Database">
 			<SvgsDatabase class="__icons" />
 		</NuxtLink>
-
-		<!-- <div class="__icons_container"></div> -->
 	</section>
 </template>
+
 
 <style scoped>
 .__icons {

@@ -37,7 +37,7 @@ export default defineNuxtPlugin(nuxtApp => {
         return user
       }
     } catch (error) {
-      $router.push('/')
+      // $router.push('/')
       console.log(error)
     }
   }
@@ -84,7 +84,7 @@ export default defineNuxtPlugin(nuxtApp => {
       // app_loading.value = false;
       // logged.value = false;
     } catch (error) {
-      $router.push('/')
+      // $router.push('/')
       console.log(error)
     }
   }

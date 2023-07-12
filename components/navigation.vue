@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import { useAppStore } from '@/store/app';
 
-const { _route, $router } = useNuxtApp()
+const { $router } = useNuxtApp()
 
 async function handleLogout() {
 	try {

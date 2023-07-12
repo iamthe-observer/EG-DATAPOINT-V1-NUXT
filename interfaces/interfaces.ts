@@ -4,6 +4,12 @@
 //   (e: 'logIn', emit: emitLogin): void;
 // }
 
+export interface AplData {
+  prime: PrimeApplicant | null
+  sec: SecApplicant | null
+  wards: WardsApplicant[] | null
+}
+
 export interface UserData {
   profile: ProfileData[]
   apls: PrimeApplicant[]

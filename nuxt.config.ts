@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     // new way
     assets: '<rootDir>/assets',
   },
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   css: ['~/assets/css/main.css', '~/assets/css/fonts.css'],
   postcss: {
     plugins: {

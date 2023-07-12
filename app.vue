@@ -7,6 +7,8 @@
 </template>
 
 <script setup lang="ts">
+import { useAplStore } from '@/store/apl';
+
 const { $onInitLoadAppData, $router } = useNuxtApp()
 
 useSupabaseClient().auth.onAuthStateChange((event: string) => {
@@ -17,6 +19,8 @@ useSupabaseClient().auth.onAuthStateChange((event: string) => {
     // useDashStore().reset()
     // useAnnStore().reset()
     // useRequestStore().reset()
+
+    useAplStore().resetAplData()
     $router.push('/')
   }
 })
