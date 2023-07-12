@@ -122,7 +122,7 @@ onMounted(() => {
 	emit('apl', prime_apl.value)
 })
 
-const emit = defineEmits(['apl'])
+const emit = defineEmits(['apl', 'validate'])
 const { $formatDate } = useNuxtApp()
 
 const v$ = useVuelidate(rules, prime_apl.value)

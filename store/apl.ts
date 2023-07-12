@@ -57,6 +57,27 @@ export const useAplStore = defineStore('apl', () => {
   })
   const wards_apl = ref<WardsApplicant[]>([])
 
+  watchEffect(() => {
+    if (prime_apl.value.pmarital_status == 'UNMARRIED') {
+      setSecApl({
+        slastName: '',
+        sfirstName: '',
+        sotherName: '',
+        scity_ob: '',
+        scountry_ob: '',
+        scontact: '',
+        sgender: '',
+        sdob: '',
+      })
+    }
+  })
+
+  watchEffect(() => {
+    if (prime_apl.value.children_number == 0) {
+      setWardsApl([])
+    }
+  })
+
   function setPrimeApl(val: PrimeApplicant) {
     prime_apl.value = val
   }

@@ -1,6 +1,6 @@
 <template>
 	<div class="__newApl relative w-full grid grid-cols-12 gap-2 px-5 py-2">
-		<avatarSelect class="col-span-2 row-span-2" />
+		<avatarSelect @click="logger" class="col-span-2 row-span-2" />
 		<!-- name -->
 		<div class="flex gap-4 col-span-10 pl-6 justify-center">
 			<TextInput @update:model-value="handleKeyPress" v-model="sec_apl.sfirstName">First Name</TextInput>
@@ -32,33 +32,41 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
 import { useAplStore } from '@/store/apl';
-
+import { required, email, numeric } from '@vuelidate/validators';
+import useVuelidate from '@vuelidate/core';
 
 const { sec_apl } = storeToRefs(useAplStore())
 
+const rules = computed(() => {
+	return {
+		slastName: { required },
+		sfirstName: { required },
+		sotherName: { required },
+		scity_ob: { required },
+		scountry_ob: { required },
+		scontact: { required },
+		sgender: { required },
+		sdob: { required },
+	}
+})
+
+const v$ = useVuelidate(rules, sec_apl.value)
+
+async function logger() {
+	const val = await v$.value.$validate()
+	console.log(val)
+}
+
 onMounted(() => {
-	// console.log(sec_apl.value);
 	emit('sec', sec_apl.value)
 })
 
 const { $formatDate } = useNuxtApp()
 const sdob = ref()
-const emit = defineEmits(['sec'])
+const emit = defineEmits(['sec', 'validate'])
 
 const handleKeyPress = () => {
 	if (sdob.value) sec_apl.value.sdob = $formatDate(sdob.value)
 	emit('sec', sec_apl.value)
 }
-
-// const sec_apl = ref<SecApplicant>({
-// 	slastName: '',
-// 	sfirstName: '',
-// 	sotherName: '',
-// 	scity_ob: '',
-// 	scountry_ob: '',
-// 	scontact: '',
-// 	sgender: '',
-// 	sdob: '',
-// })
-// const sec_apl = ref(useStorage<SecApplicant>('sec_apl', sec))
 </script>

@@ -34,13 +34,21 @@
 import { WardsApplicant } from 'interfaces/interfaces';
 import { useAplStore } from '@/store/apl';
 import { storeToRefs } from 'pinia';
+import useVuelidate from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
 
 const { wards_apl } = storeToRefs(useAplStore())
+
 onMounted(() => {
 	if (wards_apl.value.length > 0) {
-		let filtered_ward = wards_apl.value.filter(ward => ward.index === props.idx)
-		ward.value = filtered_ward[0]
-		emit('ward', filtered_ward[0])
+		let filtered_ward = wards_apl.value.filter(ward => ward.index === props.idx)[0]
+		if (filtered_ward == undefined) {
+			console.log('damn too bad...')
+		} else {
+			console.log(`🚀 ~ file: FieldSetWardApl.vue:47 ~ onMounted ~ filtered_ward ${filtered_ward.index}:`, filtered_ward)
+			ward.value = filtered_ward
+		}
+		// emit('ward', filtered_ward[0])
 	}
 })
 

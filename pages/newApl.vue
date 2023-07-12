@@ -7,20 +7,11 @@
 				class="px-5 py-5 rounded-2xl bg-neutral-700 text-2xl w-full flex justify-between items-center sticky top-0 mb-2 shadow-lg z-10">
 				<span class="">Add a new Applicant</span>
 
-				<!-- <steps @step="handleStep" :steps="steps_"
-					v-if="prime_apl?.pmarital_status === 'MARRIED' || prime_apl?.children_number! > 0" class="text-sm" /> -->
-				<steps @step="handleStep" :steps="steps_" class="text-sm" />
+				<steps v-if="apl_data.prime?.pmarital_status !== 'UNMARRIED' || apl_data.prime?.children_number !== 0"
+					@step="handleStep" :steps="steps_" class="text-sm" />
 
 				<div class="text-md">
 					<button @click="handleSend" class="btn btn-outline rounded-xl">SUBMIT</button>
-					<!-- <button @click="handleSend" v-if="prime_apl?.pmarital_status !== 'MARRIED' && prime_apl?.children_number == 0"
-						class="btn btn-outline rounded-xl">SUBMIT</button> -->
-
-					<!-- <div v-if="prime_apl?.pmarital_status === 'MARRIED' || prime_apl?.children_number! > 0"
-						class="join grid grid-cols-2 rounded-2xl">
-						<button class="join-item btn bg-neutral-600 border-none">Previous page</button>
-						<button ref="progress_btn" class="join-item btn bg-neutral-800 border-none">Next</button>
-					</div> -->
 				</div>
 			</h1>
 			<!-- text fields -->
@@ -78,7 +69,44 @@ watchEffect(() => {
 	}
 })
 
-// [ ] warning message when you have to leave the page with info on it
+function resetApl_sec() {
+	apl_data.sec = {
+		slastName: '',
+		sfirstName: '',
+		sotherName: '',
+		scity_ob: '',
+		scountry_ob: '',
+		scontact: '',
+		sgender: '',
+		sdob: '',
+	}
+}
+function resetApl_wards() {
+	apl_data.wards = []
+}
+// resets sec on marital status change
+watchEffect(() => {
+	if (apl_data.prime?.pmarital_status == 'UNMARRIED') {
+		resetApl_sec()
+	}
+})
+// resets wards on number of children
+watchEffect(() => {
+	if (apl_data.prime?.children_number == 0) {
+		resetApl_wards()
+	}
+})
+
+// check to regulate the amount of wards in apl_data.wards
+watchEffect(() => {
+	if (apl_data.wards?.length! > apl_data.prime?.children_number! && apl_data.wards?.length != 0) {
+		let diff = apl_data.wards?.length! - apl_data.prime?.children_number!
+		for (let ii = 0; ii < diff; ii++) {
+			apl_data.wards?.pop()
+		}
+		console.log('done');
+	}
+})
 
 function handleStep(page: string) {
 	curr_page.value = page
@@ -96,7 +124,7 @@ const handleSecInput = (sec: SecApplicant) => {
 }
 
 const handleWardInput = (ward: WardsApplicant) => {
-	if (apl_data.wards!.some(warder => warder.index == ward.index)) {
+	if (apl_data.wards?.length! > 0 && apl_data.wards!.some(warder => warder.index == ward.index)) {
 		const filtered_ward = apl_data.wards!.filter(warder => warder.index != ward.index)
 		filtered_ward.push(ward)
 		filtered_ward.sort((a, b) => a.index - b.index)
