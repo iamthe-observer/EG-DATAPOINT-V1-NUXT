@@ -5,7 +5,8 @@
 				<slot />
 			</span>
 		</label>
-		<select class="select w-full" @input="$emit('update:modelValue', $event.target?.value)" :value="modelValue">
+		<select class="select w-full bg-neutral-600" @input="$emit('update:modelValue', $event.target?.value)"
+			:value="modelValue">
 			<option v-if="options" disabled selected>Pick one</option>
 			<option v-if="num_options" disabled selected>Pick number</option>
 			<option v-if="options" v-for="(option, i) in  options" :key="i" :value="option.toUpperCase()">{{

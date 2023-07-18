@@ -5,9 +5,12 @@
 		<UsersDash />
 		<AplInfoDash />
 		<MostRecentApls />
-		<AplsTimeGraph />
+		<AplStats />
 	</div>
 </template>
+
+<script setup lang='ts'>
+</script>
 
 <style scoped>
 .griddy {

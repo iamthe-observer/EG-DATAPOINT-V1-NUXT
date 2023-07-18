@@ -1,4 +1,5 @@
 import { useAppStore } from '@/store/app'
+import { storeToRefs } from 'pinia'
 import { setupCalendar, Calendar, DatePicker } from 'v-calendar'
 import 'v-calendar/style.css'
 
@@ -7,20 +8,61 @@ export default defineNuxtPlugin(nuxtApp => {
   nuxtApp.vueApp.component('VCalendar', Calendar)
   nuxtApp.vueApp.component('DatePicker', DatePicker)
 
-  const { $router, _route } = useNuxtApp()
+  const { $router, _route, $SB } = useNuxtApp()
+  const app_loading = ref(false)
+
+  watchEffect(() => {
+    if (app_loading.value) {
+      useAppStore().setAppLoading(app_loading.value)
+    }
+  })
+
+  function formatDateWords(date: Date): string {
+    const day = date.getDate()
+    const month = date.toLocaleString('default', { month: 'long' })
+    const year = date.getFullYear()
+
+    const ordinalSuffix = getOrdinalSuffix(day)
+    const formattedDate = `${day}${ordinalSuffix} ${month}, ${year}`
+
+    return formattedDate
+  }
+
+  function getOrdinalSuffix(day: number): string {
+    if (day >= 11 && day <= 13) {
+      return 'th'
+    }
+
+    const lastDigit = day % 10
+
+    switch (lastDigit) {
+      case 1:
+        return 'st'
+      case 2:
+        return 'nd'
+      case 3:
+        return 'rd'
+      default:
+        return 'th'
+    }
+  }
 
   const formatDate = (date: Date) => {
-    if (!date) return ''
-    let day = date.getDate()
-    let month = date.getMonth() + 1
-    let year = date.getFullYear()
+    if (date == null) {
+      return ''
+    } else {
+      const day = String(date.getDate()).padStart(2, '0')
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const year = String(date.getFullYear())
 
-    return `${day}/${month}/${year}`
+      return `${day}/${month}/${year}`
+    }
   }
 
   const onInitLoadAppData = async () => {
+    app_loading.value = true
     try {
-      let currentSession = await useSupabaseClient().auth.getSession()
+      let currentSession = await $SB.auth.getSession()
       console.log(currentSession.data)
 
       if (currentSession.data.session == null) {
@@ -28,25 +70,32 @@ export default defineNuxtPlugin(nuxtApp => {
       } else {
         let {
           data: { user },
-        } = await useSupabaseClient().auth.getUser()
-        useAppStore().logged = true
+        } = await $SB.auth.getUser()
+
+        await useAppStore().getAllMyApls()
+        await useAppStore().getTotalApls()
+        await useAppStore().getPrices()
 
         if (_route.path == '/') {
           $router.push('/dashboard')
         }
+        await $SB.auth.startAutoRefresh()
+        app_loading.value = false
         return user
       }
     } catch (error) {
-      // $router.push('/')
+      $router.push('/')
       console.log(error)
+      app_loading.value = false
+    } finally {
+      app_loading.value = false
     }
   }
 
   const loadAppData = async () => {
-    // app_loading.value = true
-    // set(app_loading, true)
+    app_loading.value = true
     try {
-      let currentSession = await useSupabaseClient().auth.getSession()
+      let currentSession = await $SB.auth.getSession()
       console.log(currentSession.data)
 
       if (currentSession.data.session == null) {
@@ -54,38 +103,19 @@ export default defineNuxtPlugin(nuxtApp => {
       } else {
         let {
           data: { user },
-        } = await useSupabaseClient().auth.getUser()
-        useAppStore().logged = true
+        } = await $SB.auth.getUser()
 
+        await useAppStore().getAllMyApls()
+        await useAppStore().getTotalApls()
+        await useAppStore().getPrices()
+
+        app_loading.value = false
         return user
       }
-      // let active_profile = await useProfileStore().getUserProfileByUserId(id)
-      // useProfileStore().setActiveProfile(active_profile?.data!)
-
-      // let [ann] = await Promise.allSettled([
-      // 	useAnnStore().getAnnouncements(),
-      // 	useProfileStore().getUserProfiles(),
-      // 	active_profile?.data![0].role
-      // 		? useRequestStore().getRequestsById(id)
-      // 		: useRequestStore().getAllRequests(),
-      // 	useDashStore().getSupervisorData(),
-      // 	!active_profile?.data![0].role ? useAppStore().getUserSignIns() : null,
-      // ])
-
-      // @ts-ignore
-      // useAnnStore().setAnnouncements(ann?.value!.data)
-      // set(logged, true)
-      // set(app_loading, false)
-      // logged.value = true;
-      // app_loading.value = false;
-      // await dailySignIn(role.value)
-      // set(app_loading, false)
-      // set(logged, false)
-      // app_loading.value = false;
-      // logged.value = false;
     } catch (error) {
-      // $router.push('/')
+      $router.push('/')
       console.log(error)
+      app_loading.value = false
     }
   }
 
@@ -294,7 +324,9 @@ export default defineNuxtPlugin(nuxtApp => {
       loadAppData,
       onInitLoadAppData,
       formatDate,
+      formatDateWords,
       countries,
+      app_loading,
     },
   }
 })

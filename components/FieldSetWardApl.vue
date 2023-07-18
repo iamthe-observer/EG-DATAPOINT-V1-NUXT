@@ -5,15 +5,16 @@
 		<avatarSelect @click="logger" class="col-span-2 row-span-2" />
 		<!-- name -->
 		<div class="flex gap-4 col-span-10 pl-6 justify-center">
-			<TextInput @update:model-value="handleKeyPress" v-model="ward.wfirstName">First Name</TextInput>
-			<TextInput @update:model-value="handleKeyPress" v-model="ward.wotherName">Middle Name</TextInput>
 			<TextInput @update:model-value="handleKeyPress" v-model="ward.wlastName">Last Name</TextInput>
+			<TextInput @update:model-value="handleKeyPress" v-model="ward.wfirstName">First Name</TextInput>
+			<TextInput @update:model-value="handleKeyPress" v-model="ward.wotherName">Other Name</TextInput>
 		</div>
 
 		<div class="flex gap-4 col-span-10 pl-6 justify-center">
 			<DatePicker @click="handleKeyPress" dark :color="'purple'" is-dark v-model="wdob" mode="date">
 				<template #default="{ togglePopover }">
-					<TextInput :value="wdob ? $formatDate(wdob) : ward.wdob" @click="togglePopover">Date of Birth
+					<TextInput :icon="true" :value="wdob ? $formatDate(wdob) : $formatDate(ward.wdob!)" @click="togglePopover">Date
+						of Birth
 					</TextInput>
 				</template>
 			</DatePicker>
@@ -24,9 +25,6 @@
 			</SelectInput>
 		</div>
 
-		<!-- <div class="flex gap-4 col-span-12 justify-center">
-			<TextInput>Country of Birth</TextInput>
-		</div> -->
 	</div>
 </template>
 
@@ -38,6 +36,35 @@ import useVuelidate from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 
 const { wards_apl } = storeToRefs(useAplStore())
+const { $formatDate } = useNuxtApp()
+const wdob = ref()
+const props = defineProps<{
+	idx: number
+}>()
+const emit = defineEmits(['ward'])
+
+const ward = ref<WardsApplicant>({
+	wlastName: '',
+	wfirstName: '',
+	wotherName: '',
+	wcity_ob: '',
+	wcountry_ob: '',
+	wgender: '',
+	wdob: new Date(),
+	index: props.idx
+})
+
+const rules = computed(() => {
+	return {
+		wlastName: { required },
+		wfirstName: { required },
+		wotherName: { required },
+		wcity_ob: { required },
+		wcountry_ob: { required },
+		wgender: { required },
+		wdob: { required },
+	}
+})
 
 onMounted(() => {
 	if (wards_apl.value.length > 0) {
@@ -52,30 +79,28 @@ onMounted(() => {
 	}
 })
 
-const { $formatDate } = useNuxtApp()
-const wdob = ref()
-const props = defineProps<{
-	idx: number
-}>()
-const emit = defineEmits(['ward'])
-
-const handleKeyPress = () => {
-	if (wdob.value) ward.value.wdob = $formatDate(wdob.value)
-	emit('ward', ward.value)
-}
-
-const logger = () => {
-	console.log(ward.value)
-}
-
-const ward = ref<WardsApplicant>({
-	wlastName: '',
-	wfirstName: '',
-	wotherName: '',
-	wcity_ob: '',
-	wcountry_ob: '',
-	wgender: '',
-	wdob: '',
-	index: props.idx
+const curr_ward = computed(() => {
+	return wards_apl.value[props.idx]
 })
+
+const v$ = useVuelidate(rules, ward.value)
+
+const handleKeyPress = async () => {
+	if (wdob.value) ward.value.wdob = wdob.value
+	const val = await v$.value.$validate()
+	emit('ward', { ward: ward.value, valid: val })
+}
+
+
+const logger = async () => {
+	ward.value.wdob = wdob.value
+	let val = await v$.value.$validate()
+
+	if (!val) {
+		v$.value.$errors.forEach(err => {
+			console.log(err.$property, err.$message);
+		});
+	} else console.log(val);
+
+}
 </script>

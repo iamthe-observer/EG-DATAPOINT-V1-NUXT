@@ -1,6 +1,8 @@
+import { Database } from '@/supabase/supabase'
 // import { resolve } from 'path'
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  plugins: [{ src: '~/plugins/dragscroll', ssr: false }],
   modules: ['@vueuse/nuxt', '@nuxtjs/supabase', '@pinia/nuxt'],
   alias: {
     // old way of doing it
@@ -9,7 +11,7 @@ export default defineNuxtConfig({
     // new way
     assets: '<rootDir>/assets',
   },
-  devtools: { enabled: false },
+  devtools: { enabled: true },
   css: ['~/assets/css/main.css', '~/assets/css/fonts.css'],
   postcss: {
     plugins: {
@@ -17,4 +19,11 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+  // supabase: {
+  //   client: {
+  //     db: {
+  //       schema: 'Database',
+  //     },
+  //   },
+  // },
 })

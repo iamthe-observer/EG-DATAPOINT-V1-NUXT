@@ -1,8 +1,5 @@
-// import { emitLogin, _Null } from '../types/types';
-
-// export interface LoginInUser {
-//   (e: 'logIn', emit: emitLogin): void;
-// }
+export type FileWithAplType = File & { apl_type: string }
+export type _Null<T> = T | null
 
 export interface AplData {
   prime: PrimeApplicant | null
@@ -27,13 +24,11 @@ export interface WardsApplicant {
   wlastName: string
   wfirstName: string
   wotherName: string
-  wdob: string
+  wdob: Date | null
   wgender: string
   wcity_ob: string
   wcountry_ob: string
   index: number
-  // wdob_month: number>
-  // wdob_year: number>
 }
 
 export interface SecApplicant {
@@ -44,7 +39,7 @@ export interface SecApplicant {
   scountry_ob: string
   scontact: string
   sgender: string
-  sdob: string
+  sdob: Date | null
 }
 
 export interface PrimeApplicant {
@@ -53,16 +48,16 @@ export interface PrimeApplicant {
   plastName: string
   pfirstName: string
   potherName: string
-  pdob: string
-  // pdob_month: number>
-  // pdob_year: number>
+  pdob: Date | null
+  // pdob_Date: number>
+  // pdob_Date: number>
   pcity_ob: string
   pcountry_ob: string
   pgender: string
   pconf_code: string
   pemail: string
   ppassport_number: string
-  passport_ex: string
+  passport_ex: Date | null
   // passport_ex_month: number>
   // passport_ex_year: number>
   pcountry_live_today: string
@@ -77,8 +72,6 @@ export interface PrimeApplicant {
   // sdob_year: number>
   wards: WardsApplicant[]
   totalPayment: number
-  passportAvail: boolean
-  created_at_date: string
   pother_contact: string
   psocial_media: {
     facebook: string
@@ -90,6 +83,51 @@ export interface PrimeApplicant {
     secPath: string[]
     wardsPath: string[]
   }
+}
+
+export interface Applicant {
+  created_at: Date | null
+  apl_id?: string
+  plastName: string
+  pfirstName: string
+  potherName: string
+  pdob: Date | null
+  pcity_ob: string
+  pcountry_ob: string
+  pgender: string
+  pconf_code: string
+  pemail: string
+  ppassport_number: string
+  passport_ex: Date | null
+  pcountry_live_today: string
+  peducation_level: string
+  ppostal: string
+  pmarital_status: string
+  children_number: number
+  fullName: string
+  user_id: string
+  pcontact: string
+  wards: WardsApplicant[]
+  totalPayment: number
+  pother_contact: string
+  psocial_media: {
+    facebook: string
+    instagram: string
+    twitter: string
+  }
+  aplImg_path: {
+    primePath: string[]
+    secPath: string[]
+    wardsPath: string[]
+  }
+  slastName: string
+  sfirstName: string
+  sotherName: string
+  scity_ob: string
+  scountry_ob: string
+  scontact: string
+  sgender: string
+  sdob: Date | null
 }
 
 export interface SupervisorInfo {

@@ -6,21 +6,20 @@ import {
 } from 'interfaces/interfaces'
 
 export const useAplStore = defineStore('apl', () => {
-  const { $formatDate } = useNuxtApp()
   const user = useSupabaseUser()
   const prime_apl = ref<PrimeApplicant>({
     created_at: new Date(),
     plastName: '',
     pfirstName: '',
     potherName: '',
-    pdob: '',
+    pdob: null,
     pcity_ob: '',
     pcountry_ob: '',
     pgender: '',
     pconf_code: '',
     pemail: '',
     ppassport_number: '',
-    passport_ex: '',
+    passport_ex: null,
     pcountry_live_today: '',
     peducation_level: '',
     ppostal: '',
@@ -31,8 +30,6 @@ export const useAplStore = defineStore('apl', () => {
     pcontact: '',
     wards: [],
     totalPayment: 0,
-    passportAvail: false,
-    created_at_date: $formatDate(new Date()),
     pother_contact: '',
     psocial_media: {
       facebook: '',
@@ -53,7 +50,7 @@ export const useAplStore = defineStore('apl', () => {
     scountry_ob: '',
     scontact: '',
     sgender: '',
-    sdob: '',
+    sdob: null,
   })
   const wards_apl = ref<WardsApplicant[]>([])
 
@@ -67,7 +64,7 @@ export const useAplStore = defineStore('apl', () => {
         scountry_ob: '',
         scontact: '',
         sgender: '',
-        sdob: '',
+        sdob: null,
       })
     }
   })
@@ -94,14 +91,14 @@ export const useAplStore = defineStore('apl', () => {
       plastName: '',
       pfirstName: '',
       potherName: '',
-      pdob: '',
+      pdob: null,
       pcity_ob: '',
       pcountry_ob: '',
       pgender: '',
       pconf_code: '',
       pemail: '',
       ppassport_number: '',
-      passport_ex: '',
+      passport_ex: null,
       pcountry_live_today: '',
       peducation_level: '',
       ppostal: '',
@@ -112,8 +109,6 @@ export const useAplStore = defineStore('apl', () => {
       pcontact: '',
       wards: [],
       totalPayment: 0,
-      passportAvail: false,
-      created_at_date: $formatDate(new Date()),
       pother_contact: '',
       psocial_media: {
         facebook: '',
@@ -134,7 +129,7 @@ export const useAplStore = defineStore('apl', () => {
       scountry_ob: '',
       scontact: '',
       sgender: '',
-      sdob: '',
+      sdob: null,
     }
     wards_apl.value = []
   }

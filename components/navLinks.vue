@@ -6,7 +6,8 @@
 		<NuxtLink to="/newApl" class="__icons_container tooltip tooltip-primary z-20 tooltip-right" data-tip="Add Applicant">
 			<SvgsContact class="__icons" />
 		</NuxtLink>
-		<NuxtLink to="/database" class="__icons_container tooltip tooltip-primary z-20 tooltip-right" data-tip="Database">
+		<NuxtLink to="/database" class="__icons_container tooltip tooltip-primary z-20 tooltip-right"
+			data-tip="Database & Analytics">
 			<SvgsDatabase class="__icons" />
 		</NuxtLink>
 	</section>

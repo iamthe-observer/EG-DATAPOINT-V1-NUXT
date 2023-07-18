@@ -1,13 +1,20 @@
 <template>
-	<div class="min-h-[200px] w-[200px] relative bg-neutral-600 rounded-lg">
-		<slot />
-		<!-- <div class="absolute border-t-2 border-l-2 border-white -top-1 -left-1  w-10 aspect-square rounded-xl1">
+	<div :class="`relative h-[200px] w-[200px] bg-neutral-600 rounded-lg ${classer ? classer : ''}`">
+		<div v-if="!src" class="absolute inset-1 rounded-md bg-neutral-700 grid place-items-center">
+			<SvgsImage class="w-10" />
 		</div>
-		<div class="absolute border-t-2 border-r-2 border-white -top-1 -right-1  w-10 aspect-square rounded-xl1">
-		</div>
-		<div class="absolute border-b-2 border-l-2 border-white -bottom-1 -left-1  w-10 aspect-square rounded-xl1">
-		</div>
-		<div class="absolute border-b-2 border-r-2 border-white -bottom-1 -right-1  w-10 aspect-square rounded-xl1">
-		</div> -->
+
+		<div class="absolute inset-1 rounded-md bg-neutral-700 grid place-items-center" v-else><img :src="src" :alt="alt"
+				class="w-full h-full rounded-md object-cover"></div>
 	</div>
 </template>
+
+<script setup lang="ts">
+defineProps<{
+	classer?: string | undefined
+	src?: string
+	alt?: string
+}>()
+defineEmits([])
+
+</script>
