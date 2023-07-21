@@ -14,6 +14,19 @@ export const useAppStore = defineStore('app', () => {
     app_loading.value = val
   }
 
+  async function getApplicant(id: string) {
+    try {
+      let { data, error } = await $SB
+        .from('applicants')
+        .select('*')
+        .eq('apl_id', id)
+      if (error) throw error
+      return data
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   async function getAllMyApls() {
     try {
       let { data, error } = await $SB
@@ -93,5 +106,6 @@ export const useAppStore = defineStore('app', () => {
     getTotalApls,
     setAppLoading,
     getPrices,
+    getApplicant,
   }
 })

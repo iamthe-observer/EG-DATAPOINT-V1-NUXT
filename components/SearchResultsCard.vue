@@ -1,5 +1,5 @@
 <template>
-	<div @click="$router.push(`/database/search/${result.apl_id}`)
+	<div @click="$router.push(`/applicant/${result.apl_id}`)
 		" class="card card-side bg-neutral-800 shadow-xl w-[60%]">
 		<figure class="p-2 max-h-full aspect-square"><img class="border-2 border-white w-36 h-36 rounded-xl" :src="image"
 				alt="Movie" />

@@ -1,76 +1,32 @@
 <template>
 	<div class="flex flex-col p-5">
-		<div class="w-full flex gap-5">
-			<div class="flex flex-col gap-4">
-				<AvatarSelect :src="prime_image" :alt="apl.fullName" />
-				<AvatarSelect v-if="apl.pmarital_status == 'MARRIED'" :src="sec_image" :alt="apl.fullName" />
-				<AvatarSelect v-if="apl.children_number > 0" :src="prime_image" :alt="apl.fullName" />
+		<div class="w-full flex gap-5 justify-between">
+			<div class="w-2/5 h-full flex flex-col gap-4">
+				<AvatarSelect class="w-full aspect-square" :src="prime_image" :alt="apl.fullName" />
+				<AvatarSelect class="w-full aspect-square" v-if="apl.pmarital_status == 'MARRIED'" :src="sec_image"
+					:alt="apl.fullName" />
+				<AvatarSelect class="w-full aspect-square" v-for="src in wards_image" v-if="apl.children_number > 0"
+					:src="src.signedUrl" :alt="apl.fullName" />
 			</div>
 
-			<div class="flex-1 grid grid-cols-3 gap-2">
-				<!-- <p class="w-fit place-self-center">{{ apl.plastName }}</p>
-				<p class="w-fit place-self-center">{{ apl.pfirstName }}</p>
-				<p class="w-fit place-self-center">{{ apl.potherName }}</p> -->
-				<p class="container">
-					<span class="heading">Date of Birth</span>
-					<span class="info">{{ $formatDateWords(new Date(apl.pdob!)) }}</span>
-				</p>
-				<p class="container">
-					<span class="heading">Confirmation Code</span>
-					<span class="info">{{ apl.pconf_code ? apl.pconf_code : `No Confirmation Code` }}</span>
-				</p>
-				<p class="container">
-					<span class="heading">Passport Number</span>
-					<span class="info">{{ apl.ppassport_number }}</span>
-				</p>
-				<p class="container">
-					<span class="heading">City of Birth</span>
-					<span class="info">{{ apl.pcity_ob }}</span>
-				</p>
-				<p class="container">
-					<span class="heading">Country of Birth</span>
-					<span class="info">{{ apl.pcountry_ob }}</span>
-				</p>
-				<p class="container">
-					<span class="heading">Next of Kin Contact</span>
-					<span class="info">{{ apl.pother_contact }}</span>
-				</p>
-				<p class="container">
-					<span class="heading">Country You Live in Today</span>
-					<span class="info">{{ apl.pcountry_live_today }}</span>
-				</p>
-				<p class="container">
-					<span class="heading">Passport Expiry Date</span>
-					<span class="info">{{ $formatDateWords(new Date(apl.passport_ex!)) }}</span>
-				</p>
-				<p class="container">
-					<span class="heading">Email</span>
-					<span class="info">{{ apl.pemail }}</span>
-				</p>
-				<p class="container">
-					<span class="heading">Gender</span>
-					<span class="info">{{ apl.pgender }}</span>
-				</p>
-				<p class="container">
-					<span class="heading">Marital Status</span>
-					<span class="info">{{ apl.pmarital_status }}</span>
-				</p>
-				<p class="container">
-					<span class="heading">Education Level</span>
-					<span class="info">{{ apl.peducation_level }}</span>
-				</p>
-				<p class="container">
-					<span class="heading">Contact</span>
-					<span class="info">{{ apl.pcontact }}</span>
-				</p>
-				<p class="container">
-					<span class="heading">Residential Address</span>
-					<span class="info">{{ apl.ppostal }}</span>
-				</p>
-				<p class="container">
-					<span class="heading">Number of Children</span>
-					<span class="info">{{ apl.children_number }}</span>
-				</p>
+			<div class="flex-1 grid grid-cols-3 gap-2 h-fit">
+				<AplInfoCardDate :heading="`Date of Birth`" :date="apl.pdob" @date="handleDate" :name_type="'pdob'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.pconf_code" :heading="'Confirmation Code'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.ppassport_number" :heading="'Passport Number'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.pcity_ob" :heading="'City Of Birth'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.pcountry_ob" :heading="'Country of Birth'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.pother_contact" :heading="'Next of Kin Contact'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.pcountry_live_today"
+					:heading="'Country You Live in Today'" />
+				<AplInfoCardDate @update:model-value="logger" :date="apl.passport_ex" @date="handleDate"
+					:name_type="'passport_ex'" :heading="'Passport Expiry Date'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.pemail" :heading="'Email'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.pgender" :heading="'Gender'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.pmarital_status" :heading="'Marital Status'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.peducation_level" :heading="'Education Level'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.pcontact" :heading="'Contact'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.ppostal" :heading="'Residential Address'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.children_number" :heading="'Number of Children'" />
 
 				<div v-if="apl.pmarital_status === 'MARRIED'" class="pt-10 flex-1 grid grid-cols-3 gap-2 col-span-full">
 					<h2 class="col-span-full py-3 text-2xl font-bold flex justify-between"><span>Spouse Information</span> <span
@@ -134,9 +90,11 @@ const { $SB } = useNuxtApp()
 const props = defineProps<{
 	apl: Applicant
 }>()
+provide('apl', props.apl)
+const editMode = inject<boolean>('edit')
 const prime_image = ref()
 const sec_image = ref()
-const wards_image = ref()
+const wards_image = ref<any[]>([])
 
 onMounted(() => {
 	setTimeout(async () => {
@@ -151,19 +109,34 @@ async function loadUrl() {
 		const { data, error } = await $SB
 			.storage
 			.from('applicants')
-			.createSignedUrls([props.apl.aplImg_path.primePath[0], props.apl.aplImg_path.secPath[0]], 3600)
+			.createSignedUrls([props.apl.aplImg_path.primePath[0], props.apl.aplImg_path.secPath[0], ...props.apl.aplImg_path.wardsPath], 3600)
 
 		console.log(data);
 		if (error) throw error
 
 		prime_image.value = data[0].signedUrl || ''
 		sec_image.value = data[1].signedUrl || ''
+		wards_image.value = data.slice(2)
 
 	}
 	catch (err: any) {
 		console.log((err));
-
 	}
+}
+
+function handleDate(e: { name: string, date: Date }) {
+	if (e.name == 'pdob') {
+		console.log(e);
+	} else if (e.name == 'sdob') {
+		console.log(e);
+	} else if (e.name == 'passport_ex') {
+		console.log(e);
+	}
+}
+
+function logger(e: any) {
+
+	console.log(e)
 }
 </script>
 

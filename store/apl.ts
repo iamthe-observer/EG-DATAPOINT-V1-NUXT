@@ -7,6 +7,11 @@ import {
 
 export const useAplStore = defineStore('apl', () => {
   const user = useSupabaseUser()
+  const edit_mode = ref(false)
+  function toggleEditMode() {
+    edit_mode.value = !edit_mode.value
+    console.log(edit_mode.value)
+  }
   const prime_apl = ref<PrimeApplicant>({
     created_at: new Date(),
     plastName: '',
@@ -142,5 +147,7 @@ export const useAplStore = defineStore('apl', () => {
     setSecApl,
     setWardsApl,
     resetAplData,
+    edit_mode,
+    toggleEditMode,
   }
 })

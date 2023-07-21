@@ -1,5 +1,6 @@
 import { useAppStore } from '@/store/app'
 import { storeToRefs } from 'pinia'
+import { useAnnStore } from '@/store/announce'
 import { setupCalendar, Calendar, DatePicker } from 'v-calendar'
 import 'v-calendar/style.css'
 
@@ -47,7 +48,7 @@ export default defineNuxtPlugin(nuxtApp => {
     }
   }
 
-  const formatDate = (date: Date) => {
+  const formatDate = (date: Date | null) => {
     if (date == null) {
       return ''
     } else {
@@ -75,16 +76,17 @@ export default defineNuxtPlugin(nuxtApp => {
         await useAppStore().getAllMyApls()
         await useAppStore().getTotalApls()
         await useAppStore().getPrices()
+        await useAnnStore().getAnnounce()
 
         if (_route.path == '/') {
-          $router.push('/dashboard')
+          // $router.push('/dashboard')
         }
         await $SB.auth.startAutoRefresh()
         app_loading.value = false
         return user
       }
     } catch (error) {
-      $router.push('/')
+      // $router.push('/')
       console.log(error)
       app_loading.value = false
     } finally {
@@ -108,12 +110,13 @@ export default defineNuxtPlugin(nuxtApp => {
         await useAppStore().getAllMyApls()
         await useAppStore().getTotalApls()
         await useAppStore().getPrices()
+        await useAnnStore().getAnnounce()
 
         app_loading.value = false
         return user
       }
     } catch (error) {
-      $router.push('/')
+      // $router.push('/')
       console.log(error)
       app_loading.value = false
     }

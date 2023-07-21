@@ -7,8 +7,8 @@
 				<span class="">Applicant Information</span>
 
 				<div class="join join-vertical lg:join-horizontal">
-
-					<button class="btn btn-outline rounded-xl text-white hover:text-blue-500 join-item bg-none hover:btn-ghost">
+					<button @click="useAplStore().toggleEditMode"
+						class="btn btn-outline rounded-xl text-white hover:text-blue-500 join-item bg-none hover:btn-ghost">
 						<svg xmlns="http://www.w3.org/2000/svg" class="w-6 aspect-square" viewBox="0 0 24 24">
 							<g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
 								<path stroke-dasharray="56" stroke-dashoffset="56"
@@ -30,8 +30,8 @@
 						</svg>
 						Edit
 					</button>
-
-					<button class="btn btn-outline rounded-xl text-white hover:text-red-500 join-item bg-none hover:btn-ghost">
+					<button @click=""
+						class="btn btn-outline rounded-xl text-white hover:text-red-500 join-item bg-none hover:btn-ghost">
 						<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24">
 							<g fill="none" stroke="#fff" stroke-linecap="round" stroke-width="2">
 								<path stroke-dasharray="20" stroke-dashoffset="20"
@@ -68,9 +68,11 @@
 import { useAppStore } from '@/store/app';
 import { storeToRefs } from 'pinia';
 import { Applicant } from '@/interfaces/interfaces';
+import { useAplStore } from '@/store/apl'
 
 const { _route } = useNuxtApp()
 const { total_apls } = storeToRefs(useAppStore())
+
 const apl = ref<Applicant>({
 	apl_id: '',
 	aplImg_path: {
@@ -79,15 +81,15 @@ const apl = ref<Applicant>({
 		wardsPath: []
 	},
 	children_number: 0,
-	created_at: new Date(),
+	created_at: null,
 	fullName: '',
-	passport_ex: new Date(),
+	passport_ex: null,
 	pcity_ob: '',
 	pconf_code: '',
 	pcontact: '',
 	pcountry_live_today: '',
 	pcountry_ob: '',
-	pdob: new Date(),
+	pdob: null,
 	peducation_level: '',
 	pemail: '',
 	pfirstName: '',
@@ -106,7 +108,7 @@ const apl = ref<Applicant>({
 	scity_ob: '',
 	scontact: '',
 	scountry_ob: '',
-	sdob: new Date(),
+	sdob: null,
 	sfirstName: '',
 	sgender: '',
 	slastName: '',
@@ -121,9 +123,6 @@ onMounted(async () => {
 	let aplVal = total_apls.value.filter(applicant => applicant.apl_id == _route.params.id)[0]
 
 	apl.value = aplVal
-
 })
 
 </script>
-
-<style scoped></style>

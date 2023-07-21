@@ -4,8 +4,6 @@
 			<avatarSelect :src="secSRC" @click="logger" class="" />
 
 			<input @change="handleFile" type="file" class="file-input file-input-primary file-input-xs w-full max-w-xs" />
-			<span v-if="has_files" class="text-xs px-3 py-1 rounded-full bg-green-800">{{ has_files ? 'Saved Image' : ''
-			}}</span>
 		</div>
 		<!-- name -->
 		<div class="flex gap-4 col-span-10 pl-6 justify-center">

@@ -15,9 +15,9 @@ export interface UserData {
 export interface Announcement {
   id: number
   created_at: Date
-  subject: string
+  title: string
   body: string
-  urgency: string
+  meta_data: {}
 }
 
 export interface WardsApplicant {

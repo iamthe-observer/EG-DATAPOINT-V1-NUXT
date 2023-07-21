@@ -15,16 +15,19 @@
 			<div class="w-full h-full scrollbar-hidden relative flex justify-center items-center">
 				<!-- if no Input -->
 				<div v-if="search_results.length == 0" class="flex flex-col gap-2 w-fit">
-					<span class="text-center text-2xl drop-shadow-lg">Search For <br />Applicants over <br />here!</span>
+					<span v-if="!if_first" class="text-center text-2xl drop-shadow-lg">Search For <br />Applicants over
+						<br />here!</span>
+					<span v-if="if_first" class="text-center text-2xl drop-shadow-lg">No Applicants Found
+						<br />Check the spelling!</span>
 
 					<div class=" absolute bottom-16 left-1/2 -translate-x-1/2 z-20 flex flex-col gap-2 text-sm justify-self-end">
 						<span
 							class="text-sm font-bold justify-self-end mt-2 mx-auto px-3 bg-white text-black w-fit rounded-full">Recent
 							Searches</span>
-						<span class="cursor-pointer hover:text-purple-700" v-for="recent in recent_search" @click="$router.push(`/database/search/${recent.apl_id}`)
+						<span class="cursor-pointer hover:text-purple-700 text-center text-xs" v-for="recent in recent_search" @click="$router.push(`/applicant/${recent.apl_id}`)
 							">{{ recent.fullName }}</span>
 					</div>
-					<div class="h-40 mx-auto aspect-square absolute right-[420px] -rotate-45 top-24">
+					<div v-show="!if_first" class="h-40 mx-auto aspect-square absolute right-[420px] -rotate-45 top-24">
 						<SvgsArrow />
 					</div>
 				</div>
@@ -47,9 +50,10 @@ const { recent_search } = storeToRefs(useSearchStore())
 const props = defineProps<{
 	visible: boolean
 }>()
-const search = ref<string>('')
+const search = ref<string>()
 const search_bar_input = ref<HTMLInputElement>()
 const search_results = ref<Applicant[]>([])
+let if_first = ref(false)
 
 watchEffect(() => {
 	if (props.visible) {
@@ -58,6 +62,11 @@ watchEffect(() => {
 })
 
 async function startSearch() {
+	if (!if_first.value) {
+		if_first.value = !if_first.value
+	}
+
+	if (!search.value) return
 	search_results.value = await useSearchStore().getSearch(search.value!.toUpperCase())
 	console.log(search_results.value);
 }

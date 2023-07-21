@@ -24,7 +24,7 @@
 				</div>
 			</h1>
 			<!-- text fields -->
-			<FieldSetPrimeApl @file="onSelect" @validate="setPrimeValidate" @apl="handlePrimeInput" v-if="curr_page == 'prime'"
+			<FieldSetPrimeEdit @file="onSelect" @validate="setPrimeValidate" @apl="handlePrimeInput" v-if="curr_page == 'prime'"
 				:container="container!" />
 
 			<FieldSetSecApl @file="onSelect" @validate="setSecValidate" @sec="handleSecInput" :container="container!"
@@ -47,16 +47,54 @@
 </template>
 
 <script setup lang="ts">
+// @ts-ignore
+import { v4 as uuidv4 } from 'uuid'
 import { PrimeApplicant, WardsApplicant, SecApplicant, AplData, Applicant } from '@/interfaces/interfaces';
 import { useAplStore } from '@/store/apl';
 import { useImageStore } from '@/store/images';
-import { required, email, numeric } from '@vuelidate/validators';
-import useVuelidate from '@vuelidate/core';
-// @ts-ignore
-import { v4 as uuidv4 } from 'uuid'
 import { storeToRefs } from 'pinia';
 import { useAppStore } from '@/store/app';
 
+onBeforeUnmount(() => {
+	useAplStore().resetAplData()
+	useImageStore().resetFiles()
+})
+
+onMounted(async () => {
+	let data = await useAppStore().getApplicant(_route.params.id.toString())
+	if (data?.length! > 0) applicant.value = data![0]
+	console.log(applicant.value);
+})
+
+const apl_sending = ref(false)
+const container = ref<HTMLDivElement>()
+const { $SB, _route } = useNuxtApp()
+const { has_files } = storeToRefs(useImageStore())
+const steps_ = ref([{ name: 'Primary', page: 'prime' }])
+const curr_page = ref('prime')
+const if_sent = ref<boolean>(false)
+const num = ref(0)
+const applicant = ref<Applicant>()
+const apl_data = reactive<AplData>({
+	prime: null,
+	sec: null,
+	wards: [],
+})
+
+const onSelect = (evt: any) => {
+	useImageStore().setFiles(evt.file, evt.type)
+	console.log(evt);
+}
+
+
+// validation
+const val = reactive<{ prime: boolean; sec: boolean; wards: { idx: number; val: boolean }[] }>({
+	prime: false,
+	sec: false,
+	wards: []
+})
+
+// calculated price
 const price = computed(() => {
 	const pp = useAppStore().prices[0]
 	const if_sp = apl_data.prime?.pmarital_status == 'MARRIED'
@@ -77,33 +115,6 @@ const price = computed(() => {
 	}
 })
 
-const apl_sending = ref(false)
-const container = ref<HTMLDivElement>()
-const { $SB } = useNuxtApp()
-const { has_files } = storeToRefs(useImageStore())
-const steps_ = ref([{ name: 'Primary', page: 'prime' }])
-const curr_page = ref('prime')
-const if_sent = ref<boolean>(false)
-const num = ref(0)
-const apl_data = reactive<AplData>({
-	prime: null,
-	sec: null,
-	wards: [],
-})
-
-const onSelect = (evt: any) => {
-	useImageStore().setFiles(evt.file, evt.type)
-	console.log(evt);
-}
-
-
-// validation
-const val = reactive<{ prime: boolean; sec: boolean; wards: { idx: number; val: boolean }[] }>({
-	prime: false,
-	sec: false,
-	wards: []
-})
-
 const if_prime = computed(() => { return val.prime })
 const if_spouse = computed(() => {
 	if (val.sec && apl_data.prime?.pmarital_status == 'MARRIED') {
@@ -122,35 +133,6 @@ const if_wards = computed(() => {
 	) {
 		return true
 	} else { return false }
-})
-
-// const rules = computed(() => {
-// 	return {
-// 		plastName: { required },
-// 		pfirstName: { required },
-// 		potherName: { required },
-// 		pdob: { required },
-// 		pcity_ob: { required },
-// 		pcountry_ob: { required },
-// 		pgender: { required },
-// 		pemail: { required, email },
-// 		ppassport_number: { required },
-// 		passport_ex: { required },
-// 		pcountry_live_today: { required },
-// 		peducation_level: { required },
-// 		ppostal: { required },
-// 		pmarital_status: { required },
-// 		children_number: { required, numeric },
-// 		fullName: { required },
-// 		pcontact: { required },
-// 		totalPayment: { required },
-// 		pother_contact: { required },
-// 	}
-// })
-
-onBeforeUnmount(() => {
-	useAplStore().resetAplData()
-	useImageStore().resetFiles()
 })
 
 // this handles the visibility of the steps

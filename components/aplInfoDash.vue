@@ -29,18 +29,39 @@
 			</div>
 		</div>
 
-
 		<div class="flex w-full h-full gap-5">
-			<div class="containers total_applicants p-2 flex items-center justify-between w-full h-full">
-				<p class="flex flex-col"><span class="">Total Applicants</span></p>
-				<radial-progress :amount="all_my_apls?.length!" />
+			<!-- tasks -->
+			<div class="containers total_applicants px-4 flex items-center justify-between w-full h-full">
+				<p class="flex flex-col gap-2">
+					<span class="text-sm">Tasks</span>
+					<span class="text-2xl">{{ total_daily_applicants?.length }}</span>
+					<span :class="`text-xs ${total_daily_inc >= 100 ? 'text-green-500' : 'text-red-500'} font-bold`">
+						<span v-if="total_daily_inc < 100">-</span>
+						<span v-if="total_daily_inc > 100">+</span>
+						{{ total_daily_inc.toFixed(1) }}%
+						<span v-if="total_daily_inc < 100">Dec.</span>
+						<span v-if="total_daily_inc >= 100">Inc.</span>
+					</span>
+				</p>
+				<radial-progress :amount="Number(total_daily_inc.toFixed(1))" />
 			</div>
 
-			<div class="containers total_applicants p-2 flex items-center justify-between w-full h-full">
-				<p class="flex flex-col"><span class="">Total Applicants</span></p>
-				<radial-progress :amount="all_my_apls?.length!" />
+			<div class="containers total_applicants px-4 flex items-center justify-between w-full h-full">
+				<p class="flex flex-col gap-2">
+					<span class="text-sm">Tasks</span>
+					<span class="text-2xl">{{ total_daily_applicants?.length }}</span>
+					<span :class="`text-xs ${total_daily_inc >= 100 ? 'text-green-500' : 'text-red-500'} font-bold`">
+						<span v-if="total_daily_inc < 100">-</span>
+						<span v-if="total_daily_inc > 100">+</span>
+						{{ total_daily_inc.toFixed(1) }}%
+						<span v-if="total_daily_inc < 100">Dec.</span>
+						<span v-if="total_daily_inc >= 100">Inc.</span>
+					</span>
+				</p>
+				<radial-progress :amount="Number(total_daily_inc.toFixed(1))" />
 			</div>
 		</div>
+
 	</div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-	<div :class="`relative h-[200px] w-[200px] bg-neutral-600 rounded-lg ${classer ? classer : ''}`">
+	<div :class="`relative min-h-[200px] min-w-[200px] bg-neutral-600 rounded-lg ${classer ? classer : ''}`">
 		<div v-if="!src" class="absolute inset-1 rounded-md bg-neutral-700 grid place-items-center">
 			<SvgsImage class="w-10" />
 		</div>

@@ -1,7 +1,7 @@
 <template>
 	<div v-if="curr_page == 'ward'" class="flex flex-col items-center">
-		<FieldSetWardApl v-for="idx in  Number(apl_data.prime?.children_number)" :key="idx" @ward="handleWardInput"
-			:idx="idx" />
+		<FieldSetWardApl @file="handleFile" v-for="(apl, idx) in Number(apl_data.prime?.children_number)" :idx="idx"
+			:key="idx" :ward_info="apl_data.wards![idx]" @ward="handleWardInput" />
 	</div>
 </template>
 
@@ -12,6 +12,9 @@ onMounted(() => {
 	setTimeout(() => {
 		props.container.scrollTo({ top: 0, behavior: 'smooth' });
 	}, 100)
+
+	console.log(props.apl_data.wards);
+
 })
 
 const props = defineProps<{
@@ -20,7 +23,11 @@ const props = defineProps<{
 	apl_data: AplData
 }>()
 
-const emit = defineEmits(['handleWardInput'])
+const emit = defineEmits(['handleWardInput', 'file'])
+
+function handleFile(e: any) {
+	emit('file', e)
+}
 
 function handleWardInput(e: any) {
 	emit('handleWardInput', e)

@@ -13,17 +13,24 @@ export const useImageStore = defineStore('image', () => {
   const wardsPath = ref<_Null<string[]>>(null)
   const primeIMG = ref<File>()
   const secIMG = ref<File>()
+  const wardIMG = ref<FileWithAplType[]>([])
 
   function setFiles(file: FileWithAplType, type: string) {
+    // type -> the kind of apl being saved
+    file.apl_type = type
+
     if (type === 'prime') {
       primeIMG.value = file
     } else if (type === 'sec') {
       secIMG.value = file
-    } else {
+    } else if (type.includes('ward')) {
+      const updatedImages = wardIMG.value.filter(
+        x => x.apl_type !== file.apl_type
+      )
+      updatedImages.push(file)
+      wardIMG.value = updatedImages
     }
 
-    // type -> the kind of apl being saved
-    file.apl_type = type
     const updatedFiles = files.value.filter(x => x.apl_type !== file.apl_type)
     updatedFiles.push(file)
     files.value = updatedFiles
@@ -169,6 +176,7 @@ export const useImageStore = defineStore('image', () => {
     files.value = []
     primeIMG.value = undefined
     secIMG.value = undefined
+    wardIMG.value = []
   }
 
   const deleteAplImg = async (path: string) => {
@@ -227,6 +235,7 @@ export const useImageStore = defineStore('image', () => {
     wardsPath,
     primeIMG,
     secIMG,
+    wardIMG,
     updateAplPath,
     uploadAplImg,
     deleteAplImg,

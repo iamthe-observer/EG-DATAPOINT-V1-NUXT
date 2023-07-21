@@ -96,10 +96,12 @@ import { required, email, numeric } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
 // import { Applicant } from '@/supabase/supabase';
 
-
 const props = defineProps<{
 	container: HTMLDivElement
 }>()
+
+const { $SB, _route } = useNuxtApp()
+
 const { prime_apl } = storeToRefs(useAplStore())
 const pdob = ref<Date>()
 const passport_ex = ref<Date>()
