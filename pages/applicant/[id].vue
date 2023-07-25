@@ -1,14 +1,35 @@
 <template>
-	<div class="w-full h-full flex flex-col rounded-2xl pb-2">
-		<div
-			class="w-full h-full rounded-2xl bg-neutral-800 col-span-full row-span-full pb-2 overflow-y-scroll scrollbar-hidden text-justify px-0 relative">
-			<h1 class="px-5 py-5 rounded-2xl bg-neutral-700 text-2xl w-full flex justify-between items-center mb-2 sticky top-0
-				shadow-lg z-10">
-				<span class="">Applicant Information</span>
+	<div :key="num" class="w-full h-full flex flex-col rounded-2xl pb-2">
+		<div id="style-1"
+			class="w-full h-full rounded-2xl bg-neutral-800 col-span-full row-span-full pb-2 overflow-y-auto text-justify px-0 relative">
+			<h1
+				class="px-5 py-5 rounded-2xl bg-neutral-700 text-2xl w-full flex justify-between items-center mb-2 sticky top-0 shadow-lg z-10">
+				<span v-if="!edit_mode" class="">Applicant Information</span>
 
 				<div class="join join-vertical lg:join-horizontal">
-					<button @click="useAplStore().toggleEditMode"
-						class="btn btn-outline rounded-xl text-white hover:text-blue-500 join-item bg-none hover:btn-ghost">
+					<button v-if="edit_mode" onclick="my_modal_1.showModal()"
+						class="btn btn-outline btn-sm rounded-xl text-white hover:text-green-500 join-item bg-none hover:btn-ghost">
+						<svg class="w-6 aspect-square stroke-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+							<path fill="none" stroke-dasharray="24" stroke-dashoffset="24" stroke-linecap="round"
+								stroke-linejoin="round" stroke-width="2" d="M5 11L11 17L21 7">
+								<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="24;0" />
+							</path>
+						</svg>
+						Request
+					</button>
+					<button v-if="edit_mode" @click="handleClose"
+						class="btn btn-outline btn-sm rounded-xl text-white hover:text-red-500 join-item bg-none hover:btn-ghost">
+						<svg xmlns="http://www.w3.org/2000/svg" class="w-6 aspect-square stroke-red-600" viewBox="0 0 24 24">
+							<path fill="none" stroke="" stroke-dasharray="12" stroke-dashoffset="12" stroke-linecap="round"
+								stroke-width="2" d="M12 12L19 19M12 12L5 5M12 12L5 19M12 12L19 5">
+								<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="12;0" />
+							</path>
+						</svg>
+						Quit
+					</button>
+
+					<button v-if="!edit_mode" @click="useAplStore().toggleEditMode(true)"
+						class="btn btn-outline btn-sm rounded-xl text-white hover:text-blue-500 join-item bg-none hover:btn-ghost relative">
 						<svg xmlns="http://www.w3.org/2000/svg" class="w-6 aspect-square" viewBox="0 0 24 24">
 							<g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
 								<path stroke-dasharray="56" stroke-dashoffset="56"
@@ -28,10 +49,10 @@
 								<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.15s" values="0;0.3" />
 							</path>
 						</svg>
-						Edit
+						Request Edit
 					</button>
-					<button @click=""
-						class="btn btn-outline rounded-xl text-white hover:text-red-500 join-item bg-none hover:btn-ghost">
+					<button v-if="!edit_mode" onclick="my_modal_2.showModal()"
+						class="btn btn-outline btn-sm rounded-xl text-white hover:text-red-500 join-item bg-none hover:btn-ghost">
 						<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24">
 							<g fill="none" stroke="#fff" stroke-linecap="round" stroke-width="2">
 								<path stroke-dasharray="20" stroke-dashoffset="20"
@@ -50,79 +71,192 @@
 								</path>
 							</g>
 						</svg>
-						Delete
+						Request Delete
 					</button>
 				</div>
 
-				<span class="">{{ apl?.fullName }}</span>
+				<span v-if="!edit_mode" class="font-semibold">{{ fullName ? fullName : 'Applicant' }}</span>
+				<div v-else class="flex gap-3">
+					<TextInput @update:model-value="logger" classer="" v-model="lastName">Last Name</TextInput>
+					<TextInput @update:model-value="logger" classer="" v-model="firstName">First Name</TextInput>
+					<TextInput @update:model-value="logger" classer="" v-model="otherName">Other Name</TextInput>
+				</div>
 			</h1>
 
 
-			<ViewApplicant :apl="apl" />
+			<ViewApplicant @apl="handleEmit" />
 
 		</div>
+		<dialog id="my_modal_1" class="modal">
+			<form method="dialog" class="modal-box bg-neutral-900">
+				<h3 class="font-semibold text-lg text-white flex items-center gap-3">
+					<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+						<g stroke="#888888" stroke-linecap="round" stroke-width="2">
+							<path fill="#dc1010" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
+								d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z">
+								<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0" />
+								<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3" />
+							</path>
+							<path fill="none" stroke-dasharray="8" stroke-dashoffset="8" d="M12 7V13">
+								<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="8;0" />
+							</path>
+						</g>
+						<circle cx="12" cy="17" r="1" fill="#888888" fill-opacity="0">
+							<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1" />
+						</circle>
+					</svg>
+					Are you sure you want to send this request?
+				</h3>
+				<textarea v-model="request_body" class="textarea textarea-bordered w-full bg-black text-white mt-3"
+					placeholder="What's your reason for editing?..."></textarea>
+				<p class="text-white py-4 text-right text-xs">Review and cross-check your request before sending!</p>
+				<div class="modal-action">
+					<!-- if there is a button in form, it will close the modal -->
+					<button v-if="request_body" class="btn btn-primary text-white" @click="handleSubmit">Submit</button>
+					<button @click="request_body = ''" class="btn btn-error text-white">Close</button>
+				</div>
+			</form>
+		</dialog>
+
+		<dialog id="my_modal_2" class="modal">
+			<form method="dialog" class="modal-box bg-red-950 w-5/6 max-w-5xl">
+				<h3 class="text-lg text-white flex items-center gap-3">
+					<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+						<g stroke="#888888" stroke-linecap="round" stroke-width="2">
+							<path fill="#dc1010" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
+								d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z">
+								<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0" />
+								<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3" />
+							</path>
+							<path fill="none" stroke-dasharray="8" stroke-dashoffset="8" d="M12 7V13">
+								<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="8;0" />
+							</path>
+						</g>
+						<circle cx="12" cy="17" r="1" fill="#888888" fill-opacity="0">
+							<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1" />
+						</circle>
+					</svg>
+					Are you sure you want to send this request to delete the Applicant:<br /> <span class="text-bold">{{
+						curr_apl?.fullName }}</span>
+				</h3>
+				<textarea v-model="request_body" class="textarea textarea-bordered w-full bg-red-900 border-none text-white mt-3"
+					placeholder="What's your reason for editing?..."></textarea>
+				<p class="text-white py-4 text-right text-xs">Review and cross-check your request before sending!</p>
+				<div class="modal-action">
+					<!-- if there is a button in form, it will close the modal -->
+					<button @click="handleDeleteSubmit" v-if="request_body" class="btn btn-primary text-white">Submit</button>
+					<button @click="request_body = ''" class="btn btn-error text-white">Close</button>
+				</div>
+			</form>
+		</dialog>
+
+		<input :checked="if_sent" type="checkbox" id="my_modal_09" class="modal-toggle" />
+		<div class="modal">
+			<div class="modal-box">
+				<p class="py-4 text-center text-2xl">Request Sent!</p>
+				<div class="modal-action">
+					<label class="btn btn-sm btn-ghost" for="my_modal_09">Close</label>
+				</div>
+			</div>
+		</div>
+
 	</div>
 </template>
 
+<!-- TODO before the req is sent check to see if any user has already req for a deleting of that particular applicant -->
+
 <script setup lang="ts">
-import { useAppStore } from '@/store/app';
 import { storeToRefs } from 'pinia';
-import { Applicant } from '@/interfaces/interfaces';
 import { useAplStore } from '@/store/apl'
+import { useRequestStore } from '@/store/requests'
+import { Applicant } from 'interfaces/interfaces';
 
-const { _route } = useNuxtApp()
-const { total_apls } = storeToRefs(useAppStore())
 
-const apl = ref<Applicant>({
+onMounted(() => {
+	useAplStore().toggleEditMode(false)
+})
+let num = ref(0)
+const { edit_mode } = storeToRefs(useAplStore())
+const { curr_request } = storeToRefs(useRequestStore())
+const fullName = ref()
+const lastName = ref()
+const firstName = ref()
+const otherName = ref()
+const request_body = ref<string>()
+const curr_apl = ref<Applicant>()
+const if_sent = ref(false)
+
+const handleEmit = (e: Applicant) => {
+	curr_apl.value = e
+	fullName.value = e.fullName
+	firstName.value = e.pfirstName
+	otherName.value = e.potherName
+	lastName.value = e.plastName
+}
+
+function handleClose() {
+	useAplStore().toggleEditMode(false)
+}
+
+function logger(e: any) {
+	console.log(e);
+
+	setTimeout(() => {
+		curr_request.value!.modified_apl!.pfirstName = firstName.value
+		curr_request.value!.modified_apl!.plastName = lastName.value
+		curr_request.value!.modified_apl!.potherName = otherName.value
+		curr_request.value!.modified_apl!.fullName = `${lastName.value} ${firstName.value} ${otherName.value}`.trimEnd()
+	}, 10)
+}
+
+interface MyObject {
+	[key: string]: any;
+}
+
+async function handleSubmit() {
+	if (!request_body.value) return
+	curr_request.value!.body = request_body.value!
+	if (curr_request.value!.modified_apl == null) return
+	curr_request.value!.modified_apl.pfirstName = firstName.value
+	curr_request.value!.modified_apl.plastName = lastName.value
+	curr_request.value!.modified_apl.potherName = otherName.value
+	curr_request.value!.modified_apl.fullName = `${lastName.value} ${firstName.value} ${otherName.value}`.trimEnd()
+	let data = await useRequestStore().sendRequest(curr_request.value!)
+	if (data) if_sent.value = true
+	console.log("🚀 ~ file: [id].vue:135 ~ handleSubmit ~ data:", data)
+	console.log('done');
+	useAplStore().toggleEditMode(false)
+	num.value++
+	request_body.value = ''
+	useRequestStore().setRequest(nullReq.value)
+}
+
+async function handleDeleteSubmit() {
+	if (!request_body.value) return
+	let req = nullReq.value
+	req.body = request_body.value
+	req.apl_id = curr_apl.value?.apl_id!
+	req.modify_type = 'delete'
+	req.status = 'pending'
+	req.user_id = useSupabaseUser().value?.id!
+
+	let data = await useRequestStore().sendRequest(req)
+	if (data) if_sent.value = true
+	console.log("🚀 ~ file: [id].vue:135 ~ handleSubmit ~ data:", data)
+	console.log('done');
+	useAplStore().toggleEditMode(false)
+	num.value++
+	request_body.value = ''
+	useRequestStore().setRequest(nullReq.value)
+
+}
+
+const nullReq = ref({
 	apl_id: '',
-	aplImg_path: {
-		primePath: [],
-		secPath: [],
-		wardsPath: []
-	},
-	children_number: 0,
-	created_at: null,
-	fullName: '',
-	passport_ex: null,
-	pcity_ob: '',
-	pconf_code: '',
-	pcontact: '',
-	pcountry_live_today: '',
-	pcountry_ob: '',
-	pdob: null,
-	peducation_level: '',
-	pemail: '',
-	pfirstName: '',
-	pgender: '',
-	plastName: '',
-	pmarital_status: '',
-	pother_contact: '',
-	potherName: '',
-	ppassport_number: '',
-	ppostal: '',
-	psocial_media: {
-		facebook: '',
-		instagram: '',
-		twitter: '',
-	},
-	scity_ob: '',
-	scontact: '',
-	scountry_ob: '',
-	sdob: null,
-	sfirstName: '',
-	sgender: '',
-	slastName: '',
-	sotherName: '',
-	totalPayment: 0,
-	user_id: useSupabaseUser().value?.id!,
-	wards: []
+	modified_apl: null,
+	modify_type: '',
+	body: '',
+	status: 'pending',
+	user_id: '',
 })
-
-onMounted(async () => {
-	await useAppStore().getTotalApls()
-	let aplVal = total_apls.value.filter(applicant => applicant.apl_id == _route.params.id)[0]
-
-	apl.value = aplVal
-})
-
 </script>

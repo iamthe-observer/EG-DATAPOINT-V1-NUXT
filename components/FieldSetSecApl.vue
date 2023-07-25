@@ -68,7 +68,7 @@ const rules = computed(() => {
 	return {
 		slastName: { required },
 		sfirstName: { required },
-		sotherName: { required },
+		// sotherName: { required },
 		scity_ob: { required },
 		scountry_ob: { required },
 		scontact: { required },

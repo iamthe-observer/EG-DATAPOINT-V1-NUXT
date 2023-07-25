@@ -1,8 +1,9 @@
 import { useAppStore } from '@/store/app'
-import { storeToRefs } from 'pinia'
 import { useAnnStore } from '@/store/announce'
 import { setupCalendar, Calendar, DatePicker } from 'v-calendar'
 import 'v-calendar/style.css'
+import { useRequestStore } from '@/store/requests'
+import { Applicant } from 'interfaces/interfaces'
 
 export default defineNuxtPlugin(nuxtApp => {
   nuxtApp.vueApp.use(setupCalendar, {})
@@ -11,6 +12,7 @@ export default defineNuxtPlugin(nuxtApp => {
 
   const { $router, _route, $SB } = useNuxtApp()
   const app_loading = ref(false)
+  const curr_session = ref()
 
   watchEffect(() => {
     if (app_loading.value) {
@@ -60,11 +62,24 @@ export default defineNuxtPlugin(nuxtApp => {
     }
   }
 
+  function replaceWardWithImagePaths(
+    wardArray: string[],
+    imagePathsArray: string[]
+  ): string[] {
+    return wardArray.map(ward => {
+      const matchingPath = imagePathsArray.find(path =>
+        path.includes(ward + '.jpg')
+      )
+      return matchingPath ? matchingPath : ward
+    })
+  }
+
   const onInitLoadAppData = async () => {
     app_loading.value = true
     try {
       let currentSession = await $SB.auth.getSession()
-      console.log(currentSession.data)
+
+      curr_session.value = currentSession.data.session!
 
       if (currentSession.data.session == null) {
         throw currentSession.error
@@ -77,6 +92,7 @@ export default defineNuxtPlugin(nuxtApp => {
         await useAppStore().getTotalApls()
         await useAppStore().getPrices()
         await useAnnStore().getAnnounce()
+        await useRequestStore().getRequests()
 
         if (_route.path == '/') {
           // $router.push('/dashboard')
@@ -98,7 +114,7 @@ export default defineNuxtPlugin(nuxtApp => {
     app_loading.value = true
     try {
       let currentSession = await $SB.auth.getSession()
-      console.log(currentSession.data)
+      console.log(currentSession.data.session)
 
       if (currentSession.data.session == null) {
         throw currentSession.error
@@ -111,6 +127,7 @@ export default defineNuxtPlugin(nuxtApp => {
         await useAppStore().getTotalApls()
         await useAppStore().getPrices()
         await useAnnStore().getAnnounce()
+        await useRequestStore().getRequests()
 
         app_loading.value = false
         return user
@@ -119,6 +136,17 @@ export default defineNuxtPlugin(nuxtApp => {
       // $router.push('/')
       console.log(error)
       app_loading.value = false
+    }
+  }
+
+  function extractNumFromPhrase(phrase: string): number | null {
+    const regex = /ward(\d+)/ // Matches "ward" followed by one or more digits
+    const match = phrase.match(regex)
+
+    if (match && match[1]) {
+      return parseInt(match[1], 10)
+    } else {
+      return null
     }
   }
 
@@ -322,6 +350,13 @@ export default defineNuxtPlugin(nuxtApp => {
     'Zimbabwe',
   ]
 
+  function sortByRecency(apls: Applicant[]): Applicant[] {
+    return apls.sort(
+      (a, b) =>
+        new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime()
+    )
+  }
+
   return {
     provide: {
       loadAppData,
@@ -330,6 +365,10 @@ export default defineNuxtPlugin(nuxtApp => {
       formatDateWords,
       countries,
       app_loading,
+      extractNumFromPhrase,
+      replaceWardWithImagePaths,
+      sortByRecency,
+      curr_session,
     },
   }
 })

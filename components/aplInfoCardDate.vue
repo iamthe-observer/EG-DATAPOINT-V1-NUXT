@@ -23,10 +23,15 @@ const props = defineProps<{
 	date: Date | null
 	heading: string
 	name_type: string
+	idx?: number | null
 }>()
 const emit = defineEmits(['date'])
 function logger() {
-	emit('date', { name: props.name_type, date: date.value });
+	if (props.idx) {
+		emit('date', { name: props.name_type, date: date.value, ward_idx: props.idx });
+	} else {
+		emit('date', { name: props.name_type, date: date.value });
+	}
 }
 </script>
 
@@ -45,10 +50,10 @@ function logger() {
 }
 
 .info {
-	@apply p-3 font-bold;
+	@apply p-3;
 }
 
 .info_edit {
-	@apply p-3 font-bold bg-[#3f3f3f] rounded-b-xl;
+	@apply p-3 bg-[#3f3f3f] rounded-b-xl;
 }
 </style>

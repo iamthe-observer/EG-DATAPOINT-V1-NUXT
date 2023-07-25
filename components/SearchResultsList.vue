@@ -1,5 +1,6 @@
 <template>
-	<div class="w-full h-full flex flex-col self-end bg-gradient-to-b to-[rgba(0,0,0,0.5)] from-black overflow-y-scroll">
+	<div class="w-full h-full flex flex-col self-end bg-gradient-to-b to-[rgba(0,0,0,0.5)] from-black overflow-y-auto"
+		id="style-1">
 		<!-- top -->
 		<div class="min-h-[80px] w-full"></div>
 		<!-- bottom -->

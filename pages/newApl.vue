@@ -1,7 +1,8 @@
 <template>
 	<div :key="num" class="w-full h-full flex flex-col rounded-2xl pb-2">
 		<div ref="container"
-			class="w-full h-full rounded-2xl bg-neutral-800 col-span-full row-span-full pb-2 overflow-y-scroll scrollbar-hidden text-justify px-0 relative">
+			class="w-full h-full rounded-2xl bg-neutral-800 col-span-full row-span-full pb-2 overflow-y-scroll text-justify px-0 relative"
+			id="style-1">
 			<h1 @click="logger"
 				class="px-5 py-5 rounded-2xl bg-neutral-700 text-2xl w-full flex justify-between items-center sticky top-0 mb-2 shadow-lg z-10">
 				<span class="">Add a new Applicant</span>
@@ -10,10 +11,11 @@
 					@step="handleStep" :steps="steps_" class="text-sm" />
 
 				<div class="text-md">
-					<button v-if="!apl_sending" @click="handleSend" class="btn btn-outline rounded-xl text-white group">
+					<button v-if="!apl_sending" @click="handleSend"
+						class="btn btn-outline rounded-xl text-white group hover:bg-accent hover:text-white group">
 						SUBMIT
 						<SvgsCedis
-							class="w-4 aspect-square stroke-white fill-white group-hover:fill-black transition-all duration-150 ease-linear" />
+							class="w-4 aspect-square stroke-white fill-white transition-all duration-150 ease-linear group-hover:fill-white" />
 						{{
 							price }}.00
 					</button>
@@ -50,12 +52,11 @@
 import { PrimeApplicant, WardsApplicant, SecApplicant, AplData, Applicant } from '@/interfaces/interfaces';
 import { useAplStore } from '@/store/apl';
 import { useImageStore } from '@/store/images';
-import { required, email, numeric } from '@vuelidate/validators';
-import useVuelidate from '@vuelidate/core';
 // @ts-ignore
 import { v4 as uuidv4 } from 'uuid'
 import { storeToRefs } from 'pinia';
 import { useAppStore } from '@/store/app';
+import { useSSRContext } from 'nuxt/dist/app/compat/capi';
 
 const price = computed(() => {
 	const pp = useAppStore().prices[0]
@@ -85,6 +86,7 @@ const steps_ = ref([{ name: 'Primary', page: 'prime' }])
 const curr_page = ref('prime')
 const if_sent = ref<boolean>(false)
 const num = ref(0)
+const curr_datetime = ref()
 const apl_data = reactive<AplData>({
 	prime: null,
 	sec: null,
@@ -124,29 +126,28 @@ const if_wards = computed(() => {
 	} else { return false }
 })
 
-// const rules = computed(() => {
-// 	return {
-// 		plastName: { required },
-// 		pfirstName: { required },
-// 		potherName: { required },
-// 		pdob: { required },
-// 		pcity_ob: { required },
-// 		pcountry_ob: { required },
-// 		pgender: { required },
-// 		pemail: { required, email },
-// 		ppassport_number: { required },
-// 		passport_ex: { required },
-// 		pcountry_live_today: { required },
-// 		peducation_level: { required },
-// 		ppostal: { required },
-// 		pmarital_status: { required },
-// 		children_number: { required, numeric },
-// 		fullName: { required },
-// 		pcontact: { required },
-// 		totalPayment: { required },
-// 		pother_contact: { required },
-// 	}
-// })
+function calculateHoursPassed(date: string): number {
+	// Calculate the number of hours passed in a day and round off to no decimals
+	const startOfDay = new Date(date); // Create a copy of the current date
+	startOfDay.setHours(0, 0, 0, 0); // Set the time to the start of the day (00:00:00)
+
+	const hoursPassed = Math.floor((new Date(date).getTime() - startOfDay.getTime()) / (1000 * 60 * 60));
+
+	return hoursPassed;
+}
+
+onMounted(async () => {
+	try {
+		let response = await fetch('http://worldtimeapi.org/api/timezone/Africa/Accra')
+		curr_datetime.value = await response.json()
+		if (!curr_datetime.value) throw new Error("Can't get DateTime")
+		console.log(curr_datetime.value);
+		console.log(calculateHoursPassed(curr_datetime.value.datetime));
+	} catch (error) {
+		console.log(error);
+	}
+	// console.log(apl_data.prime!.aplImg_path.wardsPath);
+})
 
 onBeforeUnmount(() => {
 	useAplStore().resetAplData()
@@ -177,6 +178,7 @@ watchEffect(() => {
 		steps_.value = stepper
 	}
 })
+
 watchEffect(() => {
 	if (apl_data.prime?.pmarital_status == 'UNMARRIED') {
 		resetApl_sec()
@@ -195,7 +197,9 @@ watchEffect(() => {
 		for (let ii = 0; ii < diff; ii++) {
 			apl_data.wards?.pop()
 			val.wards.pop()
+			apl_data.prime!.aplImg_path.wardsPath.pop()
 		}
+		console.log(apl_data.prime!.aplImg_path.wardsPath);
 		console.log('done');
 	}
 })
@@ -220,6 +224,8 @@ function resetApl_sec() {
 }
 function resetApl_wards() {
 	apl_data.wards = []
+	apl_data.prime!.aplImg_path.wardsPath = []
+	console.log(apl_data.prime!.aplImg_path.wardsPath);
 	val.wards = []
 }
 // resets sec on marital status change
@@ -237,21 +243,31 @@ const handleWardInput = (child: { ward: WardsApplicant, valid: boolean }) => {
 	if (apl_data.wards?.length! > 0 && apl_data.wards!.some(warder => warder.index == child.ward.index)) {
 		const filtered_ward = apl_data.wards!.filter(warder => warder.index != child.ward.index)
 		const filtered_ward_valid = val.wards!.filter(warder => warder.idx != child.ward.index)
+		const filtered_path = apl_data.prime?.aplImg_path.wardsPath.filter(path => !path.includes(`ward${child.ward.index}`))!
 
 		filtered_ward.push(child.ward)
 		filtered_ward_valid.push({ idx: child.ward.index, val: child.valid })
+		filtered_path.push(`ward${child.ward.index}`)
 
 		filtered_ward.sort((a, b) => a.index - b.index)
 		filtered_ward_valid.sort((a, b) => a.idx - b.idx)
+		filtered_path.sort((a, b) => useNuxtApp().$extractNumFromPhrase(a)! - useNuxtApp().$extractNumFromPhrase(b)!)
 
 		apl_data.wards = filtered_ward
 		val.wards = filtered_ward_valid
+		apl_data.prime!.aplImg_path.wardsPath = filtered_path
+		// console.log(apl_data.prime!.aplImg_path.wardsPath);
 
 	} else {
 		apl_data.wards!.push(child.ward)
 		val.wards!.push({ idx: child.ward.index, val: child.valid })
+		apl_data.prime!.aplImg_path.wardsPath.push(`ward${child.ward.index}`)
+
 		apl_data.wards!.sort((a, b) => a.index - b.index)
 		val.wards!.sort((a, b) => a.idx - b.idx)
+		apl_data.prime!.aplImg_path.wardsPath.sort((a, b) => useNuxtApp().$extractNumFromPhrase(a)! - useNuxtApp().$extractNumFromPhrase(b)!)
+
+		// console.log(apl_data.prime!.aplImg_path.wardsPath);
 	}
 
 	// console.log(val.wards);
@@ -259,17 +275,27 @@ const handleWardInput = (child: { ward: WardsApplicant, valid: boolean }) => {
 	useAplStore().setWardsApl(apl_data.wards!)
 }
 
+console.log(
+	useNuxtApp().$replaceWardWithImagePaths(['a67249f8-a468-4431-8c06-bf26ad4bc333/ward0.jpeg'], ['ward0']));
+
+
 const submitApl = async (apl: Applicant) => {
 	if_sent.value = false
+	console.log(apl.aplImg_path.wardsPath);
 	try {
 		if (has_files.value) {
 			let { primePath, secPath, wardsPath } =
 				await useImageStore().uploadFiles(apl.apl_id)
 			apl.aplImg_path.primePath = primePath
 			apl.aplImg_path.secPath = secPath
-			apl.aplImg_path.wardsPath = wardsPath
+			wardsPath.forEach(path => {
+				for (let i = 0; i < apl.aplImg_path.wardsPath.length; i++) {
+					const el = apl.aplImg_path.wardsPath[i];
+					if (path.includes(el)) apl.aplImg_path.wardsPath[i] = path
+				}
+			});
+			console.log(apl.aplImg_path.wardsPath, wardsPath);
 		}
-		console.log(apl.aplImg_path);
 
 		const { error } = await $SB.from('applicants').insert([apl])
 
@@ -389,8 +415,8 @@ const doAction = async (apl_info: any) => {
 function logger() {
 	// console.log(apl_data);
 
-	console.log(if_prime.value, if_spouse.value, if_wards.value);
-	console.log(val.wards)
+	// console.log(if_prime.value, if_spouse.value, if_wards.value);
+	// console.log(val.wards)
 }
 
 // TODO error handler for JWT expiration

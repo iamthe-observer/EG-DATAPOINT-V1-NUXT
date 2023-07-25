@@ -1,6 +1,5 @@
 <template>
-	<div class="radial-progress bg-purple-800 text-primary-content border-4 border-purple-900"
-		:style="`--value:${amount}; `">
+	<div :class="`radial-progress bg-neutral-900 text-${textclr ? textclr : 'text-accent'}`" :style="`--value:${amount}; `">
 		{{
 			amount }}%</div>
 </template>
@@ -8,5 +7,7 @@
 <script setup lang="ts">
 defineProps<{
 	amount: number
+	textclr?: string
+	bgclr?: string
 }>()
 </script>

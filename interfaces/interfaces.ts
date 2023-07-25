@@ -14,10 +14,11 @@ export interface UserData {
 
 export interface Announcement {
   id: number
+  uuid: string
   created_at: Date
   title: string
   body: string
-  meta_data: {}
+  urgency: boolean
 }
 
 export interface WardsApplicant {
@@ -40,6 +41,14 @@ export interface SecApplicant {
   scontact: string
   sgender: string
   sdob: Date | null
+}
+
+export interface Task {
+  id?: string
+  created_at?: string
+  body: string
+  user_id: string
+  done?: boolean
 }
 
 export interface PrimeApplicant {
@@ -164,14 +173,14 @@ export interface DefaultProfile {
 }
 
 export interface Requests {
-  id: string
-  created_at: Date
+  id?: string
+  created_at?: Date
   user_id: string
   apl_id: string
-  reason_body: string
+  body: string
   status: string
   modify_type: string
-  modify_apl: PrimeApplicant
+  modified_apl?: Applicant | null
 }
 
 export interface SearchParams {

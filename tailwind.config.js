@@ -2,7 +2,21 @@
 module.exports = {
   plugins: [require('daisyui')],
   daisyui: {
-    themes: false, // true: all themes | false: only light + dark | array: specific themes like this ["light", "dark", "cupcake"]
+    themes: [
+      {
+        EG: {
+          primary: '#7e22ce',
+          secondary: '#eebe3e',
+          accent: '#e11d48',
+          neutral: '#3f3f3f',
+          'base-100': '#1f1f1f',
+          info: '#0ea5e9',
+          success: '#16a34a',
+          warning: '#fde68a',
+          error: '#dc2626',
+        },
+      },
+    ], // true: all themes | false: only light + dark | array: specific themes like this ["light", "dark", "cupcake"]
     darkTheme: 'dark', // name of one of the included themes for dark mode
     base: true, // applies background color and foreground color for root element by default
     styled: true, // include daisyUI colors and design decisions for all components
@@ -42,6 +56,10 @@ module.exports = {
         'span-15': 'span 15 / span 15',
         'span-8': 'span 8 / span 8',
         'span-7': 'span 7 / span 7',
+      },
+      fontFamily: {
+        Jost: 'Jost',
+        Fredoka: 'Fredoka',
       },
     },
   },

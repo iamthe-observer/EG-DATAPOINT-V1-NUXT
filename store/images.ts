@@ -80,51 +80,49 @@ export const useImageStore = defineStore('image', () => {
     }
   }
 
-  async function updateFile(path: string) {
-    let paths: string[] = []
-    for (const file of files.value) {
-      paths.push(await updateSingleAplImg(path))
-    }
+  // async function updateFile(path: string) {
+  //   let paths: string[] = []
+  //   for (const file of files.value) {
+  //     paths.push(await updateSingleAplImg(path, file))
+  //   }
 
-    primePath.value = paths.filter(path => {
-      if (path.includes('prime')) {
-        return path
-      }
-    })
-    secPath.value = paths.filter(path => {
-      if (path.includes('sec')) {
-        return path
-      }
-    })
-    wardsPath.value = paths.filter(path => {
-      if (path.includes('ward')) {
-        return path
-      }
-    })
-    files.value = []
+  //   primePath.value = paths.filter(path => {
+  //     if (path.includes('prime')) {
+  //       return path
+  //     }
+  //   })
+  //   secPath.value = paths.filter(path => {
+  //     if (path.includes('sec')) {
+  //       return path
+  //     }
+  //   })
+  //   wardsPath.value = paths.filter(path => {
+  //     if (path.includes('ward')) {
+  //       return path
+  //     }
+  //   })
+  //   files.value = []
 
-    console.log({
-      primePath: primePath.value,
-      secPath: secPath.value,
-      wardsPath: wardsPath.value,
-    })
+  //   console.log({
+  //     primePath: primePath.value,
+  //     secPath: secPath.value,
+  //     wardsPath: wardsPath.value,
+  //   })
 
-    return {
-      primePath: primePath.value,
-      secPath: secPath.value,
-      wardsPath: wardsPath.value,
-    }
-  }
+  //   return {
+  //     primePath: primePath.value,
+  //     secPath: secPath.value,
+  //     wardsPath: wardsPath.value,
+  //   }
+  // }
 
   async function uploadAplImg(uuid: any, file: any) {
     uploading.value = true
-    console.log(file)
     if (!has_files.value) return
     const fileExt = file.name.split('.').pop()
     const fileName = `${file.apl_type}`
     const filePath = `${fileName}.${fileExt}`
     const path: any = `${uuid}/${filePath}`
-
     try {
       const { data, error } = await $SB.storage
         .from('applicants')
@@ -140,17 +138,41 @@ export const useImageStore = defineStore('image', () => {
     }
   }
 
-  async function updateSingleAplImg(path: any) {
+  async function uploadAplImg2(uuid: any, file: any) {
+    uploading.value = true
+    const fileExt = file.name.split('.').pop()
+    const fileName = `${file.apl_type}`
+    const filePath = `${fileName}.${fileExt}`
+    const path: any = `${uuid}/${filePath}`
+    try {
+      const { data, error } = await $SB.storage
+        .from('applicants')
+        .upload(path, file)
+      if (error) throw error
+      uploading.value = false
+      console.log(data)
+
+      console.log('uploaded img')
+      return path
+    } catch (err: any) {
+      return useErrorHandle(err, uploading.value)
+    }
+  }
+
+  async function updateSingleAplImg(path: string, file: FileWithAplType) {
     uploading.value = true
     try {
       const { data, error } = await $SB.storage
         .from('applicants')
-        .update(path, files.value[0], {
+        .update(path, file, {
           cacheControl: '1',
           upsert: true,
         })
 
       if (error) throw error
+
+      console.log(data)
+
       uploading.value = false
       return path
     } catch (error: any) {
@@ -158,11 +180,19 @@ export const useImageStore = defineStore('image', () => {
     }
   }
 
-  const updateAplImg = async (path: any, uuid: any) => {
+  const updateAplImg = async (
+    path: any,
+    uuid: any,
+    file: FileWithAplType,
+    type: string
+  ) => {
     uploading.value = true
+    file.apl_type = type
     try {
-      await deleteAplImg(path)
-      await uploadAplImg(uuid, files.value[0])
+      let del = await deleteAplImg(path)
+      if (del) {
+        await uploadAplImg(uuid, file)
+      }
       uploading.value = false
     } catch (err: any) {
       uploading.value = false
@@ -226,6 +256,28 @@ export const useImageStore = defineStore('image', () => {
     }
   }
 
+  const updateSingleFile = async (
+    path: string,
+    uuid: string,
+    file: FileWithAplType,
+    type: string
+  ) => {
+    file.apl_type = type
+    uploading.value = true
+    try {
+      await deleteAplImg(path)
+      let val = await uploadAplImg(uuid, file)
+      uploading.value = false
+      console.log('done')
+      console.log('🚀 ~ file: images.ts:240 ~ useImageStore ~ val:', val)
+    } catch (err: any) {
+      uploading.value = false
+      console.trace(err.message)
+    } finally {
+      resetFiles()
+    }
+  }
+
   return {
     files,
     has_files,
@@ -238,11 +290,13 @@ export const useImageStore = defineStore('image', () => {
     wardIMG,
     updateAplPath,
     uploadAplImg,
+    uploadAplImg2,
     deleteAplImg,
     updateAplImg,
     updateSingleAplImg,
+    updateSingleFile,
     uploadFiles,
-    updateFile,
+    // updateFile,
     setFiles,
     removeFile,
     resetFiles,

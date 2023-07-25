@@ -65,7 +65,7 @@ const rules = computed(() => {
 	return {
 		wlastName: { required },
 		wfirstName: { required },
-		wotherName: { required },
+		// wotherName: { required },
 		wcity_ob: { required },
 		wcountry_ob: { required },
 		wgender: { required },
@@ -73,17 +73,26 @@ const rules = computed(() => {
 	}
 })
 
-// TODO you have to get the wardsIMG arr sorted in order
-
-onMounted(() => {
-	console.log(wardIMG.value);
+onMounted(async () => {
+	console.log(wardIMG.value, props.idx);
 
 	setTimeout(() => {
-		if (wardIMG.value[props.idx - 1]) wardSRC.value = (URL.createObjectURL(wardIMG.value[props.idx - 1]));
+		wardIMG.value.forEach(img => {
+			if (img.apl_type == `ward${props.idx}`) wardSRC.value = URL.createObjectURL(img)
+		});
+
+		// if (wardIMG.value[useNuxtApp().$extractNumFromPhrase(wardIMG.value[props.idx].apl_type)!]) wardSRC.value = (URL.createObjectURL(wardIMG.value[useNuxtApp().$extractNumFromPhrase(wardIMG.value[props.idx].apl_type)!]));
+
 	}, 100)
 
 	wdob.value = ward.value.wdob!
-	if (wards_apl.value.length > 0) { if (wards_apl.value[props.idx]) ward.value = wards_apl.value[props.idx] }
+	if (wards_apl.value.length > 0) {
+		if (wards_apl.value[props.idx]) ward.value = wards_apl.value[props.idx]
+	}
+	if (wdob.value) ward.value.wdob = wdob.value
+	const val = await v$.value.$validate()
+	emit('ward', { ward: ward.value, valid: val })
+
 	// if (wards_apl.value.length > 0) {
 	// 	let filtered_ward = wards_apl.value.filter(ward => ward.index === props.idx)[0]
 	// 	if (filtered_ward == undefined || filtered_ward == null) {

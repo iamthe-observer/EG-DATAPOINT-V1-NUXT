@@ -11,25 +11,32 @@
 				<textInput :no_uppercase="true" :bg="'neutral-700'" v-model="email_" :placeholder="'Enter username / email'" />
 				<textInput :type="'password'" :no_uppercase="true" :bg="'neutral-700'" v-model="password"
 					:placeholder="'Password'" class="mb-2" />
-				<span class="w-full text-right mb-6">Recover Password</span>
+				<span onclick="my_modal_23.showModal()"
+					class="hover:cursor-pointer hover:text-secondary w-full text-right mb-6">Recover
+					Password</span>
 				<button @click.prevent="loginUser" class="btn mb-9">Sign In</button>
-				<span class="w-full text-center mb-4">Or continue with</span>
-				<div class="mx-auto">google G</div>
 			</div>
 		</form>
+
+		<dialog id="my_modal_23" class="modal">
+			<form method="dialog" class="modal-box text-white w-fit outline-4 outline-neutral-700 outline">
+				<p class="">Response:</p>
+				<h3 class="font-semibold text-2xl">Contact the IT Head.</h3>
+			</form>
+			<form method="dialog" class="modal-backdrop bg-black bg-opacity-70">
+				<button>close</button>
+			</form>
+		</dialog>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { useAppStore } from '@/store/app'
 import { required, email } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 
 const { $SB } = useNuxtApp()
 const email_ = ref('')
 const password = ref('')
-const { } = storeToRefs(useAppStore())
 const emit = defineEmits(['login'])
 
 const rules = computed(() => {
@@ -43,7 +50,7 @@ const loading = ref<boolean>(false)
 const errMsg = ref<string>('')
 
 async function loginUser() {
-	// loading.value = true
+	loading.value = true
 	const v$l = useVuelidate(rules, { email: email_, password: password })
 	let val: any = await v$l.value.$validate()
 

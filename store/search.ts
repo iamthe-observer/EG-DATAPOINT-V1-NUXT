@@ -8,12 +8,21 @@ export interface SearchParams {
 }
 
 export const useSearchStore = defineStore('search', () => {
+  const if_search = ref(false)
+  const recent_search = ref(useStorage<SearchParams[] | null>('search', []))
+
   async function getSearch(search: string) {
     const data = await useAppStore().getTotalApls()
     return data!.filter(apl => apl.fullName?.includes(search))
   }
 
-  const recent_search = ref(useStorage<SearchParams[] | null>('search', []))
+  function setIfSearch(val: boolean) {
+    if_search.value = val
+  }
+
+  function clearRecentSearch() {
+    recent_search.value = []
+  }
 
   const resetRecentSearch = () => {
     recent_search.value = []
@@ -35,5 +44,8 @@ export const useSearchStore = defineStore('search', () => {
     resetRecentSearch,
     setRecentSearch,
     getSearch,
+    clearRecentSearch,
+    if_search,
+    setIfSearch,
   }
 })

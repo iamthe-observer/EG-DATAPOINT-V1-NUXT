@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import {
   PrimeApplicant,
+  Requests,
   SecApplicant,
   WardsApplicant,
 } from 'interfaces/interfaces'
@@ -8,10 +9,11 @@ import {
 export const useAplStore = defineStore('apl', () => {
   const user = useSupabaseUser()
   const edit_mode = ref(false)
-  function toggleEditMode() {
-    edit_mode.value = !edit_mode.value
-    console.log(edit_mode.value)
+
+  function toggleEditMode(val: boolean) {
+    edit_mode.value = val!
   }
+
   const prime_apl = ref<PrimeApplicant>({
     created_at: new Date(),
     plastName: '',

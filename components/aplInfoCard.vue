@@ -5,8 +5,9 @@
 		</span>
 		<span v-if="!edit_mode" class="info truncate">{{ modelValue }}</span>
 
-		<input v-else type="text" class="info_edit" @input="$emit('update:modelValue', $event.target?.value)"
-			:value="modelValue ? modelValue : value" :placeholder="placeholder ? placeholder : ''">
+		<input v-else oninput="this.value = this.value.toUpperCase()" type="text" class="info_edit"
+			@input="$emit('update:modelValue', $event.target?.value)" :value="modelValue ? modelValue : value"
+			:placeholder="placeholder ? placeholder : ''">
 	</p>
 </template>
 
@@ -21,7 +22,6 @@ defineProps<{
 	heading: string
 	value?: string
 	placeholder?: string
-	// info: string
 }>()
 </script>
 
@@ -36,11 +36,11 @@ defineProps<{
 }
 
 .info {
-	@apply p-3 font-bold;
+	@apply p-3;
 }
 
 .info_edit {
-	@apply p-3 font-bold bg-[#3f3f3f] rounded-b-xl;
+	@apply p-3 bg-[#3f3f3f] rounded-b-xl;
 }
 
 .heading {

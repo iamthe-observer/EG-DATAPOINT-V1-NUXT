@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 
 export const useAnnStore = defineStore('announcements', () => {
   const announcements = ref<Announcement[]>([])
+  const { $SB } = useNuxtApp()
 
   async function getAnnounce() {
     try {
@@ -15,6 +16,17 @@ export const useAnnStore = defineStore('announcements', () => {
       console.log(error)
     }
   }
+
+  $SB
+    .channel('prices-channel')
+    .on(
+      'postgres_changes',
+      { event: '*', schema: 'public', table: 'announcements' },
+      async payload => {
+        await getAnnounce()
+      }
+    )
+    .subscribe()
 
   return {
     getAnnounce,
