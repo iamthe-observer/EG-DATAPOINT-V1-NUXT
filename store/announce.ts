@@ -17,6 +17,10 @@ export const useAnnStore = defineStore('announcements', () => {
     }
   }
 
+  function resetAnnouncements() {
+    announcements.value = []
+  }
+
   $SB
     .channel('prices-channel')
     .on(
@@ -31,5 +35,6 @@ export const useAnnStore = defineStore('announcements', () => {
   return {
     getAnnounce,
     announcements,
+    resetAnnouncements
   }
 })

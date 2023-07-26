@@ -4,6 +4,8 @@ import { setupCalendar, Calendar, DatePicker } from 'v-calendar'
 import 'v-calendar/style.css'
 import { useRequestStore } from '@/store/requests'
 import { Applicant } from 'interfaces/interfaces'
+import { useTasksStore } from '@/store/tasks'
+import { useProfileStore } from '@/store/profile'
 
 export default defineNuxtPlugin(nuxtApp => {
   nuxtApp.vueApp.use(setupCalendar, {})
@@ -88,11 +90,32 @@ export default defineNuxtPlugin(nuxtApp => {
           data: { user },
         } = await $SB.auth.getUser()
 
-        await useAppStore().getAllMyApls()
-        await useAppStore().getTotalApls()
-        await useAppStore().getPrices()
-        await useAnnStore().getAnnounce()
-        await useRequestStore().getRequests()
+        const asyncFunctions = [
+          // useAppStore().getAllMyApls,
+          useAppStore().getTotalApls,
+          useAppStore().getPrices,
+          useAnnStore().getAnnounce,
+          useRequestStore().getRequests,
+          useTasksStore().getTasks,
+          useProfileStore().getProfile,
+        ]
+
+        Promise.allSettled(asyncFunctions.map(fn => fn()))
+          .then(results => {
+            console.log('All promises resolved!')
+            console.log(results)
+          })
+          .catch(error => {
+            console.error('An error occurred:', error)
+          })
+
+        // await useAppStore().getAllMyApls()
+        // await useAppStore().getTotalApls()
+        // await useAppStore().getPrices()
+        // await useAnnStore().getAnnounce()
+        // await useRequestStore().getRequests()
+        // await useTasksStore().getTasks()
+        // await useProfileStore().getProfile()
 
         if (_route.path == '/') {
           // $router.push('/dashboard')
@@ -123,11 +146,32 @@ export default defineNuxtPlugin(nuxtApp => {
           data: { user },
         } = await $SB.auth.getUser()
 
-        await useAppStore().getAllMyApls()
-        await useAppStore().getTotalApls()
-        await useAppStore().getPrices()
-        await useAnnStore().getAnnounce()
-        await useRequestStore().getRequests()
+        // await useAppStore().getAllMyApls()
+        // await useAppStore().getTotalApls()
+        // await useAppStore().getPrices()
+        // await useAnnStore().getAnnounce()
+        // await useRequestStore().getRequests()
+        // await useTasksStore().getTasks()
+        // await useProfileStore().getProfile()
+
+        const asyncFunctions = [
+          // useAppStore().getAllMyApls,
+          useAppStore().getTotalApls,
+          useAppStore().getPrices,
+          useAnnStore().getAnnounce,
+          useRequestStore().getRequests,
+          useTasksStore().getTasks,
+          useProfileStore().getProfile,
+        ]
+
+        Promise.allSettled(asyncFunctions.map(fn => fn()))
+          .then(results => {
+            console.log('All promises resolved!')
+            console.log(results)
+          })
+          .catch(error => {
+            console.error('An error occurred:', error)
+          })
 
         app_loading.value = false
         return user

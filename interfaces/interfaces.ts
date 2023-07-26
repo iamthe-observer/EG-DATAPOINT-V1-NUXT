@@ -8,7 +8,7 @@ export interface AplData {
 }
 
 export interface UserData {
-  profile: ProfileData[]
+  profile: Profile[]
   apls: PrimeApplicant[]
 }
 
@@ -152,15 +152,17 @@ export interface UserSignIn {
   user_id: string
 }
 
-export interface ProfileData {
+export interface Profile {
   id: string
-  updated_at: Date
-  username: string
-  full_name: string
-  settings: object
   email: string
-  avatar_url: string | undefined
-  avatar_path: string | undefined
+  is_dark: boolean
+  contact?: string
+  address?: string
+  national_id?: string
+  recent_search?: string
+  username: string
+  fullname?: string
+  avatar_url?: string | undefined
   role: boolean
 }
 

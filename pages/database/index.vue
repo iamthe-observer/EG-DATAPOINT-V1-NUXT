@@ -8,7 +8,7 @@
 
 			<!-- heading -->
 			<div class="flex justify-between">
-				<h3 class="text-3xl font-bold">Database Resources</h3>
+				<h3 class="text-3xl font-semibold">Database Resources</h3>
 
 				<div @click="useSearchStore().setIfSearch(true)" v-if="!if_search" ref="search_bar"
 					class="flex justify-end rounded-xl w-[400px] search_bar bg-neutral-900 fixed top-10 right-7 drop-shadow-2xl transition-all duration-300 ease-out">

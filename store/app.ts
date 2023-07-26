@@ -10,6 +10,13 @@ export const useAppStore = defineStore('app', () => {
   const prices = ref<Prices[]>([])
   const app_loading = ref(false)
 
+  function resetApp() {
+    all_my_apls.value = []
+    total_apls.value = []
+    prices.value = []
+    app_loading.value = false
+  }
+
   function setAppLoading(val: boolean) {
     app_loading.value = val
   }
@@ -49,6 +56,10 @@ export const useAppStore = defineStore('app', () => {
 
       if (error) throw error
       total_apls.value = data!
+
+      all_my_apls.value = data!.filter(
+        apl => apl.user_id == useSupabaseUser().value?.id
+      )
       return data
     } catch (err: any) {
       console.log(err)
@@ -73,6 +84,12 @@ export const useAppStore = defineStore('app', () => {
     )
   })
 
+  const all_total_daily_applicants = computed(() => {
+    return total_apls.value?.filter(
+      apl => $formatDate(new Date(apl.created_at!)) == $formatDate(new Date())
+    )
+  })
+
   // real-time channels
   $SB
     .channel('applicants-channel')
@@ -80,7 +97,7 @@ export const useAppStore = defineStore('app', () => {
       'postgres_changes',
       { event: '*', schema: 'public', table: 'applicants' },
       async payload => {
-        await getAllMyApls()
+        await getTotalApls()
       }
     )
     .subscribe()
@@ -100,6 +117,7 @@ export const useAppStore = defineStore('app', () => {
     all_my_apls,
     total_apls,
     total_daily_applicants,
+    all_total_daily_applicants,
     app_loading,
     prices,
     getAllMyApls,
@@ -107,5 +125,6 @@ export const useAppStore = defineStore('app', () => {
     setAppLoading,
     getPrices,
     getApplicant,
+    resetApp,
   }
 })

@@ -7,7 +7,7 @@
 					<span class="text-sm">All Applicants</span>
 					<span class="text-2xl font-medium">{{ all_my_apls?.length }}</span>
 					<span :class="`text-xs ${total_perc_inc >= 50 ? 'text-green-500' : 'text-red-500'} font-medium`">+{{
-						total_perc_inc.toFixed(1) }}% Inc.</span>
+						total_perc_inc.toFixed(1) }}% coverage.</span>
 				</p>
 				<radial-progress :textclr="'primary'" :amount="Number(total_apl_perc.toFixed(1))" />
 			</div>
@@ -17,15 +17,18 @@
 				<p class="flex flex-col gap-2">
 					<span class="text-sm">Today's Applicants</span>
 					<span class="font-medium text-2xl">{{ total_daily_applicants?.length }}</span>
-					<span :class="`text-xs ${total_daily_inc >= 100 ? 'text-green-500' : 'text-red-500'} font-medium`">
-						<span v-if="total_daily_inc < 100">-</span>
-						<span v-if="total_daily_inc > 100">+</span>
-						{{ total_daily_inc.toFixed(1) }}%
-						<span v-if="total_daily_inc < 100">Dec.</span>
-						<span v-if="total_daily_inc >= 100">Inc.</span>
-					</span>
+					<span :class="`text-xs ${total_daily_inc >= 50 ? 'text-green-500' : 'text-red-500'} font-medium`">+{{
+						total_daily_inc.toFixed(1) }}% more than yesterday.</span>
+
+					<!-- <span :class="`text-xs ${total_daily_inc! >= 100 ? 'text-green-500' : 'text-red-500'} font-medium`">
+						<span v-if="total_daily_inc! < 100 && total_daily_inc != 0">-</span>
+						<span v-if="total_daily_inc! > 100 && total_daily_inc != 0">+</span>
+						{{ total_daily_inc! > 0 || total_daily_inc! < 0 ? 100 - Number(total_daily_inc!.toFixed(1)) : 0 }}% <span
+							v-if="total_daily_inc! < 100">Dec.</span>
+					<span v-if="total_daily_inc! >= 100">Inc.</span>
+					</span> -->
 				</p>
-				<radial-progress :textclr="`secondary`" :amount="Number(total_daily_inc.toFixed(1))" />
+				<radial-progress :textclr="`secondary`" :amount="Number(total_daily_inc!.toFixed(1))" />
 			</div>
 		</div>
 
@@ -33,7 +36,7 @@
 			<!-- tasks -->
 			<div class="containers total_applicants flex items-center px-3 justify-between w-[70%] h-full gap-4">
 				<p class="flex flex-col gap-2 h-full w-full justify-center">
-					<textarea v-model="new_task" class="textarea text-sm h-[80%] w-full"
+					<textarea v-model="new_task" class="textarea outline outline-4 outline-neutral-700 text-sm h-[80%] w-full"
 						placeholder="Create a new Task..."></textarea>
 				</p>
 
@@ -42,7 +45,9 @@
 						class="hover:text-accent cursor-pointer hover:scale-110 transition-all duration-200 ease-in-out text-xs whitespace-nowrap">Tasks
 						Done</span>
 					<radial-progress :textclr="`accent`"
-						:amount="Number(((done_tasks.length / my_tasks.length) * 100).toFixed(1))" />
+						:amount="Number(((done_tasks.length / my_tasks.length) * 100).toFixed(1)) || 0">
+						{{ `${done_tasks.length}/${my_tasks.length}` }}
+					</radial-progress>
 				</div>
 
 				<div v-else class="join join-vertical">
@@ -80,25 +85,35 @@ import { useAppStore } from '@/store/app';
 import { useTasksStore } from '@/store/tasks';
 
 const new_task = ref<string>()
-const { all_my_apls, total_daily_applicants, total_apls } = storeToRefs(useAppStore())
+const { all_my_apls, total_daily_applicants, all_total_daily_applicants, total_apls } = storeToRefs(useAppStore())
 const { loading_task, my_tasks, done_task } = storeToRefs(useTasksStore())
 const { $formatDate, $curr_session } = useNuxtApp()
+
+onMounted(() => {
+	console.log(done_tasks.value);
+	console.log(my_tasks.value);
+})
 
 const total_apl_perc = computed(() => {
 	return ((all_my_apls.value.length / total_apls.value.length) * 100) || 0
 })
 
 const total_perc_inc = computed(() => {
-	return ((total_daily_applicants.value.length / total_apls.value.length) * 100) || 0
+	return ((total_daily_applicants.value.length / all_total_daily_applicants.value.length) * 100) || 0
 })
 
 const total_daily_inc = computed(() => {
 	let yesterday_apls = all_my_apls.value.filter(apl => $formatDate(new Date(apl.created_at!)) === $formatDate(new Date(Date.now() - 86400000)))
+	console.log(yesterday_apls);
+
 
 	if (yesterday_apls.length == 0 || total_daily_applicants.value.length == 0) {
 		return 0
 	} else {
-		return ((yesterday_apls.length / total_daily_applicants.value.length) * 100)
+		if (yesterday_apls.length < total_daily_applicants.value.length) return ((yesterday_apls.length / total_daily_applicants.value.length) * 100)
+		if (yesterday_apls.length > total_daily_applicants.value.length) return ((total_daily_applicants.value.length / yesterday_apls.length) * 100)
+		if (yesterday_apls.length = total_daily_applicants.value.length) return 0
+		return 0
 	}
 })
 

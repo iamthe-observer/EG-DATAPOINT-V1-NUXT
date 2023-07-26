@@ -4,7 +4,7 @@
 		<div class="w-full h-full carousel carousel-vertical rounded-xl carousel-center gap-2">
 
 			<div class="w-full h-full bg-neutral-800 grid place-items-center" v-if="recent_apls.length == 0">
-				<div class="flex flex-col items-center  gap-2">
+				<div class="flex flex-col items-center gap-2">
 					<svg xmlns="http://www.w3.org/2000/svg" class="w-20 aspect-square" viewBox="0 0 24 24">
 						<g stroke="#888888" stroke-linecap="round" stroke-width="2">
 							<path fill="#888888" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
@@ -95,7 +95,7 @@ onMounted(async () => {
 
 const recent_apls = computed(() => {
 	if (total_daily_applicants.value) {
-		return total_daily_applicants.value.slice(-5).reverse().sort()
+		// return total_daily_applicants.value.slice(-5).reverse().sort()
 		return total_daily_applicants.value.slice(5).sort((a, b) => new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime())
 
 	} else {

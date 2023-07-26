@@ -60,6 +60,8 @@ module.exports = {
       fontFamily: {
         Jost: 'Jost',
         Fredoka: 'Fredoka',
+        Lekton: 'Lekton',
+        'Lexend-Era': 'Lexend Era',
       },
     },
   },
