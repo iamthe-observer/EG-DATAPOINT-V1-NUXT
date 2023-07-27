@@ -1,6 +1,6 @@
 <template>
 	<div v-if="visible" class="absolute flex w-full h-full inset-0">
-		<div class="relative h-full flex-1 bg-gradient-to-b to-[rgba(0,0,0,0.5)] from-black">
+		<div class="relative h-full flex-1 bg-gradient-to-b to-[rgba(0,0,0,0.5)] from-black z-50">
 			<!-- SearchBar -->
 			<form @submit.prevent="startSearch" ref="search_bar"
 				class="flex justify-end rounded-xl w-[400px] search_bar bg-neutral-900 absolute z-10 top-5 right-1/2 translate-x-[47.9%] shadow-2xl transition-all duration-300 ease-out">

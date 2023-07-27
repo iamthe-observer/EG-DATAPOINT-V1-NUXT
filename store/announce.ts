@@ -17,7 +17,7 @@ export const useAnnStore = defineStore('announcements', () => {
     }
   }
 
-  function resetAnnouncements() {
+  function reset() {
     announcements.value = []
   }
 
@@ -35,6 +35,6 @@ export const useAnnStore = defineStore('announcements', () => {
   return {
     getAnnounce,
     announcements,
-    resetAnnouncements
+    reset,
   }
 })

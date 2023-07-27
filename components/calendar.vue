@@ -149,7 +149,6 @@ import { useAnnStore } from '@/store/announce';
 import { storeToRefs } from 'pinia';
 
 const { announcements } = storeToRefs(useAnnStore())
-console.log(announcements.value);
 
 const recent_ann = computed(() => {
 	return announcements.value.slice(0, 4).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
@@ -161,7 +160,6 @@ const attrs = ref([
 		key: 'test',
 		bar: {
 			style: {
-				backgroundColor: 'red',
 			},
 		},
 		dates: { start: new Date(), end: new Date() },

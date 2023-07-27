@@ -10,11 +10,10 @@ export const useAppStore = defineStore('app', () => {
   const prices = ref<Prices[]>([])
   const app_loading = ref(false)
 
-  function resetApp() {
+  function reset() {
     all_my_apls.value = []
     total_apls.value = []
     prices.value = []
-    app_loading.value = false
   }
 
   function setAppLoading(val: boolean) {
@@ -125,6 +124,6 @@ export const useAppStore = defineStore('app', () => {
     setAppLoading,
     getPrices,
     getApplicant,
-    resetApp,
+    reset,
   }
 })

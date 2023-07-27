@@ -14,7 +14,6 @@ export default defineNuxtPlugin(nuxtApp => {
 
   const { $router, _route, $SB } = useNuxtApp()
   const app_loading = ref(false)
-  const curr_session = ref()
 
   watchEffect(() => {
     if (app_loading.value) {
@@ -80,8 +79,7 @@ export default defineNuxtPlugin(nuxtApp => {
     app_loading.value = true
     try {
       let currentSession = await $SB.auth.getSession()
-
-      curr_session.value = currentSession.data.session!
+      console.log(currentSession.data.session)
 
       if (currentSession.data.session == null) {
         throw currentSession.error
@@ -102,30 +100,23 @@ export default defineNuxtPlugin(nuxtApp => {
 
         Promise.allSettled(asyncFunctions.map(fn => fn()))
           .then(results => {
-            console.log('All promises resolved!')
-            console.log(results)
+            // console.log('All promises resolved!')
+            // console.log(results)
+            app_loading.value = false
           })
           .catch(error => {
             console.error('An error occurred:', error)
           })
 
-        // await useAppStore().getAllMyApls()
-        // await useAppStore().getTotalApls()
-        // await useAppStore().getPrices()
-        // await useAnnStore().getAnnounce()
-        // await useRequestStore().getRequests()
-        // await useTasksStore().getTasks()
-        // await useProfileStore().getProfile()
-
         if (_route.path == '/') {
-          // $router.push('/dashboard')
+          $router.push('/dashboard')
         }
         await $SB.auth.startAutoRefresh()
-        app_loading.value = false
+        // app_loading.value = false
         return user
       }
     } catch (error) {
-      // $router.push('/')
+      $router.push('/')
       console.log(error)
       app_loading.value = false
     } finally {
@@ -137,7 +128,6 @@ export default defineNuxtPlugin(nuxtApp => {
     app_loading.value = true
     try {
       let currentSession = await $SB.auth.getSession()
-      console.log(currentSession.data.session)
 
       if (currentSession.data.session == null) {
         throw currentSession.error
@@ -146,16 +136,7 @@ export default defineNuxtPlugin(nuxtApp => {
           data: { user },
         } = await $SB.auth.getUser()
 
-        // await useAppStore().getAllMyApls()
-        // await useAppStore().getTotalApls()
-        // await useAppStore().getPrices()
-        // await useAnnStore().getAnnounce()
-        // await useRequestStore().getRequests()
-        // await useTasksStore().getTasks()
-        // await useProfileStore().getProfile()
-
         const asyncFunctions = [
-          // useAppStore().getAllMyApls,
           useAppStore().getTotalApls,
           useAppStore().getPrices,
           useAnnStore().getAnnounce,
@@ -166,18 +147,18 @@ export default defineNuxtPlugin(nuxtApp => {
 
         Promise.allSettled(asyncFunctions.map(fn => fn()))
           .then(results => {
-            console.log('All promises resolved!')
-            console.log(results)
+            // console.log('All promises resolved!')
+            // console.log(results)
+            app_loading.value = false
           })
           .catch(error => {
             console.error('An error occurred:', error)
           })
 
-        app_loading.value = false
         return user
       }
     } catch (error) {
-      // $router.push('/')
+      $router.push('/')
       console.log(error)
       app_loading.value = false
     }
@@ -412,7 +393,6 @@ export default defineNuxtPlugin(nuxtApp => {
       extractNumFromPhrase,
       replaceWardWithImagePaths,
       sortByRecency,
-      curr_session,
     },
   }
 })

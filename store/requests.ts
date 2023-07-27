@@ -19,6 +19,11 @@ export const useRequestStore = defineStore('requests', () => {
     }
   }
 
+  function reset() {
+    requests.value = []
+    curr_request.value = undefined
+  }
+
   async function sendRequest(request: Requests) {
     try {
       let { data, error } = await SB.from('requests').insert([request]).select()
@@ -49,6 +54,7 @@ export const useRequestStore = defineStore('requests', () => {
     sendRequest,
     curr_request,
     setRequest,
+    reset,
     requests,
   }
 })

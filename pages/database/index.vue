@@ -21,7 +21,11 @@
 			</div>
 			<!-- heading end -->
 
-			<section class="flex w-full h-[475px] mt-10 gap-5">
+			<section class="flex w-full h-[475px] mt-10 gap-5 relative">
+				<div
+					class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-4xl font-semibold drop-shadow-2xl p-5 w-full text-center bg-black bg-opacity-40 text-neutral-900">
+					Locked
+				</div>
 				<div class="bg-neutral-900 flex-1 rounded-2xl"></div>
 				<div class="bg-neutral-900 flex-1 rounded-2xl"></div>
 				<div class="bg-neutral-900 flex-1 rounded-2xl"></div>

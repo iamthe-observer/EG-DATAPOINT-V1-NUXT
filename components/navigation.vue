@@ -2,7 +2,7 @@
 	<div class="w-full h-full bg-neutral-800 p-0 rounded-2xl gap-5 flex flex-col justify-between">
 		<div class="dropdown dropdown-right">
 			<label tabindex="0" class="">
-				<Avatar :username="profile?.username!" />
+				<Avatar :username="profile?.username!" :role="profile?.role!" />
 			</label>
 			<ul tabindex="0"
 				class="dropdown-content menu p-2 shadow bg-base-100 border-2 border-neutral-900 rounded-box w-52 z-[500]">
@@ -27,6 +27,13 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
 import { useProfileStore } from '@/store/profile'
+import { useTasksStore } from '@/store/tasks';
+import { useAppStore } from '@/store/app';
+import { useAnnStore } from '@/store/announce';
+import { useRequestStore } from '@/store/requests';
+import { useSearchStore } from '@/store/search';
+import { useImageStore } from '@/store/images';
+import { useAplStore } from '@/store/apl';
 const { profile } = storeToRefs(useProfileStore())
 const { $router, $SB } = useNuxtApp()
 
@@ -37,6 +44,14 @@ async function handleLogout() {
 		// console.log('signed out');
 		console.log((await $SB.auth.getSession()).data)
 		// useAppStore().logged = false
+		useTasksStore().reset()
+		useProfileStore().reset()
+		useAppStore().reset()
+		useAnnStore().reset()
+		useRequestStore().reset()
+		useSearchStore().resetRecentSearch()
+		useImageStore().resetFiles()
+		useAplStore().resetAplData()
 		$router.push('/')
 
 

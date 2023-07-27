@@ -3,7 +3,7 @@
 
 		<div class="flex-1 flex-col flex">
 			<p class="text-2xl">Hello, {{ useProfileStore().profile?.fullname || 'User' }}</p>
-			<p class="text-sm text-accent">Welcome to Ebbysgold Group Datapoint</p>
+			<p class="text-sm text-primary">Welcome to Ebbysgold Group Datapoint</p>
 		</div>
 
 		<div class="min-w-[30%] flex items-center justify-end gap-5">

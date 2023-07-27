@@ -5,22 +5,23 @@ export const useTasksStore = defineStore('tasks', () => {
   const my_tasks = ref<Task[]>([])
   const loading_task = ref(false)
   const done_task = ref(false)
-  const { $SB, $curr_session } = useNuxtApp()
+  const { $SB } = useNuxtApp()
 
   const setDoneTask = (val: boolean) => {
     done_task.value = val
   }
 
   const getTasks = async () => {
+    let currentSession = await $SB.auth.getSession()
+
     try {
       let { data, error } = await $SB
         .from('tasks')
         .select('*')
-        .eq('user_id', $curr_session.value.user.id!)
+        .eq('user_id', currentSession.data.session!.user.id)
 
       if (error) throw error
       my_tasks.value = data!
-      console.log(data)
     } catch (error) {
       console.log(error)
     }
@@ -51,7 +52,14 @@ export const useTasksStore = defineStore('tasks', () => {
     )
     .subscribe()
 
+  function reset() {
+    my_tasks.value = []
+    loading_task.value = false
+    done_task.value = false
+  }
+
   return {
+    reset,
     getTasks,
     sendTasks,
     loading_task,

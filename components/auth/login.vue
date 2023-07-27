@@ -14,7 +14,10 @@
 				<span onclick="my_modal_23.showModal()"
 					class="hover:cursor-pointer hover:text-secondary w-full text-right mb-6">Recover
 					Password</span>
-				<button @click.prevent="loginUser" class="btn mb-9">Sign In</button>
+				<button @click.prevent="loginUser" class="btn mb-9">
+					<span v-if="loading" class="loading loading-ring loading-sm text-accent"></span>
+					<span v-else>Sign In</span>
+				</button>
 			</div>
 		</form>
 
