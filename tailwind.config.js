@@ -61,7 +61,7 @@ module.exports = {
         Jost: 'Jost',
         Fredoka: 'Fredoka',
         Lekton: 'Lekton',
-        'Lexend-Era': 'Lexend Era',
+        Foldit: 'Foldit',
       },
     },
   },

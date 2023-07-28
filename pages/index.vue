@@ -2,8 +2,14 @@
 	<div class="w-full h-full flex justify-between p-7 relative">
 		<div class="absolute bg- inset-0 my-7 mx-7">
 			<div class="w-full h-full flex relative">
-				<div class="l-slide w-[00px] rounded-2xl bg-black1"></div>
-				<div class="flex-1 rounded-2xl bg-black"></div>
+				<div class="l-slide bg-white w-[00px] rounded-2xl relative"></div>
+				<div class="flex-1 rounded-2xl bg-black relative">
+					<span class="z-[500] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[8rem]">
+						<span class="text-primary font-Foldit">Ebbysgold</span>
+						<br />
+						<span class="text-secondary font-Foldit">Datapoint</span>
+					</span>
+				</div>
 				<div class="r-slide w-[400px] rounded-2xl bg-black1"></div>
 			</div>
 		</div>
