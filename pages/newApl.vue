@@ -57,6 +57,9 @@ import { v4 as uuidv4 } from 'uuid'
 import { storeToRefs } from 'pinia';
 import { useAppStore } from '@/store/app';
 import { useSSRContext } from 'nuxt/dist/app/compat/capi';
+import { useTitle } from '@vueuse/core';
+
+useTitle('EG Datapoint | Add Applicant')
 
 const price = computed(() => {
 	const pp = useAppStore().prices[0]
@@ -372,7 +375,7 @@ const handleSend = async () => {
 		} else {
 			console.log('married');
 			if_sent.value = false
-			alert('fix yo shit');
+			alert('Error! Validation Failed. (Go over and check if all the fields have been filled.)');
 		}
 	} else if (apl_info.pmarital_status == 'MARRIED' && apl_info.children_number > 0) {
 		if (if_prime.value && if_spouse.value && if_wards.value) {
@@ -381,7 +384,7 @@ const handleSend = async () => {
 		} else {
 			console.log('family');
 			if_sent.value = false
-			alert('fix yo shit');
+			alert('Error! Validation Failed. (Go over and check if all the fields have been filled.)');
 		}
 	} else if (apl_info.pmarital_status != 'MARRIED' && apl_info.children_number > 0) {
 		if (if_prime.value && !if_spouse.value && if_wards.value) {
@@ -390,7 +393,7 @@ const handleSend = async () => {
 		} else {
 			console.log('single with kid/s');
 			if_sent.value = false
-			alert('fix yo shit');
+			alert('Error! Validation Failed. (Go over and check if all the fields have been filled.)');
 		}
 	} else if (apl_info.pmarital_status != 'MARRIED' && apl_info.children_number == 0) {
 		if (if_prime.value && !if_spouse.value && !if_wards.value) {
@@ -398,7 +401,7 @@ const handleSend = async () => {
 		} else {
 			console.log('single');
 			if_sent.value = false
-			alert('fix yo shit');
+			alert('Error! Validation Failed. (Go over and check if all the fields have been filled.)');
 		}
 	}
 

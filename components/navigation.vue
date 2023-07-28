@@ -2,12 +2,12 @@
 	<div class="w-full h-full bg-neutral-800 p-0 rounded-2xl gap-5 flex flex-col justify-between">
 		<div class="dropdown dropdown-right">
 			<label tabindex="0" class="">
-				<Avatar :username="profile?.username!" :role="profile?.role!" />
+				<Avatar :username="profile?.username!" :role="profile?.role!" :url="profile?.avatar_url" />
 			</label>
 			<ul tabindex="0"
 				class="dropdown-content menu p-2 shadow bg-base-100 border-2 border-neutral-900 rounded-box w-52 z-[500]">
 				<li class="">
-					<div class="flex justify-between items-center">
+					<div data-tip="Change Profile Picture" class="tooltip flex justify-between items-center">
 						{{ profile?.username || 'User' }}
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
 							<circle cx="26" cy="16" r="4" fill="#009900" />

@@ -15,8 +15,24 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
 	username: string | undefined
 	role?: boolean
+	url?: string
 }>()
+
+const src = ref()
+
+onMounted(async () => {
+	try {
+		let { data, error } = await useNuxtApp().$SB.storage.from('applicants').createSignedUrls([props.url!], 10)
+		if (error) throw error
+
+		src.value = data![0].signedUrl
+		console.log(data);
+
+	} catch (error) {
+		console.log(error);
+	}
+})
 </script>

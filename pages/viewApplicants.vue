@@ -161,6 +161,9 @@
 import { storeToRefs } from 'pinia'
 import { useAppStore } from '@/store/app'
 import { Applicant } from 'interfaces/interfaces';
+import { useTitle } from '@vueuse/core';
+
+useTitle('EG Datapoint | View Applicants')
 
 const { all_my_apls } = storeToRefs(useAppStore())
 const page_index = ref(1)

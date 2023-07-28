@@ -32,6 +32,14 @@ export default defineNuxtPlugin(nuxtApp => {
     return formattedDate
   }
 
+  function formatDateTime(date: Date) {
+    return date.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    })
+  }
+
   function getOrdinalSuffix(day: number): string {
     if (day >= 11 && day <= 13) {
       return 'th'
@@ -387,6 +395,7 @@ export default defineNuxtPlugin(nuxtApp => {
       loadAppData,
       onInitLoadAppData,
       formatDate,
+      formatDateTime,
       formatDateWords,
       countries,
       app_loading,

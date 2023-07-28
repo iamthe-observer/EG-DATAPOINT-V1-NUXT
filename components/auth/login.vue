@@ -36,6 +36,9 @@
 <script setup lang="ts">
 import { required, email } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
+import { useTitle } from '@vueuse/core';
+
+useTitle('EG Datapoint | Home | Login')
 
 const { $SB } = useNuxtApp()
 const email_ = ref('')

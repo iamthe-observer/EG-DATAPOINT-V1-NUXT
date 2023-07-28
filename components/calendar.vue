@@ -136,7 +136,8 @@
 				</div>
 			</div>
 			<div v-if="announcements.length > 0"
-				class="ann_btn w-[90%] whitespace-nowrap text-sm mx-auto bg-neutral-700 py-3 text-center rounded-xl">view
+				class="ann_btn w-[90%] whitespace-nowrap text-sm mx-auto bg-neutral-700 py-3 text-center rounded-xl hover:text-secondary cursor-pointer"
+				@click="$router.push('/database')">view
 				({{
 					announcements.length - 4 }}) more
 				announcement(s)</div>

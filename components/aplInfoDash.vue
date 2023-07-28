@@ -1,28 +1,43 @@
 <template>
 	<div class="__apl_info col-span-6 row-span-8 flex flex-col gap-5 p-2">
 		<div v-if="!role" class="flex w-full h-full gap-5">
-			<!-- total applicants -->
-			<div class="containers total_applicants px-4 flex gap-2 items-center justify-between w-full h-full">
-				<p class="flex flex-col gap-2">
-					<span class="text-sm text-neutral-500">All Applicants</span>
-					<span class="text-2xl font-medium">{{ all_my_apls?.length }}</span>
-					<span :class="`text-xs ${total_perc_inc >= 50 ? 'text-green-500' : 'text-red-500'} font-medium`">+{{
-						total_perc_inc.toFixed(1) }}% coverage.</span>
+			<!-- tasks -->
+			<div class="containers total_applicants flex items-center px-3 justify-between w-full h-full gap-4">
+				<p class="flex flex-col gap-2 h-full w-full justify-center">
+					<textarea v-model="new_task" class="textarea outline outline-4 outline-neutral-700 text-sm h-[80%] w-full"
+						placeholder="Create a new Task..."></textarea>
 				</p>
-				<radial-progress :textclr="'primary'" :amount="Number(total_apl_perc.toFixed(1))" />
-			</div>
 
-			<!-- total daily applicants -->
-			<div class="containers total_applicants px-4 flex items-center justify-between w-full h-full">
-				<p class="flex flex-col gap-2">
-					<span class="text-sm text-neutral-500">Today's Applicants</span>
-					<span class="font-medium text-2xl">{{ total_daily_applicants?.length }}</span>
-					<span :class="`text-xs ${total_daily_inc >= 50 ? 'text-green-500' : 'text-red-500'} font-medium w-2/3`">+{{
-						total_daily_inc.toFixed(1) }}% more than yesterday.</span>
-				</p>
-				<radial-progress :textclr="`secondary`" :amount="Number(total_daily_inc!.toFixed(1))" />
+				<div v-if="!new_task" class="flex flex-col items-center gap-2 w-fit">
+					<span
+						class="hover:text-accent cursor-pointer hover:scale-110 transition-all duration-200 ease-in-out text-xs whitespace-nowrap">Tasks
+						Done</span>
+					<radial-progress :textclr="`accent`"
+						:amount="Number(((done_tasks.length / my_tasks.length) * 100).toFixed(1)) || 0">
+						{{ `${done_tasks.length}/${my_tasks.length}` }}
+					</radial-progress>
+				</div>
+
+				<div v-else class="join join-vertical">
+					<button @click="handleTask" class="btn join-item btn-md btn-success">
+						<span v-if="!loading_task" class="">Save</span>
+						<span v-else class="loading loading-ring loading-md"></span>
+					</button>
+					<button @click="new_task = ''" class="btn join-item btn-md btn-error">Cancel</button>
+				</div>
+				<input type="checkbox" :checked="done_task" class="modal-toggle" />
+				<div class="modal">
+					<div class="modal-box w-fit">
+						<h3 class="font-semibold text-lg">Task has been saved!</h3>
+						<div class="modal-action">
+							<label @click="useTasksStore().setDoneTask(false)" class="btn">Close!</label>
+						</div>
+					</div>
+				</div>
+
 			</div>
 		</div>
+
 		<!-- admin -->
 		<div v-else class="flex w-full h-full gap-5">
 			<!-- total daily applicants -->
@@ -59,48 +74,30 @@
 		</div>
 
 		<div v-if="!role" class="flex w-full h-full gap-5">
-			<!-- tasks -->
-			<div class="containers total_applicants flex items-center px-3 justify-between w-[70%] h-full gap-4">
-				<p class="flex flex-col gap-2 h-full w-full justify-center">
-					<textarea v-model="new_task" class="textarea outline outline-4 outline-neutral-700 text-sm h-[80%] w-full"
-						placeholder="Create a new Task..."></textarea>
+			<!-- total applicants -->
+			<div class="containers total_applicants px-4 flex gap-2 items-center justify-between w-full h-full">
+				<p class="flex flex-col gap-2">
+					<span class="text-sm text-neutral-500">All Applicants</span>
+					<span class="text-2xl font-medium">{{ all_my_apls?.length }}</span>
+					<span :class="`text-xs ${total_perc_inc >= 50 ? 'text-green-500' : 'text-red-500'} font-medium`">+{{
+						total_perc_inc.toFixed(1) }}% coverage.</span>
 				</p>
-
-				<div v-if="!new_task" class="flex flex-col items-center gap-2 w-fit">
-					<span
-						class="hover:text-accent cursor-pointer hover:scale-110 transition-all duration-200 ease-in-out text-xs whitespace-nowrap">Tasks
-						Done</span>
-					<radial-progress :textclr="`accent`"
-						:amount="Number(((done_tasks.length / my_tasks.length) * 100).toFixed(1)) || 0">
-						{{ `${done_tasks.length}/${my_tasks.length}` }}
-					</radial-progress>
-				</div>
-
-				<div v-else class="join join-vertical">
-					<button @click="handleTask" class="btn join-item btn-md btn-success">
-						<span v-if="!loading_task" class="">Save</span>
-						<span v-else class="loading loading-ring loading-md"></span>
-					</button>
-					<button @click="new_task = ''" class="btn join-item btn-md btn-error">Cancel</button>
-				</div>
-				<input type="checkbox" :checked="done_task" class="modal-toggle" />
-				<div class="modal">
-					<div class="modal-box w-fit">
-						<h3 class="font-semibold text-lg">Task has been saved!</h3>
-						<div class="modal-action">
-							<label @click="useTasksStore().setDoneTask(false)" class="btn">Close!</label>
-						</div>
-					</div>
-				</div>
-
+				<radial-progress :textclr="'primary'" :amount="Number(total_apl_perc.toFixed(1))" />
 			</div>
 
-
-
-			<div class="containers total_applicants px-4 flex items-center justify-between flex-1">
-
+			<!-- total daily applicants -->
+			<div class="containers total_applicants px-4 flex items-center justify-between w-full h-full">
+				<p class="flex flex-col gap-2">
+					<span class="text-sm text-neutral-500">Today's Applicants</span>
+					<span class="font-medium text-2xl">{{ total_daily_applicants?.length }}</span>
+					<span :class="`text-xs ${total_daily_inc >= 50 ? 'text-green-500' : 'text-red-500'} font-medium w-2/3`">+{{
+						total_daily_inc.toFixed(1) }}% more than yesterday.</span>
+				</p>
+				<radial-progress :textclr="`secondary`" :amount="Number(total_daily_inc!.toFixed(1))" />
 			</div>
 		</div>
+
+		<!-- admin -->
 		<div v-else class="flex w-full h-full gap-5">
 			<!-- tasks -->
 			<div class="containers total_applicants flex items-center px-3 justify-between w-[70%] h-full gap-4">

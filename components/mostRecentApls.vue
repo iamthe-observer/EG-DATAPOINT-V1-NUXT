@@ -1,7 +1,8 @@
 <template>
 	<div class="__most_recent_apls col-span-3 row-span-7 p-2">
 		<div class="bg-neutral-800 w-full h-full rounded-xl p-2 flex flex-col gap-2">
-			<h2 class="flex-1 flex items-center justify-between">
+			<h2 class="flex-1 flex items-center justify-between cursor-pointer hover:text-secondary"
+				@click="$router.push('/database')">
 				<span class="text-lg font-medium">Total Requests</span>
 				<span class="text-lg font-medium">{{ requests.length }}</span>
 			</h2>
