@@ -4,8 +4,8 @@
 			<SvgsImage class="w-10" />
 		</div>
 
-		<div class="absolute inset-1 rounded-md bg-neutral-700 grid place-items-center" v-else><img :src="src" :alt="alt"
-				class="w-full h-full rounded-md object-cover"></div>
+		<div class="absolute inset-1 rounded-md bg-neutral-700 grid place-items-center" v-else><img :src="src ? src : ''"
+				:alt="alt" class="w-full h-full rounded-md object-cover"></div>
 	</div>
 </template>
 

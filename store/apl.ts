@@ -219,29 +219,35 @@ export const useAplStore = defineStore('apl', () => {
     () => applicant.value.children_number,
     newVal => {
       applicant.value.wards = []
+      applicant.value.aplImg_path.wardsPath = []
       for (let idx = 0; idx < newVal; idx++) {
         let ward = { ...empty_ward.value }
         ward.index = idx
         applicant.value.wards.push(ward)
+        applicant.value.aplImg_path.wardsPath.push(`ward${idx}`)
       }
+      console.log(applicant.value.aplImg_path.wardsPath)
     }
   )
 
-  watchEffect(() => {
-    if (
-      applicant.value.aplImg_path.wardsPath.length! >
-        applicant.value.children_number! &&
-      applicant.value.wards?.length != 0
-    ) {
-      let diff =
-        applicant.value.wards?.length! - applicant.value.children_number!
-      for (let ii = 0; ii < diff; ii++) {
-        applicant.value.aplImg_path.wardsPath.pop()
-      }
-      console.log(applicant.value.aplImg_path.wardsPath)
-      console.log('done')
-    }
-  })
+  // watch(
+  //   () => applicant.value.wards.length,
+  //   () => {
+  //     if (
+  //       applicant.value.aplImg_path.wardsPath.length! >
+  //         applicant.value.children_number! &&
+  //       applicant.value.wards?.length != 0
+  //     ) {
+  //       let diff =
+  //         applicant.value.wards?.length! - applicant.value.children_number!
+  //       for (let ii = 0; ii < diff; ii++) {
+  //         applicant.value.aplImg_path.wardsPath.pop()
+  //       }
+  //       console.log(applicant.value.aplImg_path.wardsPath)
+  //       console.log('done')
+  //     }
+  //   }
+  // )
 
   function toggleEditMode(val: boolean) {
     edit_mode.value = val!
@@ -253,37 +259,35 @@ export const useAplStore = defineStore('apl', () => {
     return val
   }
 
-  const handleWardPath = (ward: WardsApplicant) => {
-    if (
-      applicant.value.wards?.length! > 0 &&
-      applicant.value.wards!.some(warder => warder.index == ward.index)
-    ) {
-      const filtered_path = applicant.value.aplImg_path.wardsPath.filter(
-        path => !path.includes(`ward${ward.index}`)
-      )!
+  // const handleWardPath = (ward: WardsApplicant) => {
+  //   if (
+  //     applicant.value.wards?.length! > 0 &&
+  //     applicant.value.wards!.some(warder => warder.index == ward.index)
+  //   ) {
+  //     const filtered_path = applicant.value.aplImg_path.wardsPath.filter(
+  //       path => !path.includes(`ward${ward.index}`)
+  //     )!
 
-      filtered_path.push(`ward${ward.index}`)
+  //     filtered_path.push(`ward${ward.index}`)
 
-      filtered_path.sort(
-        (a, b) =>
-          useNuxtApp().$extractNumFromPhrase(a)! -
-          useNuxtApp().$extractNumFromPhrase(b)!
-      )
+  //     filtered_path.sort(
+  //       (a, b) =>
+  //         useNuxtApp().$extractNumFromPhrase(a)! -
+  //         useNuxtApp().$extractNumFromPhrase(b)!
+  //     )
 
-      applicant.value.aplImg_path.wardsPath = filtered_path
-      // console.log(applicant.value.aplImg_path.wardsPath);
-    } else {
-      applicant.value.aplImg_path.wardsPath.push(`ward${ward.index}`)
+  //     applicant.value.aplImg_path.wardsPath = filtered_path
+  //     // console.log(applicant.value.aplImg_path.wardsPath);
+  //   } else {
+  //     applicant.value.aplImg_path.wardsPath.push(`ward${ward.index}`)
 
-      applicant.value.aplImg_path.wardsPath.sort(
-        (a, b) =>
-          useNuxtApp().$extractNumFromPhrase(a)! -
-          useNuxtApp().$extractNumFromPhrase(b)!
-      )
-
-      // console.log(apl_data.prime!.aplImg_path.wardsPath);
-    }
-  }
+  //     applicant.value.aplImg_path.wardsPath.sort(
+  //       (a, b) =>
+  //         useNuxtApp().$extractNumFromPhrase(a)! -
+  //         useNuxtApp().$extractNumFromPhrase(b)!
+  //     )
+  //   }
+  // }
 
   const submitApl = async (apl: Applicant) => {
     console.log(apl.aplImg_path.wardsPath)
@@ -475,6 +479,6 @@ export const useAplStore = defineStore('apl', () => {
     if_sent,
     apl_sending,
     handleFile,
-    handleWardPath,
+    // handleWardPath,
   }
 })

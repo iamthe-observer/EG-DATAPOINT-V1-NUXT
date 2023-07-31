@@ -3,8 +3,20 @@
 		<!-- primary apl -->
 		<div class="flex gap-4">
 			<!-- image -->
-			<div class="">
-				<AvatarSelect :classer="`w-[300px] h-[300px]`" :src="prime_image" />
+			<div class="flex flex-col gap-2">
+				<div class="indicator">
+					<span :class="['indicator-item indicator-top indicator-center badge',
+						!edit_mode ? 'badge-primary' : 'badge-secondary']">Primary Applicant</span>
+					<AvatarSelect :classer="`w-[300px] h-[300px]`" :src="prime_image" />
+				</div>
+				<div class="flex w-full gap-2 items-end">
+					<button v-if="edit_mode && prime_file" @click="handlePrimeUpdate" class="btn btn-xs btn-success">
+						<span v-if="p_loading" class="loading loading-ring loading-sm text-white"></span>
+						<span v-else>Update</span>
+					</button>
+					<input v-if="edit_mode" @change="e => handleFile(e, 'prime')" type="file"
+						class="file-input file-input-xs file-input-primary w-full mt-2" />
+				</div>
 			</div>
 
 			<div class="grid grid-cols-3 gap-2 w-full">
@@ -35,9 +47,22 @@
 		<!-- secondary -->
 		<div v-if="apl.pmarital_status == 'MARRIED'" class="flex gap-4">
 			<!-- image -->
-			<div class="">
-				<AvatarSelect :classer="`w-[300px] h-[300px]`" :src="sec_image" />
+			<div class="flex flex-col gap-2">
+				<div class="indicator">
+					<span :class="['indicator-item indicator-top indicator-center badge',
+						!edit_mode ? 'badge-primary' : 'badge-secondary']">Secondary Applicant</span>
+					<AvatarSelect :classer="`w-[300px] h-[300px]`" :src="sec_image" />
+				</div>
+				<div class="flex w-full gap-2 items-end">
+					<button v-if="edit_mode && sec_file" @click="handleSecUpdate" class="btn btn-xs btn-success">
+						<span v-if="s_loading" class="loading loading-ring loading-sm text-white"></span>
+						<span v-else>Update</span>
+					</button>
+					<input v-if="edit_mode" @change="e => handleFile(e, 'sec')" type="file"
+						class="file-input file-input-xs file-input-primary w-full mt-2" />
+				</div>
 			</div>
+
 
 			<div class="grid grid-cols-3 gap-2 w-full h-fit">
 				<h2 class="col-span-full py-3 text-2xl font-bold flex justify-between items-center">
@@ -70,9 +95,27 @@
 		<div v-if="apl.wards.length > 0" class="flex flex-col gap-10">
 			<div v-for="(ward, i) in apl.wards" class="flex gap-5">
 				<!-- image -->
-				<div class="">
-					<AvatarSelect :classer="`w-[300px] h-[300px]`" :src="wards_image[ward.index!]" />
+				<div class="flex flex-col gap-2">
+					<div class="indicator">
+						<span :class="['indicator-item indicator-top indicator-center badge',
+							!edit_mode ? 'badge-primary' : 'badge-secondary']">Ward Applicant {{ i + 1
+	}}</span>
+						<AvatarSelect :classer="`w-[300px] h-[300px]`" :src="wards_image[ward.index!]" />
+					</div>
+					<div class="flex w-full gap-2 items-end">
+						<button v-if="edit_mode && wards_file[0] && curr_ward_file!.apl_type.includes(`ward${i}`)"
+							@click="handleWardUpdate(i)" class="btn btn-xs btn-success">
+							<span v-if="w_loading && wards_file[0] && curr_ward_file!.apl_type.includes(`ward${i}`)"
+								class="loading loading-ring loading-sm text-white"></span>
+							<span v-else>Update</span>
+						</button>
+						<input v-if="edit_mode" @change="e => handleFile(e, `ward${i}`, i)" type="file"
+							class="file-input file-input-xs file-input-primary w-full mt-2" />
+					</div>
 				</div>
+
+
+
 				<div class="flex-1 grid grid-cols-2 gap-2 col-span-full h-fit">
 					<h2 class="col-span-full py-3 text-2xl font-bold flex justify-between items-center w-full">
 						<span>Ward #{{ ward.index! + 1 }}</span>
@@ -80,9 +123,12 @@
 													${ward.wotherName}`.trimEnd() }}
 						</span>
 						<div v-else class="flex gap-3 w-2/3">
-							<TextInput @update:model-value="logger" classer="input-sm" v-model="ward.wlastName">Last Name</TextInput>
-							<TextInput @update:model-value="logger" classer="input-sm" v-model="ward.wfirstName">First Name</TextInput>
-							<TextInput @update:model-value="logger" classer="input-sm" v-model="ward.wotherName">Other Name</TextInput>
+							<TextInput @update:model-value="logger" classer="input-sm font-normal" v-model="ward.wlastName">Last Name
+							</TextInput>
+							<TextInput @update:model-value="logger" classer="input-sm font-normal" v-model="ward.wfirstName">First Name
+							</TextInput>
+							<TextInput @update:model-value="logger" classer="input-sm font-normal" v-model="ward.wotherName">Other Name
+							</TextInput>
 						</div>
 					</h2>
 
@@ -170,6 +216,9 @@ const { $SB } = useNuxtApp()
 const { total_apls } = storeToRefs(useAppStore())
 const { APL_ID } = storeToRefs(useViewAplStore())
 const emit = defineEmits(['apl', 'request'])
+const p_loading = ref(false)
+const s_loading = ref(false)
+const w_loading = ref(false)
 const request = ref<Requests>({
 	apl_id: '',
 	modified_apl: null,
@@ -241,8 +290,10 @@ async function loadUrl() {
 
 		prime_image.value = data[0].signedUrl || ''
 		sec_image.value = data[1].signedUrl || ''
+		if (!data) return
 		wards_image.value = data.slice(2).map(img => img.signedUrl)
-		// wards_data.value = data.slice(2)
+		console.log(wards_image.value);
+
 	}
 	catch (err: any) {
 		console.log((err));
@@ -317,17 +368,18 @@ function handleFile(evt: any, type: string, idx?: number) {
 }
 
 async function handlePrimeUpdate() {
-	let aplVal = total_apls.value.filter(applicant => apl.value.apl_id == useNuxtApp()._route.params.id)[0]
+	p_loading.value = true
+	let aplVal = total_apls.value.filter(applicant => apl.value.apl_id == applicant.apl_id)[0]
 	if (!prime_file.value) return;
 	if (apl.value.aplImg_path.primePath.length == 0) {
 		try {
 			// let apl_paths = apl.value.aplImg_path
-			prime_file.value!.apl_type = 'prime'
+			// prime_file.value!.apl_type = 'prime'
 			let path = await useImageStore().uploadAplImg2(apl.value.apl_id, prime_file.value)
 			aplVal.aplImg_path.primePath.push(path)
 			console.log(aplVal)
 			console.log(path)
-			if (!path) return
+			if (!path) aplVal.aplImg_path.primePath.push(`${apl.value.apl_id}/prime.jpeg`)
 			const { error: err } = await $SB
 				.from('applicants')
 				.delete()
@@ -344,25 +396,30 @@ async function handlePrimeUpdate() {
 			if (error) throw error
 			if_updated.value = true
 			console.log(data)
+			p_loading.value = false
 		} catch (error) {
 			console.log(error);
+			p_loading.value = false
 		}
 	} else {
+		p_loading.value = true
 		let path = await useImageStore().updateSingleAplImg(apl.value.aplImg_path.primePath[0], prime_file.value!);
 		if (path) if_updated.value = true
+		p_loading.value = false
 	}
 }
 async function handleSecUpdate() {
-	let aplVal = total_apls.value.filter(applicant => apl.value.apl_id == useNuxtApp()._route.params.id)[0]
+	s_loading.value = true
+	let aplVal = total_apls.value.filter(applicant => apl.value.apl_id == applicant.apl_id)[0]
 	if (!sec_file.value) return;
 	if (apl.value.aplImg_path.secPath.length == 0) {
 		try {
-			sec_file.value!.apl_type = 'sec'
+			// sec_file.value!.apl_type = 'sec'
 			let path = await useImageStore().uploadAplImg2(apl.value.apl_id, sec_file.value)
 			aplVal.aplImg_path.secPath.push(path)
 			console.log(aplVal)
 			console.log(path)
-			if (!path) return
+			if (!path) aplVal.aplImg_path.secPath.push(`${apl.value.apl_id}/sec.jpeg`)
 			const { error: err } = await $SB
 				.from('applicants')
 				.delete()
@@ -379,21 +436,26 @@ async function handleSecUpdate() {
 			if (error) throw error
 			if_updated.value = true
 			console.log(data)
+			s_loading.value = false
 		} catch (error) {
 			console.log(error);
+			s_loading.value = false
 		}
 	} else {
+		s_loading.value = true
 		let path = await useImageStore().updateSingleAplImg(apl.value.aplImg_path.secPath[0], sec_file.value!);
 		if (path) if_updated.value = true
+		s_loading.value = false
 	}
 }
 async function handleWardUpdate(idx: number) {
-	let aplVal = total_apls.value.filter(applicant => apl.value.apl_id == useNuxtApp()._route.params.id)[0]
+	w_loading.value = true
+	let aplVal = total_apls.value.filter(applicant => apl.value.apl_id == applicant.apl_id)[0]
 
 	// to see if theres a file before going ahead and sending
 	if (wards_file.value.length == 0) return;
 
-	if (apl.value.aplImg_path.wardsPath[idx] == `ward${idx}` || apl.value.aplImg_path.wardsPath[idx] == '') {
+	if (apl.value.aplImg_path.wardsPath[idx] == `ward${idx}` || apl.value.aplImg_path.wardsPath[idx] == undefined) {
 		try {
 			console.log(wards_file.value);
 
@@ -401,7 +463,7 @@ async function handleWardUpdate(idx: number) {
 			aplVal.aplImg_path.wardsPath[idx] = path
 			console.log(aplVal)
 			console.log(path)
-			if (!path) return
+			if (!path) aplVal.aplImg_path.wardsPath[idx] = `${apl.value.apl_id}/ward${idx}.jpeg`
 			const { error: err } = await $SB
 				.from('applicants')
 				.delete()
@@ -419,16 +481,21 @@ async function handleWardUpdate(idx: number) {
 			if_updated.value = true
 			console.log(data)
 			wards_file.value = []
+			w_loading.value = false
 		} catch (error) {
 			console.log(error);
 			wards_file.value = []
+			w_loading.value = false
 		}
 		finally {
 			wards_file.value = []
+			w_loading.value = false
 		}
 	} else {
+		w_loading.value = true
 		let path = await useImageStore().updateSingleAplImg(apl.value.aplImg_path.wardsPath[idx], wards_file.value[0]);
 		if (path) if_updated.value = true
+		w_loading.value = false
 	}
 }
 </script>

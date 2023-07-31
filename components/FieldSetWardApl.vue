@@ -53,7 +53,7 @@ const wardSRC = computed(() => {
 })
 
 function handleFile(evt: any) {
-	useAplStore().handleWardPath(applicant.value.wards[props.idx])
+	// useAplStore().handleWardPath(applicant.value.wards[props.idx])
 	console.log(applicant.value.aplImg_path.wardsPath);
 
 	// wardSRC.value = URL.createObjectURL(evt.target.files[0])

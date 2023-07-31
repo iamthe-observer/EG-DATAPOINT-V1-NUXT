@@ -1,6 +1,9 @@
 <template>
 	<p class="container">
-		<span class="heading">
+		<span :class="[
+			'heading',
+			edit_mode ? 'text-secondary' : 'text-neutral-400',
+		]">
 			{{ heading }}
 		</span>
 		<span v-if="!edit_mode" class="info truncate">{{ modelValue }}</span>

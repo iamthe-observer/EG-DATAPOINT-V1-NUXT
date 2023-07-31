@@ -12,7 +12,7 @@
 
 				<div class="text-md flex gap-2">
 					<button v-if="!apl_sending" @click="() => { useAplStore().resetAplData(); useImageStore().resetFiles() }"
-						class="btn btn-ghost rounded-xl text-white group hover:bg-base-100 hover:text-white group">
+						class="btn font-normal btn-ghost rounded-xl text-white group hover:bg-base-100 hover:text-white group">
 						Reset
 						<svg xmlns="http://www.w3.org/2000/svg" class="w-4 aspect-square stroke-red-500" viewBox="0 0 24 24">
 							<path fill="none" stroke="" stroke-dasharray="12" stroke-dashoffset="12" stroke-linecap="round"
@@ -24,7 +24,7 @@
 					<button v-if="!apl_sending" @click="async () => {
 						await useAplStore().handleSend()
 						curr_page = 'prime'
-					}" class="btn btn-outline rounded-xl text-white group hover:bg-accent hover:text-white group">
+					}" class="btn btn-outline rounded-xl text-white group hover:bg-accent font-normal hover:text-white group">
 						SUBMIT
 						<SvgsCedis
 							class="w-4 aspect-square stroke-white fill-white transition-all duration-150 ease-linear group-hover:fill-white" />
@@ -63,7 +63,6 @@ import { useImageStore } from '@/store/images';
 import { storeToRefs } from 'pinia';
 import { useAppStore } from '@/store/app';
 import { useTitle } from '@vueuse/core';
-import { WardsApplicant } from 'interfaces/interfaces';
 
 useTitle('EG Datapoint | Add Applicant')
 

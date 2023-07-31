@@ -94,8 +94,10 @@
 				<p class="flex flex-col gap-2">
 					<span class="text-sm text-neutral-500">Today's Applicants</span>
 					<span class="font-medium text-2xl">{{ total_daily_applicants?.length }}</span>
-					<span :class="`text-xs ${total_daily_inc >= 50 ? 'text-green-500' : 'text-red-500'} font-medium w-2/3`">+{{
-						total_daily_inc.toFixed(1) }}% more than yesterday.</span>
+					<span :class="`text-xs ${total_daily_inc >= 100 ? 'text-green-500' : 'text-red-500'} font-medium w-full`">{{
+						total_daily_inc >= 100 ? Math.floor(total_daily_inc - 100) : total_daily_inc.toFixed(1) }}% {{
+		total_daily_inc >= 100 ? 'more than yesterday.' : 'of yesterday.'
+	}}</span>
 				</p>
 				<radial-progress :textclr="`secondary`" :amount="Number(total_daily_inc!.toFixed(1))" />
 			</div>
@@ -109,10 +111,13 @@
 					<span class="w-min mx-auto text-sm text-neutral-500 text-center">Today's Applicants</span>
 					<span class="w-min mx-auto font-medium text-2xl">{{ total_daily_applicants_admin?.length }}</span>
 					<span
-						:class="`text-xs text-center ${total_daily_inc >= 50 ? 'text-green-500' : 'text-red-500'} font-medium w-full`">+{{
-							total_daily_inc.toFixed(1) }}% more than yesterday.</span>
+						:class="`text-xs text-center ${total_daily_inc_admin >= 100 ? 'text-green-500' : 'text-red-500'} font-medium w-full`">
+						{{ total_daily_inc_admin >= 100 ? Math.floor(total_daily_inc_admin - 100) : total_daily_inc_admin.toFixed(1)
+						}}% {{
+	total_daily_inc_admin >= 100 ? 'more than yesterday.' : 'of yesterday.'
+}}</span>
 				</p>
-				<radial-progress v-else :textclr="`secondary`" :amount="Number(total_daily_inc!.toFixed(1))" />
+				<radial-progress v-else :textclr="`secondary`" :amount="Number(total_daily_inc_admin!.toFixed(1))" />
 			</div>
 
 			<!-- total applicants -->
@@ -240,6 +245,18 @@ const total_daily_inc = computed(() => {
 		if (yesterday_apls.length < total_daily_applicants.value.length) return ((yesterday_apls.length / total_daily_applicants.value.length) * 100)
 		if (yesterday_apls.length > total_daily_applicants.value.length) return ((total_daily_applicants.value.length / yesterday_apls.length) * 100)
 		if (yesterday_apls.length = total_daily_applicants.value.length) return 0
+		return 0
+	}
+})
+const total_daily_inc_admin = computed(() => {
+	let yesterday_apls = total_apls.value.filter(apl => $formatDate(new Date(apl.created_at!)) === $formatDate(new Date(Date.now() - 86400000)))
+
+	if (yesterday_apls.length == 0 || total_daily_applicants_admin.value.length == 0) {
+		return 0
+	} else {
+		if (yesterday_apls.length < total_daily_applicants_admin.value.length) return ((yesterday_apls.length / total_daily_applicants_admin.value.length) * 100)
+		if (yesterday_apls.length > total_daily_applicants_admin.value.length) return ((total_daily_applicants_admin.value.length / yesterday_apls.length) * 100)
+		if (yesterday_apls.length = total_daily_applicants_admin.value.length) return 0
 		return 0
 	}
 })

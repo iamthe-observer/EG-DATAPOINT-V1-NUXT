@@ -30,7 +30,7 @@
 				</div>
 			</div>
 
-			<div v-if="!role && recent_apls.length != 0" :id="`slide${idx}`" v-for="(apl, idx) in recent_apls"
+			<div v-if="!role && recent_apls.length != 0" v-for="(apl, idx) in recent_apls"
 				class="carousel-container bg-neutral-800 grid place-items-center">
 				<div class="relative w-full h-full flex flex-col items-center">
 					<span class="badge badge-secondary absolute top-1 right-1">#{{ idx + 1 }}</span>
@@ -82,7 +82,7 @@
 				</div>
 			</div>
 
-			<div v-if="role && recent_apls_admin.length != 0" :id="`slide${idx}`" v-for="(apl, idx) in recent_apls_admin"
+			<div v-if="role && recent_apls_admin.length != 0" v-for="(apl, idx) in recent_apls_admin"
 				class="carousel-container bg-neutral-800 grid place-items-center">
 				<div class="relative w-full h-full flex flex-col items-center">
 					<span class="badge badge-secondary absolute top-1 right-1">#{{ idx + 1 }}</span>

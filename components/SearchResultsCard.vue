@@ -1,6 +1,6 @@
 <template>
 	<div @click="() => { $router.push(`/applicant/${result.apl_id}`); useViewAplStore().setID(result.apl_id!) }"
-		class="card card-side bg-neutral-800 shadow-xl w-[60%] cursor-pointer hover:bg-primary transition-all duration-400 ease-in-out">
+		class="card card-side bg-neutral-800 shadow-xl w-[60%] cursor-pointer hover:bg-primary transition-all group duration-400 ease-in-out">
 		<figure class="p-2 max-h-full aspect-square"><img loading="lazy"
 				:class="image ? 'border-2 border-white w-36 h-36 rounded-xl' : 'w-36 h-36 rounded-xl'"
 				:src="image ? image : 'assets/svg/image.svg'" alt="Movie" />
@@ -10,8 +10,9 @@
 			<p>{{ result.pcontact }}</p>
 			<p>{{ $formatDate(new Date(result.pdob!)) }}</p>
 			<p>{{ result.pconf_code ? result.pconf_code : 'No Confirmation Code' }}</p>
-			<div class="card-actions justify-end">
-				<button class="">Created At: {{ $formatDateWords(new Date(result.created_at!)) }}</button>
+			<div class="card-actions flex flex-col gap-1 items-end justify-end text-neutral-500 text-xs">
+				<button class="group-hover:text-white">{{ $formatDateTime(new Date(result.created_at!)) }}</button>
+				<button class="group-hover:text-white">{{ $formatDateWords(new Date(result.created_at!)) }}</button>
 			</div>
 		</div>
 	</div>
