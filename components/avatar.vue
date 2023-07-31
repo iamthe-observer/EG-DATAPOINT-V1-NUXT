@@ -29,7 +29,7 @@ onMounted(async () => {
 		if (error) throw error
 
 		src.value = data![0].signedUrl
-		console.log(data);
+		// console.log(data);
 
 	} catch (error) {
 		console.log(error);

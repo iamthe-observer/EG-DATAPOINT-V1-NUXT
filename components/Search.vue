@@ -31,7 +31,7 @@
 						<span v-if="recent_search!.length > 0"
 							class="text-sm font-bold justify-self-end mt-2 mx-auto px-3 bg-white text-black w-fit rounded-full">Recent
 							Searches</span>
-						<span class="cursor-pointer hover:text-purple-700 text-center text-xs" v-for="recent in recent_search" @click="$router.push(`/applicant/${recent.apl_id}`)
+						<span class="cursor-pointer hover:text-purple-700 text-center text-xs" v-for="recent in recent_search" @click="() => { $router.push(`/applicant/${recent.apl_id}`); useViewAplStore().setID(recent.apl_id!) }
 							">{{ recent.fullName }}</span>
 					</div>
 					<div v-show="!if_first" class="h-40 mx-auto aspect-square absolute right-[420px] -rotate-45 top-24">
@@ -61,6 +61,7 @@
 import { useSearchStore } from '@/store/search';
 import { Applicant } from '@/interfaces/interfaces';
 import { storeToRefs } from 'pinia';
+import { useViewAplStore } from '@/store/viewApl';
 
 const { recent_search } = storeToRefs(useSearchStore())
 const not_long_enough_search = ref(false)

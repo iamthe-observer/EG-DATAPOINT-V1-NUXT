@@ -14,6 +14,13 @@ import { useAplStore } from '@/store/apl';
 import { useAppStore } from '@/store/app';
 import { storeToRefs } from 'pinia';
 
+useServerSeoMeta({
+  title: 'Ebbysgold Group Datapoint',
+  ogTitle: 'Ebbysgold Group Datapoint',
+  description: 'Welcome! and Enjoy your stay with us!',
+  ogDescription: 'Welcome! and Enjoy your stay with us!',
+})
+
 const { $SB } = useNuxtApp()
 const { app_loading } = storeToRefs(useAppStore())
 

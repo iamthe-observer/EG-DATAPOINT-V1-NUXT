@@ -4,7 +4,9 @@
 			<h2 class="flex-1 flex items-center justify-between cursor-pointer hover:text-secondary"
 				@click="$router.push('/database')">
 				<span class="text-lg font-medium">Total Requests</span>
-				<span class="text-lg font-medium">{{ requests.length }}</span>
+				<span class="text-lg font-medium">{{ !role ? requests.filter(req => req.apl_id ==
+					useSupabaseUser().value?.id).length : requests.length
+				}}</span>
 			</h2>
 
 
@@ -24,7 +26,8 @@
 					</svg>
 
 					<span class="text-sm">Rejected</span>
-					<span class="text-sm">{{ requests.filter(req => req.status == 'reject').length }}</span>
+					<span class="text-sm">{{ role ? requests.filter(req => req.status == 'reject').length : requests.filter(req =>
+						req.status == 'reject').filter(req => req.apl_id == useSupabaseUser().value?.id).length }}</span>
 				</div>
 
 				<div class="flex-1 flex flex-col items-center justify-center">
@@ -47,7 +50,8 @@
 						</g>
 					</svg>
 					<span class="text-sm">Pending</span>
-					<span class="text-sm">{{ requests.filter(req => req.status == 'pending').length }}</span>
+					<span class="text-sm">{{ role ? requests.filter(req => req.status == 'pending').length : requests.filter(req =>
+						req.status == 'pending').filter(req => req.apl_id == useSupabaseUser().value?.id).length }}</span>
 				</div>
 
 				<div class="flex-1 flex flex-col items-center justify-center">
@@ -64,7 +68,10 @@
 						</g>
 					</svg>
 					<span class="text-sm">Approved</span>
-					<span class="text-sm">{{ requests.filter(req => req.status == 'approved').length }}</span>
+					<span class="text-sm">{{ role ? requests.filter(req => req.status == 'approved').length :
+						requests.filter(req => req.status == 'approved').filter(req => req.apl_id ==
+							useSupabaseUser().value?.id).length
+					}}</span>
 				</div>
 			</div>
 
@@ -75,6 +82,8 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
 import { useRequestStore } from '@/store/requests';
+import { useProfileStore } from '@/store/profile';
 
 const { requests } = storeToRefs(useRequestStore())
+const { role } = storeToRefs(useProfileStore())
 </script>

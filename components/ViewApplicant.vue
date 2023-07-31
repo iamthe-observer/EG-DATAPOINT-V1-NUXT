@@ -1,99 +1,81 @@
 <template>
-	<div class="flex flex-col p-5">
-		<div class="w-full flex gap-5 justify-between">
-			<div class="w-2/5 h-full flex flex-col gap-10 indicator">
-
-				<div class="w-full h-full">
-					<div class="indicator w-full h-full">
-						<span class="indicator-item indicator-top indicator-center badge badge-primary">Primary Applicant</span>
-						<AvatarSelect class="avatarImg w-full aspect-square" :src="prime_image" :alt="apl.fullName" />
-					</div>
-					<div class="flex w-full gap-2 items-end">
-						<button v-if="edit_mode && prime_file" @click="handlePrimeUpdate"
-							class="btn btn-xs btn-success">Update</button>
-						<input v-if="edit_mode" @change="e => handleFile(e, 'prime')" type="file"
-							class="file-input file-input-xs file-input-primary w-full mt-2" />
-					</div>
-				</div>
-
-				<div v-if="apl.pmarital_status == 'MARRIED'" class="w-full h-full">
-					<div class="indicator w-full h-full">
-						<span class="indicator-item indicator-top indicator-center badge badge-primary">Secondary Applicant</span>
-						<AvatarSelect class="w-full aspect-square" v-if="apl.pmarital_status == 'MARRIED'" :src="sec_image"
-							:alt="apl.fullName" />
-					</div>
-					<div class="flex w-full gap-2 items-end">
-						<button @click="handleSecUpdate" v-if="edit_mode && sec_file" class="btn btn-xs btn-success">Update</button>
-						<input v-if="edit_mode" @change="e => handleFile(e, 'sec')" type="file"
-							class="file-input file-input-xs file-input-primary w-full mt-2" />
-					</div>
-				</div>
-
-				<div v-if="wards_image.length > 0" v-for="(src, i) in wards_image" class="h-full flex flex-col gap-4">
-					<div class="w-full h-full">
-						<div class="indicator w-full h-full">
-							<span class="indicator-item indicator-top indicator-center badge badge-primary">
-								Ward Applicant {{ i + 1 }}</span>
-							<AvatarSelect class="w-full aspect-square" :src="src" :alt="apl.fullName" />
-						</div>
-						<div class="flex w-full gap-2 items-end">
-							<button v-if="edit_mode && wards_file[0] && curr_ward_file!.apl_type.includes(`ward${i}`)"
-								@click="handleWardUpdate(i)" class="btn btn-xs btn-success">Update</button>
-							<input v-if="edit_mode" @change="e => handleFile(e, `ward${i}`, i)" type="file"
-								class="file-input file-input-primary w-full mt-2 mx-auto file-input-xs" />
-						</div>
-					</div>
-				</div>
+	<div class="flex flex-col p-5 gap-10">
+		<!-- primary apl -->
+		<div class="flex gap-4">
+			<!-- image -->
+			<div class="">
+				<AvatarSelect :classer="`w-[300px] h-[300px]`" :src="prime_image" />
 			</div>
 
-			<div class="flex-1 grid grid-cols-2 gap-2 h-fit">
-				<div class="flex-1 grid grid-cols-2 gap-2 col-span-full">
-					<AplInfoCardDate :heading="`Date of Birth`" :date="new Date(apl.pdob!)" @date="handleDate"
-						:name_type="'pdob'" />
-					<AplInfoCard @update:model-value="logger" v-model="apl.pconf_code" :heading="'Confirmation Code'" />
-					<AplInfoCard @update:model-value="logger" v-model="apl.ppassport_number" :heading="'Passport Number'" />
-					<AplInfoCard @update:model-value="logger" v-model="apl.pcity_ob" :heading="'City Of Birth'" />
-					<AplInfoCard @update:model-value="logger" v-model="apl.pcountry_ob" :heading="'Country of Birth'" />
-					<AplInfoCard @update:model-value="logger" v-model="apl.pother_contact" :heading="'Next of Kin Contact'" />
-					<AplInfoCard @update:model-value="logger" v-model="apl.pcountry_live_today"
-						:heading="'Country You Live in Today'" />
-					<AplInfoCardDate @update:model-value="logger" :date="new Date(apl.passport_ex!)" @date="handleDate"
-						:name_type="'passport_ex'" :heading="'Passport Expiry Date'" />
-					<AplInfoCard @update:model-value="logger" v-model="apl.pemail" :heading="'Email'" />
-					<AplInfoCard @update:model-value="logger" v-model="apl.pgender" :heading="'Gender'" />
-					<AplInfoCard @update:model-value="logger" v-model="apl.pmarital_status" :heading="'Marital Status'" />
-					<AplInfoCard @update:model-value="logger" v-model="apl.peducation_level" :heading="'Education Level'" />
-					<AplInfoCard @update:model-value="logger" v-model="apl.pcontact" :heading="'Contact'" />
-					<AplInfoCard @update:model-value="logger" v-model="apl.ppostal" :heading="'Residential Address'" />
-					<AplInfoCard @update:model-value="logger" v-model="apl.children_number" :heading="'Number of Children'" />
-					<AplInfoCard @update:model-value="logger" v-model="apl.totalPayment" :heading="'Paid Amount'" />
+			<div class="grid grid-cols-3 gap-2 w-full">
+				<AplInfoCardDate :heading="`Date of Birth`" :date="new Date(apl.pdob!) || undefined" @date="handleDate"
+					:name_type="'pdob'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.pconf_code" :heading="'Confirmation Code'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.ppassport_number" :heading="'Passport Number'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.pcity_ob" :heading="'City Of Birth'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.pcountry_ob" :heading="'Country of Birth'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.pother_contact" :heading="'Next of Kin Contact'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.pcountry_live_today"
+					:heading="'Country You Live in Today'" />
+				<AplInfoCardDate @update:model-value="logger" :date="new Date(apl.passport_ex!)" @date="handleDate"
+					:name_type="'passport_ex'" :heading="'Passport Expiry Date'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.pemail" :heading="'Email'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.pgender" :heading="'Gender'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.pmarital_status" :heading="'Marital Status'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.peducation_level" :heading="'Education Level'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.pcontact" :heading="'Contact'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.ppostal" :heading="'Residential Address'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.children_number" :heading="'Number of Children'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.totalPayment" :heading="'Paid Amount'" />
+			</div>
+		</div>
+
+		<div v-if="apl.pmarital_status == 'MARRIED'" class="divider"></div>
+
+		<!-- secondary -->
+		<div v-if="apl.pmarital_status == 'MARRIED'" class="flex gap-4">
+			<!-- image -->
+			<div class="">
+				<AvatarSelect :classer="`w-[300px] h-[300px]`" :src="sec_image" />
+			</div>
+
+			<div class="grid grid-cols-3 gap-2 w-full h-fit">
+				<h2 class="col-span-full py-3 text-2xl font-bold flex justify-between items-center">
+					<span>Spouse Information</span>
+					<span v-if="!edit_mode" class="font-normal">{{
+						`${apl.slastName} ${apl.sfirstName} ${apl.sotherName}`.trimEnd() }}
+					</span>
+					<div v-else class="flex gap-3 w-fit">
+						<TextInput @update:model-value="logger" classer="input-sm" v-model="apl.slastName">Last Name
+						</TextInput>
+						<TextInput @update:model-value="logger" classer="input-sm" v-model="apl.sfirstName">First Name
+						</TextInput>
+						<TextInput @update:model-value="logger" classer="input-sm" v-model="apl.sotherName">Other Name
+						</TextInput>
+					</div>
+
+				</h2>
+				<AplInfoCardDate @update:model-value="logger" :date="new Date(apl.sdob!)" @date="handleDate" :name_type="'sdob'"
+					:heading="'Date of Birth'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.sgender" :heading="'Gender'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.scontact" :heading="'Contact'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.scity_ob" :heading="'City of Birth'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.scountry_ob" :heading="'Country of Birth'" />
+			</div>
+		</div>
+
+		<div v-if="apl.wards.length > 0" class="divider"></div>
+
+
+		<div v-if="apl.wards.length > 0" class="flex flex-col gap-10">
+			<div v-for="(ward, i) in apl.wards" class="flex gap-5">
+				<!-- image -->
+				<div class="">
+					<AvatarSelect :classer="`w-[300px] h-[300px]`" :src="wards_image[ward.index!]" />
 				</div>
-
-				<div v-if="apl.pmarital_status === 'MARRIED'" class="pt-10 flex-1 grid grid-cols-3 gap-2 col-span-full">
-					<h2 class="col-span-full py-3 text-2xl font-bold flex justify-between items-center">
-						<span>Spouse Information</span>
-						<span v-if="!edit_mode" class="font-normal">{{
-							`${apl.slastName} ${apl.sfirstName} ${apl.sotherName}`.trimEnd() }}
-						</span>
-						<div v-else class="flex gap-3 w-fit">
-							<TextInput @update:model-value="logger" classer="input-sm" v-model="apl.slastName">Last Name</TextInput>
-							<TextInput @update:model-value="logger" classer="input-sm" v-model="apl.sfirstName">First Name</TextInput>
-							<TextInput @update:model-value="logger" classer="input-sm" v-model="apl.sotherName">Other Name</TextInput>
-						</div>
-
-					</h2>
-					<AplInfoCardDate @update:model-value="logger" :date="new Date(apl.sdob!)" @date="handleDate" :name_type="'sdob'"
-						:heading="'Date of Birth'" />
-					<AplInfoCard @update:model-value="logger" v-model="apl.sgender" :heading="'Gender'" />
-					<AplInfoCard @update:model-value="logger" v-model="apl.scontact" :heading="'Contact'" />
-					<AplInfoCard @update:model-value="logger" v-model="apl.scity_ob" :heading="'City of Birth'" />
-					<AplInfoCard @update:model-value="logger" v-model="apl.scountry_ob" :heading="'Country of Birth'" />
-				</div>
-
-				<div v-for="ward in apl.wards" v-if="apl.wards.length > 0"
-					class="pt-10 flex-1 grid grid-cols-2 gap-2 col-span-full">
-					<h2 class="col-span-full py-3 text-2xl font-bold flex justify-between items-center">
-						<span>Ward #{{ ward.index + 1 }}</span>
+				<div class="flex-1 grid grid-cols-2 gap-2 col-span-full h-fit">
+					<h2 class="col-span-full py-3 text-2xl font-bold flex justify-between items-center w-full">
+						<span>Ward #{{ ward.index! + 1 }}</span>
 						<span v-if="!edit_mode" class="font-normal">{{ `${ward.wlastName} ${ward.wfirstName}
 													${ward.wotherName}`.trimEnd() }}
 						</span>
@@ -105,13 +87,20 @@
 					</h2>
 
 					<AplInfoCardDate @update:model-value="logger" :date="new Date(ward.wdob!)" @date="handleDate"
-						:name_type="'wdob'" :idx="ward.index" :heading="'Date of Birth'" />
+						:name_type="'wdob'" :idx="ward.index!" :heading="'Date of Birth'" />
 					<AplInfoCard @update:model-value="logger" v-model="ward.wgender" :heading="'Gender'" />
 					<AplInfoCard @update:model-value="logger" v-model="ward.wcity_ob" :heading="'City of Birth'" />
 					<AplInfoCard @update:model-value="logger" v-model="ward.wcountry_ob" :heading="'Country of Birth'" />
 				</div>
 			</div>
+
 		</div>
+
+
+
+
+
+
 		<input :checked="if_updated" type="checkbox" id="my_modal_7" class="modal-toggle" />
 		<div class="modal">
 			<div class="modal-box">
@@ -129,6 +118,7 @@ import { storeToRefs } from 'pinia';
 import { useRequestStore } from '@/store/requests';
 import { useAplStore } from '@/store/apl';
 import { useImageStore } from '@/store/images';
+import { useViewAplStore } from '@/store/viewApl';
 
 const if_updated = ref(false)
 const apl = ref<Applicant>({
@@ -178,6 +168,7 @@ const apl = ref<Applicant>({
 const { edit_mode } = storeToRefs(useAplStore())
 const { $SB } = useNuxtApp()
 const { total_apls } = storeToRefs(useAppStore())
+const { APL_ID } = storeToRefs(useViewAplStore())
 const emit = defineEmits(['apl', 'request'])
 const request = ref<Requests>({
 	apl_id: '',
@@ -188,15 +179,31 @@ const request = ref<Requests>({
 	user_id: '',
 })
 
+async function getApplicant(id: string) {
+	try {
+		let { data, error } = await $SB
+			.from('applicants')
+			.select('*')
+			.eq('apl_id', id)
+		if (error) throw error
+		return data![0]
+	} catch (error) {
+		console.log(error)
+	}
+}
+
 onMounted(async () => {
-	await useAppStore().getTotalApls()
-	let aplVal = total_apls.value.filter(applicant => applicant.apl_id == useNuxtApp()._route.params.id)[0]
-	setTimeout(async () => {
-		await loadUrl()
-	}, 1000)
+	let aplVal = await getApplicant(APL_ID.value!)
 
 	apl.value = aplVal
-	console.log(apl.value.aplImg_path.wardsPath);
+
+	console.log(apl.value);
+
+	// let aplVal = total_apls.value.filter(applicant => apl.value.apl_id! == useNuxtApp()._route.params.id)[0]
+
+	// setTimeout(async () => {
+	await loadUrl()
+	// }, 1000)
 
 	request.value.apl_id = apl.value.apl_id!
 	request.value.modify_type = 'edit'
@@ -210,22 +217,16 @@ onMounted(async () => {
 	useAplStore().toggleEditMode(false)
 })
 
-onBeforeUnmount(() => {
-	useAplStore().toggleEditMode(false)
-})
+// onBeforeUnmount(() => {
+// 	useAplStore().toggleEditMode(false)
+// })
 
 const prime_image = ref()
 const sec_image = ref()
 const wards_image = ref<any[]>([])
-const wards_data = ref<any[]>([])
+// const wards_data = ref<any[]>([])
 
 async function loadUrl() {
-	// if (apl.value.aplImg_path.wardsPath.length == 0) {
-	// 	for (let idx = 0; idx < apl.value.children_number; idx++) {
-	// 		apl.value.aplImg_path.wardsPath.push('')
-	// 	}
-	// }
-
 	try {
 		const { data, error } = await $SB
 			.storage
@@ -233,6 +234,7 @@ async function loadUrl() {
 			.createSignedUrls([apl.value.aplImg_path!.primePath[0], apl.value.aplImg_path.secPath[0], ...apl.value.aplImg_path.wardsPath], 3600)
 
 		if (error) throw error
+		console.log(apl.value.aplImg_path);
 
 		console.log(data);
 
@@ -240,33 +242,11 @@ async function loadUrl() {
 		prime_image.value = data[0].signedUrl || ''
 		sec_image.value = data[1].signedUrl || ''
 		wards_image.value = data.slice(2).map(img => img.signedUrl)
-		wards_data.value = data.slice(2)
-		// console.log(apl.value.aplImg_path.wardsPath);
-
-		// let DATA = sortArrayByWardNumber(data.slice(2)!)
-		// wards_image.value = DATA
+		// wards_data.value = data.slice(2)
 	}
 	catch (err: any) {
 		console.log((err));
 	}
-}
-
-function sortArrayByWardNumber(arr: string[]): string[] {
-	// Custom sorting function
-	function compareByWardNumber(a: string, b: string): number {
-		console.log(a, b);
-		if (a == null) {
-			const numB = parseInt(b.match(/ward(\d+)/)?.[1] || '0');
-			return numB
-		} else {
-			const numA = parseInt(a.match(/ward(\d+)/)?.[1] || '0');
-			const numB = parseInt(b.match(/ward(\d+)/)?.[1] || '0');
-			return numA - numB;
-		}
-	}
-
-	// Use the custom sorting function to sort the array
-	return arr.slice().sort(compareByWardNumber);
 }
 
 function handleDate(e: { name: string, date: Date, ward_idx?: number }) {
@@ -337,7 +317,7 @@ function handleFile(evt: any, type: string, idx?: number) {
 }
 
 async function handlePrimeUpdate() {
-	let aplVal = total_apls.value.filter(applicant => applicant.apl_id == useNuxtApp()._route.params.id)[0]
+	let aplVal = total_apls.value.filter(applicant => apl.value.apl_id == useNuxtApp()._route.params.id)[0]
 	if (!prime_file.value) return;
 	if (apl.value.aplImg_path.primePath.length == 0) {
 		try {
@@ -373,7 +353,7 @@ async function handlePrimeUpdate() {
 	}
 }
 async function handleSecUpdate() {
-	let aplVal = total_apls.value.filter(applicant => applicant.apl_id == useNuxtApp()._route.params.id)[0]
+	let aplVal = total_apls.value.filter(applicant => apl.value.apl_id == useNuxtApp()._route.params.id)[0]
 	if (!sec_file.value) return;
 	if (apl.value.aplImg_path.secPath.length == 0) {
 		try {
@@ -407,11 +387,8 @@ async function handleSecUpdate() {
 		if (path) if_updated.value = true
 	}
 }
-
-// [ ] problem is here... images of wards dont show cos of match error
-
 async function handleWardUpdate(idx: number) {
-	let aplVal = total_apls.value.filter(applicant => applicant.apl_id == useNuxtApp()._route.params.id)[0]
+	let aplVal = total_apls.value.filter(applicant => apl.value.apl_id == useNuxtApp()._route.params.id)[0]
 
 	// to see if theres a file before going ahead and sending
 	if (wards_file.value.length == 0) return;

@@ -50,6 +50,8 @@ export const useImageStore = defineStore('image', () => {
 
   async function uploadFiles(uuid: any) {
     let paths: string[] = []
+    console.log(files.value)
+
     for (const file of files.value) {
       paths.push(await uploadAplImg(uuid, file))
     }

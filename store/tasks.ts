@@ -2,7 +2,7 @@ import { Task } from './../interfaces/interfaces'
 import { defineStore } from 'pinia'
 
 export const useTasksStore = defineStore('tasks', () => {
-  const my_tasks = ref<Task[]>([])
+  const _tasks = ref<Task[]>([])
   const loading_task = ref(false)
   const done_task = ref(false)
   const { $SB } = useNuxtApp()
@@ -21,7 +21,7 @@ export const useTasksStore = defineStore('tasks', () => {
         .eq('user_id', currentSession.data.session!.user.id)
 
       if (error) throw error
-      my_tasks.value = data!
+      _tasks.value = data!
     } catch (error) {
       console.log(error)
     }
@@ -53,7 +53,7 @@ export const useTasksStore = defineStore('tasks', () => {
     .subscribe()
 
   function reset() {
-    my_tasks.value = []
+    _tasks.value = []
     loading_task.value = false
     done_task.value = false
   }
@@ -64,7 +64,7 @@ export const useTasksStore = defineStore('tasks', () => {
     sendTasks,
     loading_task,
     done_task,
-    my_tasks,
+    _tasks,
     setDoneTask,
   }
 })

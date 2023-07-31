@@ -29,7 +29,7 @@ export interface WardsApplicant {
   wgender: string
   wcity_ob: string
   wcountry_ob: string
-  index: number
+  index: number | null
 }
 
 export interface SecApplicant {

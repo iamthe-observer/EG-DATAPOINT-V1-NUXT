@@ -1,7 +1,7 @@
+import 'v-calendar/style.css'
+import { setupCalendar, Calendar, DatePicker } from 'v-calendar'
 import { useAppStore } from '@/store/app'
 import { useAnnStore } from '@/store/announce'
-import { setupCalendar, Calendar, DatePicker } from 'v-calendar'
-import 'v-calendar/style.css'
 import { useRequestStore } from '@/store/requests'
 import { Applicant } from 'interfaces/interfaces'
 import { useTasksStore } from '@/store/tasks'
@@ -96,25 +96,24 @@ export default defineNuxtPlugin(nuxtApp => {
           data: { user },
         } = await $SB.auth.getUser()
 
-        const asyncFunctions = [
-          // useAppStore().getAllMyApls,
-          useAppStore().getTotalApls,
-          useAppStore().getPrices,
-          useAnnStore().getAnnounce,
-          useRequestStore().getRequests,
-          useTasksStore().getTasks,
-          useProfileStore().getProfile,
-        ]
-
-        Promise.allSettled(asyncFunctions.map(fn => fn()))
-          .then(results => {
-            // console.log('All promises resolved!')
-            // console.log(results)
-            app_loading.value = false
-          })
-          .catch(error => {
-            console.error('An error occurred:', error)
-          })
+        useAsyncData('Profile', async () => {
+          await useProfileStore().getProfile()
+        })
+        useAsyncData('Apls', async () => {
+          await useAppStore().getTotalApls()
+        })
+        useAsyncData('Prices', async () => {
+          await useAppStore().getPrices()
+        })
+        useAsyncData('Announcements', async () => {
+          await useAnnStore().getAnnounce()
+        })
+        useAsyncData('Requests', async () => {
+          await useRequestStore().getRequests()
+        })
+        useAsyncData('Tasks', async () => {
+          await useTasksStore().getTasks()
+        })
 
         if (_route.path == '/') {
           $router.push('/dashboard')
@@ -144,24 +143,24 @@ export default defineNuxtPlugin(nuxtApp => {
           data: { user },
         } = await $SB.auth.getUser()
 
-        const asyncFunctions = [
-          useAppStore().getTotalApls,
-          useAppStore().getPrices,
-          useAnnStore().getAnnounce,
-          useRequestStore().getRequests,
-          useTasksStore().getTasks,
-          useProfileStore().getProfile,
-        ]
-
-        Promise.allSettled(asyncFunctions.map(fn => fn()))
-          .then(results => {
-            // console.log('All promises resolved!')
-            // console.log(results)
-            app_loading.value = false
-          })
-          .catch(error => {
-            console.error('An error occurred:', error)
-          })
+        useAsyncData('Profile', async () => {
+          await useProfileStore().getProfile()
+        })
+        useAsyncData('Apls', async () => {
+          await useAppStore().getTotalApls()
+        })
+        useAsyncData('Prices', async () => {
+          await useAppStore().getPrices()
+        })
+        useAsyncData('Announcements', async () => {
+          await useAnnStore().getAnnounce()
+        })
+        useAsyncData('Requests', async () => {
+          await useRequestStore().getRequests()
+        })
+        useAsyncData('Tasks', async () => {
+          await useTasksStore().getTasks()
+        })
 
         return user
       }
@@ -390,6 +389,36 @@ export default defineNuxtPlugin(nuxtApp => {
     )
   }
 
+  function calculateHoursPassed(date: string): number {
+    // Calculate the number of hours passed in a day and round off to no decimals
+    const startOfDay = new Date(date) // Create a copy of the current date
+    startOfDay.setHours(0, 0, 0, 0) // Set the time to the start of the day (00:00:00)
+
+    const hoursPassed = Math.floor(
+      (new Date(date).getTime() - startOfDay.getTime()) / (1000 * 60 * 60)
+    )
+
+    return hoursPassed
+  }
+
+  function sortArrayByWardNumber(arr: string[]): string[] {
+    // Custom sorting function
+    function compareByWardNumber(a: string, b: string): number {
+      console.log(a, b)
+      if (a == null) {
+        const numB = parseInt(b.match(/ward(\d+)/)?.[1] || '0')
+        return numB
+      } else {
+        const numA = parseInt(a.match(/ward(\d+)/)?.[1] || '0')
+        const numB = parseInt(b.match(/ward(\d+)/)?.[1] || '0')
+        return numA - numB
+      }
+    }
+
+    // Use the custom sorting function to sort the array
+    return arr.slice().sort(compareByWardNumber)
+  }
+
   return {
     provide: {
       loadAppData,
@@ -402,6 +431,8 @@ export default defineNuxtPlugin(nuxtApp => {
       extractNumFromPhrase,
       replaceWardWithImagePaths,
       sortByRecency,
+      calculateHoursPassed,
+      sortArrayByWardNumber,
     },
   }
 })

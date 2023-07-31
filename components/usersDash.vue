@@ -45,7 +45,7 @@
 					<p class="font-bold text-xs">{{ apl.pcontact }}</p>
 
 					<div class="flex absolute bottom-1 left-1 justify-center pt-5 gap-1 items-center">
-						<button @click="$router.push(`/applicant/${apl.apl_id}`)"
+						<button @click="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
 							class="btn btn-primary mr-3 rounded-xl">View</button>
 						<span class="flex gap-1">
 							<SvgsCedis class="w-2 fill-white" />{{ apl.totalPayment }}.00
@@ -97,7 +97,7 @@
 					<p class="font-bold text-xs">{{ apl.pcontact }}</p>
 
 					<div class="flex absolute bottom-1 left-1 justify-center pt-5 gap-1 items-center">
-						<button @click="$router.push(`/applicant/${apl.apl_id}`)"
+						<button @click="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
 							class="btn btn-primary mr-3 rounded-xl">View</button>
 						<span class="flex gap-1">
 							<SvgsCedis class="w-2 fill-white" />{{ apl.totalPayment }}.00
@@ -114,12 +114,13 @@
 import { storeToRefs } from 'pinia';
 import { useAppStore } from '@/store/app';
 import { useProfileStore } from '@/store/profile';
+import { useViewAplStore } from '@/store/viewApl';
 
-const { profile, loading: prof_loading } = storeToRefs(useProfileStore())
+const { profile, role, loading: prof_loading } = storeToRefs(useProfileStore())
 
-const role = computed(() => {
-	return profile.value?.role || false
-})
+// const role = computed(() => {
+// 	return profile.value?.role || false
+// })
 
 const loading = ref(false)
 const { total_daily_applicants, total_apls } = storeToRefs(useAppStore())
@@ -128,7 +129,7 @@ const path = computed(() => {
 	return total_daily_applicants.value.map(apl => apl.aplImg_path.primePath[0])
 })
 const path_admin = computed(() => {
-	return total_apls.value.map(apl => apl.aplImg_path.primePath[0]).slice(5)
+	return total_apls.value.map(apl => apl.aplImg_path.primePath[0]).reverse().slice(5)
 })
 
 const URLs = ref<{
@@ -145,21 +146,21 @@ onMounted(async () => {
 		if (!role.value) {
 			if (total_daily_applicants.value.length == 0) return
 			let { data, error } = await useNuxtApp().$SB.storage.from('applicants').createSignedUrls(path.value, 10)
-			console.log(data);
+			// console.log(data);
 
 			if (error) throw error
 			loading.value = false
 			URLs.value = data?.reverse()
-			console.log(URLs.value);
+			// console.log(URLs.value);
 		} else if (role.value) {
 			if (APLS!.length == 0) return
 			let { data, error } = await useNuxtApp().$SB.storage.from('applicants').createSignedUrls(path_admin.value, 10)
-			console.log(data);
+			// console.log(data);
 
 			if (error) throw error
 			loading.value = false
 			URLs.value = data?.reverse()
-			console.log(URLs.value);
+			// console.log(URLs.value);
 		}
 	} catch (error) {
 		console.log(error);
@@ -180,18 +181,11 @@ const recent_apls = computed(() => {
 const recent_apls_admin = computed(() => {
 	if (total_apls.value) {
 		// return total_daily_applicants.value.slice(-5).reverse().sort()
-		return total_apls.value.slice(0, 5).sort((a, b) => new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime())
+		return total_apls.value.reverse().slice(0, 5).sort((a, b) => new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime())
 
 	} else {
 		return []
 	}
-})
-
-watchEffect(() => {
-	console.log(URLs.value);
-	console.log(path.value);
-	console.log(recent_apls.value);
-
 })
 
 </script>

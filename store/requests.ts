@@ -8,9 +8,8 @@ export const useRequestStore = defineStore('requests', () => {
 
   async function getRequests() {
     try {
-      let { data, error } = await SB.from('requests')
-        .select('*')
-        .eq('user_id', useSupabaseUser().value?.id!)
+      let { data, error } = await SB.from('requests').select('*')
+      // .eq('user_id', useSupabaseUser().value?.id!)
       if (error) throw error
       requests.value = data!
       return data
@@ -18,6 +17,12 @@ export const useRequestStore = defineStore('requests', () => {
       console.log(error)
     }
   }
+
+  const my_requests = computed(() => {
+    return requests.value.filter(
+      req => req.apl_id == useSupabaseUser().value?.id
+    )
+  })
 
   function reset() {
     requests.value = []
@@ -56,5 +61,6 @@ export const useRequestStore = defineStore('requests', () => {
     setRequest,
     reset,
     requests,
+    my_requests,
   }
 })

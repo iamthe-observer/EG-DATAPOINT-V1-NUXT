@@ -20,10 +20,10 @@ import { useAplStore } from '@/store/apl';
 const { edit_mode } = storeToRefs(useAplStore())
 const date = ref(new Date())
 const props = defineProps<{
-	date: Date | null
+	date?: Date
 	heading: string
 	name_type: string
-	idx?: number | null
+	idx?: number
 }>()
 const emit = defineEmits(['date'])
 function logger() {

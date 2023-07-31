@@ -2,10 +2,10 @@
 	<div class="bg-neutral-900 flex flex-col rounded-2xl p-3 h-full">
 		<h1 class="pb-2 text-xl font-semibold flex justify-between">
 			<span class="w-full">Tasks</span>
-			<span class="w-full text-right">{{ my_tasks.length }}</span>
+			<span class="w-full text-right">{{ _tasks.length }}</span>
 		</h1>
 		<!-- if no requests -->
-		<div v-if="my_tasks!.length == 0" class="w-full h-full grid place-items-center">
+		<div v-if="_tasks!.length == 0" class="w-full h-full grid place-items-center">
 			<div class="flex flex-col items-center gap-2">
 				<svg xmlns="http://www.w3.org/2000/svg" class="w-20 aspect-square" viewBox="0 0 24 24">
 					<g stroke="#888888" stroke-linecap="round" stroke-width="2">
@@ -35,12 +35,12 @@
 		<!-- contains all requests -->
 		<div v-else id="style-1" class="bg-neutral-800 flex flex-col gap-3 rounded-xl overflow-y-auto">
 			<div class="w-full flex gap-2 justify-between p-2 hover:bg-neutral-700 rounded-xl"
-				v-for="(task, i) in my_tasks.sort((a, b) => new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime())"
+				v-for="(task, i) in _tasks.sort((a, b) => new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime())"
 				:key="i">
 				<span class="text-neutral-600 w-10 text-xs grid place-items-center">
 					<div class="form-control">
 						<label class="label cursor-pointer">
-							<input type="checkbox" :checked="task.done" class="checkbox checkbox-primary" />
+							<input type="checkbox" v-model="task.done" class="checkbox checkbox-primary" />
 						</label>
 					</div>
 				</span>
@@ -54,8 +54,6 @@
 					<span class="">
 						{{ $formatDateTime(new Date(task.created_at!)) }}
 					</span>
-					<span :class="task.done ? 'badge badge-accent badge-xs self-end' : 'badge badge-info badge-xs self-end'">{{
-						task.done ? 'High' : 'Low' }}</span>
 				</div>
 			</div>
 
@@ -68,14 +66,12 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
 import { useTasksStore } from '@/store/tasks';
-import { Task } from 'interfaces/interfaces';
 
-const { my_tasks } = storeToRefs(useTasksStore())
-const tasks = ref<Task[]>([])
+const { _tasks } = storeToRefs(useTasksStore())
+// const tasks = ref<Task[]>([])
 
 watchEffect(() => {
-	if (my_tasks.value) my_tasks.value = tasks.value
-	console.log(tasks.value);
+	console.log(_tasks.value);
 
 })
 </script>

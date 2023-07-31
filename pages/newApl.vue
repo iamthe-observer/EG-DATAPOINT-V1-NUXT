@@ -3,16 +3,28 @@
 		<div ref="container"
 			class="w-full h-full rounded-2xl bg-neutral-800 col-span-full row-span-full pb-2 overflow-y-scroll text-justify px-0 relative"
 			id="style-1">
-			<h1 @click="logger"
+			<h1
 				class="px-5 py-5 rounded-2xl bg-neutral-700 text-2xl w-full flex justify-between items-center sticky top-0 mb-2 shadow-lg z-10">
 				<span class="">Add a new Applicant</span>
 
-				<steps v-if="apl_data.prime?.pmarital_status !== 'UNMARRIED' || apl_data.prime?.children_number !== 0"
-					@step="handleStep" :steps="steps_" class="text-sm" />
+				<steps v-if="applicant.pmarital_status !== 'UNMARRIED' || applicant.children_number !== 0" @step="handleStep"
+					:steps="steps_" class="text-sm" />
 
-				<div class="text-md">
-					<button v-if="!apl_sending" @click="handleSend"
-						class="btn btn-outline rounded-xl text-white group hover:bg-accent hover:text-white group">
+				<div class="text-md flex gap-2">
+					<button v-if="!apl_sending" @click="() => { useAplStore().resetAplData(); useImageStore().resetFiles() }"
+						class="btn btn-ghost rounded-xl text-white group hover:bg-base-100 hover:text-white group">
+						Reset
+						<svg xmlns="http://www.w3.org/2000/svg" class="w-4 aspect-square stroke-red-500" viewBox="0 0 24 24">
+							<path fill="none" stroke="" stroke-dasharray="12" stroke-dashoffset="12" stroke-linecap="round"
+								stroke-width="2" d="M12 12L19 19M12 12L5 5M12 12L5 19M12 12L19 5">
+								<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="12;0" />
+							</path>
+						</svg>
+					</button>
+					<button v-if="!apl_sending" @click="async () => {
+						await useAplStore().handleSend()
+						curr_page = 'prime'
+					}" class="btn btn-outline rounded-xl text-white group hover:bg-accent hover:text-white group">
 						SUBMIT
 						<SvgsCedis
 							class="w-4 aspect-square stroke-white fill-white transition-all duration-150 ease-linear group-hover:fill-white" />
@@ -26,15 +38,12 @@
 				</div>
 			</h1>
 			<!-- text fields -->
-			<FieldSetPrimeApl @file="onSelect" @validate="setPrimeValidate" @apl="handlePrimeInput" v-if="curr_page == 'prime'"
-				:container="container!" />
+			<FieldSetPrimeApl v-if="curr_page == 'prime'" :container="container!" />
 
-			<FieldSetSecApl @file="onSelect" @validate="setSecValidate" @sec="handleSecInput" :container="container!"
-				v-if="curr_page == 'sec'" />
+			<FieldSetSecApl :container="container!" v-if="curr_page == 'sec'" />
 
 
-			<FieldSetWardContainer @file="onSelect" @handle-ward-input="handleWardInput" :container="container!"
-				:curr_page="curr_page" :apl_data="apl_data" />
+			<FieldSetWardContainer v-if="curr_page == 'ward'" :container="container!" />
 		</div>
 
 		<!-- Put this part before </body> tag -->
@@ -49,377 +58,68 @@
 </template>
 
 <script setup lang="ts">
-import { PrimeApplicant, WardsApplicant, SecApplicant, AplData, Applicant } from '@/interfaces/interfaces';
 import { useAplStore } from '@/store/apl';
 import { useImageStore } from '@/store/images';
-// @ts-ignore
-import { v4 as uuidv4 } from 'uuid'
 import { storeToRefs } from 'pinia';
 import { useAppStore } from '@/store/app';
-import { useSSRContext } from 'nuxt/dist/app/compat/capi';
 import { useTitle } from '@vueuse/core';
+import { WardsApplicant } from 'interfaces/interfaces';
 
 useTitle('EG Datapoint | Add Applicant')
 
-const price = computed(() => {
-	const pp = useAppStore().prices[0]
-	const if_sp = apl_data.prime?.pmarital_status == 'MARRIED'
-	const if_wa = apl_data.prime?.children_number! > 0
-
-	if (pp) {
-		if (!if_sp && if_wa) {
-			return pp.adult + (pp.child * apl_data.prime?.children_number!)
-		} else if (if_sp && !if_wa) {
-			return pp.adult * 2
-		} else if (if_sp && if_wa) {
-			return (pp.adult * 2) + (pp.child * apl_data.prime?.children_number!)
-		} else if (!if_sp && !if_wa) {
-			return pp.adult
-		}
-	} else {
-		return 0
-	}
-})
-
-const apl_sending = ref(false)
+const { price } = storeToRefs(useAppStore())
+const { applicant, if_sent, apl_sending } = storeToRefs(useAplStore())
 const container = ref<HTMLDivElement>()
-const { $SB } = useNuxtApp()
-const { has_files } = storeToRefs(useImageStore())
 const steps_ = ref([{ name: 'Primary', page: 'prime' }])
 const curr_page = ref('prime')
-const if_sent = ref<boolean>(false)
 const num = ref(0)
-const curr_datetime = ref()
-const apl_data = reactive<AplData>({
-	prime: null,
-	sec: null,
-	wards: [],
-})
-
-const onSelect = (evt: any) => {
-	useImageStore().setFiles(evt.file, evt.type)
-	console.log(evt);
-}
-
-
-// validation
-const val = reactive<{ prime: boolean; sec: boolean; wards: { idx: number; val: boolean }[] }>({
-	prime: false,
-	sec: false,
-	wards: []
-})
-
-const if_prime = computed(() => { return val.prime })
-const if_spouse = computed(() => {
-	if (val.sec && apl_data.prime?.pmarital_status == 'MARRIED') {
-		return true
-	} else {
-		return false
-	}
-})
-const if_wards = computed(() => {
-	if (
-		val.wards.filter(ward => ward.val).length == apl_data.wards?.length &&
-		Number(apl_data.prime?.children_number) != 0 &&
-		val.wards.filter(ward => ward.val).length != 0 &&
-		apl_data.wards?.length != 0 &&
-		apl_data.wards?.length == Number(apl_data.prime?.children_number)
-	) {
-		return true
-	} else { return false }
-})
-
-function calculateHoursPassed(date: string): number {
-	// Calculate the number of hours passed in a day and round off to no decimals
-	const startOfDay = new Date(date); // Create a copy of the current date
-	startOfDay.setHours(0, 0, 0, 0); // Set the time to the start of the day (00:00:00)
-
-	const hoursPassed = Math.floor((new Date(date).getTime() - startOfDay.getTime()) / (1000 * 60 * 60));
-
-	return hoursPassed;
-}
 
 onMounted(async () => {
-	try {
-		let response = await fetch('http://worldtimeapi.org/api/timezone/Africa/Accra')
-		curr_datetime.value = await response.json()
-		if (!curr_datetime.value) throw new Error("Can't get DateTime")
-		console.log(curr_datetime.value);
-		console.log(calculateHoursPassed(curr_datetime.value.datetime));
-	} catch (error) {
-		console.log(error);
-	}
+	if_sent.value = false
+	// try {
+	// 	let response = await fetch('http://worldtimeapi.org/api/timezone/Africa/Accra')
+	// 	curr_datetime.value = await response.json()
+	// 	if (!curr_datetime.value) throw new Error("Can't get DateTime")
+	// 	console.log(curr_datetime.value);
+	// 	console.log(calculateHoursPassed(curr_datetime.value.datetime));
+	// } catch (error) {
+	// 	console.log(error);
+	// }
 	// console.log(apl_data.prime!.aplImg_path.wardsPath);
 })
 
-onBeforeUnmount(() => {
-	useAplStore().resetAplData()
-	useImageStore().resetFiles()
-})
+// onBeforeUnmount(() => {
+// 	useAplStore().resetAplData()
+// 	useImageStore().resetFiles()
+// })
 
 // this handles the visibility of the steps
 watchEffect(() => {
-	if (apl_data.prime?.pmarital_status === 'MARRIED') {
+	if (applicant.value.pmarital_status === 'MARRIED') {
 		if (steps_.value.every(step => step.name != 'Secondary'))
 			steps_.value.push({ name: 'Secondary', page: 'sec' })
 	}
 
-	if (apl_data.prime?.pmarital_status !== 'MARRIED') {
+	if (applicant.value.pmarital_status !== 'MARRIED') {
 		let stepper = steps_.value.filter(step => step.name !== 'Secondary')
 		steps_.value = stepper
 	}
 
-	if (apl_data.prime?.children_number! > 0) {
+	if (applicant.value.children_number! > 0) {
 		let stepper = steps_.value.filter(step => !step.name.startsWith('Wards'))
 		steps_.value = stepper
 		steps_.value.push({ name: 'Wards', page: 'ward' })
-
 	}
 
-	if (apl_data.prime?.children_number == 0) {
+	if (applicant.value.children_number == 0) {
 		let stepper = steps_.value.filter(step => step.name == 'Primary' || step.name == 'Secondary')
 		steps_.value = stepper
 	}
 })
 
-watchEffect(() => {
-	if (apl_data.prime?.pmarital_status == 'UNMARRIED') {
-		resetApl_sec()
-	}
-})
-// resets wards on number of children
-watchEffect(() => {
-	if (apl_data.prime?.children_number == 0) {
-		resetApl_wards()
-	}
-})
-// check to regulate the amount of wards in apl_data.wards
-watchEffect(() => {
-	if (apl_data.wards?.length! > apl_data.prime?.children_number! && apl_data.wards?.length != 0) {
-		let diff = apl_data.wards?.length! - apl_data.prime?.children_number!
-		for (let ii = 0; ii < diff; ii++) {
-			apl_data.wards?.pop()
-			val.wards.pop()
-			apl_data.prime!.aplImg_path.wardsPath.pop()
-		}
-		console.log(apl_data.prime!.aplImg_path.wardsPath);
-		console.log('done');
-	}
-})
-
-function setPrimeValidate(e: boolean) {
-	val.prime = e
-}
-function setSecValidate(e: boolean) {
-	val.sec = e
-}
-function resetApl_sec() {
-	apl_data.sec = {
-		slastName: '',
-		sfirstName: '',
-		sotherName: '',
-		scity_ob: '',
-		scountry_ob: '',
-		scontact: '',
-		sgender: '',
-		sdob: null,
-	}
-}
-function resetApl_wards() {
-	apl_data.wards = []
-	apl_data.prime!.aplImg_path.wardsPath = []
-	console.log(apl_data.prime!.aplImg_path.wardsPath);
-	val.wards = []
-}
 // resets sec on marital status change
 function handleStep(page: string) {
 	curr_page.value = page
-}
-
-const handlePrimeInput = (prime: PrimeApplicant) => {
-	apl_data.prime = prime
-}
-const handleSecInput = (sec: SecApplicant) => {
-	apl_data.sec = sec
-}
-const handleWardInput = (child: { ward: WardsApplicant, valid: boolean }) => {
-	if (apl_data.wards?.length! > 0 && apl_data.wards!.some(warder => warder.index == child.ward.index)) {
-		const filtered_ward = apl_data.wards!.filter(warder => warder.index != child.ward.index)
-		const filtered_ward_valid = val.wards!.filter(warder => warder.idx != child.ward.index)
-		const filtered_path = apl_data.prime?.aplImg_path.wardsPath.filter(path => !path.includes(`ward${child.ward.index}`))!
-
-		filtered_ward.push(child.ward)
-		filtered_ward_valid.push({ idx: child.ward.index, val: child.valid })
-		filtered_path.push(`ward${child.ward.index}`)
-
-		filtered_ward.sort((a, b) => a.index - b.index)
-		filtered_ward_valid.sort((a, b) => a.idx - b.idx)
-		filtered_path.sort((a, b) => useNuxtApp().$extractNumFromPhrase(a)! - useNuxtApp().$extractNumFromPhrase(b)!)
-
-		apl_data.wards = filtered_ward
-		val.wards = filtered_ward_valid
-		apl_data.prime!.aplImg_path.wardsPath = filtered_path
-		// console.log(apl_data.prime!.aplImg_path.wardsPath);
-
-	} else {
-		apl_data.wards!.push(child.ward)
-		val.wards!.push({ idx: child.ward.index, val: child.valid })
-		apl_data.prime!.aplImg_path.wardsPath.push(`ward${child.ward.index}`)
-
-		apl_data.wards!.sort((a, b) => a.index - b.index)
-		val.wards!.sort((a, b) => a.idx - b.idx)
-		apl_data.prime!.aplImg_path.wardsPath.sort((a, b) => useNuxtApp().$extractNumFromPhrase(a)! - useNuxtApp().$extractNumFromPhrase(b)!)
-
-		// console.log(apl_data.prime!.aplImg_path.wardsPath);
-	}
-
-	// console.log(val.wards);
-
-	useAplStore().setWardsApl(apl_data.wards!)
-}
-
-console.log(
-	useNuxtApp().$replaceWardWithImagePaths(['a67249f8-a468-4431-8c06-bf26ad4bc333/ward0.jpeg'], ['ward0']));
-
-
-const submitApl = async (apl: Applicant) => {
-	if_sent.value = false
-	console.log(apl.aplImg_path.wardsPath);
-	try {
-		if (has_files.value) {
-			let { primePath, secPath, wardsPath } =
-				await useImageStore().uploadFiles(apl.apl_id)
-			apl.aplImg_path.primePath = primePath
-			apl.aplImg_path.secPath = secPath
-			wardsPath.forEach(path => {
-				for (let i = 0; i < apl.aplImg_path.wardsPath.length; i++) {
-					const el = apl.aplImg_path.wardsPath[i];
-					if (path.includes(el)) apl.aplImg_path.wardsPath[i] = path
-				}
-			});
-			console.log(apl.aplImg_path.wardsPath, wardsPath);
-		}
-
-		const { error } = await $SB.from('applicants').insert([apl])
-
-		if (error) throw error
-		if_sent.value = true
-		apl_sending.value = false
-		useAplStore().resetAplData()
-		return 'done'
-	} catch (err: any) {
-		apl_sending.value = false
-		console.log(err);
-	}
-}
-
-function putWardIntoApl() {
-	// puts wards into apl_data
-	if (apl_data.wards?.length! > 0) {
-		for (let ii = 0; ii < apl_data.wards!.length; ii++) {
-			const el = apl_data.wards![ii];
-			apl_data.prime?.wards!.push(el)
-		}
-	}
-}
-
-const handleSend = async () => {
-	let apl_info: Applicant
-
-	apl_info = {
-		created_at: apl_data.prime!.created_at,
-		aplImg_path: !apl_data.prime!.aplImg_path
-			? { primePath: [], secPath: [], wardsPath: [] }
-			: apl_data.prime!.aplImg_path,
-		apl_id: uuidv4(),
-		fullName: apl_data.prime!.fullName,
-		plastName: apl_data.prime!.plastName?.toUpperCase().trim(),
-		pfirstName: apl_data.prime!.pfirstName?.toUpperCase().trim(),
-		potherName: apl_data.prime!.potherName?.toUpperCase().trim(),
-		pdob: apl_data.prime!.pdob,
-		ppassport_number: apl_data.prime!.ppassport_number,
-		passport_ex: apl_data.prime!.passport_ex,
-		pgender: apl_data.prime!.pgender,
-		pcity_ob: apl_data.prime!.pcity_ob,
-		pconf_code: apl_data.prime!.pconf_code,
-		pcountry_ob: apl_data.prime!.pcountry_ob,
-		pemail: apl_data.prime!.pemail,
-		pcountry_live_today: apl_data.prime!.pcountry_live_today,
-		peducation_level: apl_data.prime!.peducation_level,
-		pcontact: apl_data.prime!.pcontact,
-		pother_contact: apl_data.prime!.pother_contact,
-		ppostal: apl_data.prime!.ppostal,
-		pmarital_status: apl_data.prime!.pmarital_status,
-		children_number: apl_data.prime!.children_number,
-		wards: apl_data.prime!.wards,
-		psocial_media: apl_data.prime!.psocial_media,
-
-		slastName: apl_data.sec!.slastName || '',
-		sfirstName: apl_data.sec!.sfirstName || '',
-		sotherName: apl_data.sec!.sotherName || '',
-		sdob: apl_data.sec!.sdob || null,
-		sgender: apl_data.sec!.sgender || '',
-		scity_ob: apl_data.sec!.scity_ob || '',
-		scountry_ob: apl_data.sec!.scountry_ob || '',
-		scontact: apl_data.sec!.scontact || '',
-		totalPayment: price.value!,
-		user_id: useSupabaseUser().value?.id!,
-	}
-
-	console.log(val);
-	console.log(apl_info);
-
-	if (apl_info.pmarital_status == 'MARRIED' && apl_info.children_number == 0) {
-		if (if_prime.value && if_spouse.value && !if_wards.value) {
-			await doAction(apl_info)
-		} else {
-			console.log('married');
-			if_sent.value = false
-			alert('Error! Validation Failed. (Go over and check if all the fields have been filled.)');
-		}
-	} else if (apl_info.pmarital_status == 'MARRIED' && apl_info.children_number > 0) {
-		if (if_prime.value && if_spouse.value && if_wards.value) {
-			putWardIntoApl()
-			await doAction(apl_info)
-		} else {
-			console.log('family');
-			if_sent.value = false
-			alert('Error! Validation Failed. (Go over and check if all the fields have been filled.)');
-		}
-	} else if (apl_info.pmarital_status != 'MARRIED' && apl_info.children_number > 0) {
-		if (if_prime.value && !if_spouse.value && if_wards.value) {
-			putWardIntoApl()
-			await doAction(apl_info)
-		} else {
-			console.log('single with kid/s');
-			if_sent.value = false
-			alert('Error! Validation Failed. (Go over and check if all the fields have been filled.)');
-		}
-	} else if (apl_info.pmarital_status != 'MARRIED' && apl_info.children_number == 0) {
-		if (if_prime.value && !if_spouse.value && !if_wards.value) {
-			await doAction(apl_info)
-		} else {
-			console.log('single');
-			if_sent.value = false
-			alert('Error! Validation Failed. (Go over and check if all the fields have been filled.)');
-		}
-	}
-
-}
-
-const doAction = async (apl_info: any) => {
-	apl_sending.value = true
-
-	await submitApl(apl_info)
-	num.value++
-	console.log('done');
-}
-
-function logger() {
-	// console.log(apl_data);
-
-	// console.log(if_prime.value, if_spouse.value, if_wards.value);
-	// console.log(val.wards)
 }
 
 // TODO error handler for JWT expiration

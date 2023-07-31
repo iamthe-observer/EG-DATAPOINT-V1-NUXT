@@ -1,5 +1,5 @@
 <template>
-	<div @click="$router.push(`/applicant/${result.apl_id}`)"
+	<div @click="() => { $router.push(`/applicant/${result.apl_id}`); useViewAplStore().setID(result.apl_id!) }"
 		class="card card-side bg-neutral-800 shadow-xl w-[60%] cursor-pointer hover:bg-primary transition-all duration-400 ease-in-out">
 		<figure class="p-2 max-h-full aspect-square"><img loading="lazy"
 				:class="image ? 'border-2 border-white w-36 h-36 rounded-xl' : 'w-36 h-36 rounded-xl'"
@@ -21,6 +21,7 @@
 // TODO	sort out userDash recent apls
 import { Applicant, SearchParams } from '@/interfaces/interfaces';
 import { asyncComputed } from '@vueuse/core'
+import { useViewAplStore } from '@/store/viewApl';
 
 const { $SB } = useNuxtApp()
 const props = defineProps<{

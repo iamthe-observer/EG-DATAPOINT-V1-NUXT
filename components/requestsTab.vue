@@ -78,6 +78,9 @@ import { useRequestStore } from '@/store/requests';
 import { Requests } from '@/interfaces/interfaces';
 import { useAppStore } from '@/store/app';
 
+const { requests } = storeToRefs(useRequestStore())
+const { total_apls } = storeToRefs(useAppStore())
+
 const filter_val = ref('all')
 const curr_filtered_req = computed(() => {
 	if (filter_val.value == 'all') return requests.value
@@ -105,10 +108,6 @@ function getCreatedAtDate(req: Requests) {
 function getCreatedAtTime(req: Requests) {
 	return useNuxtApp().$formatDateTime(new Date(req.created_at!)) || ''
 }
-
-const { requests } = storeToRefs(useRequestStore())
-const { total_apls } = storeToRefs(useAppStore())
-
 </script>
 
 <style scoped></style>
