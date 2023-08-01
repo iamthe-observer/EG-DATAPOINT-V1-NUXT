@@ -6,6 +6,7 @@ import useVuelidate from '@vuelidate/core'
 import {
   Applicant,
   FileWithAplType,
+  Requests,
   WardsApplicant,
 } from '@/interfaces/interfaces'
 import { useImageStore } from './images'
@@ -18,7 +19,151 @@ export const useAplStore = defineStore('apl', () => {
   const user = useSupabaseUser()
   const edit_mode = ref(false)
   const if_sent = ref<boolean>(false)
+  const if_req_sent = ref<boolean>(false)
   const apl_sending = ref(false)
+  const request = ref<Requests>({
+    apl_id: '',
+    modified_apl: null,
+    modify_type: '',
+    body: '',
+    status: '',
+    user_id: '',
+  })
+  const empty_req = ref<Requests>({
+    apl_id: '',
+    modified_apl: null,
+    modify_type: '',
+    body: '',
+    status: '',
+    user_id: '',
+  })
+
+  async function requestDiscount() {
+    let err_msg =
+      'Error! Validation Failed. (Go over and check if all the fields have been filled.)'
+
+    applicant.value.apl_id = uuidv4()
+    applicant.value.fullName = `${applicant.value.plastName} ${applicant.value.pfirstName} ${applicant.value.potherName}`
+    let pricer = await useAppStore().getPrices()
+    let price: number = 0
+    const if_sp = applicant.value.pmarital_status == 'MARRIED'
+    const if_wa = applicant.value.children_number > 0
+
+    if (pricer) {
+      if (!if_sp && if_wa) {
+        price = pricer.adult + pricer.child * applicant.value.children_number
+      } else if (if_sp && !if_wa) {
+        price = pricer.adult * 2
+      } else if (if_sp && if_wa) {
+        price =
+          pricer.adult * 2 + pricer.child * applicant.value.children_number
+      } else if (!if_sp && !if_wa) {
+        price = pricer.adult
+      }
+    } else {
+      throw new Error('Get Prices First')
+    }
+
+    applicant.value.totalPayment = price
+
+    if (applicant_type.value == 'spouse only') {
+      if (await validate(spouse_only_rules, applicant.value)) {
+        await sendDiscountRequest(applicant.value)
+      } else {
+        console.log(applicant_type.value)
+
+        if_req_sent.value = false
+        alert(err_msg)
+      }
+    } else if (applicant_type.value == 'family') {
+      // getting val for all wards
+      let val: boolean[] = []
+      for (let idx = 0; idx < applicant.value.wards.length; idx++) {
+        const ward = { ...applicant.value.wards[idx] }
+        val.push(await validate(ward_rules, ward))
+      }
+      if (
+        (await validate(family_rules, applicant.value)) &&
+        val.every(ward => ward == true)
+      ) {
+        await sendDiscountRequest(applicant.value)
+      } else {
+        console.log(applicant_type.value)
+
+        if_req_sent.value = false
+        alert(err_msg)
+      }
+    } else if (applicant_type.value == 'wards only') {
+      // getting val for all wards
+      let val: boolean[] = []
+      for (let idx = 0; idx < applicant.value.wards.length; idx++) {
+        const ward = { ...applicant.value.wards[idx] }
+        val.push(await validate(ward_rules, ward))
+      }
+      if (
+        (await validate(wards_only_rules, applicant.value)) &&
+        val.every(ward => ward == true)
+      ) {
+        await sendDiscountRequest(applicant.value)
+      } else {
+        console.log(applicant_type.value)
+
+        if_req_sent.value = false
+        alert(err_msg)
+      }
+    } else if (applicant_type.value == 'single') {
+      let if_spouse = await validate(single_rules, applicant.value)
+      console.log(if_spouse)
+      if (await validate(single_rules, applicant.value)) {
+        await sendDiscountRequest(applicant.value)
+      } else {
+        console.log(applicant_type.value)
+
+        if_req_sent.value = false
+        alert(err_msg)
+      }
+    }
+  }
+
+  async function sendDiscountRequest(applicant: Applicant) {
+    console.log(applicant.aplImg_path.wardsPath)
+    try {
+      if (has_files.value) {
+        let { primePath, secPath, wardsPath } =
+          await useImageStore().uploadFiles(applicant.apl_id)
+        applicant.aplImg_path.primePath = primePath
+        applicant.aplImg_path.secPath = secPath
+        wardsPath.forEach(path => {
+          for (let i = 0; i < applicant.aplImg_path.wardsPath.length; i++) {
+            const el = applicant.aplImg_path.wardsPath[i]
+            if (path.includes(el)) applicant.aplImg_path.wardsPath[i] = path
+          }
+        })
+        console.log(applicant.aplImg_path.wardsPath, wardsPath)
+      }
+
+      request.value.apl_id = applicant.apl_id!
+      request.value.modified_apl = applicant
+      request.value.modify_type = 'discount'
+      request.value.status = 'pending'
+      request.value.user_id = useSupabaseUser().value?.id!
+
+      console.log(request.value)
+
+      const { error } = await $SB.from('requests').insert([request.value])
+
+      if (error) throw error
+      if_req_sent.value = true
+      apl_sending.value = false
+      resetAplData()
+      resetRequest()
+      return 'done'
+    } catch (err: any) {
+      if_req_sent.value = false
+      apl_sending.value = false
+      console.log(err)
+    }
+  }
 
   const applicant = ref<Applicant>({
     created_at: new Date(),
@@ -230,25 +375,6 @@ export const useAplStore = defineStore('apl', () => {
     }
   )
 
-  // watch(
-  //   () => applicant.value.wards.length,
-  //   () => {
-  //     if (
-  //       applicant.value.aplImg_path.wardsPath.length! >
-  //         applicant.value.children_number! &&
-  //       applicant.value.wards?.length != 0
-  //     ) {
-  //       let diff =
-  //         applicant.value.wards?.length! - applicant.value.children_number!
-  //       for (let ii = 0; ii < diff; ii++) {
-  //         applicant.value.aplImg_path.wardsPath.pop()
-  //       }
-  //       console.log(applicant.value.aplImg_path.wardsPath)
-  //       console.log('done')
-  //     }
-  //   }
-  // )
-
   function toggleEditMode(val: boolean) {
     edit_mode.value = val!
   }
@@ -258,36 +384,6 @@ export const useAplStore = defineStore('apl', () => {
     const val = await v$.value.$validate()
     return val
   }
-
-  // const handleWardPath = (ward: WardsApplicant) => {
-  //   if (
-  //     applicant.value.wards?.length! > 0 &&
-  //     applicant.value.wards!.some(warder => warder.index == ward.index)
-  //   ) {
-  //     const filtered_path = applicant.value.aplImg_path.wardsPath.filter(
-  //       path => !path.includes(`ward${ward.index}`)
-  //     )!
-
-  //     filtered_path.push(`ward${ward.index}`)
-
-  //     filtered_path.sort(
-  //       (a, b) =>
-  //         useNuxtApp().$extractNumFromPhrase(a)! -
-  //         useNuxtApp().$extractNumFromPhrase(b)!
-  //     )
-
-  //     applicant.value.aplImg_path.wardsPath = filtered_path
-  //     // console.log(applicant.value.aplImg_path.wardsPath);
-  //   } else {
-  //     applicant.value.aplImg_path.wardsPath.push(`ward${ward.index}`)
-
-  //     applicant.value.aplImg_path.wardsPath.sort(
-  //       (a, b) =>
-  //         useNuxtApp().$extractNumFromPhrase(a)! -
-  //         useNuxtApp().$extractNumFromPhrase(b)!
-  //     )
-  //   }
-  // }
 
   const submitApl = async (apl: Applicant) => {
     console.log(apl.aplImg_path.wardsPath)
@@ -465,6 +561,11 @@ export const useAplStore = defineStore('apl', () => {
       sgender: '',
       sdob: null,
     }
+    request.value = empty_req.value
+  }
+
+  function resetRequest() {
+    request.value = empty_req.value
   }
 
   return {
@@ -479,6 +580,10 @@ export const useAplStore = defineStore('apl', () => {
     if_sent,
     apl_sending,
     handleFile,
+    request,
+    requestDiscount,
+    resetRequest,
+    if_req_sent,
     // handleWardPath,
   }
 })

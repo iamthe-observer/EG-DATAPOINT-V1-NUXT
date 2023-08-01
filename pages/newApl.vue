@@ -5,7 +5,38 @@
 			id="style-1">
 			<h1
 				class="px-5 py-5 rounded-2xl bg-neutral-700 text-2xl w-full flex justify-between items-center sticky top-0 mb-2 shadow-lg z-10">
-				<span class="">Add a new Applicant</span>
+				<span ref="header" class="flex flex-col gap-1 hover:text-neutral-600 group">Add a new Applicant
+					<button v-if="if_hover_header" onclick="request_modal.showModal()"
+						class="btn btn-ghost btn-xs group-hover:text-secondary">Request Discount</button>
+
+					<dialog id="request_modal" class="modal">
+						<form method="dialog" class="modal-box flex flex-col gap-4">
+							<button @click="useAplStore().resetRequest()"
+								class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-red-500">✕</button>
+							<div class="flex flex-col gap-2 items-center">
+								<h3 class="font-semibold text-2xl text-neutral-300">Input discounted amount only</h3>
+								<div class="flex gap-2 items-center">
+									<span class="text-neutral-600 font-semibold text-xl">GHC</span>
+									<input v-model="request.body" type="number" min="0"
+										class="input input-xl w-fit outline outline-4 outline-neutral-700 text-2xl text-center text-white"
+										placeholder="" />
+									<span class="text-neutral-600">.00</span>
+								</div>
+							</div>
+							<div class="modal-action flex gap-2 items-center">
+								<span data-tip="Contact Supervisor or Manager for pending requests." class="text-xs tooltip tooltip-left">
+									<svg xmlns="http://www.w3.org/2000/svg" class="w-6 z-[500] aspect-square" viewBox="0 0 24 24">
+										<path fill="white"
+											d="M11.75 19h-.25q-3.55 0-6.025-2.475T3 10.5q0-3.55 2.475-6.025T11.5 2q1.775 0 3.313.662t2.7 1.825q1.162 1.163 1.824 2.7T20 10.5q0 3.35-1.888 6.225t-4.762 4.5q-.25.125-.5.138t-.45-.113q-.2-.125-.35-.325t-.175-.475L11.75 19Zm-.275-3.025q.425 0 .725-.3t.3-.725q0-.425-.3-.725t-.725-.3q-.425 0-.725.3t-.3.725q0 .425.3.725t.725.3ZM9.3 8.375q.275.125.55.013t.45-.363q.225-.3.525-.463T11.5 7.4q.6 0 .975.337t.375.863q0 .325-.188.65t-.662.8q-.625.55-.925 1.038t-.3.987q0 .3.213.513t.512.212q.3 0 .5-.225t.3-.525q.125-.425.45-.775t.6-.625q.525-.525.788-1.05t.262-1.05q0-1.15-.788-1.85T11.5 6q-.8 0-1.475.388t-1.1 1.062q-.15.275-.038.537t.413.388Z" />
+									</svg>
+								</span>
+								<button @click="useAplStore().requestDiscount()"
+									class="btn btn-sm btn-primary border-none">Request</button>
+							</div>
+						</form>
+					</dialog>
+
+				</span>
 
 				<steps v-if="applicant.pmarital_status !== 'UNMARRIED' || applicant.children_number !== 0" @step="handleStep"
 					:steps="steps_" class="text-sm" />
@@ -54,6 +85,13 @@
 			</div>
 			<label class="modal-backdrop bg-[rgb(0,0,0,.7)]" for="my_modal_7">Close</label>
 		</div>
+		<input :checked="if_req_sent" type="checkbox" id="request_modal_1" class="modal-toggle" />
+		<div class="modal">
+			<div class="modal-box">
+				<p class="py-4 text-center text-2xl">Request Sent!</p>
+			</div>
+			<label class="modal-backdrop bg-[rgb(0,0,0,.7)]" for="request_modal_1">Close</label>
+		</div>
 	</div>
 </template>
 
@@ -67,30 +105,17 @@ import { useTitle } from '@vueuse/core';
 useTitle('EG Datapoint | Add Applicant')
 
 const { price } = storeToRefs(useAppStore())
-const { applicant, if_sent, apl_sending } = storeToRefs(useAplStore())
+const { applicant, if_sent, if_req_sent, apl_sending, request } = storeToRefs(useAplStore())
 const container = ref<HTMLDivElement>()
 const steps_ = ref([{ name: 'Primary', page: 'prime' }])
 const curr_page = ref('prime')
 const num = ref(0)
+const header = ref()
+const if_hover_header = useElementHover(header)
 
 onMounted(async () => {
 	if_sent.value = false
-	// try {
-	// 	let response = await fetch('http://worldtimeapi.org/api/timezone/Africa/Accra')
-	// 	curr_datetime.value = await response.json()
-	// 	if (!curr_datetime.value) throw new Error("Can't get DateTime")
-	// 	console.log(curr_datetime.value);
-	// 	console.log(calculateHoursPassed(curr_datetime.value.datetime));
-	// } catch (error) {
-	// 	console.log(error);
-	// }
-	// console.log(apl_data.prime!.aplImg_path.wardsPath);
 })
-
-// onBeforeUnmount(() => {
-// 	useAplStore().resetAplData()
-// 	useImageStore().resetFiles()
-// })
 
 // this handles the visibility of the steps
 watchEffect(() => {
@@ -120,9 +145,6 @@ watchEffect(() => {
 function handleStep(page: string) {
 	curr_page.value = page
 }
-
-// TODO error handler for JWT expiration
-
 </script>
 
 <style scoped>
