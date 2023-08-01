@@ -7,7 +7,7 @@ export const useViewAplStore = defineStore('view_apl', () => {
   const APL_ID = ref(useStorage<string>('search', ''))
 
   function setID(id: string) {
-    APL_ID.value = id
+    APL_ID.value = id.toString()
   }
 
   return {
