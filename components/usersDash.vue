@@ -44,6 +44,8 @@
 
 					<p class="font-bold text-xs">{{ apl.pcontact }}</p>
 
+					<p class="font-bold text-xs">{{ useNuxtApp().$formatDateTime(new Date(apl.created_at!)) }}</p>
+
 					<div class="flex absolute bottom-1 left-1 justify-center pt-5 gap-1 items-center">
 						<button @click="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
 							class="btn btn-primary mr-3 rounded-xl">View</button>
@@ -92,9 +94,12 @@
 								:src="URLs![idx].signedUrl !== null ? URLs![idx].signedUrl : '/svg/image.svg'" />
 						</div>
 					</div>
-					<p class="font-bold pt-4 text-sm justify-end">{{ apl.fullName }}</p>
+					<p class="font-semibold pt-4 text-sm justify-end">{{ apl.fullName }}</p>
 
-					<p class="font-bold text-xs">{{ apl.pcontact }}</p>
+					<p class="font-normal text-neutral-400 text-xs">{{ apl.pcontact }}</p>
+
+					<p class="font-normal text-neutral-400 text-xs">{{ useNuxtApp().$formatDateTime(new Date(apl.created_at!)) }}
+					</p>
 
 					<div class="flex absolute bottom-1 left-1 justify-center pt-5 gap-1 items-center">
 						<button @click="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
@@ -126,10 +131,18 @@ const loading = ref(false)
 const { total_daily_applicants, total_apls } = storeToRefs(useAppStore())
 
 const path = computed(() => {
-	return total_daily_applicants.value.map(apl => apl.aplImg_path.primePath[0])
+	if (useNuxtApp().$sortByRecency(total_daily_applicants.value).length >= 5) {
+		return useNuxtApp().$sortByRecency(total_daily_applicants.value).map(apl => apl.aplImg_path.primePath[0]).slice(0, 5)
+	} else {
+		return useNuxtApp().$sortByRecency(total_daily_applicants.value).map(apl => apl.aplImg_path.primePath[0])
+	}
 })
 const path_admin = computed(() => {
-	return total_apls.value.map(apl => apl.aplImg_path.primePath[0]).reverse().slice(5)
+	if (total_apls.value.length >= 5) {
+		return useNuxtApp().$sortByRecency(total_apls.value).map(apl => apl.aplImg_path.primePath[0]).slice(0, 5)
+	} else {
+		return useNuxtApp().$sortByRecency(total_apls.value).map(apl => apl.aplImg_path.primePath[0])
+	}
 })
 
 const URLs = ref<{
@@ -150,7 +163,7 @@ onMounted(async () => {
 
 			if (error) throw error
 			loading.value = false
-			URLs.value = data?.reverse()
+			URLs.value = data
 			// console.log(URLs.value);
 		} else if (role.value) {
 			if (APLS!.length == 0) return
@@ -159,7 +172,7 @@ onMounted(async () => {
 
 			if (error) throw error
 			loading.value = false
-			URLs.value = data?.reverse()
+			URLs.value = data
 			// console.log(URLs.value);
 		}
 	} catch (error) {
@@ -170,8 +183,7 @@ onMounted(async () => {
 
 const recent_apls = computed(() => {
 	if (total_daily_applicants.value.length > 0) {
-		// return total_daily_applicants.value.slice(-5).reverse().sort()
-		return total_daily_applicants.value.slice(0, 5).sort((a, b) => new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime())
+		return useNuxtApp().$sortByRecency(total_daily_applicants.value).slice(0, 5)
 
 	} else {
 		return []
@@ -180,8 +192,7 @@ const recent_apls = computed(() => {
 
 const recent_apls_admin = computed(() => {
 	if (total_apls.value) {
-		// return total_daily_applicants.value.slice(-5).reverse().sort()
-		return total_apls.value.reverse().slice(0, 5).sort((a, b) => new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime())
+		return useNuxtApp().$sortByRecency(total_apls.value).slice(0, 5)
 
 	} else {
 		return []

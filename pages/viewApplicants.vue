@@ -183,7 +183,8 @@
 					<tbody class="">
 						<!-- row -->
 						<!-- <tr v-for="(apl, i) in all_my_apls" -->
-						<tr v-for="(apl, i) in _curr_filtered_apls" class="border-b-neutral-700 hover">
+						<tr @dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
+							v-for="(apl, i) in _curr_filtered_apls" class="border-b-neutral-700 hover">
 							<th class="font-normal">
 								{{ i + 1 }}
 							</th>
