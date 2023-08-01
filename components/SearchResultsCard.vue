@@ -3,7 +3,7 @@
 		class="card card-side bg-neutral-800 shadow-xl w-[60%] cursor-pointer hover:bg-primary transition-all group duration-400 ease-in-out">
 		<figure class="p-2 max-h-full aspect-square"><img loading="lazy"
 				:class="image ? 'border-2 border-white w-36 h-36 rounded-xl' : 'w-36 h-36 rounded-xl'"
-				:src="image ? image : 'assets/svg/image.svg'" alt="Movie" />
+				:src="image ? image : '/svg/image.svg'" alt="Movie" />
 		</figure>
 		<div class="card-body p-2" @click="$emit('recentSearch', rSearchParams)">
 			<h2 class="card-title">{{ result.fullName }}</h2>

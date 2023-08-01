@@ -37,7 +37,7 @@
 					<div class="avatar pt-5 justify-start">
 						<div class="w-32 rounded-full justify-center">
 							<img v-if="URLs?.length! > 0" class=""
-								:src="URLs![idx].signedUrl !== null ? URLs![idx].signedUrl : 'assets/svg/image.svg'" />
+								:src="URLs![idx].signedUrl !== null ? URLs![idx].signedUrl : '/svg/image.svg'" />
 						</div>
 					</div>
 					<p class="font-bold pt-4 text-sm justify-end">{{ apl.fullName }}</p>
@@ -89,7 +89,7 @@
 					<div class="avatar pt-5 justify-start">
 						<div class="w-32 rounded-full justify-center">
 							<img v-if="URLs?.length! > 0" class=""
-								:src="URLs![idx].signedUrl !== null ? URLs![idx].signedUrl : 'assets/svg/image.svg'" />
+								:src="URLs![idx].signedUrl !== null ? URLs![idx].signedUrl : '/svg/image.svg'" />
 						</div>
 					</div>
 					<p class="font-bold pt-4 text-sm justify-end">{{ apl.fullName }}</p>
