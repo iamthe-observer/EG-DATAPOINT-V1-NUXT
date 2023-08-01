@@ -8,6 +8,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .vertical-text {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+  }
+}
+
 * {
   box-sizing: border-box;
   font-family: Fredoka;
