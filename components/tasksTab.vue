@@ -3,10 +3,18 @@
 		class="w-full h-full rounded-xl bg-opacity-10 p-1 overflow-y-hidden bg-white flex flex-col">
 		<h1 class="py-1 px-1 text-xl font-semibold flex justify-between">
 			<span class="">Tasks</span>
-			<span class="">{{ _tasks.length }}</span>
+
+			<select v-model="filter_val" class="select select-xs w-fit max-w-xs">
+				<option disabled selected>Filter</option>
+				<option selected value="false">Not Completed</option>
+				<option value="true">Completed</option>
+				<option value="all">All</option>
+			</select>
+
+			<span class="">{{ curr_filtered_tasks.length }}</span>
 		</h1>
 
-		<div v-if="_tasks!.length == 0" class="w-full h-full grid place-items-center">
+		<div v-if="curr_filtered_tasks.length == 0" class="w-full h-full grid place-items-center">
 			<div class="flex flex-col items-center gap-2">
 				<svg xmlns="http://www.w3.org/2000/svg" class="w-20 aspect-square" viewBox="0 0 24 24">
 					<g stroke="#888888" stroke-linecap="round" stroke-width="2">
@@ -35,12 +43,11 @@
 
 		<div v-else id="style-1" class="bg-neutral-800 flex flex-col gap-3 rounded-xl overflow-y-auto">
 			<div class="w-full flex gap-2 justify-between p-2 hover:bg-neutral-700 rounded-xl"
-				v-for="(task, i) in _tasks.sort((a, b) => new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime())"
-				:key="i">
+				v-for="(task, i) in curr_filtered_tasks" :key="i">
 				<span class="text-neutral-600 w-10 text-xs grid place-items-center">
 					<div class="form-control">
 						<label class="label cursor-pointer">
-							<input @click="useTasksStore().updateTask(task.done!, task.id!)" type="checkbox" v-model="task.done"
+							<input @keypress="useTasksStore().updateTask(task.done!, task.id!)" type="checkbox" v-model="task.done"
 								class="checkbox checkbox-primary" />
 						</label>
 					</div>
@@ -70,6 +77,14 @@ import { storeToRefs } from 'pinia';
 import { useTasksStore } from '@/store/tasks';
 
 const { _tasks } = storeToRefs(useTasksStore())
+
+const filter_val = ref('false')
+const curr_filtered_tasks = computed(() => {
+	if (filter_val.value == 'all') return _tasks.value.sort((a, b) => new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime())
+	if (filter_val.value == 'true') return _tasks.value.filter(task => task.done == true).sort((a, b) => new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime())
+	if (filter_val.value == 'false') return _tasks.value.filter(task => task.done == false).sort((a, b) => new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime())
+	return []
+})
 
 defineProps<{
 	curr_page: string
