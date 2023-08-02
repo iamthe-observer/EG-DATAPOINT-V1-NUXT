@@ -1,7 +1,7 @@
 <template>
 	<div class="w-full relative h-full rounded-2xl pb-2">
 		<div id="style-1" :class="[
-			'bg-white max-w-full w-[97%] h-full max-h-full rounded-2xl bg-neutral-80 col-span-full row-span-full scrollbar text-justify p-2 relative flex flex-col',
+			'max-w-full w-full h-full max-h-full rounded-2xl col-span-full row-span-full scrollbar text-justify p-2 relative flex flex-col',
 			if_search ? 'overflow-hidden' : 'overflow-y-auto'
 		]">
 			<!-- Search -->
