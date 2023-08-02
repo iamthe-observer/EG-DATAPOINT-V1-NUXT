@@ -258,6 +258,7 @@ onMounted(async () => {
 	request.value.modify_type = 'edit'
 	request.value.modified_apl = apl.value
 	request.value.status = 'pending'
+	request.value.fullName = apl.value.fullName
 	request.value.user_id = useSupabaseUser().value?.id!
 	useRequestStore().setRequest(request.value)
 	emit('request', request.value)
@@ -328,6 +329,7 @@ function logger(e: any) {
 		request.value.modify_type = 'edit'
 		request.value.modified_apl = apl.value
 		request.value.status = 'pending'
+		request.value.fullName = apl.value.fullName
 		request.value.user_id = useSupabaseUser().value?.id!
 		useRequestStore().setRequest(request.value)
 		emit('request', request.value)

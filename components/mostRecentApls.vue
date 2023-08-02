@@ -26,7 +26,7 @@
 					</svg>
 
 					<span class="text-sm">Rejected</span>
-					<span class="text-sm">{{ role ? requests.filter(req => req.status == 'reject').length : requests.filter(req =>
+					<span class="text-sm">{{ role ? requests.filter(req => req.status == 'rejected').length : requests.filter(req =>
 						req.status == 'reject').filter(req => req.user_id == useSupabaseUser().value?.id).length }}</span>
 				</div>
 

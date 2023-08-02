@@ -11,7 +11,7 @@
 				<div v-if="!new_task" class="flex flex-col items-center gap-2 w-fit">
 					<span
 						class="hover:text-accent cursor-pointer hover:scale-110 transition-all duration-200 ease-in-out text-xs whitespace-nowrap">Tasks
-						Done</span>
+					</span>
 					<radial-progress :textclr="`accent`"
 						:amount="Number(((done_tasks.length / _tasks.length) * 100).toFixed(1)) || 0">
 						{{ `${done_tasks.length}/${_tasks.length}` }}
@@ -48,9 +48,9 @@
 				</p>
 
 				<div v-if="!new_task" class="flex flex-col items-center gap-2 w-fit">
-					<span
+					<span @click="$router.push('/database')"
 						class="hover:text-accent cursor-pointer hover:scale-110 transition-all duration-200 ease-in-out text-xs whitespace-nowrap">Tasks
-						Done</span>
+					</span>
 					<radial-progress :textclr="`secondary`"
 						:amount="Number(((done_tasks.length / _tasks.length) * 100).toFixed(1)) || 0">
 						{{ `${done_tasks.length}/${_tasks.length}` }}

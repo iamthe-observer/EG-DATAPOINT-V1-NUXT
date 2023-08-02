@@ -21,6 +21,7 @@ useServerSeoMeta({
   ogDescription: 'Welcome! and Enjoy your stay with us!',
 })
 
+// document.body.style
 const { $SB } = useNuxtApp()
 const { app_loading } = storeToRefs(useAppStore())
 

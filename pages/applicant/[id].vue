@@ -169,7 +169,7 @@
 import { storeToRefs } from 'pinia';
 import { useAplStore } from '@/store/apl'
 import { useRequestStore } from '@/store/requests'
-import { Applicant } from 'interfaces/interfaces';
+import { Applicant, Requests } from 'interfaces/interfaces';
 
 
 onMounted(() => {
@@ -206,11 +206,8 @@ function logger(e: any) {
 		curr_request.value!.modified_apl!.plastName = lastName.value
 		curr_request.value!.modified_apl!.potherName = otherName.value
 		curr_request.value!.modified_apl!.fullName = `${lastName.value} ${firstName.value} ${otherName.value}`.trimEnd()
+		curr_request.value!.fullName = `${lastName.value} ${firstName.value} ${otherName.value}`.trimEnd()
 	}, 10)
-}
-
-interface MyObject {
-	[key: string]: any;
 }
 
 async function handleSubmit() {
@@ -221,6 +218,7 @@ async function handleSubmit() {
 	curr_request.value!.modified_apl.plastName = lastName.value
 	curr_request.value!.modified_apl.potherName = otherName.value
 	curr_request.value!.modified_apl.fullName = `${lastName.value} ${firstName.value} ${otherName.value}`.trimEnd()
+	curr_request.value!.fullName = `${lastName.value} ${firstName.value} ${otherName.value}`.trimEnd()
 	let data = await useRequestStore().sendRequest(curr_request.value!)
 	if (data) if_sent.value = true
 	console.log("🚀 ~ file: [id].vue:135 ~ handleSubmit ~ data:", data)
@@ -236,6 +234,7 @@ async function handleDeleteSubmit() {
 	let req = nullReq.value
 	req.body = request_body.value
 	req.apl_id = curr_apl.value?.apl_id!
+	req.fullName = curr_apl.value?.fullName!
 	req.modify_type = 'delete'
 	req.status = 'pending'
 	req.user_id = useSupabaseUser().value?.id!
@@ -251,12 +250,13 @@ async function handleDeleteSubmit() {
 
 }
 
-const nullReq = ref({
+const nullReq = ref<Requests>({
 	apl_id: '',
 	modified_apl: null,
 	modify_type: '',
 	body: '',
 	status: 'pending',
 	user_id: '',
+	fullName: undefined
 })
 </script>

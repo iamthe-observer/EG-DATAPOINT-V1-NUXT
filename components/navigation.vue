@@ -41,9 +41,7 @@ async function handleLogout() {
 	try {
 		let { error } = await $SB.auth.signOut()
 		if (error) throw error
-		// console.log('signed out');
-		console.log((await $SB.auth.getSession()).data)
-		// useAppStore().logged = false
+		$router.push('/')
 		useTasksStore().reset()
 		useProfileStore().reset()
 		useAppStore().reset()
@@ -52,9 +50,6 @@ async function handleLogout() {
 		useSearchStore().resetRecentSearch()
 		useImageStore().resetFiles()
 		useAplStore().resetAplData()
-		$router.push('/')
-
-
 	} catch (error: any) {
 		console.log(error);
 	}

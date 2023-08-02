@@ -183,6 +183,7 @@ export interface Requests {
   status: string
   modify_type: string
   modified_apl?: Applicant | null
+  fullName?: string
 }
 
 export interface SearchParams {

@@ -1,8 +1,8 @@
 <template>
 	<div v-if="curr_page == 'tasks' || curr_page == ''"
-		class="w-full h-full rounded-xl bg-opacity-10 p-1 overflow-y-hidden bg-white flex flex-col">
+		class="w-full h-full rounded-xl p-1 overflow-y-hidden flex flex-col">
 		<h1 class="py-1 px-1 text-xl font-semibold flex justify-between">
-			<span class="">Tasks</span>
+			<span :class="['transition-all duration-300 ease-out', curr_page == 'tasks' ? 'text-4xl' : '']">Tasks</span>
 
 			<select v-model="filter_val" class="select select-xs w-fit max-w-xs">
 				<option disabled selected>Filter</option>
