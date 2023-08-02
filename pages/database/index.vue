@@ -12,12 +12,11 @@
 				class="flex w-full justify-between hover:mb-10 transition-all duration-300 ease-in-out relative group">
 
 
-				<div @click="curr_page = ''" :class="[
+				<div v-if="is_hover && !if_search" @click="curr_page = ''" :class="[
 					'opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out absolute -bottom-9 left-1/2 -translate-x-1/2 w-56 h-10 cursor-pointer z-[5000] flex justify-center items-end',
-					if_search ? '' : 'tooltip tooltip-secondary tooltip-open tooltip-bottom'
+					if_search ? '' : 'tooltip tooltip-primary tooltip-bottom'
 				]" data-tip="resize panels">
-					<svg data-tip="resize" v-if="is_hover && !if_search" class="w-6 aspect-square"
-						xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+					<svg data-tip="resize" class="w-6 aspect-square" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 						<path fill="white"
 							d="M10 6a1 1 0 0 0-1 1v4H5.41l.8-.79a1 1 0 0 0-1.42-1.42l-2.5 2.5a1 1 0 0 0-.21.33a1 1 0 0 0 0 .76a1 1 0 0 0 .21.33l2.5 2.5a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.42l-.8-.79H9v4a1 1 0 0 0 2 0V7a1 1 0 0 0-1-1Zm11.92 5.62a1 1 0 0 0-.21-.33l-2.5-2.5a1 1 0 0 0-1.42 1.42l.8.79H15V7a1 1 0 0 0-2 0v10a1 1 0 0 0 2 0v-4h3.59l-.8.79a1 1 0 0 0 0 1.42a1 1 0 0 0 1.42 0l2.5-2.5a1 1 0 0 0 .21-.33a1 1 0 0 0 0-.76Z" />
 					</svg>
@@ -44,11 +43,7 @@
 					<span v-if="curr_page != 'tasks' && curr_page != ''"
 						class="vertical-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 tracking-[-0.2rem] font-semibold text-neutral-600 group-hover:text-secondary text-[2rem] cursor-pointer transition-all duration-300 ease-out group-hover:scale-110">TASKS</span>
 
-
-					<div v-if="curr_page == 'tasks' || curr_page == ''"
-						class="w-full h-full rounded-xl bg-opacity-10 p-1 overflow-y-auto bg-white" id="style-1">
-
-					</div>
+					<TasksTab :curr_page="curr_page" />
 				</div>
 
 				<div @click="handlePage('requests')" :class="[
@@ -59,10 +54,7 @@
 						class="vertical-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 tracking-[-0.2rem] font-semibold text-neutral-600 group-hover:text-secondary text-[2rem] cursor-pointer transition-all duration-300 ease-out group-hover:scale-110">REQUESTS</span>
 
 
-					<div v-if="curr_page == 'requests' || curr_page == ''"
-						class="w-full h-full rounded-xl bg-opacity-10 p-1 overflow-y-auto bg-white" id="style-1">
-
-					</div>
+					<RequestsTab :curr_page="curr_page" />
 				</div>
 
 				<div @click="handlePage('announcements')" :class="[
@@ -73,10 +65,7 @@
 						class="vertical-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 tracking-[-0.2rem] font-semibold text-neutral-600 group-hover:text-secondary text-[2rem] cursor-pointer transition-all duration-300 ease-out group-hover:scale-110">ANNOUNCEMENTS</span>
 
 
-					<div v-if="curr_page == 'announcements' || curr_page == ''"
-						class="w-full h-full rounded-xl bg-opacity-10 p-1 overflow-y-auto bg-white" id="style-1">
-
-					</div>
+					<AnnTab :curr_page="curr_page" />
 				</div>
 
 			</div>
@@ -106,8 +95,6 @@ const curr_page = ref('')
 
 function handlePage(page: string): void {
 	curr_page.value = page
-	console.log(curr_page.value);
-
 }
 
 onBeforeUnmount(() => {

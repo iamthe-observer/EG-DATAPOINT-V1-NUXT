@@ -108,7 +108,6 @@
 							</div>
 							<div class="flex-1 flex flex-col truncate">
 								<span class="text-md truncate">{{ ann.title }}</span>
-								<!-- <span class="text-sm truncate">{{ ann.body }}</span> -->
 							</div>
 							<div class="text-xs flex flex-col items-end">
 								<span>{{ new Date(ann.created_at).toLocaleTimeString([], {

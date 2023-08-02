@@ -1,7 +1,9 @@
 <template>
-	<div class="bg-neutral-900 flex flex-col rounded-2xl p-3 h-full">
-		<h1 class="pb-2 text-xl font-semibold flex justify-between" v-if="announcements.length > 0">
-			<span class="w-full text-center">Announcements</span>
+	<div v-if="curr_page == 'announcements' || curr_page == ''"
+		class="w-full h-full rounded-xl bg-opacity-10 p-1 overflow-y-hidden bg-white flex flex-col">
+
+		<h1 class="py-1 px-1 text-xl font-semibold flex justify-between">
+			<span class="">Announcements</span>
 		</h1>
 		<!-- if no requests -->
 		<div v-if="announcements!.length == 0" class="w-full h-full grid place-items-center">
@@ -39,9 +41,14 @@
 				<span class="text-neutral-600 w-10 text-xs grid place-items-center">
 					{{ i + 1 }}
 				</span>
-				<span class="flex flex-col justify-center truncate flex-1 overflow-x-hidden text-sm">
+				<span class="flex flex-col justify-center truncate- flex-1 overflow-x-hidden text-sm">
 					{{ ann.title }}<br />
-					<span class="truncate">{{ ann.body }}</span>
+					<span :class="[
+						'overflow-hidden text-sm text-left truncate-',
+						curr_page == 'announcements' ? 'w-full' : 'w-[200px]'
+					]">{{ ann.body }} Lorem ipsum dolor sit amet
+						consectetur
+						adipisicing elit. Quisquam, aliquid.</span>
 				</span>
 				<div class="flex flex-col text-xs text-right text-neutral-400">
 					<span class="">
@@ -65,7 +72,8 @@
 import { storeToRefs } from 'pinia';
 import { useAnnStore } from '@/store/announce';
 
+defineProps<{
+	curr_page: string
+}>()
 const { announcements } = storeToRefs(useAnnStore())
 </script>
-
-<style scoped></style>

@@ -1,10 +1,11 @@
 <template>
-	<div class="bg-neutral-900 flex flex-col rounded-2xl p-3 h-full">
-		<h1 class="pb-2 text-xl font-semibold flex justify-between">
-			<span class="w-full">Tasks</span>
-			<span class="w-full text-right">{{ _tasks.length }}</span>
+	<div v-if="curr_page == 'tasks' || curr_page == ''"
+		class="w-full h-full rounded-xl bg-opacity-10 p-1 overflow-y-hidden bg-white flex flex-col">
+		<h1 class="py-1 px-1 text-xl font-semibold flex justify-between">
+			<span class="">Tasks</span>
+			<span class="">{{ _tasks.length }}</span>
 		</h1>
-		<!-- if no requests -->
+
 		<div v-if="_tasks!.length == 0" class="w-full h-full grid place-items-center">
 			<div class="flex flex-col items-center gap-2">
 				<svg xmlns="http://www.w3.org/2000/svg" class="w-20 aspect-square" viewBox="0 0 24 24">
@@ -32,7 +33,6 @@
 			</div>
 		</div>
 
-		<!-- contains all requests -->
 		<div v-else id="style-1" class="bg-neutral-800 flex flex-col gap-3 rounded-xl overflow-y-auto">
 			<div class="w-full flex gap-2 justify-between p-2 hover:bg-neutral-700 rounded-xl"
 				v-for="(task, i) in _tasks.sort((a, b) => new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime())"
@@ -40,12 +40,13 @@
 				<span class="text-neutral-600 w-10 text-xs grid place-items-center">
 					<div class="form-control">
 						<label class="label cursor-pointer">
-							<input type="checkbox" v-model="task.done" class="checkbox checkbox-primary" />
+							<input @click="useTasksStore().updateTask(task.done!, task.id!)" type="checkbox" v-model="task.done"
+								class="checkbox checkbox-primary" />
 						</label>
 					</div>
 				</span>
 				<span class="flex flex-col justify-center truncate flex-1 overflow-x-hidden text-sm">
-					<span class="truncate">{{ task.body }}</span>
+					<span :class="['truncate-', task.done ? 'text-neutral-600 line-through' : '']">{{ task.body }}</span>
 				</span>
 				<div class="flex flex-col text-xs text-right text-neutral-400">
 					<span class="">
@@ -57,8 +58,9 @@
 				</div>
 			</div>
 
-
 		</div>
+
+
 	</div>
 </template>
 
@@ -68,12 +70,10 @@ import { storeToRefs } from 'pinia';
 import { useTasksStore } from '@/store/tasks';
 
 const { _tasks } = storeToRefs(useTasksStore())
-// const tasks = ref<Task[]>([])
 
-watchEffect(() => {
-	console.log(_tasks.value);
-
-})
+defineProps<{
+	curr_page: string
+}>()
 </script>
 
 <style scoped></style>

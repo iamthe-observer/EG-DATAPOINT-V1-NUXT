@@ -1,6 +1,7 @@
 <template>
-	<div class="bg-neutral-900 flex-1 flex flex-col rounded-2xl p-3">
-		<h1 class="pb-2 text-xl font-semibold flex justify-between" v-if="requests.length > 0">
+	<div v-if="curr_page == 'requests' || curr_page == ''"
+		class="w-full h-full rounded-xl bg-opacity-10 p-1 overflow-y-hidden bg-white flex flex-col">
+		<h1 class="py-1 px-1 text-xl font-semibold flex justify-between">
 			<span class="">Requests</span>
 
 			<select v-model="filter_val" class="select select-xs w-fit max-w-xs">
@@ -9,6 +10,7 @@
 				<option value="pending">Pending</option>
 				<option value="rejected">Rejected</option>
 				<option value="approved">Approved</option>
+				<option value="discount">Discount</option>
 				<option value="edit">Edit</option>
 				<option value="delete">Delete</option>
 			</select>
@@ -44,15 +46,15 @@
 		</div>
 
 		<!-- contains all requests -->
-		<div v-else class="flex-1 bg-neutral-800 flex flex-col gap-3 rounded-xl">
+		<div v-else id="style-1" class="bg-neutral-800 flex flex-col gap-3 rounded-xl overflow-y-auto">
 			<div class="w-full flex gap-2 justify-between p-2 hover:bg-neutral-700 rounded-xl"
 				v-for="(req, i) in curr_filtered_req.sort((a, b) => new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime())"
 				:key="i">
 				<span class="text-neutral-600 w-10 text-xs grid place-items-center">
 					{{ i + 1 }}
 				</span>
-				<span class="flex flex-col justify-center truncate overflow-x-hidden text-sm">
-					{{ getName(req) }}<br />
+				<span class="flex flex-col justify-center w-full truncate- justify-self-stretch">
+					{{ getName(req) }}
 					<span :class="req.modify_type == 'delete' ? 'badge badge-accent badge-xs' : 'badge badge-primary badge-xs'">{{
 						req.modify_type }}</span>
 				</span>
@@ -77,25 +79,43 @@ import { storeToRefs } from 'pinia';
 import { useRequestStore } from '@/store/requests';
 import { Requests } from '@/interfaces/interfaces';
 import { useAppStore } from '@/store/app';
+import { useProfileStore } from '@/store/profile';
 
-const { requests } = storeToRefs(useRequestStore())
+defineProps<{
+	curr_page: string
+}>()
+const { requests, my_requests } = storeToRefs(useRequestStore())
+const { role } = storeToRefs(useProfileStore())
 const { total_apls } = storeToRefs(useAppStore())
 
-const filter_val = ref('all')
+const filter_val = ref('pending')
 const curr_filtered_req = computed(() => {
-	if (filter_val.value == 'all') return requests.value
-	if (filter_val.value == 'pending') return requests.value.filter(req => req.status == 'pending')
-	if (filter_val.value == 'rejected') return requests.value.filter(req => req.status == 'rejected')
-	if (filter_val.value == 'approved') return requests.value.filter(req => req.status == 'approved')
-	if (filter_val.value == 'edit') return requests.value.filter(req => req.modify_type == 'edit')
-	if (filter_val.value == 'delete') return requests.value.filter(req => req.modify_type == 'delete')
+	if (role.value) {
+		if (filter_val.value == 'all') return requests.value
+		if (filter_val.value == 'pending') return requests.value.filter(req => req.status == 'pending')
+		if (filter_val.value == 'rejected') return requests.value.filter(req => req.status == 'rejected')
+		if (filter_val.value == 'approved') return requests.value.filter(req => req.status == 'approved')
+		if (filter_val.value == 'edit') return requests.value.filter(req => req.modify_type == 'edit')
+		if (filter_val.value == 'delete') return requests.value.filter(req => req.modify_type == 'delete')
+		if (filter_val.value == 'discount') return requests.value.filter(req => req.modify_type == 'discount')
+	} else {
+		if (filter_val.value == 'all') return my_requests.value
+		if (filter_val.value == 'pending') return my_requests.value.filter(req => req.status == 'pending')
+		if (filter_val.value == 'rejected') return my_requests.value.filter(req => req.status == 'rejected')
+		if (filter_val.value == 'approved') return my_requests.value.filter(req => req.status == 'approved')
+		if (filter_val.value == 'edit') return my_requests.value.filter(req => req.modify_type == 'edit')
+		if (filter_val.value == 'delete') return my_requests.value.filter(req => req.modify_type == 'delete')
+		if (filter_val.value == 'discount') return my_requests.value.filter(req => req.modify_type == 'discount')
+	}
 	return []
 })
 
 function getName(req: Requests) {
-	console.log(req);
-
-	return total_apls.value.filter(apl => apl.apl_id == req.apl_id)[0].fullName || ''
+	if (req.modify_type == 'discount') {
+		return req.modified_apl?.fullName
+	} else {
+		return total_apls.value.filter(apl => apl.apl_id == req.apl_id)[0].fullName || ''
+	}
 }
 
 function getStatus(req: Requests) {

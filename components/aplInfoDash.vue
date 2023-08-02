@@ -128,7 +128,7 @@
 				</p>
 				<div class="flex flex-col gap- w-3/5 h-full items-center justify-center">
 					<span class="text-neutral-500 text-sm">Recent Daily Applicants</span>
-					<div v-for="i in [4, 3, 2, 1, 0]" class="flex gap-2 w-full items-center">
+					<div v-for="i in [5, 4, 3, 2, 1]" class="flex gap-2 w-full items-center">
 						<progress class="progress progress-secondary bg-neutral-700" :value="getAplNumByDay(i)"
 							:max="getMaxDay.maxCount"></progress>
 						<span
@@ -224,6 +224,8 @@ const getMaxDay = computed(() => {
 			daysAgoMaxCount = daysAgo;
 		}
 	}
+
+	console.log({ maxCount, daysAgo: daysAgoMaxCount });
 
 	return { maxCount, daysAgo: daysAgoMaxCount };
 })

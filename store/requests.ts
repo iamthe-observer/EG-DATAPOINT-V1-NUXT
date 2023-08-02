@@ -20,7 +20,7 @@ export const useRequestStore = defineStore('requests', () => {
 
   const my_requests = computed(() => {
     return requests.value.filter(
-      req => req.apl_id == useSupabaseUser().value?.id
+      req => req.user_id == useSupabaseUser().value?.id
     )
   })
 

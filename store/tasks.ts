@@ -41,6 +41,19 @@ export const useTasksStore = defineStore('tasks', () => {
     }
   }
 
+  async function updateTask(state: boolean, id: string) {
+    try {
+      let { data, error } = await $SB
+        .from('tasks')
+        .update({ done: !state })
+        .eq('id', id)
+        .select()
+      if (error) throw error
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   $SB
     .channel('prices-channel')
     .on(
@@ -66,5 +79,6 @@ export const useTasksStore = defineStore('tasks', () => {
     done_task,
     _tasks,
     setDoneTask,
+    updateTask,
   }
 })
