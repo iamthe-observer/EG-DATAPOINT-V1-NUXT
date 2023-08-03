@@ -419,6 +419,40 @@ export default defineNuxtPlugin(nuxtApp => {
     return arr.slice().sort(compareByWardNumber)
   }
 
+  function isDateString(str: string): boolean {
+    // Custom regular expression to match the date string format 'YYYY-MM-DD HH:mm:ss.SSS+zz'
+    const dateRegex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3}\+\d{2}$/
+    return dateRegex.test(str)
+  }
+
+  function trimStringProperties(obj: any): any {
+    // if (typeof obj !== 'object' || obj === null) {
+    //   return obj
+    // }
+
+    // if (Array.isArray(obj)) {
+    //   return obj.map(item => trimStringProperties(item))
+    // }
+
+    // const trimmedObj: any = {}
+
+    // for (const key in obj) {
+    //   if (obj.hasOwnProperty(key)) {
+    //     const value = obj[key]
+    //     if (typeof value === 'string' && !isDateString(value)) {
+    //       // If the value is a string but not a date string, trim it
+    //       trimmedObj[key] = value.trim()
+    //     } else {
+    //       // If the value is a date string or non-string type, keep it as it is
+    //       trimmedObj[key] = trimStringProperties(value)
+    //     }
+    //   }
+    // }
+
+    // return trimmedObj
+    return obj
+  }
+
   return {
     provide: {
       loadAppData,
@@ -433,6 +467,7 @@ export default defineNuxtPlugin(nuxtApp => {
       sortByRecency,
       calculateHoursPassed,
       sortArrayByWardNumber,
+      trimStringProperties,
     },
   }
 })

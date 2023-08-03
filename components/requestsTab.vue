@@ -94,7 +94,9 @@
 									<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1" />
 								</circle>
 							</svg>
-							<!-- {{ getName(req) || '' }} -->
+							{{ req.modify_type == 'delete' ? req.fullName : null }}
+							{{ req.modify_type == 'edit' ? req.fullName : null }}
+							{{ req.modify_type == 'discount' ? req.modified_apl?.fullName : null }}
 						</h3>
 						<p class="py-4">{{ req.modify_type == 'discount' ? 'GHC' : '' }}{{
 							req.body }}{{ req.modify_type == 'discount' ? '.00' : '' }}</p>
@@ -187,6 +189,7 @@ import { Applicant, Requests } from '@/interfaces/interfaces';
 import { useAppStore } from '@/store/app';
 import { useProfileStore } from '@/store/profile';
 
+const { $SB } = useNuxtApp()
 defineProps<{
 	curr_page: string
 }>()
@@ -217,7 +220,6 @@ const curr_filtered_req = computed(() => {
 })
 
 const typeOfApl = (apl: Applicant): string | undefined => {
-	console.log(apl);
 	if (apl) {
 		if (apl.pmarital_status == 'MARRIED' && apl.children_number > 0) {
 			return '👨‍👩‍👧‍👦 Family'
@@ -234,16 +236,6 @@ const typeOfApl = (apl: Applicant): string | undefined => {
 	}
 }
 
-function getName(req: Requests) {
-	if (req.modify_type == 'delete') {
-		return req.fullName || ''
-	} else if (req.modify_type == 'discount') {
-		return req.modified_apl?.fullName || ''
-	} else {
-		return total_apls.value.filter(apl => apl.apl_id == req.apl_id)[0].fullName || ''
-	}
-}
-
 function getStatus(req: Requests) {
 	return req.status
 }
@@ -255,11 +247,12 @@ function getCreatedAtTime(req: Requests) {
 	return useNuxtApp().$formatDateTime(new Date(req.created_at!)) || ''
 }
 
-async function deleteApplicant(id: string) {
+async function deleteApplicant(req: Requests) {
 	try {
-		let { data, error } = await useNuxtApp().$SB.from('applicants').delete().eq('apl_id', id)
+		let { data, error } = await useNuxtApp().$SB.from('applicants').delete().eq('apl_id', req.apl_id)
 		if (error) throw error
-		return data
+
+		return await updateRequestType(req, 'approved')
 	} catch (error) {
 		console.log(error);
 	}
@@ -275,26 +268,72 @@ async function updateRequestType(req: Requests, type: string) {
 	}
 }
 
-async function handleApprove(req: Requests) {
-	if (req.modify_type == 'delete') {
-		let data = await deleteApplicant(req.apl_id)
+async function approveDiscount(req: Requests) {
+	req.modified_apl!.totalPayment = Number(req.body)
+
+	try {
+		let { data, error } = await $SB.from('applicants').insert(req.modified_apl).select()
+		if (error) throw error
 		console.log(data);
-		let data1 = await updateRequestType(req, 'approved')
-		console.log(data1);
+
+		return data
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+async function updateApplicant(req: Requests) {
+	let apl = req.modified_apl
+	try {
+		let { data, error } = await $SB
+			.from('applicants')
+			.update(apl)
+			.eq('apl_id', req.apl_id)
+			.select()
+		if (error) throw error
+		console.log(data);
+		return data
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+async function handleApprove(req: Requests) {
+	// type of request
+	let ty = req.modify_type
+
+	if (ty == 'delete') {
+		await deleteApplicant(req)
+		await updateRequestType(req, 'approved')
+
+	} else if (ty == 'discount') {
+		await approveDiscount(req)
+		await updateRequestType(req, 'approved')
+
+	} else if (ty == 'edit') {
+		await updateApplicant(req)
+		await updateRequestType(req, 'approved')
 	}
 }
 
 async function handleReject(req: Requests) {
-	if (req.modify_type == 'delete') {
-		let data1 = await updateRequestType(req, 'rejected')
-		console.log(data1);
+	let ty = req.modify_type
+	if (ty == 'delete') {
+		await updateRequestType(req, 'rejected')
+	}
+	if (ty == 'discount') {
+		await updateRequestType(req, 'rejected')
+	}
+	if (ty == 'edit') {
+		await updateRequestType(req, 'rejected')
 	}
 }
 
 async function handleOpen(req: Requests) {
 	console.log(req.modified_apl?.fullName);
-
 }
+
+// TODO add delete and update ann
 </script>
 
 <style scoped></style>

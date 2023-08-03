@@ -5,7 +5,7 @@ export const useTasksStore = defineStore('tasks', () => {
   const _tasks = ref<Task[]>([])
   const loading_task = ref(false)
   const done_task = ref(false)
-  const { $SB } = useNuxtApp()
+  const { $SB, $trimStringProperties } = useNuxtApp()
 
   const setDoneTask = (val: boolean) => {
     done_task.value = val
@@ -30,7 +30,9 @@ export const useTasksStore = defineStore('tasks', () => {
   const sendTasks = async (task: Task) => {
     loading_task.value = true
     try {
-      let { error } = await $SB.from('tasks').insert([task])
+      let { error } = await $SB
+        .from('tasks')
+        .insert([$trimStringProperties(task)])
       if (error) throw error
       loading_task.value = false
       done_task.value = true

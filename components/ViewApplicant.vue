@@ -38,7 +38,7 @@
 				<AplInfoCard @update:model-value="logger" v-model="apl.pcontact" :heading="'Contact'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.ppostal" :heading="'Residential Address'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.children_number" :heading="'Number of Children'" />
-				<AplInfoCard @update:model-value="logger" v-model="apl.totalPayment" :heading="'Paid Amount'" />
+				<AplInfoCard :disabled="true" @update:model-value="logger" v-model="apl.totalPayment" :heading="'Paid Amount'" />
 			</div>
 		</div>
 
@@ -212,7 +212,7 @@ const apl = ref<Applicant>({
 	wards: []
 })
 const { edit_mode } = storeToRefs(useAplStore())
-const { $SB } = useNuxtApp()
+const { $SB,$trimStringProperties } = useNuxtApp()
 const { total_apls } = storeToRefs(useAppStore())
 const { APL_ID } = storeToRefs(useViewAplStore())
 const emit = defineEmits(['apl', 'request'])
@@ -392,7 +392,7 @@ async function handlePrimeUpdate() {
 			}
 			let { data, error } = await $SB
 				.from('applicants')
-				.insert([aplVal])
+				.insert([$trimStringProperties(aplVal)])
 				.eq('apl_id', aplVal.apl_id!)
 				.select()
 			if (error) throw error
@@ -432,7 +432,7 @@ async function handleSecUpdate() {
 			}
 			let { data, error } = await $SB
 				.from('applicants')
-				.insert([aplVal])
+				.insert([$trimStringProperties(aplVal)])
 				.eq('apl_id', aplVal.apl_id!)
 				.select()
 			if (error) throw error
@@ -476,7 +476,7 @@ async function handleWardUpdate(idx: number) {
 			}
 			let { data, error } = await $SB
 				.from('applicants')
-				.insert([aplVal])
+				.insert([$trimStringProperties(aplVal)])
 				.eq('apl_id', aplVal.apl_id!)
 				.select()
 			if (error) throw error

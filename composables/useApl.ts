@@ -17,7 +17,7 @@ export const useApl = () => {
   const apl_sending = ref(false)
   const if_sent = ref(false)
   const if_updated = ref(false)
-  const { $SB } = useNuxtApp()
+  const { $SB,$trimStringProperties } = useNuxtApp()
   const { total_apls } = storeToRefs(useAppStore())
   const { has_files } = storeToRefs(useImageStore())
   const prime_image = ref()
@@ -494,7 +494,7 @@ export const useApl = () => {
         }
         let { data, error } = await $SB
           .from('applicants')
-          .insert([aplVal])
+          .insert([$trimStringProperties(aplVal)])
           .eq('apl_id', aplVal.apl_id!)
           .select()
         if (error) throw error
@@ -537,7 +537,7 @@ export const useApl = () => {
         }
         let { data, error } = await $SB
           .from('applicants')
-          .insert([aplVal])
+          .insert([$trimStringProperties(aplVal)])
           .eq('apl_id', aplVal.apl_id!)
           .select()
         if (error) throw error
@@ -587,7 +587,7 @@ export const useApl = () => {
         }
         let { data, error } = await $SB
           .from('applicants')
-          .insert([aplVal])
+          .insert([$trimStringProperties(aplVal)])
           .eq('apl_id', aplVal.apl_id!)
           .select()
         if (error) throw error

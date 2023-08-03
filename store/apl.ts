@@ -15,7 +15,7 @@ import { useAppStore } from './app'
 export const useAplStore = defineStore('apl', () => {
   const { prices } = storeToRefs(useAppStore())
   const { has_files } = storeToRefs(useImageStore())
-  const { $SB } = useNuxtApp()
+  const { $SB, $trimStringProperties } = useNuxtApp()
   const user = useSupabaseUser()
   const edit_mode = ref(false)
   const if_sent = ref<boolean>(false)
@@ -37,134 +37,6 @@ export const useAplStore = defineStore('apl', () => {
     status: '',
     user_id: '',
   })
-
-  async function requestDiscount() {
-    let err_msg =
-      'Error! Validation Failed. (Go over and check if all the fields have been filled.)'
-
-    applicant.value.apl_id = uuidv4()
-    applicant.value.fullName = `${applicant.value.plastName} ${applicant.value.pfirstName} ${applicant.value.potherName}`
-    let pricer = await useAppStore().getPrices()
-    let price: number = 0
-    const if_sp = applicant.value.pmarital_status == 'MARRIED'
-    const if_wa = applicant.value.children_number > 0
-
-    if (pricer) {
-      if (!if_sp && if_wa) {
-        price = pricer.adult + pricer.child * applicant.value.children_number
-      } else if (if_sp && !if_wa) {
-        price = pricer.adult * 2
-      } else if (if_sp && if_wa) {
-        price =
-          pricer.adult * 2 + pricer.child * applicant.value.children_number
-      } else if (!if_sp && !if_wa) {
-        price = pricer.adult
-      }
-    } else {
-      throw new Error('Get Prices First')
-    }
-
-    applicant.value.totalPayment = price
-
-    if (applicant_type.value == 'spouse only') {
-      if (await validate(spouse_only_rules, applicant.value)) {
-        await sendDiscountRequest(applicant.value)
-      } else {
-        console.log(applicant_type.value)
-
-        if_req_sent.value = false
-        alert(err_msg)
-      }
-    } else if (applicant_type.value == 'family') {
-      // getting val for all wards
-      let val: boolean[] = []
-      for (let idx = 0; idx < applicant.value.wards.length; idx++) {
-        const ward = { ...applicant.value.wards[idx] }
-        val.push(await validate(ward_rules, ward))
-      }
-      if (
-        (await validate(family_rules, applicant.value)) &&
-        val.every(ward => ward == true)
-      ) {
-        await sendDiscountRequest(applicant.value)
-      } else {
-        console.log(applicant_type.value)
-
-        if_req_sent.value = false
-        alert(err_msg)
-      }
-    } else if (applicant_type.value == 'wards only') {
-      // getting val for all wards
-      let val: boolean[] = []
-      for (let idx = 0; idx < applicant.value.wards.length; idx++) {
-        const ward = { ...applicant.value.wards[idx] }
-        val.push(await validate(ward_rules, ward))
-      }
-      if (
-        (await validate(wards_only_rules, applicant.value)) &&
-        val.every(ward => ward == true)
-      ) {
-        await sendDiscountRequest(applicant.value)
-      } else {
-        console.log(applicant_type.value)
-
-        if_req_sent.value = false
-        alert(err_msg)
-      }
-    } else if (applicant_type.value == 'single') {
-      let if_spouse = await validate(single_rules, applicant.value)
-      console.log(if_spouse)
-      if (await validate(single_rules, applicant.value)) {
-        await sendDiscountRequest(applicant.value)
-      } else {
-        console.log(applicant_type.value)
-
-        if_req_sent.value = false
-        alert(err_msg)
-      }
-    }
-  }
-
-  async function sendDiscountRequest(applicant: Applicant) {
-    console.log(applicant.aplImg_path.wardsPath)
-    try {
-      if (has_files.value) {
-        let { primePath, secPath, wardsPath } =
-          await useImageStore().uploadFiles(applicant.apl_id)
-        applicant.aplImg_path.primePath = primePath
-        applicant.aplImg_path.secPath = secPath
-        wardsPath.forEach(path => {
-          for (let i = 0; i < applicant.aplImg_path.wardsPath.length; i++) {
-            const el = applicant.aplImg_path.wardsPath[i]
-            if (path.includes(el)) applicant.aplImg_path.wardsPath[i] = path
-          }
-        })
-        console.log(applicant.aplImg_path.wardsPath, wardsPath)
-      }
-
-      request.value.apl_id = applicant.apl_id!
-      request.value.modified_apl = applicant
-      request.value.modify_type = 'discount'
-      request.value.status = 'pending'
-      request.value.user_id = useSupabaseUser().value?.id!
-
-      console.log(request.value)
-
-      const { error } = await $SB.from('requests').insert([request.value])
-
-      if (error) throw error
-      if_req_sent.value = true
-      apl_sending.value = false
-      resetAplData()
-      resetRequest()
-      return 'done'
-    } catch (err: any) {
-      if_req_sent.value = false
-      apl_sending.value = false
-      console.log(err)
-    }
-  }
-
   const applicant = ref<Applicant>({
     created_at: new Date(),
     plastName: '',
@@ -218,7 +90,6 @@ export const useAplStore = defineStore('apl', () => {
     wdob: null,
     index: null,
   })
-
   const applicant_type = computed(() => {
     if (
       applicant.value.pmarital_status == 'MARRIED' &&
@@ -402,7 +273,7 @@ export const useAplStore = defineStore('apl', () => {
         console.log(apl.aplImg_path.wardsPath, wardsPath)
       }
 
-      const { error } = await $SB.from('applicants').insert([apl])
+      const { error } = await $SB.from('applicants').insert([$trimStringProperties(apl)])
 
       if (error) throw error
       if_sent.value = true
@@ -515,6 +386,135 @@ export const useAplStore = defineStore('apl', () => {
   function handleFile(evt: any, type: string) {
     let file = evt.target.files[0]
     useImageStore().setFiles(file, type)
+  }
+
+  async function requestDiscount() {
+    let err_msg =
+      'Error! Validation Failed. (Go over and check if all the fields have been filled.)'
+
+    applicant.value.apl_id = uuidv4()
+    applicant.value.fullName = `${applicant.value.plastName} ${applicant.value.pfirstName} ${applicant.value.potherName}`
+    let pricer = await useAppStore().getPrices()
+    let price: number = 0
+    const if_sp = applicant.value.pmarital_status == 'MARRIED'
+    const if_wa = applicant.value.children_number > 0
+
+    if (pricer) {
+      if (!if_sp && if_wa) {
+        price = pricer.adult + pricer.child * applicant.value.children_number
+      } else if (if_sp && !if_wa) {
+        price = pricer.adult * 2
+      } else if (if_sp && if_wa) {
+        price =
+          pricer.adult * 2 + pricer.child * applicant.value.children_number
+      } else if (!if_sp && !if_wa) {
+        price = pricer.adult
+      }
+    } else {
+      throw new Error('Get Prices First')
+    }
+
+    applicant.value.totalPayment = price
+
+    if (applicant_type.value == 'spouse only') {
+      if (await validate(spouse_only_rules, applicant.value)) {
+        await sendDiscountRequest(applicant.value)
+      } else {
+        console.log(applicant_type.value)
+
+        if_req_sent.value = false
+        alert(err_msg)
+      }
+    } else if (applicant_type.value == 'family') {
+      // getting val for all wards
+      let val: boolean[] = []
+      for (let idx = 0; idx < applicant.value.wards.length; idx++) {
+        const ward = { ...applicant.value.wards[idx] }
+        val.push(await validate(ward_rules, ward))
+      }
+      if (
+        (await validate(family_rules, applicant.value)) &&
+        val.every(ward => ward == true)
+      ) {
+        await sendDiscountRequest(applicant.value)
+      } else {
+        console.log(applicant_type.value)
+
+        if_req_sent.value = false
+        alert(err_msg)
+      }
+    } else if (applicant_type.value == 'wards only') {
+      // getting val for all wards
+      let val: boolean[] = []
+      for (let idx = 0; idx < applicant.value.wards.length; idx++) {
+        const ward = { ...applicant.value.wards[idx] }
+        val.push(await validate(ward_rules, ward))
+      }
+      if (
+        (await validate(wards_only_rules, applicant.value)) &&
+        val.every(ward => ward == true)
+      ) {
+        await sendDiscountRequest(applicant.value)
+      } else {
+        console.log(applicant_type.value)
+
+        if_req_sent.value = false
+        alert(err_msg)
+      }
+    } else if (applicant_type.value == 'single') {
+      let if_spouse = await validate(single_rules, applicant.value)
+      console.log(if_spouse)
+      if (await validate(single_rules, applicant.value)) {
+        await sendDiscountRequest(applicant.value)
+      } else {
+        console.log(applicant_type.value)
+
+        if_req_sent.value = false
+        alert(err_msg)
+      }
+    }
+  }
+
+  async function sendDiscountRequest(applicant: Applicant) {
+    console.log(applicant.aplImg_path.wardsPath)
+    try {
+      if (has_files.value) {
+        let { primePath, secPath, wardsPath } =
+          await useImageStore().uploadFiles(applicant.apl_id)
+        applicant.aplImg_path.primePath = primePath
+        applicant.aplImg_path.secPath = secPath
+        wardsPath.forEach(path => {
+          for (let i = 0; i < applicant.aplImg_path.wardsPath.length; i++) {
+            const el = applicant.aplImg_path.wardsPath[i]
+            if (path.includes(el)) applicant.aplImg_path.wardsPath[i] = path
+          }
+        })
+        console.log(applicant.aplImg_path.wardsPath, wardsPath)
+      }
+
+      request.value.apl_id = applicant.apl_id!
+      request.value.modified_apl = applicant
+      request.value.modify_type = 'discount'
+      request.value.status = 'pending'
+      request.value.user_id = useSupabaseUser().value?.id!
+
+      console.log(request.value)
+
+      const { error } = await $SB
+        .from('requests')
+        .insert([$trimStringProperties(request.value)])
+
+      if (error) throw error
+      if_req_sent.value = true
+      apl_sending.value = false
+      resetAplData()
+      resetRequest()
+      return 'done'
+    } catch (err: any) {
+      if_req_sent.value = false
+      apl_sending.value = false
+      console.log(err)
+    }
   }
 
   function resetAplData() {

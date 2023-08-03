@@ -4,7 +4,7 @@ import { defineStore } from 'pinia'
 export const useRequestStore = defineStore('requests', () => {
   const requests = ref<Requests[]>([])
   const curr_request = ref<Requests>()
-  const { $SB: SB } = useNuxtApp()
+  const { $SB: SB, $trimStringProperties } = useNuxtApp()
 
   async function getRequests() {
     try {
@@ -31,7 +31,9 @@ export const useRequestStore = defineStore('requests', () => {
 
   async function sendRequest(request: Requests) {
     try {
-      let { data, error } = await SB.from('requests').insert([request]).select()
+      let { data, error } = await SB.from('requests')
+        .insert([$trimStringProperties(request)])
+        .select()
       if (error) throw error
       return data
     } catch (error) {

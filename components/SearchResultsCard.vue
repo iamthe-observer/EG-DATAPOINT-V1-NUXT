@@ -36,15 +36,11 @@ const rSearchParams = reactive<SearchParams>({
 defineEmits(['recentSearch'])
 
 async function loadUrl() {
-	console.log(props.result);
-
 	try {
 		const { data, error } = await $SB
 			.storage
 			.from('applicants')
 			.createSignedUrls([props.result.aplImg_path.primePath[0]], 3600)
-
-		console.log(data);
 		if (error) throw error
 
 		return data[0].signedUrl
