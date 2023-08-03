@@ -173,7 +173,7 @@
 						{{ getCreatedAtTime(req) }}
 					</span>
 					<span
-						:class="[getStatus(req) == 'pending' ? 'text-secondary' : 'text-success', getStatus(req) == 'rejected' ? 'text-error' : 'text-secondary']">
+						:class="[getStatus(req) == 'pending' ? 'text-secondary' : '', getStatus(req) == 'rejected' ? 'text-error' : '', getStatus(req) == 'approved' ? 'text-success' : '']">
 						{{ getStatus(req) }}
 					</span>
 				</div>
