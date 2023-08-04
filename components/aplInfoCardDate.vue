@@ -6,10 +6,10 @@
 		]">
 			{{ heading }}
 		</span>
-		<span v-if="!edit_mode" class="info">{{ $formatDateWords(new Date(date!)) }}</span>
+		<span v-if="!edit_mode" class="info">{{ date ? $formatDateWords(new Date(date!)) : '' }}</span>
 		<DatePicker @dayclick="logger" v-else dark :color="'purple'" is-dark v-model="date" mode="date">
 			<template #default="{ togglePopover }">
-				<span @click="togglePopover" class="info_edit">{{ $formatDateWords(new Date(date!))
+				<span @click="togglePopover" class="info_edit">{{ date ? $formatDateWords(new Date(date!)) : ''
 				}}</span>
 			</template>
 		</DatePicker>
@@ -21,16 +21,19 @@ import { storeToRefs } from 'pinia';
 import { useAplStore } from '@/store/apl';
 
 const { edit_mode } = storeToRefs(useAplStore())
-const date = ref(new Date())
 const props = defineProps<{
 	date?: Date
 	heading: string
 	name_type: string
 	idx?: number
 }>()
-onMounted(() => {
+const date = ref<Date | null>(null)
+
+watch(() => props.date, () => {
 	date.value = props.date!
+	console.log(date.value);
 })
+
 const emit = defineEmits(['date'])
 function logger() {
 	if (props.idx) {

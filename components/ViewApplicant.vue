@@ -20,23 +20,22 @@
 			</div>
 
 			<div class="grid grid-cols-3 gap-2 w-full">
-				<AplInfoCardDate :heading="`Date of Birth`" :date="new Date(apl.pdob!) || undefined" @date="handleDate"
-					:name_type="'pdob'" />
-				<AplInfoCard @update:model-value="logger" v-model="apl.pconf_code" :heading="'Confirmation Code'" />
-				<AplInfoCard @update:model-value="logger" v-model="apl.ppassport_number" :heading="'Passport Number'" />
+				<AplInfoCardDate :heading="`Date of Birth`" :date="apl.pdob!" @date="handleDate" :name_type="'pdob'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.pcity_ob" :heading="'City Of Birth'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.pcountry_ob" :heading="'Country of Birth'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.pcontact" :heading="'Contact'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.pother_contact" :heading="'Next of Kin Contact'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.pcountry_live_today"
 					:heading="'Country You Live in Today'" />
-				<AplInfoCardDate @update:model-value="logger" :date="new Date(apl.passport_ex!)" @date="handleDate"
+				<AplInfoCard @update:model-value="logger" v-model="apl.ppassport_number" :heading="'Passport Number'" />
+				<AplInfoCardDate @update:model-value="logger" :date="apl.passport_ex!" @date="handleDate"
 					:name_type="'passport_ex'" :heading="'Passport Expiry Date'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.pemail" :heading="'Email'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.pgender" :heading="'Gender'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.pmarital_status" :heading="'Marital Status'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.peducation_level" :heading="'Education Level'" />
-				<AplInfoCard @update:model-value="logger" v-model="apl.pcontact" :heading="'Contact'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.ppostal" :heading="'Residential Address'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.pconf_code" :heading="'Confirmation Code'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.children_number" :heading="'Number of Children'" />
 				<AplInfoCard :disabled="true" @update:model-value="logger" v-model="apl.totalPayment" :heading="'Paid Amount'" />
 			</div>
