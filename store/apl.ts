@@ -260,6 +260,7 @@ export const useAplStore = defineStore('apl', () => {
   }
 
   const submitApl = async (apl: Applicant) => {
+    apl_sending.value = true
     console.log(apl.aplImg_path.wardsPath)
     try {
       if (has_files.value) {
