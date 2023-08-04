@@ -212,7 +212,7 @@ const apl = ref<Applicant>({
 	wards: []
 })
 const { edit_mode } = storeToRefs(useAplStore())
-const { $SB,$trimStringProperties } = useNuxtApp()
+const { $SB, $trimStringProperties } = useNuxtApp()
 const { total_apls } = storeToRefs(useAppStore())
 const { APL_ID } = storeToRefs(useViewAplStore())
 const emit = defineEmits(['apl', 'request'])

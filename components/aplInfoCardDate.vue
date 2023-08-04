@@ -28,11 +28,18 @@ const props = defineProps<{
 	name_type: string
 	idx?: number
 }>()
+onMounted(() => {
+	date.value = props.date!
+})
 const emit = defineEmits(['date'])
 function logger() {
 	if (props.idx) {
+		console.log(props);
+
 		emit('date', { name: props.name_type, date: date.value, ward_idx: props.idx });
 	} else {
+		console.log(props);
+
 		emit('date', { name: props.name_type, date: date.value });
 	}
 }

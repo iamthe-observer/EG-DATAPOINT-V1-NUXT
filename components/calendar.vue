@@ -56,8 +56,8 @@
 
 									<p v-if="!ann.urgency" class="absolute top-2 right-2 text-xs flex gap-2">
 									<div class="badge badge-primary">{{ useNuxtApp().$formatDateWords(new
-										Date(ann.created_at)) }}</div>
-									<div class="badge badge-primary">{{ new Date(ann.created_at).toLocaleTimeString([], {
+										Date(ann.created_at!)) }}</div>
+									<div class="badge badge-primary">{{ new Date(ann.created_at!).toLocaleTimeString([], {
 										hour: '2-digit', minute: '2-digit', hour12: true
 									}) }}
 									</div>
@@ -65,8 +65,8 @@
 
 									<p v-else class="absolute top-2 right-2 text-xs flex gap-2">
 									<div class="badge badge-accent">{{ useNuxtApp().$formatDateWords(new
-										Date(ann.created_at)) }}</div>
-									<div class="badge badge-accent">{{ new Date(ann.created_at).toLocaleTimeString([], {
+										Date(ann.created_at!)) }}</div>
+									<div class="badge badge-accent">{{ new Date(ann.created_at!).toLocaleTimeString([], {
 										hour: '2-digit', minute: '2-digit', hour12: true
 									}) }}
 									</div>
@@ -110,10 +110,10 @@
 								<span class="text-md truncate">{{ ann.title }}</span>
 							</div>
 							<div class="text-xs flex flex-col items-end">
-								<span>{{ new Date(ann.created_at).toLocaleTimeString([], {
+								<span>{{ new Date(ann.created_at!).toLocaleTimeString([], {
 									hour: '2-digit', minute: '2-digit', hour12: true
 								}) }}</span>
-								<span>{{ useNuxtApp().$formatDate(new Date(ann.created_at)) }}</span>
+								<span>{{ useNuxtApp().$formatDate(new Date(ann.created_at!)) }}</span>
 							</div>
 						</label>
 					</div>
@@ -137,11 +137,10 @@
 			<div v-if="announcements.length > 0"
 				class="ann_btn w-[90%] whitespace-nowrap text-sm mx-auto bg-neutral-700 py-3 text-center rounded-xl hover:text-secondary cursor-pointer"
 				@click="$router.push('/database')">view
-				({{
-					announcements.length - 4 }}) more
-				announcement(s)</div>
+				{{
+					announcements.length < 5 ? `` : `(${announcements.length - 4})` }} more announcement(s)</div>
+			</div>
 		</div>
-	</div>
 </template>
 
 <script setup lang="ts">

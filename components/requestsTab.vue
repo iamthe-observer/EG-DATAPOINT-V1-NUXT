@@ -102,6 +102,8 @@
 							req.body }}{{ req.modify_type == 'discount' ? '.00' : '' }}</p>
 
 						<p v-if="req.modified_apl" class="badge badge-neutral">{{ typeOfApl(req.modified_apl!) }}</p>
+						<p v-if="req.modified_apl" class="badge badge-neutral ml-1">By: {{ profiles.find(user => user.id ==
+							req.user_id)!.fullname }}</p>
 
 						<p class="absolute top-2 left-2 text-xs flex gap-2 items-center badge badge-outline">
 							{{ req.modify_type.toUpperCase() }} REQUEST
@@ -186,16 +188,14 @@
 import { storeToRefs } from 'pinia';
 import { useRequestStore } from '@/store/requests';
 import { Applicant, Requests } from '@/interfaces/interfaces';
-import { useAppStore } from '@/store/app';
 import { useProfileStore } from '@/store/profile';
 
 const { $SB } = useNuxtApp()
 defineProps<{
 	curr_page: string
 }>()
-const { requests, my_requests } = storeToRefs(useRequestStore())
-const { role } = storeToRefs(useProfileStore())
-const { total_apls } = storeToRefs(useAppStore())
+const { requests, my_requests, } = storeToRefs(useRequestStore())
+const { role, profiles } = storeToRefs(useProfileStore())
 
 const filter_val = ref('pending')
 const curr_filtered_req = computed(() => {
