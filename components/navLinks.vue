@@ -10,8 +10,7 @@
 			data-tip="View Applicants">
 			<SvgsAplTable class="__icons" />
 		</NuxtLink>
-		<NuxtLink to="/database" class="__icons_container tooltip tooltip-primary z-20 tooltip-right"
-			data-tip="Database & Analytics">
+		<NuxtLink to="/database" class="__icons_container tooltip tooltip-primary z-20 tooltip-right" data-tip="Database">
 			<SvgsDatabase class="__icons" />
 		</NuxtLink>
 	</section>

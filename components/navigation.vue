@@ -16,7 +16,8 @@
 						</svg>
 					</div>
 				</li>
-				<li @click="handleLogout" class="bg-error rounded-lg shadow-xl"><a>Log out</a></li>
+				<li @click="handleLogout" class="bg-error rounded-lg shadow-xl"><a v-if="!logout_loading">Log out</a><span v-else
+						class="loading loading-infinity loading-xs mx-auto"></span></li>
 			</ul>
 		</div>
 		<nav-links />
@@ -36,8 +37,10 @@ import { useImageStore } from '@/store/images';
 import { useAplStore } from '@/store/apl';
 const { profile } = storeToRefs(useProfileStore())
 const { $router, $SB } = useNuxtApp()
+const logout_loading = ref(false)
 
 async function handleLogout() {
+	logout_loading.value = true
 	try {
 		let { error } = await $SB.auth.signOut()
 		if (error) throw error
@@ -50,8 +53,13 @@ async function handleLogout() {
 		useSearchStore().resetRecentSearch()
 		useImageStore().resetFiles()
 		useAplStore().resetAplData()
+		logout_loading.value = false
 	} catch (error: any) {
 		console.log(error);
+		logout_loading.value = false
+	}
+	finally {
+		logout_loading.value = false
 	}
 }
 

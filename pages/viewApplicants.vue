@@ -4,7 +4,19 @@
 
 			<header class="w-full min-h-[4rem] bg-neutral-700 rounded-2xl shadow-xl flex items-center justify-between px-4">
 				<h1 v-if="!role" class="text-2xl">View All Applicants <span class="">({{ all_my_apls.length }})</span></h1>
-				<h1 v-else class="text-2xl">View All Applicants <span class="">({{ total_apls.length }})</span></h1>
+				<h1 v-else class="flex items-center gap-3">
+					<span class="text-2xl whitespace-nowrap">
+						View All Applicants
+					</span>
+					<span class="text-2xl">({{ total_apls.length }})</span>
+					<select v-model="curr_user" class="select w-full select-sm rounded-full bg-[rgb(13,13,13)]">
+						<option selected value="all">All Users</option>
+						<option v-for="user in profiles" :value="user.id">{{ `${user.fullname || 'User'} (${total_apls.filter(apl =>
+							apl.user_id
+							==
+							user.id).length})` }}</option>
+					</select>
+				</h1>
 
 				<div v-if="role ? total_apls.length > step : all_my_apls.length > step" class="join">
 					<button class="join-item btn btn-sm rounded-full btn-primary" @click="PrevPage(page_index)">«</button>
@@ -138,31 +150,6 @@
 
 				</table>
 			</div>
-			<!-- <div v-else class="w-full h-full flex flex-col items-center justify-center">
-				<svg xmlns="http://www.w3.org/2000/svg" class="w-20 aspect-square" viewBox="0 0 24 24">
-					<g stroke="#888888" stroke-linecap="round" stroke-width="2">
-						<path fill="#888888" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
-							d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z">
-							<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0" />
-							<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3" />
-						</path>
-						<path fill="none" stroke-dasharray="14" stroke-dashoffset="14"
-							d="M8 16C8.5 15 9.79086 14 12 14C14.2091 14 15.5 15 16 16">
-							<animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="14;0" />
-						</path>
-					</g>
-					<g fill="#888888" fill-opacity="0">
-						<ellipse cx="9" cy="9.5" rx="1" ry="1.5">
-							<animate fill="freeze" attributeName="fill-opacity" begin="0.6s" dur="0.2s" values="0;1" />
-						</ellipse>
-						<ellipse cx="15" cy="9.5" rx="1" ry="1.5">
-							<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.2s" values="0;1" />
-						</ellipse>
-					</g>
-				</svg>
-
-				No Applicants Yet.
-			</div> -->
 
 			<div v-if="role && _curr_filtered_apls?.length! > 0" id="style-1"
 				class="overflow-x-auto overflow-Y-auto pb -3 px-2">
@@ -260,7 +247,8 @@
 				</table>
 			</div>
 
-			<div v-if="role && total_apls?.length! == 0" class="w-full h-full flex flex-col items-center justify-center">
+			<div v-if="role && _curr_filtered_apls?.length! == 0"
+				class="w-full h-full flex flex-col items-center justify-center">
 				<svg xmlns="http://www.w3.org/2000/svg" class="w-20 aspect-square" viewBox="0 0 24 24">
 					<g stroke="#888888" stroke-linecap="round" stroke-width="2">
 						<path fill="#888888" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
@@ -286,7 +274,8 @@
 				No Applicants Yet.
 			</div>
 
-			<div v-if="!role && all_my_apls?.length! == 0" class="w-full h-full flex flex-col items-center justify-center">
+			<div v-if="!role && curr_filtered_apls?.length! == 0"
+				class="w-full h-full flex flex-col items-center justify-center">
 				<svg xmlns="http://www.w3.org/2000/svg" class="w-20 aspect-square" viewBox="0 0 24 24">
 					<g stroke="#888888" stroke-linecap="round" stroke-width="2">
 						<path fill="#888888" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
@@ -330,6 +319,7 @@ const { all_my_apls, total_apls } = storeToRefs(useAppStore())
 const { role, profiles } = storeToRefs(useProfileStore())
 const page_index = ref(1)
 const step = ref(50)
+const curr_user = ref('all')
 
 function NextPage(idx: number) {
 	if (role) if (_curr_filtered_apls.value?.length! == 50) page_index.value++
@@ -347,9 +337,19 @@ const order_alpha_apls = computed(() => sortAplsByName(all_my_apls.value).slice(
 const order_recency_apls = computed(() => useNuxtApp().$sortByRecency(all_my_apls.value).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
 const order_reverse_apls = computed(() => sortAplsByName(all_my_apls.value).reverse().slice((page_index.value * step.value) - step.value, page_index.value * step.value))
 
-const _order_alpha_apls = computed(() => sortAplsByName(total_apls.value).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
-const _order_recency_apls = computed(() => useNuxtApp().$sortByRecency(total_apls.value).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
-const _order_reverse_apls = computed(() => sortAplsByName(total_apls.value).reverse().slice((page_index.value * step.value) - step.value, page_index.value * step.value))
+const _order_alpha_apls = computed(() => sortAplsByName(user_filtered_apls.value).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
+
+const _order_recency_apls = computed(() => useNuxtApp().$sortByRecency(user_filtered_apls.value).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
+
+const _order_reverse_apls = computed(() => sortAplsByName(user_filtered_apls.value).reverse().slice((page_index.value * step.value) - step.value, page_index.value * step.value))
+
+const user_filtered_apls = computed(() => {
+	if (curr_user.value == 'all') {
+		return total_apls.value
+	} else {
+		return total_apls.value.filter(apl => apl.user_id == curr_user.value)
+	}
+})
 
 const curr_filtered_apls = computed(() => {
 	if (filter_alpha.value) return order_alpha_apls.value
@@ -362,7 +362,6 @@ const _curr_filtered_apls = computed(() => {
 	if (filter_recent.value) return _order_recency_apls.value
 	if (filter_reverse.value) return _order_reverse_apls.value
 })
-
 
 function sortAplsByName(apls: Applicant[]): Applicant[] {
 	return apls.sort((a, b) => a.fullName.localeCompare(b.fullName));
