@@ -13,12 +13,12 @@ export interface UserData {
 }
 
 export interface Announcement {
-  id: number
-  uuid: string
-  created_at: Date
+  id?: number
+  uuid?: string
+  created_at?: Date
   title: string
   body: string
-  urgency: boolean
+  urgency?: boolean
 }
 
 export interface WardsApplicant {
@@ -92,6 +92,7 @@ export interface PrimeApplicant {
     secPath: string[]
     wardsPath: string[]
   }
+  location?: string
 }
 
 export interface Applicant {
@@ -137,6 +138,7 @@ export interface Applicant {
   scontact: string
   sgender: string
   sdob: Date | null
+  location?: string
 }
 
 export interface SupervisorInfo {
@@ -164,6 +166,7 @@ export interface Profile {
   fullname?: string
   avatar_url?: string | undefined
   role: boolean
+  location?: string
 }
 
 export interface DefaultProfile {

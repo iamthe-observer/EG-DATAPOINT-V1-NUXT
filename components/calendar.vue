@@ -151,7 +151,7 @@ import { storeToRefs } from 'pinia';
 const { announcements } = storeToRefs(useAnnStore())
 
 const recent_ann = computed(() => {
-	return announcements.value.slice(0, 4).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+	return announcements.value.slice(0, 4).sort((a, b) => new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime())
 })
 
 const selectedClr = ref('purple')

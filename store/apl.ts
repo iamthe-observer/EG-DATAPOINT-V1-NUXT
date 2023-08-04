@@ -11,9 +11,11 @@ import {
 } from '@/interfaces/interfaces'
 import { useImageStore } from './images'
 import { useAppStore } from './app'
+import { useProfileStore } from './profile'
 
 export const useAplStore = defineStore('apl', () => {
   const { prices } = storeToRefs(useAppStore())
+  const { profile } = storeToRefs(useProfileStore())
   const { has_files } = storeToRefs(useImageStore())
   const { $SB, $trimStringProperties } = useNuxtApp()
   const user = useSupabaseUser()
@@ -79,6 +81,7 @@ export const useAplStore = defineStore('apl', () => {
     scontact: '',
     sgender: '',
     sdob: null,
+    location: '',
   })
   const empty_ward = ref<WardsApplicant>({
     wlastName: '',
@@ -273,7 +276,9 @@ export const useAplStore = defineStore('apl', () => {
         console.log(apl.aplImg_path.wardsPath, wardsPath)
       }
 
-      const { error } = await $SB.from('applicants').insert([$trimStringProperties(apl)])
+      const { error } = await $SB
+        .from('applicants')
+        .insert([$trimStringProperties(apl)])
 
       if (error) throw error
       if_sent.value = true
@@ -379,6 +384,9 @@ export const useAplStore = defineStore('apl', () => {
   }
 
   async function sendApplicant(apl_info: any) {
+    apl_info.location = profile.value?.location
+    console.log(apl_info)
+
     await submitApl(apl_info)
     console.log('done')
   }
@@ -393,7 +401,8 @@ export const useAplStore = defineStore('apl', () => {
       'Error! Validation Failed. (Go over and check if all the fields have been filled.)'
 
     applicant.value.apl_id = uuidv4()
-    applicant.value.fullName = `${applicant.value.plastName} ${applicant.value.pfirstName} ${applicant.value.potherName}`
+    applicant.value.fullName =
+      `${applicant.value.plastName} ${applicant.value.pfirstName} ${applicant.value.potherName}`.trim()
     let pricer = await useAppStore().getPrices()
     let price: number = 0
     const if_sp = applicant.value.pmarital_status == 'MARRIED'

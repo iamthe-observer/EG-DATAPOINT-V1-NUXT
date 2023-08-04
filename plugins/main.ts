@@ -114,6 +114,9 @@ export default defineNuxtPlugin(nuxtApp => {
         useAsyncData('Tasks', async () => {
           await useTasksStore().getTasks()
         })
+        useAsyncData('Profiles', async () => {
+          await useProfileStore().getProfiles()
+        })
 
         if (_route.path == '/') {
           $router.push('/dashboard')
@@ -160,6 +163,9 @@ export default defineNuxtPlugin(nuxtApp => {
         })
         useAsyncData('Tasks', async () => {
           await useTasksStore().getTasks()
+        })
+        useAsyncData('Profiles', async () => {
+          await useProfileStore().getProfiles()
         })
 
         return user

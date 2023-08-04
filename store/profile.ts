@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 
 export const useProfileStore = defineStore('profile', () => {
   const profile = ref<Profile>()
+  const profiles = ref<Profile[]>([])
   const { $SB } = useNuxtApp()
   const loading = ref(false)
 
@@ -28,6 +29,18 @@ export const useProfileStore = defineStore('profile', () => {
     }
   }
 
+  async function getProfiles() {
+    try {
+      let { data, error } = await $SB.from('profiles').select('*')
+      if (error) throw error
+      console.log(data)
+      profiles.value = data!
+      return data
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   function reset() {
     profile.value = undefined
   }
@@ -39,7 +52,9 @@ export const useProfileStore = defineStore('profile', () => {
 
   return {
     getProfile,
+    getProfiles,
     profile,
+    profiles,
     setProfile,
     reset,
     loading,

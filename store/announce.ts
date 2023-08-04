@@ -3,6 +3,16 @@ import { defineStore } from 'pinia'
 
 export const useAnnStore = defineStore('announcements', () => {
   const announcements = ref<Announcement[]>([])
+  const announcement = ref<Announcement>({
+    urgency: false,
+    body: '',
+    title: '',
+  })
+  const announcement_def = ref<Announcement>({
+    urgency: false,
+    body: '',
+    title: '',
+  })
   const { $SB } = useNuxtApp()
 
   async function getAnnounce() {
@@ -17,8 +27,26 @@ export const useAnnStore = defineStore('announcements', () => {
     }
   }
 
+  async function Announce() {
+    console.log(announcement.value)
+    try {
+      let { data, error } = await $SB
+        .from('announcements')
+        .insert(announcement.value)
+        .select()
+      if (error) throw error
+      console.log(data)
+      console.log('done')
+      announcement.value = announcement_def.value
+      return data
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   function reset() {
     announcements.value = []
+    announcement.value = announcement_def.value
   }
 
   $SB
@@ -35,6 +63,8 @@ export const useAnnStore = defineStore('announcements', () => {
   return {
     getAnnounce,
     announcements,
+    Announce,
+    announcement,
     reset,
   }
 })

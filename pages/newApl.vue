@@ -115,6 +115,8 @@ const if_hover_header = useElementHover(header)
 
 onMounted(async () => {
 	if_sent.value = false
+	useAplStore().resetAplData()
+	useImageStore().resetFiles()
 })
 
 // this handles the visibility of the steps
@@ -145,6 +147,11 @@ watchEffect(() => {
 function handleStep(page: string) {
 	curr_page.value = page
 }
+
+onBeforeUnmount(() => {
+	useAplStore().resetAplData()
+	useImageStore().resetFiles()
+})
 </script>
 
 <style scoped>

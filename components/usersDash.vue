@@ -121,7 +121,7 @@ import { useAppStore } from '@/store/app';
 import { useProfileStore } from '@/store/profile';
 import { useViewAplStore } from '@/store/viewApl';
 
-const { profile, role, loading: prof_loading } = storeToRefs(useProfileStore())
+const { role } = storeToRefs(useProfileStore())
 
 // const role = computed(() => {
 // 	return profile.value?.role || false
@@ -152,6 +152,10 @@ const URLs = ref<{
 }[] | null | undefined>()
 
 onMounted(async () => {
+	await loadUrls()
+})
+
+async function loadUrls() {
 	loading.value = true
 	try {
 		const APLS = await useAppStore().getTotalApls()
@@ -179,7 +183,8 @@ onMounted(async () => {
 		console.log(error);
 		loading.value = false
 	}
-})
+
+}
 
 const recent_apls = computed(() => {
 	if (total_daily_applicants.value.length > 0) {

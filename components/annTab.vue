@@ -60,7 +60,7 @@
 				<div class="modal">
 					<div
 						:class="ann.urgency ? 'modal-box relative outline outline-4 outline-red-600' : 'modal-box relative outline outline-4 outline-neutral-700'">
-						<h3 class="font-semibold text-lg uppercase flex gap-2 items-center">
+						<h3 class="font-semibold text-lg uppercase flex gap-2 items-center pt-4">
 							<svg v-if="!ann.urgency" xmlns="http://www.w3.org/2000/svg" class="w-7 aspect-square" viewBox="0 0 24 24">
 								<g stroke="#888888" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
 									<circle cx="12" cy="12" r="9" fill="#888888" fill-opacity="0">
@@ -92,8 +92,8 @@
 
 						<p v-if="!ann.urgency" class="absolute top-2 right-2 text-xs flex gap-2">
 						<div class="badge badge-primary">{{ useNuxtApp().$formatDateWords(new
-							Date(ann.created_at)) }}</div>
-						<div class="badge badge-primary">{{ new Date(ann.created_at).toLocaleTimeString([], {
+							Date(ann.created_at!)) }}</div>
+						<div class="badge badge-primary">{{ new Date(ann.created_at!).toLocaleTimeString([], {
 							hour: '2-digit', minute: '2-digit', hour12: true
 						}) }}
 						</div>
@@ -101,8 +101,8 @@
 
 						<p v-else class="absolute top-2 right-2 text-xs flex gap-2">
 						<div class="badge badge-accent">{{ useNuxtApp().$formatDateWords(new
-							Date(ann.created_at)) }}</div>
-						<div class="badge badge-accent">{{ new Date(ann.created_at).toLocaleTimeString([], {
+							Date(ann.created_at!)) }}</div>
+						<div class="badge badge-accent">{{ new Date(ann.created_at!).toLocaleTimeString([], {
 							hour: '2-digit', minute: '2-digit', hour12: true
 						}) }}
 						</div>
@@ -127,10 +127,10 @@
 				</span>
 				<div class="flex flex-col text-xs text-right text-neutral-400">
 					<span class="">
-						{{ $formatDate(new Date(ann.created_at)) }}
+						{{ $formatDate(new Date(ann.created_at!)) }}
 					</span>
 					<span class="">
-						{{ $formatDateTime(new Date(ann.created_at)) }}
+						{{ $formatDateTime(new Date(ann.created_at!)) }}
 					</span>
 					<span :class="ann.urgency ? 'badge badge-accent badge-xs self-end' : 'badge badge-info badge-xs self-end'">{{
 						ann.urgency ? 'High' : 'Low' }}</span>
@@ -148,14 +148,15 @@
 						<label class="label">
 							<span class="label-text">Subject</span>
 						</label>
-						<input type="text" class="input input-xl text-white bg-neutral-800 flex-1">
+						<input v-model="announcement.title" type="text" class="input input-xl text-white bg-neutral-800 flex-1">
 					</div>
 
 					<div class="form-control w-full">
 						<label class="label">
 							<span class="label-text">Body</span>
 						</label>
-						<textarea class="textarea outline outline-4 text-white text-2xl outline-neutral-700 w-full"></textarea>
+						<textarea v-model="announcement.body"
+							class="textarea outline outline-4 text-white text-2xl outline-neutral-700 w-full"></textarea>
 					</div>
 
 
@@ -165,7 +166,7 @@
 							<label class="label">
 								<span class="label-text">Urgency</span>
 							</label>
-							<select class="select flex-1 bg-neutral-800 text-white text-xl">
+							<select v-model="announcement.urgency" class="select flex-1 bg-neutral-800 text-white text-xl">
 								<option disabled selected>Importance Level</option>
 								<option :value="true">High</option>
 								<option :value="false">Low</option>
@@ -173,7 +174,8 @@
 						</div>
 
 						<div class="form-control flex-1 h-24 flex flex-col justify-end">
-							<button class="btn w-full h-full text-3xl btn-secondary font-semibold">Announce</button>
+							<button @click="useAnnStore().Announce()"
+								class="btn w-full h-full text-3xl btn-secondary font-semibold">Announce</button>
 						</div>
 
 					</div>
@@ -197,6 +199,6 @@ import { useProfileStore } from '@/store/profile';
 defineProps<{
 	curr_page: string
 }>()
-const { announcements } = storeToRefs(useAnnStore())
+const { announcements, announcement } = storeToRefs(useAnnStore())
 const { role } = storeToRefs(useProfileStore())
 </script>

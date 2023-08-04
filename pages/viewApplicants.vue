@@ -51,13 +51,13 @@
 					<!-- head -->
 					<thead class="sticky top-0 backdrop-blur-lg border-none z-50">
 						<tr class="border-none z-50">
-							<th class="font-semibold text-sm">Pos.</th>
-							<th class="font-semibold text-sm">Action</th>
-							<th class="font-semibold text-sm">Name</th>
-							<th class="font-semibold text-sm">Bio</th>
-							<th class="font-semibold text-sm">Phone Number</th>
-							<th class="font-semibold text-sm">Created At</th>
-							<th class="font-semibold text-sm">Type</th>
+							<th class="font-semibold text-center text-sm">Pos.</th>
+							<th class="font-semibold text-center text-sm">Action</th>
+							<th class="font-semibold text-center text-sm">Name</th>
+							<th class="font-semibold text-center text-sm">Bio</th>
+							<th class="font-semibold text-center text-sm">Phone Number</th>
+							<th class="font-semibold text-center text-sm">Created</th>
+							<th class="font-semibold text-center text-sm">Type</th>
 						</tr>
 					</thead>
 
@@ -170,13 +170,13 @@
 					<!-- head -->
 					<thead class="sticky top-0 backdrop-blur-lg border-none z-50">
 						<tr class="border-none z-50">
-							<th class="font-semibold text-sm">Pos.</th>
-							<th class="font-semibold text-sm">Action</th>
-							<th class="font-semibold text-sm">Name</th>
-							<th class="font-semibold text-sm">Bio</th>
-							<th class="font-semibold text-sm">Phone Number</th>
-							<th class="font-semibold text-sm">Created At</th>
-							<th class="font-semibold text-sm">Type</th>
+							<th class="font-semibold text-center text-sm">Pos.</th>
+							<th class="font-semibold text-center text-sm">Action</th>
+							<th class="font-semibold text-center text-sm">Name</th>
+							<th class="font-semibold text-center text-sm">Bio</th>
+							<th class="font-semibold text-center text-sm">Phone Number</th>
+							<th class="font-semibold text-center text-sm">Created</th>
+							<th class="font-semibold text-center text-sm">Type</th>
 						</tr>
 					</thead>
 
@@ -231,8 +231,10 @@
 							</td>
 							<td class="">
 								<div class="flex flex-col items-end justify-center text-xs">
-									<span>{{ useNuxtApp().$formatDate(new Date(apl.created_at!)) }}</span>
-									<span>{{ new Date(apl.created_at!).toLocaleTimeString([], {
+									<span class="text-right">By: {{ profiles.filter(user => user.id == apl.user_id)[0].fullname || 'User'
+									}}</span>
+									<span class="text-neutral-300">{{ useNuxtApp().$formatDate(new Date(apl.created_at!)) }}</span>
+									<span class="text-neutral-300">{{ new Date(apl.created_at!).toLocaleTimeString([], {
 										hour: '2-digit', minute: '2-digit', hour12: true
 									}) }}</span>
 								</div>
@@ -325,7 +327,7 @@ import { useViewAplStore } from '@/store/viewApl';
 useTitle('EG Datapoint | View Applicants')
 
 const { all_my_apls, total_apls } = storeToRefs(useAppStore())
-const { role } = storeToRefs(useProfileStore())
+const { role, profiles } = storeToRefs(useProfileStore())
 const page_index = ref(1)
 const step = ref(50)
 

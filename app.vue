@@ -43,5 +43,12 @@ $SB.auth.onAuthStateChange((event: string) => {
 
 onMounted(async () => {
   await $onInitLoadAppData()
+
+  watch(
+    () => document.documentElement.classList,
+    val => {
+      console.log(val)
+    }
+  )
 })
 </script>
