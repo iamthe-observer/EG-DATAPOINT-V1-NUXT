@@ -1,32 +1,36 @@
 <template>
 	<div :key="num" class="w-full h-full flex flex-col rounded-2xl pb-2">
 		<div ref="container"
-			class="w-full h-full rounded-2xl bg-neutral-800 col-span-full row-span-full pb-2 overflow-y-scroll text-justify px-0 relative"
+			class="w-full h-full rounded-2xl dark:bg-neutral-50 bg-neutral-800 col-span-full row-span-full pb-2 overflow-y-scroll text-justify px-0 relative dark:shadow-xl"
 			id="style-1">
 			<h1
-				class="px-5 py-5 rounded-2xl bg-neutral-700 text-2xl w-full flex justify-between items-center sticky top-0 mb-2 shadow-lg z-10">
-				<span ref="header" class="flex flex-col gap-1 hover:text-neutral-600 group">Add a new Applicant
+				class="px-5 py-5 rounded-2xl bg-neutral-700 dark:bg-primary text-2xl w-full flex justify-between items-center sticky top-0 mb-2 shadow-lg z-10">
+				<span ref="header"
+					class="flex flex-col gap-1 dark:text-white dark:hover:text-purple-600 hover:text-neutral-600 group">Add a new
+					Applicant
 					<button v-if="if_hover_header" onclick="request_modal.showModal()"
-						class="btn btn-ghost btn-xs group-hover:text-secondary">Request Discount</button>
+						class="btn btn-ghost btn-xs dark:group-hover:text-white group-hover:text-secondary">Request Discount</button>
 
 					<dialog id="request_modal" class="modal">
-						<form method="dialog" class="modal-box flex flex-col gap-4">
+						<form method="dialog" class="modal-box dark:bg-neutral-50 flex flex-col gap-4">
 							<button @click="useAplStore().resetRequest()"
 								class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-red-500">✕</button>
 							<div class="flex flex-col gap-2 items-center">
-								<h3 class="font-semibold text-2xl text-neutral-300">Input discounted amount only</h3>
+								<h3 class="font-semibold text-2xl text-neutral-300 dark:text-neutral-900 mb-5">Input discounted amount
+									only
+								</h3>
 								<div class="flex gap-2 items-center">
-									<span class="text-neutral-600 font-semibold text-xl">GHC</span>
+									<span class="text-neutral-600 text-xl dark:text-neutral-900">GHC</span>
 									<input v-model="request.body" type="number" min="0"
-										class="input input-xl w-fit outline outline-4 outline-neutral-700 text-2xl text-center text-white"
+										class="input input-xl w-fit outline outline-4 outline-neutral-700 dark:outline-neutral-300 dark:text-neutral-900 dark:bg-white text-2xl text-center text-white"
 										placeholder="" />
-									<span class="text-neutral-600">.00</span>
+									<span class="text-neutral-600 dark:text-neutral-900">.00</span>
 								</div>
 							</div>
 							<div class="modal-action flex gap-2 items-center">
 								<span data-tip="Contact Supervisor or Manager for pending requests." class="text-xs tooltip tooltip-left">
 									<svg xmlns="http://www.w3.org/2000/svg" class="w-6 z-[500] aspect-square" viewBox="0 0 24 24">
-										<path fill="white"
+										<path fill="white" class="dark:fill-accent"
 											d="M11.75 19h-.25q-3.55 0-6.025-2.475T3 10.5q0-3.55 2.475-6.025T11.5 2q1.775 0 3.313.662t2.7 1.825q1.162 1.163 1.824 2.7T20 10.5q0 3.35-1.888 6.225t-4.762 4.5q-.25.125-.5.138t-.45-.113q-.2-.125-.35-.325t-.175-.475L11.75 19Zm-.275-3.025q.425 0 .725-.3t.3-.725q0-.425-.3-.725t-.725-.3q-.425 0-.725.3t-.3.725q0 .425.3.725t.725.3ZM9.3 8.375q.275.125.55.013t.45-.363q.225-.3.525-.463T11.5 7.4q.6 0 .975.337t.375.863q0 .325-.188.65t-.662.8q-.625.55-.925 1.038t-.3.987q0 .3.213.513t.512.212q.3 0 .5-.225t.3-.525q.125-.425.45-.775t.6-.625q.525-.525.788-1.05t.262-1.05q0-1.15-.788-1.85T11.5 6q-.8 0-1.475.388t-1.1 1.062q-.15.275-.038.537t.413.388Z" />
 									</svg>
 								</span>

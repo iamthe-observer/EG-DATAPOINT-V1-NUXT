@@ -29,8 +29,8 @@
 						</div>
 
 						<div @click="useSearchStore().setIfSearch(true)" v-if="!if_search" ref="search_bar"
-							class="z-[200] w-full flex justify-end rounded-xl search_bar bg-neutral-900 drop-shadow-2xl transition-all duration-300 ease-out outline outline-2 outline-neutral-600">
-							<input ref="search_bar_input" type="text" class="flex-1 bg-transparent px-2"
+							class="z-[200] w-full flex justify-end rounded-xl search_bar dark:bg-accent bg-neutral-900 drop-shadow-2xl transition-all duration-300 ease-out outline outline-2 outline-neutral-600 dark:outline-none dark:shadow-lg hover:scale-95">
+							<input ref="search_bar_input" type="text" class="flex-1 bg-transparent px-2 dark:placeholder:text-white"
 								placeholder="Click here to search!">
 							<div class="w-10 p-2">
 								<SvgsSearch class=" w-full h-full aspect-square" />

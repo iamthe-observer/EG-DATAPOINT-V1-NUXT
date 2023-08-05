@@ -1,28 +1,28 @@
 <template>
 	<div class="__calendar col-span-3 row-span-15 px-2 flex flex-col items-center">
-		<div class="bg-neutral-800 w-full h-full rounded-xl flex flex-col items-center justify-between gap-2 px-0 pb-4">
+		<div
+			class="bg-neutral-800 dark:bg-neutral-50 w-full h-full rounded-xl flex flex-col items-center justify-between gap-2 px-0 pb-4">
 			<div class="flex flex-col items-center w-full min-h-1/2 px-4">
 				<h2 class="w-full text-xl pt-3">Calendar</h2>
-				<VCalendar expanded title-position="right" :attributes='attrs' :color="selectedClr" isDark="true" transparent
-					borderless class="mt-2">
+				<VCalendar expanded title-position="right" :attributes='attrs' :color="selectedClr" :is-dark="!dark_mode"
+					transparent borderless class="mt-2">
 				</VCalendar>
 			</div>
-			<span class="w-full pl-4">{{ $formatDateWords(new Date()) }}</span>
 
-			<div class="rounded-none w-full h-full flex flex-col gap-2 overflow-y-scroll" id="style-1">
+			<div class="rounded-none w-full h-full flex flex-col gap-2 overflow-y-auto" id="style-1">
 
 				<div class="flex-1 flex-col flex gap-1">
 
-					<div v-for="(ann, i) in recent_ann" class="pl-4">
+					<div v-for="(ann, i) in recent_ann" class="px-4">
 
 						<label
-							class="w-full h-16 border-t-2 border-neutral-700 flex items-center justify-between gap-2 cursor-pointer hover:text-neutral-300 transition-all duration-200 ease-in-out"
+							class="w-full h-16 border-t-2 dark:border-t-[2px] dark:border-neutral-200 border-neutral-700 flex items-center justify-between gap-2 cursor-pointer hover:text-neutral-300 transition-all duration-200 ease-in-out"
 							:for="`my_modal_${i}`">
 
 							<input type="checkbox" :id="`my_modal_${i}`" class="modal-toggle" />
 							<div class="modal">
 								<div
-									:class="ann.urgency ? 'modal-box relative outline outline-4 outline-red-600' : 'modal-box relative outline outline-4 outline-neutral-700'">
+									:class="ann.urgency ? 'dark:bg-neutral-50 dark:text-neutral-900 modal-box relative outline outline-4 outline-red-600' : 'dark:bg-neutral-50 dark:text-neutral-900 modal-box relative outline outline-4 outline-neutral-700'">
 									<h3 class="font-semibold text-lg uppercase flex gap-2 items-center">
 										<svg v-if="!ann.urgency" xmlns="http://www.w3.org/2000/svg" class="w-7 aspect-square"
 											viewBox="0 0 24 24">
@@ -50,7 +50,7 @@
 												<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1" />
 											</circle>
 										</svg>
-										{{ ann.title }}
+										<span>{{ ann.title }}</span>
 									</h3>
 									<p class="py-4">{{ ann.body }}</p>
 
@@ -72,9 +72,9 @@
 									</div>
 									</p>
 
-									<div class="modal-action">
+									<!-- <div class="modal-action">
 										<label :for="`my_modal_${i}`" class="btn btn-sm">Close!</label>
-									</div>
+									</div> -->
 								</div>
 							</div>
 
@@ -135,7 +135,7 @@
 				</div>
 			</div>
 			<div v-if="announcements.length > 0"
-				class="ann_btn w-[90%] whitespace-nowrap text-sm mx-auto bg-neutral-700 py-3 text-center rounded-xl hover:text-secondary cursor-pointer"
+				class="ann_btn w-[90%] whitespace-nowrap text-sm mx-auto bg-neutral-700 py-3 text-center rounded-xl hover:text-secondary cursor-pointer dark:text-white dark:bg-primary"
 				@click="$router.push('/database')">view
 				{{
 					announcements.length < 5 ? `` : `(${announcements.length - 4})` }} more announcement(s)</div>
@@ -145,9 +145,11 @@
 
 <script setup lang="ts">
 import { useAnnStore } from '@/store/announce';
+import { useAppStore } from '@/store/app';
 import { storeToRefs } from 'pinia';
 
 const { announcements } = storeToRefs(useAnnStore())
+const { dark_mode } = storeToRefs(useAppStore())
 
 const recent_ann = computed(() => {
 	return announcements.value.slice(0, 4).sort((a, b) => new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime())

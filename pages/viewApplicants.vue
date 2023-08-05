@@ -1,15 +1,19 @@
 <template>
 	<div class="w-full h-full flex flex-col rounded-2xl pb-2">
-		<div class="w-full h-full rounded-2xl bg-neutral-800 col-span-full row-span-full text-justify relative flex flex-col">
+		<div
+			class="w-full h-full rounded-2xl dark:bg-neutral-50 dark:shadow-xl bg-neutral-800 col-span-full row-span-full text-justify relative flex flex-col">
 
-			<header class="w-full min-h-[4rem] bg-neutral-700 rounded-2xl shadow-xl flex items-center justify-between px-4">
-				<h1 v-if="!role" class="text-2xl">View All Applicants <span class="">({{ all_my_apls.length }})</span></h1>
-				<h1 v-else class="flex items-center gap-3">
+			<header
+				class="w-full min-h-[4rem] dark:bg-primary bg-neutral-700 rounded-2xl flex items-center justify-between px-4">
+				<h1 v-if="!role" class="text-2xl dark:text-neutral-50">View All Applicants <span class="">({{ all_my_apls.length
+				}})</span></h1>
+				<h1 v-else class="flex items-center gap-3 dark:text-neutral-50">
 					<span class="text-2xl whitespace-nowrap">
 						View All Applicants
 					</span>
 					<span class="text-2xl">({{ total_apls.length }})</span>
-					<select v-model="curr_user" class="select w-full select-sm rounded-full bg-[rgb(13,13,13)]">
+					<select v-model="curr_user"
+						class="select w-full select-sm rounded-full bg-[rgb(13,13,13)] dark:bg-neutral-50 dark:text-black">
 						<option selected value="all">All Users</option>
 						<option v-for="user in profiles" :value="user.id">{{ `${user.fullname || 'User'} (${total_apls.filter(apl =>
 							apl.user_id
@@ -31,25 +35,26 @@
 							filter_recent = false
 							filter_reverse = false
 							page_index = 1
-						}" :checked="filter_alpha" class="join-item btn btn-xs rounded-full" type="radio" name="options"
-							aria-label="Alphabetic" />
+						}" :checked="filter_alpha" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+							type="radio" name="options" aria-label="Alphabetic" />
 						<input @click="() => {
 							filter_alpha = false
 							filter_recent = true
 							filter_reverse = false
 							page_index = 1
-						}" :checked="filter_recent" class="join-item btn btn-xs rounded-full" type="radio" name="options"
-							aria-label="Recency" />
+						}" :checked="filter_recent" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+							type="radio" name="options" aria-label="Recency" />
 						<input @click="() => {
 							filter_alpha = false
 							filter_recent = false
 							filter_reverse = true
 							page_index = 1
-						}" :checked="filter_reverse" class="join-item btn btn-xs rounded-full" type="radio" name="options"
-							aria-label="Reverse" />
+						}" :checked="filter_reverse" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+							type="radio" name="options" aria-label="Reverse" />
 					</div>
 
-					<select v-model="step" class="select w-full select-xs rounded-full bg-[rgb(13,13,13)]">
+					<select v-model="step"
+						class="select w-full select-xs rounded-full bg-[rgb(13,13,13)] dark:bg-neutral-50 dark:text-black">
 						<option value="50">50</option>
 						<option value="100">100</option>
 					</select>
@@ -63,33 +68,35 @@
 					<!-- head -->
 					<thead class="sticky top-0 backdrop-blur-lg border-none z-50">
 						<tr class="border-none z-50">
-							<th class="font-semibold text-center text-sm">Pos.</th>
-							<th class="font-semibold text-center text-sm">Action</th>
-							<th class="font-semibold text-center text-sm">Name</th>
-							<th class="font-semibold text-center text-sm">Bio</th>
-							<th class="font-semibold text-center text-sm">Phone Number</th>
-							<th class="font-semibold text-center text-sm">Created</th>
-							<th class="font-semibold text-center text-sm">Type</th>
+							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Pos.</th>
+							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Action</th>
+							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Name</th>
+							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Bio</th>
+							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Phone Number</th>
+							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Created</th>
+							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Type</th>
 						</tr>
 					</thead>
 
 					<tbody class="">
 						<!-- row -->
 						<!-- <tr v-for="(apl, i) in all_my_apls" -->
-						<tr v-for="(apl, i) in curr_filtered_apls" class="border-b-neutral-700 hover"
+						<tr v-for="(apl, i) in curr_filtered_apls"
+							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-black hover dark:hover:bg-neutral-200"
 							@dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }">
 							<th class="font-normal">
 								{{ i + 1 }}
 							</th>
 							<th>
 								<div class="dropdown dropdown-right">
-									<label tabindex="0" class="btn btn-xs rounded-full m-1">options <svg class="w-4 aspect-square"
-											xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+									<label tabindex="0"
+										class="btn btn-xs dark:border-none dark:text-neutral-900 dark:bg-white rounded-full m-1">options <svg
+											class="w-4 aspect-square" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
 											<path fill="#888888"
 												d="M4.957 5a1 1 0 0 0-.821 1.571l2.633 3.784a1.5 1.5 0 0 0 2.462 0l2.633-3.784A1 1 0 0 0 11.043 5H4.957Z" />
 										</svg></label>
 									<ul tabindex="0"
-										class="dropdown-content z-[100] menu p-1 shadow bg-base-100 rounded-lg w-52 font-normal">
+										class="dropdown-content dark:bg-white dark:border-2 dark:border-neutral-300 dark:font-semibold dark:text-neutral-900 z-[100] menu p-1 shadow bg-base-100 rounded-lg w-52 font-normal">
 										<li @click="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
 											class="hover:bg-accent hover:text-black rounded-lg"><a>View</a></li>
 										<li class="hover:bg-accent hover:text-black rounded-lg"><a>Request Delete</a></li>
@@ -109,8 +116,8 @@
 							<td>
 								{{ useNuxtApp().$formatDateWords(new Date(apl.pdob!)) }}
 								<br />
-								<span class="badge badge-ghost badge-sm mr-1">{{ apl.pcity_ob }}</span>
-								<span class="badge badge-ghost badge-sm">{{ apl.pcountry_ob }}</span>
+								<span class="badge badge-ghost badge-sm dark:badge-accent mr-1">{{ apl.pcity_ob }}</span>
+								<span class="badge badge-ghost badge-sm dark:badge-accent">{{ apl.pcountry_ob }}</span>
 							</td>
 							<td>
 								<div class="flex flex-col items-end">
@@ -124,10 +131,12 @@
 							</td>
 							<td class="">
 								<div class="flex flex-col items-end justify-center text-xs">
-									<span>{{ useNuxtApp().$formatDate(new Date(apl.created_at!)) }}</span>
-									<span>{{ new Date(apl.created_at!).toLocaleTimeString([], {
-										hour: '2-digit', minute: '2-digit', hour12: true
-									}) }}</span>
+									<span class="text-neutral-300 dark:text-neutral-700">{{ useNuxtApp().$formatDate(new
+										Date(apl.created_at!)) }}</span>
+									<span class="text-neutral-300 dark:text-neutral-700">{{ new Date(apl.created_at!).toLocaleTimeString([],
+										{
+											hour: '2-digit', minute: '2-digit', hour12: true
+										}) }}</span>
 								</div>
 							</td>
 							<td>
@@ -157,13 +166,13 @@
 					<!-- head -->
 					<thead class="sticky top-0 backdrop-blur-lg border-none z-50">
 						<tr class="border-none z-50">
-							<th class="font-semibold text-center text-sm">Pos.</th>
-							<th class="font-semibold text-center text-sm">Action</th>
-							<th class="font-semibold text-center text-sm">Name</th>
-							<th class="font-semibold text-center text-sm">Bio</th>
-							<th class="font-semibold text-center text-sm">Phone Number</th>
-							<th class="font-semibold text-center text-sm">Created</th>
-							<th class="font-semibold text-center text-sm">Type</th>
+							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Pos.</th>
+							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Action</th>
+							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Name</th>
+							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Bio</th>
+							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Phone Number</th>
+							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Created</th>
+							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Type</th>
 						</tr>
 					</thead>
 
@@ -171,19 +180,21 @@
 						<!-- row -->
 						<!-- <tr v-for="(apl, i) in all_my_apls" -->
 						<tr @dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
-							v-for="(apl, i) in _curr_filtered_apls" class="border-b-neutral-700 hover">
+							v-for="(apl, i) in _curr_filtered_apls"
+							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-black dark:hover:bg-neutral-200">
 							<th class="font-normal">
 								{{ i + 1 }}
 							</th>
 							<th>
 								<div class="dropdown dropdown-right">
-									<label tabindex="0" class="btn btn-xs rounded-full m-1">options <svg class="w-4 aspect-square"
-											xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+									<label tabindex="0"
+										class="btn btn-xs dark:border-none dark:text-neutral-900 dark:bg-white rounded-full m-1">options <svg
+											class="w-4 aspect-square" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
 											<path fill="#888888"
 												d="M4.957 5a1 1 0 0 0-.821 1.571l2.633 3.784a1.5 1.5 0 0 0 2.462 0l2.633-3.784A1 1 0 0 0 11.043 5H4.957Z" />
 										</svg></label>
 									<ul tabindex="0"
-										class="dropdown-content z-[100] menu p-1 shadow bg-base-100 rounded-lg w-52 font-normal">
+										class="dropdown-content dark:bg-white dark:border-2 dark:border-neutral-300 dark:font-semibold dark:text-neutral-900 z-[100] menu p-1 shadow bg-base-100 rounded-lg w-52 font-normal">
 										<li @click="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
 											class="hover:bg-accent hover:text-black rounded-lg"><a>View</a></li>
 										<li class="hover:bg-accent hover:text-black rounded-lg"><a>Request Delete</a></li>
@@ -203,8 +214,8 @@
 							<td>
 								{{ useNuxtApp().$formatDateWords(new Date(apl.pdob!)) }}
 								<br />
-								<span class="badge badge-ghost badge-sm mr-1">{{ apl.pcity_ob }}</span>
-								<span class="badge badge-ghost badge-sm">{{ apl.pcountry_ob }}</span>
+								<span class="badge badge-ghost badge-sm dark:badge-accent mr-1">{{ apl.pcity_ob }}</span>
+								<span class="badge badge-ghost badge-sm dark:badge-accent">{{ apl.pcountry_ob }}</span>
 							</td>
 							<td>
 								<div class="flex flex-col items-end">
@@ -218,12 +229,16 @@
 							</td>
 							<td class="">
 								<div class="flex flex-col items-end justify-center text-xs">
-									<span class="text-right">By: {{ profiles.filter(user => user.id == apl.user_id)[0].fullname || 'User'
+									<span class="text-right dark:font-semibold">By: {{ profiles.filter(user => user.id ==
+										apl.user_id)[0].fullname ||
+										'User'
 									}}</span>
-									<span class="text-neutral-300">{{ useNuxtApp().$formatDate(new Date(apl.created_at!)) }}</span>
-									<span class="text-neutral-300">{{ new Date(apl.created_at!).toLocaleTimeString([], {
-										hour: '2-digit', minute: '2-digit', hour12: true
-									}) }}</span>
+									<span class="text-neutral-300 dark:text-neutral-700">{{ useNuxtApp().$formatDate(new
+										Date(apl.created_at!)) }}</span>
+									<span class="text-neutral-300 dark:text-neutral-700">{{ new Date(apl.created_at!).toLocaleTimeString([],
+										{
+											hour: '2-digit', minute: '2-digit', hour12: true
+										}) }}</span>
 								</div>
 							</td>
 							<td>

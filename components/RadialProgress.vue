@@ -1,5 +1,6 @@
 <template>
-	<div :class="`radial-progress bg-neutral-900 text-${textclr ? textclr : 'text-accent'}`" :style="`--value:${amount}; `">
+	<div :class="`radial-progress bg-neutral-900 dark:bg-neutral-200 text-${textclr ? textclr : 'text-accent'}`"
+		:style="`--value:${amount}; `">
 		<slot>
 			{{ amount }}%
 		</slot>

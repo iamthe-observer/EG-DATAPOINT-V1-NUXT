@@ -1,9 +1,9 @@
 <template>
 	<div class="__people col-span-3 row-span-8 p-2">
 
-		<div class="w-full h-full carousel carousel-vertical rounded-xl carousel-center gap-2">
+		<div class="w-full h-full carousel carousel-vertical dark:shadow-xl rounded-xl carousel-center gap-2">
 
-			<div class="w-full h-full bg-neutral-800 grid place-items-center" v-if="!role && recent_apls.length == 0">
+			<div class="w-full h-full grid place-items-center dark:bg-neutral-100" v-if="!role && recent_apls.length == 0">
 				<div class="flex flex-col items-center gap-2">
 					<svg xmlns="http://www.w3.org/2000/svg" class="w-20 aspect-square" viewBox="0 0 24 24">
 						<g stroke="#888888" stroke-linecap="round" stroke-width="2">
@@ -31,9 +31,9 @@
 			</div>
 
 			<div v-if="!role && recent_apls.length != 0" v-for="(apl, idx) in recent_apls"
-				class="carousel-container bg-neutral-800 grid place-items-center">
+				class="carousel-container dark:bg-neutral-50 bg-neutral-800 grid place-items-center">
 				<div class="relative w-full h-full flex flex-col items-center">
-					<span class="badge badge-secondary absolute top-1 right-1">#{{ idx + 1 }}</span>
+					<span class="badge badge-secondary dark:badge-accent absolute top-1 right-1">#{{ idx + 1 }}</span>
 					<div class="avatar pt-5 justify-start">
 						<div class="w-32 rounded-full justify-center">
 							<img v-if="URLs?.length! > 0" class=""
@@ -42,22 +42,25 @@
 					</div>
 					<p class="font-bold pt-4 text-sm justify-end">{{ apl.fullName }}</p>
 
-					<p class="font-bold text-xs">{{ apl.pcontact }}</p>
+					<p class="font-normal text-neutral-400 text-xs dark:text-neutral-600">{{ apl.pcontact }}</p>
 
-					<p class="font-bold text-xs">{{ useNuxtApp().$formatDateTime(new Date(apl.created_at!)) }}</p>
+					<p class="font-normal text-neutral-400 text-xs dark:text-neutral-600">{{ useNuxtApp().$formatDateTime(new
+						Date(apl.created_at!)) }}
+					</p>
 
 					<div class="flex absolute bottom-1 left-1 justify-center pt-5 gap-1 items-center">
 						<button @click="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
 							class="btn btn-primary mr-3 rounded-xl">View</button>
-						<span class="flex gap-1">
-							<SvgsCedis class="w-2 fill-white" />{{ apl.totalPayment }}.00
+						<span class="flex gap-1 dark:font-semibold">
+							<SvgsCedis class="w-2 fill-white dark:fill-neutral-900" />{{ apl.totalPayment }}.00
 						</span>
 					</div>
 				</div>
 			</div>
 
 			<!-- ADMIN SIDE -->
-			<div class="w-full h-full bg-neutral-800 grid place-items-center" v-if="role && recent_apls_admin.length == 0">
+			<div class="w-full h-full bg-neutral-800 dark:bg-neutral-50 grid place-items-center"
+				v-if="role && recent_apls_admin.length == 0">
 				<div class="flex flex-col items-center gap-2">
 					<svg xmlns="http://www.w3.org/2000/svg" class="w-20 aspect-square" viewBox="0 0 24 24">
 						<g stroke="#888888" stroke-linecap="round" stroke-width="2">
@@ -85,9 +88,9 @@
 			</div>
 
 			<div v-if="role && recent_apls_admin.length != 0" v-for="(apl, idx) in recent_apls_admin"
-				class="carousel-container bg-neutral-800 grid place-items-center">
+				class="carousel-container bg-neutral-800 dark:bg-neutral-50 grid place-items-center">
 				<div class="relative w-full h-full flex flex-col items-center">
-					<span class="badge badge-secondary absolute top-1 right-1">#{{ idx + 1 }}</span>
+					<span class="badge badge-secondary dark:badge-accent absolute top-1 right-1">#{{ idx + 1 }}</span>
 					<div class="avatar pt-5 justify-start">
 						<div class="w-32 rounded-full justify-center">
 							<img v-if="URLs?.length! > 0" class=""
@@ -96,16 +99,17 @@
 					</div>
 					<p class="font-semibold pt-4 text-sm justify-end">{{ apl.fullName }}</p>
 
-					<p class="font-normal text-neutral-400 text-xs">{{ apl.pcontact }}</p>
+					<p class="font-normal text-neutral-400 text-xs dark:text-neutral-600">{{ apl.pcontact }}</p>
 
-					<p class="font-normal text-neutral-400 text-xs">{{ useNuxtApp().$formatDateTime(new Date(apl.created_at!)) }}
+					<p class="font-normal text-neutral-400 text-xs dark:text-neutral-600">{{ useNuxtApp().$formatDateTime(new
+						Date(apl.created_at!)) }}
 					</p>
 
 					<div class="flex absolute bottom-1 left-1 justify-center pt-5 gap-1 items-center">
 						<button @click="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
 							class="btn btn-primary mr-3 rounded-xl">View</button>
-						<span class="flex gap-1">
-							<SvgsCedis class="w-2 fill-white" />{{ apl.totalPayment }}.00
+						<span class="flex gap-1 dark:font-semibold">
+							<SvgsCedis class="w-2 fill-white dark:fill-neutral-900" />{{ apl.totalPayment }}.00
 						</span>
 					</div>
 				</div>

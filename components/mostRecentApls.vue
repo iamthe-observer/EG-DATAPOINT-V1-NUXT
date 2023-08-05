@@ -1,7 +1,7 @@
 <template>
 	<div class="__most_recent_apls col-span-3 row-span-7 p-2">
-		<div class="bg-neutral-800 w-full h-full rounded-xl p-2 flex flex-col gap-2">
-			<h2 class="flex-1 flex items-center justify-between cursor-pointer hover:text-secondary"
+		<div class="dark:bg-neutral-50 dark:shadow-xl bg-neutral-800 w-full h-full rounded-xl p-2 flex flex-col gap-2">
+			<h2 class="flex-1 flex items-center justify-between cursor-pointer hover:text-accent"
 				@click="$router.push('/database')">
 				<span class="text-lg font-medium">Total Requests</span>
 				<span class="text-lg font-medium">{{ !role ? requests.filter(req => req.user_id ==
@@ -10,7 +10,7 @@
 			</h2>
 
 
-			<div class="flex justify-evenly gap-2 bg-neutral-900 rounded-lg w-full h-3/4">
+			<div class="flex justify-evenly gap-2 dark:bg-neutral-300 bg-neutral-900 rounded-lg w-full h-3/4">
 				<div class="flex-1 flex flex-col items-center justify-center">
 					<svg xmlns="http://www.w3.org/2000/svg" class="w-10 aspect-square" viewBox="0 0 24 24">
 						<g stroke="#888888" stroke-linecap="round" stroke-width="2">
@@ -30,7 +30,7 @@
 						req.status == 'reject').filter(req => req.user_id == useSupabaseUser().value?.id).length }}</span>
 				</div>
 
-				<div class="flex-1 flex flex-col items-center justify-center">
+				<div class="flex-1 flex flex-col items-center justify-center border-x-2 dark:border-white border-neutral-800">
 					<svg xmlns="http://www.w3.org/2000/svg" class="w-10 aspect-square" viewBox="0 0 24 24">
 						<g fill="none" stroke="#888888" stroke-linecap="round" stroke-width="2">
 							<path stroke-dasharray="2 4" stroke-dashoffset="6"

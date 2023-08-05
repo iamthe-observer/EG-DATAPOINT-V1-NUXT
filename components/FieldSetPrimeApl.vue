@@ -3,7 +3,8 @@
 		<div class="col-span-2 translate-x-1 row-span-2 flex flex-col items-center gap-3">
 			<avatarSelect :src="primeSRC" class="" />
 
-			<input @change="handleFile" type="file" class="file-input file-input-primary file-input-xs w-full max-w-xs" />
+			<input @change="handleFile" type="file"
+				class="file-input file-input-primary dark:text-neutral-900 dark:bg-white file-input-xs w-full max-w-xs" />
 		</div>
 
 		<!-- name -->

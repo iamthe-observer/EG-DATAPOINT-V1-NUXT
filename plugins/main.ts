@@ -6,11 +6,15 @@ import { useRequestStore } from '@/store/requests'
 import { Applicant } from 'interfaces/interfaces'
 import { useTasksStore } from '@/store/tasks'
 import { useProfileStore } from '@/store/profile'
+import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 export default defineNuxtPlugin(nuxtApp => {
   nuxtApp.vueApp.use(setupCalendar, {})
   nuxtApp.vueApp.component('VCalendar', Calendar)
   nuxtApp.vueApp.component('DatePicker', DatePicker)
+  const pinia = createPinia()
+  pinia.use(piniaPluginPersistedstate)
 
   const { $router, _route, $SB } = useNuxtApp()
   const app_loading = ref(false)

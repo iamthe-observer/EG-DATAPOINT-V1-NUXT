@@ -1,5 +1,5 @@
 <template>
-	<section ref="svg" class="__navs bg-opacity-40 w-full flex-1 flex flex-col gap-8 items-center justify-center">
+	<section ref="svg" class="__navs w-full flex-1 flex flex-col gap-8 items-center justify-center">
 		<NuxtLink to="/dashboard" class="__icons_container tooltip tooltip-primary z-20 tooltip-right" data-tip="Dashboard">
 			<SvgsHome class="__icons" />
 		</NuxtLink>
@@ -13,9 +13,19 @@
 		<NuxtLink to="/database" class="__icons_container tooltip tooltip-primary z-20 tooltip-right" data-tip="Database">
 			<SvgsDatabase class="__icons" />
 		</NuxtLink>
+		<NuxtLink v-if="role" to="/analytics" class="__icons_container tooltip tooltip-primary z-20 tooltip-right"
+			data-tip="Analytics">
+			<SvgsAnalytics class="__icons" />
+		</NuxtLink>
 	</section>
 </template>
 
+<script setup lang="ts">
+import { useProfileStore } from '@/store/profile'
+import { storeToRefs } from 'pinia'
+
+const { role } = storeToRefs(useProfileStore())
+</script>
 
 <style scoped>
 .__icons {

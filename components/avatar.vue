@@ -22,10 +22,12 @@
 			</div>
 		</div>
 		<div v-if="username" class="__username text-sm">@{{ username || 'User' }}</div>
-		<div v-if="role" class="__username text-[.6rem] bg-red-600 px-2 rounded-full outline-1 outline-white outline">{{ role
-			?
-			'ADMIN' :
-			'' }}</div>
+		<div v-if="role"
+			class="__username text-[.6rem] bg-red-600 dark:bg-red-400 dark:text-white dark:outline dark:outline-1 dark:outline-red-200 px-2 rounded-full outline-1 outline-white outline">
+			{{ role
+				?
+				'ADMIN' :
+				'' }}</div>
 	</section>
 </template>
 
@@ -40,8 +42,6 @@ const props = defineProps<{
 	role?: boolean
 	url?: string
 }>()
-
-
 
 const src = ref()
 

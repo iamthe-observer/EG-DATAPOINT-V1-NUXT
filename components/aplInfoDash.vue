@@ -4,26 +4,29 @@
 			<!-- tasks -->
 			<div class="containers total_applicants flex items-center px-3 justify-between w-full h-full gap-4">
 				<p class="flex flex-col gap-2 h-full w-full justify-center">
-					<textarea v-model="new_task" class="textarea outline outline-4 outline-neutral-700 text-sm h-[80%] w-full"
+					<textarea v-model="new_task"
+						class="textarea outline outline-4 outline-neutral-700 text-sm h-[80%] w-full dark:bg-neutral-300 dark:outline-neutral-400"
 						placeholder="Create a new Task..."></textarea>
 				</p>
 
 				<div v-if="!new_task" class="flex flex-col items-center gap-2 w-fit">
 					<span
-						class="hover:text-accent cursor-pointer hover:scale-110 transition-all duration-200 ease-in-out text-xs whitespace-nowrap">Tasks
+						class="hover:text-accent cursor-pointer hover:scale-110 transition-all duration-200 ease-in-out text-xs whitespace-nowrap dark:font-semibold">Tasks
 					</span>
 					<radial-progress :textclr="`accent`"
 						:amount="Number(((done_tasks.length / _tasks.length) * 100).toFixed(1)) || 0">
-						{{ `${done_tasks.length}/${_tasks.length}` }}
+						{{ `${done_tasks.length} / ${_tasks.length}` }}
 					</radial-progress>
 				</div>
 
 				<div v-else class="join join-vertical">
-					<button @click="handleTask" class="btn join-item btn-md btn-success">
+					<button @click="handleTask"
+						class="btn join-item btn-md btn-success dark:bg-green-400 dark:border-none dark:text-white ">
 						<span v-if="!loading_task" class="">Save</span>
 						<span v-else class="loading loading-ring loading-md"></span>
 					</button>
-					<button @click="new_task = ''" class="btn join-item btn-md btn-error">Cancel</button>
+					<button @click="new_task = ''"
+						class="dark:border-none dark:text-white dark:bg-red-400 btn join-item btn-md btn-error">Cancel</button>
 				</div>
 				<input type="checkbox" :checked="done_task" class="modal-toggle" />
 				<div class="modal">
@@ -43,13 +46,14 @@
 			<!-- tasks -->
 			<div class="containers total_applicants flex items-center px-3 justify-between w-full h-full gap-4">
 				<p class="flex flex-col gap-2 h-full w-full justify-center">
-					<textarea v-model="new_task" class="textarea outline outline-4 outline-neutral-700 text-sm h-[80%] w-full"
+					<textarea v-model="new_task"
+						class="textarea outline outline-4 outline-neutral-700 text-sm h-[80%] w-full dark:bg-neutral-300 dark:outline-neutral-400"
 						placeholder="Create a new Task..."></textarea>
 				</p>
 
 				<div v-if="!new_task" class="flex flex-col items-center gap-2 w-fit">
 					<span @click="$router.push('/database')"
-						class="hover:text-accent cursor-pointer hover:scale-110 transition-all duration-200 ease-in-out text-xs whitespace-nowrap">Tasks
+						class="hover:text-accent cursor-pointer hover:scale-110 transition-all duration-200 ease-in-out text-xs whitespace-nowrap dark:font-semibold">Tasks
 					</span>
 					<radial-progress :textclr="`secondary`"
 						:amount="Number(((done_tasks.length / _tasks.length) * 100).toFixed(1)) || 0">
@@ -58,11 +62,13 @@
 				</div>
 
 				<div v-else class="join join-vertical">
-					<button @click="handleTask" class="btn join-item btn-md btn-success">
+					<button @click="handleTask"
+						class="btn join-item btn-md btn-success dark:bg-green-400 dark:border-none dark:text-white">
 						<span v-if="!loading_task" class="">Save</span>
 						<span v-else class="loading loading-ring loading-md"></span>
 					</button>
-					<button @click="new_task = ''" class="btn join-item btn-md btn-error">Cancel</button>
+					<button @click="new_task = ''"
+						class="dark:border-none dark:text-white dark:bg-red-400 btn join-item btn-md btn-error">Cancel</button>
 				</div>
 				<input type="checkbox" :checked="done_task" class="modal-toggle" />
 				<div class="modal">
@@ -283,7 +289,7 @@ const undone_tasks = computed(() => {
 </script>
 
 <style scoped>
-.containers {
+/* .containers {
 	@apply rounded-xl bg-neutral-800;
-}
+} */
 </style>

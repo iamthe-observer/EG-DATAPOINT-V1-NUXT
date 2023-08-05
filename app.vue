@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen bg-neutral-900 text-white">
+  <div class="h-screen bg-neutral-900 text-white dark:bg-neutral-200 dark:text-neutral-900">
     <div v-if="!app_loading" class="w-full h-full grid place-items-center">
       <Loading />
     </div>
@@ -23,7 +23,7 @@ useServerSeoMeta({
 
 // document.body.style
 const { $SB } = useNuxtApp()
-const { app_loading } = storeToRefs(useAppStore())
+const { app_loading, dark_mode } = storeToRefs(useAppStore())
 
 const { $onInitLoadAppData, $router } = useNuxtApp()
 
@@ -43,12 +43,13 @@ $SB.auth.onAuthStateChange((event: string) => {
 
 onMounted(async () => {
   await $onInitLoadAppData()
+  document.documentElement.setAttribute('data-theme', 'EG')
 
-  watch(
-    () => document.documentElement.classList,
-    val => {
-      console.log(val)
-    }
-  )
+  watchEffect(() => {
+    if (dark_mode.value) return document.documentElement.classList.add('dark')
+    if (!dark_mode.value)
+      return document.documentElement.classList.remove('dark')
+  })
+
 })
 </script>

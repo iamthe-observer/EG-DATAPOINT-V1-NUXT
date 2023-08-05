@@ -1,10 +1,11 @@
 <template>
 	<div class="relative w-full grid grid-cols-12 gap-2 px-5 py-2 mb-10">
-		<h2 class="w-full col-span-full text-xl pb-2">Ward {{ idx + 1 }}</h2>
+		<h2 class="w-full col-span-full text-xl pb-2 font-semibold">Ward {{ idx + 1 }}</h2>
 
 		<div class="col-span-2 row-span-2 flex flex-col items-center gap-3">
 			<avatarSelect :src="wardSRC" class="col-span-2 row-span-2" />
-			<input @change="handleFile" type="file" class="file-input file-input-primary file-input-xs w-full max-w-xs" />
+			<input @change="handleFile" type="file"
+				class="file-input file-input-primary dark:text-neutral-900 dark:bg-white file-input-xs w-full max-w-xs" />
 		</div>
 		<!-- name -->
 		<div class="flex gap-4 col-span-10 pl-6 justify-center">

@@ -29,6 +29,7 @@
     "@vuelidate/validators": "^2.0.3",
     "gsap": "^3.12.2",
     "pinia": "^2.1.4",
+    "pinia-plugin-persistedstate": "^3.2.0",
     "three": "^0.155.0",
     "uuid": "^9.0.0",
     "v-calendar": "^3.0.3",

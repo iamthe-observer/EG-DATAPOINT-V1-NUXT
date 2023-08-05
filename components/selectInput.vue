@@ -1,12 +1,12 @@
 <template>
 	<div class="form-control w-full">
 		<label class="label">
-			<span class="label-text">
+			<span class="label-text dark:text-neutral-900 dark:font-semibold">
 				<slot />
 			</span>
 		</label>
-		<select class="select w-full bg-neutral-600" @input="$emit('update:modelValue', $event.target?.value)"
-			:value="modelValue">
+		<select class="select w-full bg-neutral-600 dark:bg-neutral-300 rounded-xl"
+			@input="$emit('update:modelValue', $event.target?.value)" :value="modelValue">
 			<option v-if="options" disabled selected>Pick one</option>
 			<option v-if="num_options" disabled selected>Pick number</option>
 			<option v-if="options" v-for="(option, i) in  options" :key="i" :value="option.toUpperCase()">{{

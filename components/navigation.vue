@@ -1,5 +1,6 @@
 <template>
-	<div class="w-full h-full bg-neutral-800 p-0 rounded-2xl gap-5 flex flex-col justify-between">
+	<div
+		class="w-full h-full dark:bg-neutral-50 dark:shadow-2xl bg-neutral-800 p-0 rounded-xl gap-5 flex flex-col justify-between">
 		<div class="dropdown dropdown-right">
 			<label tabindex="0" class="">
 				<Avatar :username="profile?.username!" :role="profile?.role!" :url="profile?.avatar_url" />
