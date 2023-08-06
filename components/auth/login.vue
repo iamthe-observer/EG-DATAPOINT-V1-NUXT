@@ -7,14 +7,15 @@
 		<form action="" class="flex flex-col">
 			<div class="flex flex-col w-full h-full justify-center px-12">
 				<p class="w-full text-center text-2xl">Hello</p>
-				<p class="w-full text-center mb-5">Welcome back!</p>
+				<p class="w-full text-center mb-5 text-primary text-sm">Welcome back to<br />
+					Ebbysgold Datapoint!</p>
 				<textInput :no_uppercase="true" :bg="'neutral-700'" v-model="email_" :placeholder="'Enter username / email'" />
 				<textInput :type="'password'" :no_uppercase="true" :bg="'neutral-700'" v-model="password"
 					:placeholder="'Password'" class="mb-2" />
 				<span onclick="my_modal_23.showModal()"
 					class="hover:cursor-pointer hover:text-secondary w-full text-right mb-6">Recover
 					Password</span>
-				<button @click.prevent="loginUser" class="btn mb-9">
+				<button @click.prevent="loginUser" class="btn mb-9 hover:">
 					<span v-if="loading" class="loading loading-ring loading-sm text-accent"></span>
 					<span v-else>Sign In</span>
 				</button>
