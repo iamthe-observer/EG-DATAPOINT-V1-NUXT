@@ -15,8 +15,8 @@
 				<span onclick="my_modal_23.showModal()"
 					class="hover:cursor-pointer hover:text-secondary w-full text-right mb-6">Recover
 					Password</span>
-				<button @click.prevent="loginUser" class="btn mb-9 hover:">
-					<span v-if="loading" class="loading loading-ring loading-sm text-accent"></span>
+				<button @click.prevent="loginUser" class="btn mb-9 hover:bg-primary">
+					<span v-if="loading" class="loading loading-ring loading-sm text-white"></span>
 					<span v-else>Sign In</span>
 				</button>
 			</div>
