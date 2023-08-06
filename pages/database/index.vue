@@ -29,7 +29,7 @@
 						</div>
 
 						<div @click="useSearchStore().setIfSearch(true)" v-if="!if_search" ref="search_bar"
-							class="z-[200] w-full flex justify-end rounded-xl search_bar dark:bg-accent bg-neutral-900 drop-shadow-2xl transition-all duration-300 ease-out outline outline-2 outline-neutral-600 dark:outline-none dark:shadow-lg hover:scale-95">
+							class="z-[200] w-full flex justify-end rounded-xl search_bar dark:bg-neutral-300 dark:text-accent bg-neutral-900 transition-all duration-300 ease-out outline outline-2 outline-neutral-600 dark:outline-none hover:scale-95">
 							<input ref="search_bar_input" type="text" class="flex-1 bg-transparent px-2 dark:placeholder:text-white"
 								placeholder="Click here to search!">
 							<div class="w-10 p-2">
@@ -43,32 +43,32 @@
 					<div class="w-full h-full rounded-xl flex gap-2 overflow-hidden pt-2">
 
 						<div @click="handlePage('tasks')" :class="[
-							'transition-all duration-500 ease-in-out hover:bg-neutral-800 group rounded-xl relative',
-							curr_page !== 'tasks' ? 'flex-1' : 'w-4/5 bg-neutral-800'
+							'transition-all duration-500 ease-in-out hover:bg-neutral-800 group dark:hover:bg-neutral-50 rounded-xl relative',
+							curr_page !== 'tasks' ? 'flex-1' : 'w-4/5 dark:shadow-xl dark:bg-neutral-50 bg-neutral-800'
 						]">
 							<span v-if="curr_page != 'tasks' && curr_page != ''"
-								class="vertical-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 tracking-[-0.2rem] font-semibold text-neutral-600 group-hover:text-secondary text-[2rem] cursor-pointer transition-all duration-300 ease-out group-hover:scale-110">TASKS</span>
+								class="vertical-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 tracking-[-0.2rem] font-semibold text-neutral-600 dark:group-hover:text-accent group-hover:text-secondary text-[2rem] cursor-pointer transition-all duration-300 ease-out group-hover:scale-110">TASKS</span>
 
 							<TasksTab :curr_page="curr_page" />
 						</div>
 
 						<div @click="handlePage('requests')" :class="[
-							'transition-all duration-500 ease-in-out hover:bg-neutral-800 group rounded-xl relative',
-							curr_page !== 'requests' ? 'flex-1' : 'w-4/5 bg-neutral-800'
+							'transition-all duration-500 ease-in-out hover:bg-neutral-800 group dark:hover:bg-neutral-50 rounded-xl relative',
+							curr_page !== 'requests' ? 'flex-1' : 'w-4/5 dark:shadow-xl dark:bg-neutral-50 bg-neutral-800'
 						]">
 							<span v-if="curr_page != 'requests' && curr_page != ''"
-								class="vertical-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 tracking-[-0.2rem] font-semibold text-neutral-600 group-hover:text-secondary text-[2rem] cursor-pointer transition-all duration-300 ease-out group-hover:scale-110">REQUESTS</span>
+								class="vertical-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 tracking-[-0.2rem] font-semibold text-neutral-600 dark:group-hover:text-accent group-hover:text-secondary text-[2rem] cursor-pointer transition-all duration-300 ease-out group-hover:scale-110">REQUESTS</span>
 
 
 							<RequestsTab :curr_page="curr_page" />
 						</div>
 
 						<div @click="handlePage('announcements')" :class="[
-							'transition-all duration-500 ease-in-out hover:bg-neutral-800 group rounded-xl relative',
-							curr_page !== 'announcements' ? 'flex-1' : 'w-4/5 bg-neutral-800'
+							'transition-all duration-500 ease-in-out hover:bg-neutral-800 group dark:hover:bg-neutral-50 rounded-xl relative',
+							curr_page !== 'announcements' ? 'flex-1' : 'w-4/5 dark:shadow-xl dark:bg-neutral-50 bg-neutral-800'
 						]">
 							<span v-if="curr_page != 'announcements' && curr_page != ''"
-								class="vertical-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 tracking-[-0.2rem] font-semibold text-neutral-600 group-hover:text-secondary text-[2rem] cursor-pointer transition-all duration-300 ease-out group-hover:scale-110">ANNOUNCEMENTS</span>
+								class="vertical-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 tracking-[-0.2rem] font-semibold text-neutral-600 dark:group-hover:text-accent group-hover:text-secondary text-[2rem] cursor-pointer transition-all duration-300 ease-out group-hover:scale-110">ANNOUNCEMENTS</span>
 
 
 							<AnnTab :curr_page="curr_page" />

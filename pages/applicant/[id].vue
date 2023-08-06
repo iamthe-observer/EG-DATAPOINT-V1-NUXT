@@ -1,15 +1,16 @@
 <template>
 	<div :key="num" class="w-full h-full flex flex-col rounded-2xl pb-2">
 		<div id="style-1"
-			class="w-full h-full rounded-2xl bg-neutral-800 col-span-full row-span-full pb-2 overflow-y-auto text-justify px-0 relative">
+			class="w-full h-full rounded-2xl bg-neutral-800 dark:bg-neutral-50 col-span-full row-span-full pb-2 overflow-y-auto text-justify px-0 relative">
 			<h1
-				class="px-5 py-5 rounded-2xl bg-neutral-700 text-2xl w-full flex justify-between items-center mb-2 sticky top-0 shadow-lg z-10">
+				:class="['px-5 py-5 rounded-2xl bg-neutral-700 dark:bg-primary dark:text-white text-2xl w-full flex justify-between items-center mb-2 sticky top-0 shadow-lg z-10 transition-all duration-200 ease-in-out', edit_mode ? 'dark:bg-blue-400' : 'dark:bg-primary']">
 				<span v-if="!edit_mode" class="">Applicant Information</span>
 
 				<div class="join join-vertical lg:join-horizontal">
 					<button v-if="edit_mode" onclick="my_modal_1.showModal()"
-						class="btn btn-outline btn-sm rounded-xl text-white hover:text-green-500 join-item bg-none hover:btn-ghost">
-						<svg class="w-6 aspect-square stroke-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+						class="btn btn-outline btn-sm rounded-xl text-white hover:text-green-500 dark:hover:text-green-200 join-item bg-none hover:btn-ghost">
+						<svg class="w-6 aspect-square stroke-green-500 dark:stroke-green-300" xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 24 24">
 							<path fill="none" stroke-dasharray="24" stroke-dashoffset="24" stroke-linecap="round"
 								stroke-linejoin="round" stroke-width="2" d="M5 11L11 17L21 7">
 								<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="24;0" />
@@ -18,8 +19,9 @@
 						Request
 					</button>
 					<button v-if="edit_mode" @click="handleClose"
-						class="btn btn-outline btn-sm rounded-xl text-white hover:text-red-500 join-item bg-none hover:btn-ghost">
-						<svg xmlns="http://www.w3.org/2000/svg" class="w-6 aspect-square stroke-red-600" viewBox="0 0 24 24">
+						class="btn btn-outline btn-sm rounded-xl text-white hover:text-red-500 dark:hover:text-red-300 join-item bg-none hover:btn-ghost">
+						<svg xmlns="http://www.w3.org/2000/svg" class="w-6 aspect-square stroke-red-600 dark:stroke-red-400"
+							viewBox="0 0 24 24">
 							<path fill="none" stroke="" stroke-dasharray="12" stroke-dashoffset="12" stroke-linecap="round"
 								stroke-width="2" d="M12 12L19 19M12 12L5 5M12 12L5 19M12 12L19 5">
 								<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="12;0" />
@@ -29,7 +31,7 @@
 					</button>
 
 					<button v-if="!edit_mode" @click="useAplStore().toggleEditMode(true)"
-						class="btn btn-outline btn-sm rounded-xl text-white hover:text-blue-500 join-item bg-none hover:btn-ghost relative">
+						class="btn btn-outline btn-sm rounded-xl text-white hover:text-blue-500 dark:hover:text-blue-300 join-item bg-none hover:btn-ghost relative">
 						<svg xmlns="http://www.w3.org/2000/svg" class="w-6 aspect-square" viewBox="0 0 24 24">
 							<g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
 								<path stroke-dasharray="56" stroke-dashoffset="56"
@@ -52,7 +54,7 @@
 						Request Edit
 					</button>
 					<button v-if="!edit_mode" onclick="my_modal_2.showModal()"
-						class="btn btn-outline btn-sm rounded-xl text-white hover:text-red-500 join-item bg-none hover:btn-ghost">
+						class="btn btn-outline btn-sm rounded-xl text-white hover:text-red-500 dark:hover:text-red-300 join-item bg-none hover:btn-ghost">
 						<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24">
 							<g fill="none" stroke="#fff" stroke-linecap="round" stroke-width="2">
 								<path stroke-dasharray="20" stroke-dashoffset="20"
@@ -77,9 +79,33 @@
 
 				<span v-if="!edit_mode" class="font-semibold">{{ fullName ? fullName : 'Applicant' }}</span>
 				<div v-else class="flex gap-3">
-					<TextInput @update:model-value="logger" classer="" v-model="lastName">Last Name</TextInput>
+					<div class="form-control w-full max-w-xs">
+						<label class="label">
+							<span class="text-white text-xs badge badge-ghost label-text">Last Name</span>
+						</label>
+						<input v-model="lastName" type="text" placeholder="Type here"
+							class="input input-ghost text-center w-full  focus:text-white focus:bg-transparent  max-w-xs" />
+					</div>
+
+					<div class="form-control w-full max-w-xs">
+						<label class="label">
+							<span class="text-white text-xs badge badge-ghost label-text">First Name</span>
+						</label>
+						<input v-model="firstName" type="text" placeholder="Type here"
+							class="input input-ghost text-center w-full focus:text-white focus:bg-transparent   max-w-xs" />
+					</div>
+
+					<div class="form-control w-full max-w-xs">
+						<label class="label">
+							<span class="text-white text-xs badge badge-ghost label-text">Other Name</span>
+						</label>
+						<input v-model="otherName" type="text" placeholder="Type here"
+							class="input input-ghost text-center w-full focus:text-white focus:bg-transparent   max-w-xs" />
+					</div>
+
+					<!-- <TextInput @update:model-value="logger" classer="" v-model="lastName">Last Name</TextInput>
 					<TextInput @update:model-value="logger" classer="" v-model="firstName">First Name</TextInput>
-					<TextInput @update:model-value="logger" classer="" v-model="otherName">Other Name</TextInput>
+					<TextInput @update:model-value="logger" classer="" v-model="otherName">Other Name</TextInput> -->
 				</div>
 			</h1>
 
@@ -88,8 +114,8 @@
 
 		</div>
 		<dialog id="my_modal_1" class="modal">
-			<form method="dialog" class="modal-box bg-neutral-900">
-				<h3 class="font-semibold text-lg text-white flex items-center gap-3">
+			<form method="dialog" class="modal-box bg-neutral-900 dark:bg-neutral-50">
+				<h3 class="font-semibold text-lg text-white dark:text-black flex items-center gap-3">
 					<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
 						<g stroke="#888888" stroke-linecap="round" stroke-width="2">
 							<path fill="#dc1010" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
@@ -107,9 +133,13 @@
 					</svg>
 					Are you sure you want to send this request?
 				</h3>
-				<textarea v-model="request_body" class="textarea textarea-bordered w-full bg-black text-white mt-3"
+				<textarea v-model="request_body"
+					class="textarea textarea-bordered w-full bg-black dark:bg-neutral-200 dark:text-black dark:border-none text-white mt-3"
 					placeholder="What's your reason for editing?..."></textarea>
-				<p class="text-white py-4 text-right text-xs">Review and cross-check your request before sending!</p>
+				<p class="text-white font-semibold py-4 text-right text-sm dark:text-red-400">Review and
+					cross-check your request
+					before sending!
+				</p>
 				<div class="modal-action">
 					<!-- if there is a button in form, it will close the modal -->
 					<button v-if="request_body" class="btn btn-primary text-white" @click="handleSubmit">Submit</button>
@@ -119,7 +149,7 @@
 		</dialog>
 
 		<dialog id="my_modal_2" class="modal">
-			<form method="dialog" class="modal-box bg-red-950 w-5/6 max-w-5xl">
+			<form method="dialog" class="modal-box bg-red-950 dark:bg-red-700 w-5/6 max-w-5xl">
 				<h3 class="text-lg text-white flex items-center gap-3">
 					<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
 						<g stroke="#888888" stroke-linecap="round" stroke-width="2">
@@ -170,6 +200,7 @@ import { storeToRefs } from 'pinia';
 import { useAplStore } from '@/store/apl'
 import { useRequestStore } from '@/store/requests'
 import { Applicant, Requests } from 'interfaces/interfaces';
+import ViewApplicant from '@/components/ViewApplicant.vue';
 
 
 onMounted(() => {
@@ -178,37 +209,52 @@ onMounted(() => {
 let num = ref(0)
 const { edit_mode } = storeToRefs(useAplStore())
 const { curr_request } = storeToRefs(useRequestStore())
-const fullName = ref()
-const lastName = ref()
-const firstName = ref()
-const otherName = ref()
+const viewApl = ref<InstanceType<typeof ViewApplicant> | null>()
+const fullName = computed(() => {
+	if (!otherName.value) return `${lastName.value} ${firstName.value}`.trim()
+	if (otherName.value) return `${lastName.value} ${firstName.value} ${otherName.value}`.trim()
+})
+const lastName = ref('')
+const firstName = ref('')
+const otherName = ref('')
 const request_body = ref<string>()
 const curr_apl = ref<Applicant>()
+const default_apl = ref<Applicant>()
 const if_sent = ref(false)
+
+watchEffect(() => {
+	console.log(fullName.value);
+
+})
 
 const handleEmit = (e: Applicant) => {
 	curr_apl.value = e
-	fullName.value = e.fullName
+	default_apl.value = e
+	// fullName.value = e.fullName
 	firstName.value = e.pfirstName
 	otherName.value = e.potherName
 	lastName.value = e.plastName
 }
 
-function handleClose() {
+async function handleClose() {
+	firstName.value = default_apl.value!.pfirstName
+	otherName.value = default_apl.value!.potherName
+	lastName.value = default_apl.value!.plastName
 	useAplStore().toggleEditMode(false)
+	await viewApl.value?.resetApl()
 }
 
-function logger(e: any) {
-	console.log(e);
+// function logger(e: any) {
+// 	console.log(e);
 
-	setTimeout(() => {
-		curr_request.value!.modified_apl!.pfirstName = firstName.value
-		curr_request.value!.modified_apl!.plastName = lastName.value
-		curr_request.value!.modified_apl!.potherName = otherName.value
-		curr_request.value!.modified_apl!.fullName = `${lastName.value} ${firstName.value} ${otherName.value}`.trimEnd()
-		curr_request.value!.fullName = `${lastName.value} ${firstName.value} ${otherName.value}`.trimEnd()
-	}, 10)
-}
+// 	setTimeout(() => {
+// 		curr_request.value!.modified_apl!.pfirstName = firstName.value
+// 		curr_request.value!.modified_apl!.plastName = lastName.value
+// 		curr_request.value!.modified_apl!.potherName = otherName.value
+// 		curr_request.value!.modified_apl!.fullName = `${lastName.value} ${firstName.value} ${otherName.value}`.trimEnd()
+// 		curr_request.value!.fullName = `${lastName.value} ${firstName.value} ${otherName.value}`.trimEnd()
+// 	}, 10)
+// }
 
 async function handleSubmit() {
 	if (!request_body.value) return
@@ -217,8 +263,8 @@ async function handleSubmit() {
 	curr_request.value!.modified_apl.pfirstName = firstName.value
 	curr_request.value!.modified_apl.plastName = lastName.value
 	curr_request.value!.modified_apl.potherName = otherName.value
-	curr_request.value!.modified_apl.fullName = `${lastName.value} ${firstName.value} ${otherName.value}`.trimEnd()
-	curr_request.value!.fullName = `${lastName.value} ${firstName.value} ${otherName.value}`.trimEnd()
+	curr_request.value!.modified_apl.fullName = fullName.value!
+	curr_request.value!.fullName = fullName.value
 	let data = await useRequestStore().sendRequest(curr_request.value!)
 	if (data) if_sent.value = true
 	console.log("🚀 ~ file: [id].vue:135 ~ handleSubmit ~ data:", data)

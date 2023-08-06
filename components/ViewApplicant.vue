@@ -6,7 +6,7 @@
 			<div class="flex flex-col gap-2">
 				<div class="indicator">
 					<span :class="['indicator-item indicator-top indicator-center badge',
-						!edit_mode ? 'badge-primary' : 'badge-secondary']">Primary Applicant</span>
+						!edit_mode ? 'badge-primary' : 'badge-primary']">Primary Applicant</span>
 					<AvatarSelect :classer="`w-[300px] h-[300px]`" :src="prime_image" />
 				</div>
 				<div class="flex w-full gap-2 items-end">
@@ -37,7 +37,8 @@
 				<AplInfoCard @update:model-value="logger" v-model="apl.ppostal" :heading="'Residential Address'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.pconf_code" :heading="'Confirmation Code'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.children_number" :heading="'Number of Children'" />
-				<AplInfoCard :disabled="true" @update:model-value="logger" v-model="apl.totalPayment" :heading="'Paid Amount'" />
+				<AplInfoCard v-if="!role && !edit_mode" :disabled="true" @update:model-value="logger" v-model="apl.totalPayment"
+					:heading="'Paid Amount'" />
 			</div>
 		</div>
 
@@ -49,7 +50,7 @@
 			<div class="flex flex-col gap-2">
 				<div class="indicator">
 					<span :class="['indicator-item indicator-top indicator-center badge',
-						!edit_mode ? 'badge-primary' : 'badge-secondary']">Secondary Applicant</span>
+						!edit_mode ? 'badge-primary' : 'badge-primary']">Secondary Applicant</span>
 					<AvatarSelect :classer="`w-[300px] h-[300px]`" :src="sec_image" />
 				</div>
 				<div class="flex w-full gap-2 items-end">
@@ -97,7 +98,7 @@
 				<div class="flex flex-col gap-2">
 					<div class="indicator">
 						<span :class="['indicator-item indicator-top indicator-center badge',
-							!edit_mode ? 'badge-primary' : 'badge-secondary']">Ward Applicant {{ i + 1
+							!edit_mode ? 'badge-primary' : 'badge-primary']">Ward Applicant {{ i + 1
 	}}</span>
 						<AvatarSelect :classer="`w-[300px] h-[300px]`" :src="wards_image[ward.index!]" />
 					</div>
@@ -164,6 +165,18 @@ import { useRequestStore } from '@/store/requests';
 import { useAplStore } from '@/store/apl';
 import { useImageStore } from '@/store/images';
 import { useViewAplStore } from '@/store/viewApl';
+import { useProfileStore } from '@/store/profile';
+
+const resetApl = async () => {
+	// let aplVal = await getApplicant(APL_ID.value!)
+	// apl.value = aplVal
+
+	apl.value = total_apls.value.find(aplz => aplz.apl_id == apl.value.apl_id)!
+}
+
+defineExpose({
+	resetApl
+})
 
 const if_updated = ref(false)
 const apl = ref<Applicant>({
@@ -214,6 +227,7 @@ const { edit_mode } = storeToRefs(useAplStore())
 const { $SB, $trimStringProperties } = useNuxtApp()
 const { total_apls } = storeToRefs(useAppStore())
 const { APL_ID } = storeToRefs(useViewAplStore())
+const { role } = storeToRefs(useProfileStore())
 const emit = defineEmits(['apl', 'request'])
 const p_loading = ref(false)
 const s_loading = ref(false)
@@ -314,10 +328,6 @@ function handleDate(e: { name: string, date: Date, ward_idx?: number }) {
 		apl.value.wards[e.ward_idx! - 1].wdob = e.date
 		console.log(apl.value);
 	}
-}
-
-function loggerr(e: any) {
-	console.log(e);
 }
 
 function logger(e: any) {

@@ -8,8 +8,14 @@ export const useAppStore = defineStore(
   () => {
     const { $SB } = useNuxtApp()
     const { applicant } = storeToRefs(useAplStore())
-    const dark_mode = ref(useLocalStorage('dark_mode', true))
-    watchEffect(() => console.log(dark_mode.value))
+    const dark_mode = ref(useLocalStorage('dark_mode', false))
+    // watchEffect(() => console.log(dark_mode.value))
+
+    watch(dark_mode, () => {
+      if (dark_mode.value) return document.documentElement.classList.add('dark')
+      if (!dark_mode.value)
+        return document.documentElement.classList.remove('dark')
+    })
 
     function setDarkMode(params: boolean) {
       dark_mode.value = params

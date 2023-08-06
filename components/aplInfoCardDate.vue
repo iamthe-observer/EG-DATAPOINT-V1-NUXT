@@ -1,15 +1,18 @@
 <template>
-	<p class="container">
+	<p class="flex flex-col text-white w-full rounded-xl bg-neutral-700 dark:text-neutral-900 dark:font-semibold dark:bg-neutral-200
+	dark:outline
+		dark:outline-2 dark:outline-neutral-400 dark:shadow-lg">
 		<span :class="[
-			'heading',
-			edit_mode ? 'text-secondary' : 'text-neutral-400',
+			'heading font-normal bg-neutral-900 dark:bg-neutral-400 dark:text-black',
+			edit_mode ? 'dark:text-accent text-secondary dark:bg-neutral-300' : 'text-neutral-400',
 		]">
 			{{ heading }}
 		</span>
 		<span v-if="!edit_mode" class="info">{{ date ? $formatDateWords(new Date(date!)) : '' }}</span>
 		<DatePicker @dayclick="logger" v-else dark :color="'purple'" is-dark v-model="date" mode="date">
 			<template #default="{ togglePopover }">
-				<span @click="togglePopover" class="info_edit">{{ date ? $formatDateWords(new Date(date!)) : ''
+				<span @click="togglePopover" class="info_edit dark:bg-neutral-100">{{ date ? $formatDateWords(new Date(date!)) :
+					''
 				}}</span>
 			</template>
 		</DatePicker>
@@ -59,14 +62,16 @@ function logger() {
 }
 
 .heading {
-	@apply w-full bg-neutral-900 rounded-t-xl px-3 py-1 text-sm;
+	@apply w-full rounded-t-xl px-3 py-1 text-sm;
 }
 
 .info {
 	@apply p-3;
+	@apply h-full;
 }
 
 .info_edit {
-	@apply p-3 bg-[#3f3f3f] rounded-b-xl;
+	@apply h-full;
+	@apply p-3 rounded-b-xl;
 }
 </style>

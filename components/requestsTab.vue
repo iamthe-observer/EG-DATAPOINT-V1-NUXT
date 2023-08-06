@@ -4,7 +4,7 @@
 		<h1 class="py-1 px-1 text-xl font-semibold flex justify-between items-center">
 			<span :class="['transition-all duration-300 ease-out', curr_page == 'requests' ? 'text-4xl' : '']">Requests</span>
 
-			<select v-model="filter_val" class="select select-xs w-fit max-w-xs">
+			<select v-model="filter_val" class="select select-xs w-fit max-w-xs dark:bg-neutral-50">
 				<option disabled selected>Filter</option>
 				<option value="all">All</option>
 				<option value="pending">Pending</option>
@@ -46,15 +46,17 @@
 		</div>
 
 		<!-- contains all requests -->
-		<div v-else id="style-1" class="bg-neutral-800 flex flex-col gap-3 rounded-xl overflow-y-auto">
-			<label :for="`my_modal_${i}`" class="w-full flex gap-2 justify-between p-2 hover:bg-neutral-700 rounded-xl"
+		<div v-else id="style-1" class="bg-neutral-800 dark:bg-neutral-100 flex flex-col gap-3 rounded-xl overflow-y-auto">
+			<label :for="`my_modal_${i}`"
+				class="w-full flex gap-2 justify-between p-2 dark:hover:bg-neutral-200 hover:bg-neutral-700 rounded-xl"
 				v-for="(req, i) in curr_filtered_req.sort((a, b) => new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime())"
 				:key="i">
 
 				<input type="checkbox" :id="`my_modal_${i}`" class="modal-toggle" />
 				<div class="modal">
-					<div :class="[req.status == 'rejected' ? 'modal-box relative outline outline-4 outline-red-600 pt-10' : 'modal-box relative outline outline-4 outline-neutral-700 pt-10',
-					req.status == 'approved' ? 'modal-box relative outline outline-4 outline-success pt-10' : 'modal-box relative outline outline-4 outline-neutral-700 pt-10'
+					<div :class="[req.status == 'rejected' ? 'modal-box relative outline outline-4 outline-red-600 pt-10' : 'modal-box relative outline outline-4 outline-neutral-700 dark:outline-neutral-200 pt-10',
+					req.status == 'approved' ? 'modal-box relative outline outline-4 outline-success pt-10' : 'modal-box relative outline outline-4 outline-neutral-700 dark:outline-neutral-200 pt-10',
+						'dark:bg-neutral-50'
 					]">
 						<h3 class="font-semibold text-lg uppercase flex gap-2 items-center">
 							<svg v-if="req.status == 'pending'" xmlns="http://www.w3.org/2000/svg" class="w-7 aspect-square"

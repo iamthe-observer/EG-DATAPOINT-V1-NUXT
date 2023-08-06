@@ -1,18 +1,20 @@
 <template>
 	<div @click="() => { $router.push(`/applicant/${result.apl_id}`); useViewAplStore().setID(result.apl_id!) }"
-		class="card card-side bg-neutral-800 shadow-xl w-[60%] cursor-pointer hover:bg-primary transition-all group duration-400 ease-in-out">
+		class="card card-side bg-neutral-800 dark:bg-neutral-200 shadow-xl w-[60%] cursor-pointer hover:bg-primary dark:hover:bg-accent transition-all group duration-400 ease-in-out">
 		<figure class="p-2 max-h-full aspect-square"><img loading="lazy"
-				:class="image ? 'border-2 border-white w-36 h-36 rounded-xl' : 'w-36 h-36 rounded-xl'"
+				:class="image ? 'dark:border-none w-40 h-40 rounded-xl dark:shadow-lg' : 'w-36 h-36 rounded-xl'"
 				:src="image ? image : '/svg/image.svg'" alt="Movie" />
 		</figure>
-		<div class="card-body p-2" @click="$emit('recentSearch', rSearchParams)">
+		<div class="card-body p-2 dark:hover:text-white" @click="$emit('recentSearch', rSearchParams)">
 			<h2 class="card-title">{{ result.fullName }}</h2>
 			<p>{{ result.pcontact }}</p>
 			<p>{{ $formatDate(new Date(result.pdob!)) }}</p>
 			<p>{{ result.pconf_code ? result.pconf_code : 'No Confirmation Code' }}</p>
 			<div class="card-actions flex flex-col gap-1 items-end justify-end text-neutral-500 text-xs">
-				<button class="group-hover:text-white">{{ $formatDateTime(new Date(result.created_at!)) }}</button>
-				<button class="group-hover:text-white">{{ $formatDateWords(new Date(result.created_at!)) }}</button>
+				<button class="dark:drop-shadow-lg group-hover:text-white">{{ $formatDateTime(new Date(result.created_at!))
+				}}</button>
+				<button class="dark:drop-shadow-lg group-hover:text-white">{{ $formatDateWords(new Date(result.created_at!))
+				}}</button>
 			</div>
 		</div>
 	</div>

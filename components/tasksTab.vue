@@ -4,7 +4,7 @@
 		<h1 class="py-1 px-1 text-xl font-semibold flex justify-between">
 			<span :class="['transition-all duration-300 ease-out', curr_page == 'tasks' ? 'text-4xl' : '']">Tasks</span>
 
-			<select v-model="filter_val" class="select select-xs w-fit max-w-xs">
+			<select v-model="filter_val" class="select select-xs w-fit max-w-xs dark:bg-neutral-50">
 				<option disabled selected>Filter</option>
 				<option selected value="false">Not Completed</option>
 				<option value="true">Completed</option>
@@ -41,8 +41,8 @@
 			</div>
 		</div>
 
-		<div v-else id="style-1" class="bg-neutral-800 flex flex-col gap-3 rounded-xl overflow-y-auto">
-			<div class="w-full flex gap-2 justify-between p-2 hover:bg-neutral-700 rounded-xl"
+		<div v-else id="style-1" class="bg-neutral-800 dark:bg-neutral-100 flex flex-col gap-3 rounded-xl overflow-y-auto">
+			<div class="w-full flex gap-2 justify-between p-2 hover:bg-neutral-700 dark:hover:bg-neutral-200 rounded-xl"
 				v-for="(task, i) in curr_filtered_tasks" :key="i">
 				<span class="text-neutral-600 w-10 text-xs grid place-items-center">
 					<div class="form-control">

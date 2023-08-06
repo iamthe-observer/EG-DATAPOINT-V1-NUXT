@@ -51,15 +51,16 @@
 		</div>
 
 		<!-- contains all requests -->
-		<div v-else id="style-1" class="bg-neutral-800 flex flex-col gap-3 rounded-xl overflow-y-auto">
-			<label :for="`my_modal_${i}`" class="w-full flex gap-2 justify-between p-2 hover:bg-neutral-700 rounded-xl"
+		<div v-else id="style-1" class="bg-neutral-800 dark:bg-neutral-50 flex flex-col gap-3 rounded-xl overflow-y-auto">
+			<label :for="`my_modal_${i}`"
+				class="w-full flex gap-2 justify-between p-2 dark:hover:bg-neutral-200 hover:bg-neutral-700 rounded-xl"
 				v-for="(ann, i) in announcements.sort((a, b) => new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime())"
 				:key="i">
 
 				<input type="checkbox" :id="`my_modal_${i}`" class="modal-toggle" />
 				<div class="modal">
 					<div
-						:class="ann.urgency ? 'modal-box relative outline outline-4 outline-red-600' : 'modal-box relative outline outline-4 outline-neutral-700'">
+						:class="ann.urgency ? 'modal-box relative outline dark:bg-neutral-50 outline-4 outline-red-600' : 'modal-box relative outline outline-4 outline-neutral-700 dark:outline-neutral-200 dark:bg-neutral-50'">
 						<h3 class="font-semibold text-lg uppercase flex gap-2 items-center pt-4">
 							<svg v-if="!ann.urgency" xmlns="http://www.w3.org/2000/svg" class="w-7 aspect-square" viewBox="0 0 24 24">
 								<g stroke="#888888" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
