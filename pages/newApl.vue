@@ -84,15 +84,18 @@
 		<!-- Put this part before </body> tag -->
 		<input :checked="if_sent" type="checkbox" id="my_modal_7" class="modal-toggle" />
 		<div class="modal">
-			<div class="modal-box">
-				<p class="py-4 text-center text-2xl">Applicant Saved!</p>
+			<div class="modal-box dark:bg-white dark:outline dark:outline-4 dark:outline-success">
+				<p class="py-4 text-center text-4xl dark:text-success dark:font-semibold">
+					Applicant Saved!</p>
 			</div>
 			<label class="modal-backdrop bg-[rgb(0,0,0,.7)]" for="my_modal_7">Close</label>
 		</div>
+
 		<input :checked="if_req_sent" type="checkbox" id="request_modal_1" class="modal-toggle" />
 		<div class="modal">
-			<div class="modal-box">
-				<p class="py-4 text-center text-2xl">Request Sent!</p>
+			<div class="modal-box dark:bg-white dark:outline dark:outline-4 dark:outline-success">
+				<p class="py-4 text-center text-4xl dark:text-success dark:font-semibold">
+					Request Sent!</p>
 			</div>
 			<label class="modal-backdrop bg-[rgb(0,0,0,.7)]" for="request_modal_1">Close</label>
 		</div>

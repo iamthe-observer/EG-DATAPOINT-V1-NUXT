@@ -135,7 +135,7 @@
 				<div class="flex flex-col gap- w-3/5 h-full items-center justify-center">
 					<span class="text-neutral-500 text-sm">Recent Daily Applicants</span>
 					<div v-for="i in [5, 4, 3, 2, 1]" class="flex gap-2 w-full items-center">
-						<progress class="progress progress-secondary bg-neutral-700" :value="getAplNumByDay(i)"
+						<progress class="progress progress-secondary bg-neutral-700 dark:bg-white" :value="getAplNumByDay(i)"
 							:max="getMaxDay.maxCount"></progress>
 						<span
 							:class="i == 0 ? 'w-6 text-md text-secondary tooltip tooltip-secondary tooltip-right' : 'w-6 text-sm tooltip tooltip-secondary tooltip-right'"

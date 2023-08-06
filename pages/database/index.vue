@@ -23,17 +23,17 @@
 							if_search ? '' : 'tooltip tooltip-primary tooltip-bottom'
 						]" data-tip="resize panels">
 							<svg data-tip="resize" class="w-6 aspect-square" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-								<path fill="white"
+								<path fill="white" class="dark:fill-black"
 									d="M10 6a1 1 0 0 0-1 1v4H5.41l.8-.79a1 1 0 0 0-1.42-1.42l-2.5 2.5a1 1 0 0 0-.21.33a1 1 0 0 0 0 .76a1 1 0 0 0 .21.33l2.5 2.5a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.42l-.8-.79H9v4a1 1 0 0 0 2 0V7a1 1 0 0 0-1-1Zm11.92 5.62a1 1 0 0 0-.21-.33l-2.5-2.5a1 1 0 0 0-1.42 1.42l.8.79H15V7a1 1 0 0 0-2 0v10a1 1 0 0 0 2 0v-4h3.59l-.8.79a1 1 0 0 0 0 1.42a1 1 0 0 0 1.42 0l2.5-2.5a1 1 0 0 0 .21-.33a1 1 0 0 0 0-.76Z" />
 							</svg>
 						</div>
 
 						<div @click="useSearchStore().setIfSearch(true)" v-if="!if_search" ref="search_bar"
-							class="z-[200] w-full flex justify-end rounded-xl search_bar dark:bg-neutral-300 dark:text-accent bg-neutral-900 transition-all duration-300 ease-out outline outline-2 outline-neutral-600 dark:outline-none hover:scale-95">
+							class="z-[200] w-full flex justify-end rounded-xl search_bar dark:bg-neutral-400 dark:text-accent bg-neutral-900 transition-all duration-300 ease-out outline outline-2 outline-neutral-600 dark:outline-none hover:scale-95">
 							<input ref="search_bar_input" type="text" class="flex-1 bg-transparent px-2 dark:placeholder:text-white"
 								placeholder="Click here to search!">
 							<div class="w-10 p-2">
-								<SvgsSearch class=" w-full h-full aspect-square" />
+								<SvgsSearch :classer="'stroke-white'" class="w-full h-full aspect-square" />
 							</div>
 						</div>
 					</div>

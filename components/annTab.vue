@@ -142,22 +142,23 @@
 		</div>
 
 		<dialog id="addAnn" class="modal">
-			<form method="dialog" class="modal-box min-h-fit min-w-[50%]">
+			<form method="dialog" class="modal-box dark:bg-neutral-50 dark:text-neutral-900 min-h-fit min-w-[50%]">
 				<div class="flex flex-col gap-2 w-full h-full">
 
 					<div class="form-control w-full h-20">
 						<label class="label">
-							<span class="label-text">Subject</span>
+							<span class="label-text dark:text-neutral-900">Subject</span>
 						</label>
-						<input v-model="announcement.title" type="text" class="input input-xl text-white bg-neutral-800 flex-1">
+						<input v-model="announcement.title" type="text"
+							class="input input-xl text-white dark:text-black dark:bg-neutral-200 bg-neutral-800 flex-1">
 					</div>
 
 					<div class="form-control w-full">
 						<label class="label">
-							<span class="label-text">Body</span>
+							<span class="label-text dark:text-neutral-900">Body</span>
 						</label>
 						<textarea v-model="announcement.body"
-							class="textarea outline outline-4 text-white text-2xl outline-neutral-700 w-full"></textarea>
+							class="textarea outline outline-4 text-white dark:text-black dark:bg-neutral-200 bg-neutral-800  text-2xl dark:outline-neutral-300 outline-neutral-700 w-full"></textarea>
 					</div>
 
 
@@ -165,9 +166,10 @@
 
 						<div class="form-control flex-1 h-24">
 							<label class="label">
-								<span class="label-text">Urgency</span>
+								<span class="label-text dark:text-neutral-900">Urgency</span>
 							</label>
-							<select v-model="announcement.urgency" class="select flex-1 bg-neutral-800 text-white text-xl">
+							<select v-model="announcement.urgency"
+								class="select flex-1 bg-neutral-800 text-white dark:text-black dark:bg-neutral-200  text-xl">
 								<option disabled selected>Importance Level</option>
 								<option :value="true">High</option>
 								<option :value="false">Low</option>

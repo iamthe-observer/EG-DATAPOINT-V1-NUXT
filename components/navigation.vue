@@ -6,9 +6,9 @@
 				<Avatar :username="profile?.username!" :role="profile?.role!" :url="profile?.avatar_url" />
 			</label>
 			<ul tabindex="0"
-				class="dropdown-content menu p-2 shadow bg-base-100 border-2 border-neutral-900 rounded-box w-52 z-[500]">
+				class="dropdown-content menu p-2 shadow bg-base-100 border-2 border-neutral-900 dark:bg-neutral-50 dark:border-none dark:shadow-2xl rounded-box w-52 z-[500]">
 				<li class="">
-					<div data-tip="Change Profile Picture" class="tooltip flex justify-between items-center">
+					<div class="cursor-text flex justify-between items-center">
 						{{ profile?.username || 'User' }}
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
 							<circle cx="26" cy="16" r="4" fill="#009900" />
@@ -17,8 +17,8 @@
 						</svg>
 					</div>
 				</li>
-				<li @click="handleLogout" class="bg-error rounded-lg shadow-xl"><a v-if="!logout_loading">Log out</a><span v-else
-						class="loading loading-infinity loading-xs mx-auto"></span></li>
+				<li @click="handleLogout" class="bg-error rounded-lg shadow-xl text-white"><a v-if="!logout_loading">Log
+						out</a><span v-else class="loading loading-infinity loading-xs mx-auto"></span></li>
 			</ul>
 		</div>
 		<nav-links />

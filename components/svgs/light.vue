@@ -1,8 +1,8 @@
 
 <template>
 	<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-		<g stroke="#888888" strokeLinecap="round" strokeWidth="2">
-			<path fill="#888888" fillOpacity="0" strokeDasharray="34" strokeDashoffset="34"
+		<g stroke="#888888" class="dark:stroke-white" strokeLinecap="round" strokeWidth="2">
+			<path fill="#888888" class="dark:fill-white" fillOpacity="0" strokeDasharray="34" strokeDashoffset="34"
 				d="M12 7C14.76 7 17 9.24 17 12C17 14.76 14.76 17 12 17C9.24 17 7 14.76 7 12C7 9.24 9.24 7 12 7">
 				<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="34;0"></animate>
 				<animate fill="freeze" attributeName="fill-opacity" begin="0.9s" dur="0.15s" values="0;0.3"></animate>
