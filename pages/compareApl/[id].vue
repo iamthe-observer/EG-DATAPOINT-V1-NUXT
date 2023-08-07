@@ -1,97 +1,501 @@
 <template>
-	<div class="w-full h-full overflow-hidden flex pb-2">
-		<div class="w-full h-full bg-neutral-8000 dark:bg-neutral-510 dark:shadow-xlx rounded-2xl flex flex-col gap-2">
-			<h1 class="w-full bg-white min-h-[50px] rounded-xl dark:shadow-xl">
+	<div class="w-full h-full overflow-hidden flex pb-2 rounded-xl">
+		<div class="w-full h-full rounded-xl flex flex-col gap-2">
+			<h1
+				class="flex justify-between items-center w-full bg-neutral-700 dark:bg-neutral-100 min-h-[50px] rounded-xl dark:shadow-xl p-2">
+				<p class="flex flex-col">
+					<span class="text-lg font-bold">{{ request.modified_apl?.fullName }}</span>
+					<span class="text-xs text-neutral-400 dark:text-neutral-600">{{ request.body }}</span>
+				</p>
 
-			</h1>
-			<section class="flex gap-2 w-full flex-1 rounded-xl overflow-x-hidden overflow-y-auto">
 
-				<div :ref="`cont${idx}`"
-					v-for="(apl, idx) in [request.modified_apl, total_apls.find(apl => apl.apl_id == request.modified_apl?.apl_id)]"
-					:key="`cont${idx}`"
-					:class="[`cont${idx}`, 'flex-1 rounded-lg bg-neutral-800 dark:bg-neutral-50 dark:shadow-xl overflow-y-auto p-2']"
-					@scroll="syncScroll">
-
-					<div class="flex flex-col">
-						<header class="">Last Name</header>
-						<p class="">{{ apl?.plastName }}</p>
-					</div>
-					<div class="flex flex-col">
-						<header class="">First Name</header>
-						<p class="">{{ apl?.pfirstName }}</p>
-					</div>
-					<div class="flex flex-col">
-						<header class="">Other Name</header>
-						<p class="">{{ apl?.potherName }}</p>
-					</div>
-
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. At exercitationem alias illum beatae necessitatibus
-					officia explicabo maxime, eligendi accusantium amet enim, sit culpa distinctio quod pariatur repellendus illo!
-					Blanditiis velit dolor harum quam amet magni illo quis provident voluptas consequatur error labore, id maiores
-					assumenda sed nostrum sunt enim necessitatibus est explicabo modi doloribus quod? Commodi magni nobis eius
-					dolores cupiditate labore ea nemo officia sapiente dolore, doloribus possimus, nesciunt, illum voluptates ex
-					tempora animi aut ad et culpa optio saepe incidunt. Optio eius sunt quod, cupiditate rem repellendus voluptatem
-					possimus ex? Voluptatem, quia eum mollitia numquam dolores nihil consequuntur minus? Hic suscipit sapiente vero!
-					Earum facere eos natus dolorem, commodi veniam, fuga quos consectetur iure, nisi iusto amet distinctio
-					voluptatum voluptatem placeat iste? Esse mollitia ducimus similique, non nemo ipsam quod ea est aliquam culpa
-					commodi molestias iure eum enim, modi quas praesentium quasi animi eaque minus voluptas! Commodi repellendus ea
-					reprehenderit cum dolor sit, saepe voluptatibus magnam nulla numquam ipsam magni sint in laboriosam odit
-					suscipit accusamus quasi vitae totam quaerat deleniti. Rem possimus quidem fugiat sit temporibus omnis libero
-					aperiam laudantium nisi qui et cumque veritatis voluptas atque minima cum, mollitia minus? Molestias nihil
-					laudantium illum dignissimos recusandae, fuga vero sapiente quae! Accusantium laborum laudantium illo suscipit
-					alias voluptatibus, animi, minus odio eligendi recusandae modi rem fugit quibusdam. Voluptatem excepturi quo
-					voluptate magnam, architecto, repellendus, quaerat temporibus laudantium iure ducimus reprehenderit odit dicta
-					suscipit numquam itaque aliquid vero. Repudiandae dignissimos voluptatem porro nesciunt. Provident dicta quod
-					facere nam aliquid voluptatem? A quisquam, et perferendis dolore nam, sint aperiam, voluptatum fuga officia
-					error odit necessitatibus iusto assumenda. Ducimus exercitationem vitae, dolores, reprehenderit nam, excepturi
-					laboriosam sapiente adipisci animi cupiditate harum omnis nemo. Asperiores voluptatum vitae soluta deserunt
-					quasi voluptate itaque nam inventore hic neque illo natus ratione magnam quod quibusdam cumque minus officia
-					dignissimos, eum aliquid. Dignissimos fuga minus cumque explicabo quo nesciunt dolore illo accusantium deserunt
-					ipsa consequuntur labore, eaque ut reprehenderit ullam magni. Accusamus magnam facere blanditiis dolorem eaque
-					at ipsum laborum voluptatem, aliquid tenetur explicabo, quam consequatur quidem, repellat recusandae. Tempora
-					saepe quos aspernatur ut? Accusamus nostrum tenetur, perspiciatis necessitatibus beatae neque? Tempora velit
-					soluta animi earum nesciunt, aliquid iste iusto ducimus praesentium dolorem quos inventore quidem. Perferendis
-					ullam ipsam animi ratione tempora! Asperiores consectetur assumenda ducimus architecto quisquam unde praesentium
-					nisi maxime, quidem fugit voluptatibus voluptates labore. Corporis doloribus voluptatem odit repellat saepe eos
-					asperiores? Ex aliquam voluptatem vel, quia eveniet laborum illo doloribus expedita possimus amet incidunt esse
-					harum in odit veritatis animi doloremque porro magnam. Sunt dolorum eos, ut amet omnis aperiam hic nisi sed odit
-					rem enim tempora officia exercitationem, fugit voluptas earum in, ad incidunt. Dicta rerum fuga blanditiis
-					quisquam cum facere eos provident, quibusdam saepe sequi officiis error iusto atque! Dolores porro optio
-					repellat! Dolorem libero iure molestiae inventore, asperiores, qui ea consequuntur laborum animi, quod magnam
-					labore autem adipisci fuga soluta voluptate incidunt expedita quae omnis. Nisi corrupti quam eaque, cumque
-					reprehenderit hic! Illo nulla corrupti ipsum blanditiis?
-
+				<div class="join">
+					<label @click="handleApprove(request)" class="join-item btn btn-success btn-sm">Approve</label>
+					<label @click="handleReject(request)" class="join-item btn btn-error btn-sm">Reject</label>
+					<label class="join-item btn btn-sm">Close</label>
 				</div>
+			</h1>
 
-			</section>
+			<div id="style-2" class="flex flex-col overflow-y-auto rounded-xl">
+				<section class="flex flex-col gap-2 rounded-s-xl rounded-bl-none relative bg-neutral-800 dark:bg-neutral-50 p-2">
+					<p class="flex justify-evenly sticky top-0">
+					<div class="flex w-full h-fit items-center group">
+						<div class="flex-1 grid h-12 flex-grow place-items-center text-xl uppercase badge font-bold badge-secondary">
+							Old
+						</div>
+						<div class="divider divider-horizontal text-center">
+						</div>
+						<div class="flex-1 grid h-12 flex-grow place-items-center text-xl uppercase font-bold badge badge-accent">
+							New
+						</div>
+					</div>
+					</p>
+
+					<h2 class="mx-auto mt-3 mb-5 text-3xl font-bold">Primary Applicant</h2>
+
+
+					<Divider>
+						<template #modified_apl="props">
+							{{ props.original?.plastName }}
+						</template>
+						Last Name
+						<template #apl="props">
+							{{ props.edited?.plastName }}
+						</template>
+					</Divider>
+					<Divider>
+						<template #modified_apl="props">
+							{{ props.original?.pfirstName }}
+						</template>
+						First Name
+						<template #apl="props">
+							{{ props.edited?.pfirstName }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.potherName }}
+						</template>
+						Other Name
+						<template #apl="props">
+							{{ props.edited?.potherName }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ useNuxtApp().$formatDateWords(new Date(props.original?.pdob!)) }}
+						</template>
+						Date of Birth
+						<template #apl="props">
+							{{ useNuxtApp().$formatDateWords(new Date(props.edited?.pdob!)) }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.pgender }}
+						</template>
+						Gender
+						<template #apl="props">
+							{{ props.edited?.pgender }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.pcity_ob }}
+						</template>
+						City Of Birth
+						<template #apl="props">
+							{{ props.edited?.pcity_ob }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.pcountry_ob }}
+						</template>
+						Country Of Birth
+						<template #apl="props">
+							{{ props.edited?.pcountry_ob }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.pcontact }}
+						</template>
+						Phone Number
+						<template #apl="props">
+							{{ props.edited?.pcontact }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.pother_contact }}
+						</template>
+						Next of Kin Contact
+						<template #apl="props">
+							{{ props.edited?.pother_contact }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.pemail }}
+						</template>
+						Email
+						<template #apl="props">
+							{{ props.edited?.pemail }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.ppassport_number }}
+						</template>
+						Passport Number
+						<template #apl="props">
+							{{ props.edited?.ppassport_number }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.passport_ex ? useNuxtApp().$formatDateWords(new Date(props.original?.passport_ex!)) : ''
+							}}
+						</template>
+						Passort Expiration <br /> Date
+						<template #apl="props">
+							{{ props.edited?.passport_ex ? useNuxtApp().$formatDateWords(new Date(props.edited?.passport_ex!)) : '' }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.pcountry_live_today }}
+						</template>
+						Location
+						<template #apl="props">
+							{{ props.edited?.pcountry_live_today }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.psocial_media.facebook }}
+						</template>
+						Facebook
+						<template #apl="props">
+							{{ props.edited?.psocial_media.facebook }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.psocial_media.instagram }}
+						</template>
+						Instagram
+						<template #apl="props">
+							{{ props.edited?.psocial_media.instagram }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.psocial_media.twitter }}
+						</template>
+						Twitter
+						<template #apl="props">
+							{{ props.edited?.psocial_media.twitter }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.pmarital_status }}
+						</template>
+						Marital Status
+						<template #apl="props">
+							{{ props.edited?.pmarital_status }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.peducation_level }}
+						</template>
+						Highest Level <br />of Education
+						<template #apl="props">
+							{{ props.edited?.peducation_level }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.children_number }}
+						</template>
+						Number of Children
+						<template #apl="props">
+							{{ props.edited?.children_number }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.pconf_code }}
+						</template>
+						Confirmation Code
+						<template #apl="props">
+							{{ props.edited?.pconf_code }}
+						</template>
+					</Divider>
+
+
+				</section>
+
+				<section v-if="request.modified_apl?.slastName"
+					class="flex flex-col gap-2 rounded-s-xl rounded-tl-none bg-neutral-800 dark:bg-neutral-50 p-2">
+					<h2 class="mx-auto mt-10 mb-5 text-3xl font-bold">Secondary Applicant</h2>
+					<Divider>
+						<template #modified_apl="props">
+							{{ props.original?.slastName }}
+						</template>
+						Last Name
+						<template #apl="props">
+							{{ props.edited?.slastName }}
+						</template>
+					</Divider>
+					<Divider>
+						<template #modified_apl="props">
+							{{ props.original?.sfirstName }}
+						</template>
+						First Name
+						<template #apl="props">
+							{{ props.edited?.sfirstName }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.sotherName }}
+						</template>
+						Other Name
+						<template #apl="props">
+							{{ props.edited?.sotherName }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ useNuxtApp().$formatDateWords(new Date(props.original?.sdob!)) }}
+						</template>
+						Date of Birth
+						<template #apl="props">
+							{{ useNuxtApp().$formatDateWords(new Date(props.edited?.sdob!)) }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.sgender }}
+						</template>
+						Gender
+						<template #apl="props">
+							{{ props.edited?.sgender }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.scity_ob }}
+						</template>
+						City Of Birth
+						<template #apl="props">
+							{{ props.edited?.scity_ob }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.scountry_ob }}
+						</template>
+						Country Of Birth
+						<template #apl="props">
+							{{ props.edited?.scountry_ob }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.scontact }}
+						</template>
+						Phone Number
+						<template #apl="props">
+							{{ props.edited?.scontact }}
+						</template>
+					</Divider>
+
+				</section>
+
+				<section v-for="(ward, idx) in request.modified_apl?.wards" v-if="request.modified_apl?.wards.length! > 0"
+					class="flex flex-col gap-2 rounded-s-xl rounded-tl-none bg-neutral-800 dark:bg-neutral-50 p-2">
+					<h2 class="mx-auto mt-10 mb-5 text-3xl font-bold">Ward Applicant {{ idx + 1 }}</h2>
+					<Divider>
+						<template #modified_apl="props">
+							{{ props.original?.wards[idx].wlastName }}
+						</template>
+						Last Name
+						<template #apl="props">
+							{{ props.edited?.wards[idx].wlastName }}
+						</template>
+					</Divider>
+					<Divider>
+						<template #modified_apl="props">
+							{{ props.original?.wards[idx].wfirstName }}
+						</template>
+						First Name
+						<template #apl="props">
+							{{ props.edited?.wards[idx].wfirstName }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.wards[idx].wotherName }}
+						</template>
+						Other Name
+						<template #apl="props">
+							{{ props.edited?.wards[idx].wotherName }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ useNuxtApp().$formatDateWords(new Date(props.original?.wards[idx].wdob!)) }}
+						</template>
+						Date of Birth
+						<template #apl="props">
+							{{ useNuxtApp().$formatDateWords(new Date(props.edited?.wards[idx].wdob!)) }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.wards[idx].wgender }}
+						</template>
+						Gender
+						<template #apl="props">
+							{{ props.edited?.wards[idx].wgender }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.wards[idx].wcity_ob }}
+						</template>
+						City Of Birth
+						<template #apl="props">
+							{{ props.edited?.wards[idx].wcity_ob }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
+							{{ props.original?.wards[idx].wcountry_ob }}
+						</template>
+						Country Of Birth
+						<template #apl="props">
+							{{ props.edited?.wards[idx].wcountry_ob }}
+						</template>
+					</Divider>
+
+				</section>
+			</div>
+
 		</div>
+
+
+		<input type="checkbox" id="approved" :checked="if_ap" class="modal-toggle" />
+		<div class="modal">
+			<div
+				class="modal-box dark:bg-neutral-50 dark:text-black dark:outline dark:outline-4 dark:outline-green-500 bg-neutral-800 text-white text-center">
+				<h3 class="text-lg font-bold">SUCCESS</h3>
+				<p class="py-4">Request Approved!</p>
+			</div>
+			<label @click="$router.push('/database')" class="modal-backdrop" for="approved">Close</label>
+		</div>
+
+		<input type="checkbox" id="rejected" :checked="if_rej" class="modal-toggle" />
+		<div class="modal">
+			<div
+				class="modal-box dark:bg-neutral-50 dark:text-black dark:outline dark:outline-4 dark:outline-red-500 bg-neutral-800 text-white text-center">
+				<h3 class="text-lg font-bold">SUCCESS</h3>
+				<p class="py-4 text-red-500 dark:text-neutral-800">Request Rejected!</p>
+			</div>
+			<label @click="$router.push('/database')" class="modal-backdrop" for="rejected">Close</label>
+		</div>
+
 	</div>
 </template>
 
 <script setup lang="ts">
 import { useAplStore } from '@/store/apl';
-import { useAppStore } from '@/store/app';
+import { Requests } from '@/interfaces/interfaces';
 import { storeToRefs } from 'pinia';
-const apl_ = useAplStore()
-const app_ = useAppStore()
-const { curr_compared_request: request } = storeToRefs(apl_)
-const { total_apls } = storeToRefs(app_)
 
-const cont1 = ref()
-const cont2 = ref()
+const apl_ = useAplStore()
+const { curr_compared_request: request } = storeToRefs(apl_)
+const { $SB } = useNuxtApp()
+const if_rej = ref(false)
+const if_ap = ref(false)
+
+
 onMounted(() => {
 	if (!request.value.modified_apl) useNuxtApp().$router.push({ path: '/database' })
-})
+});
 
-function syncScroll(event: any) {
-	const scrollPosition = event.target.scrollTop;
-	for (const container of [cont1, cont2]) {
-		if (container !== event.target.className) {
-			const otherContainer = document.querySelector(`.${container}`);
-			otherContainer!.scrollTop = scrollPosition;
-		}
+async function deleteApplicant(req: Requests) {
+	try {
+		let { data, error } = await useNuxtApp().$SB.from('applicants').delete().eq('apl_id', req.apl_id)
+		if (error) throw error
+
+		return await updateRequestType(req, 'approved')
+	} catch (error) {
+		console.log(error);
 	}
 }
+
+async function updateRequestType(req: Requests, type: string) {
+	try {
+		let { data, error } = await useNuxtApp().$SB.from('requests').update({ status: type }).eq('id', req.id)
+		if (error) throw error
+		return data
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+async function approveDiscount(req: Requests) {
+	req.modified_apl!.totalPayment = Number(req.body)
+
+	try {
+		let { data, error } = await $SB.from('applicants').insert(req.modified_apl).select()
+		if (error) throw error
+		console.log(data);
+
+		return data
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+async function updateApplicant(req: Requests) {
+	let apl = req.modified_apl
+	try {
+		let { data, error } = await $SB
+			.from('applicants')
+			.update(apl)
+			.eq('apl_id', req.apl_id)
+			.select()
+		if (error) throw error
+		console.log(data);
+		return data
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+async function handleApprove(req: Requests) {
+	// type of request
+	let ty = req.modify_type
+
+	if (ty == 'delete') {
+		await deleteApplicant(req)
+		await updateRequestType(req, 'approved')
+		if_ap.value = true
+	} else if (ty == 'discount') {
+		await approveDiscount(req)
+		await updateRequestType(req, 'approved')
+		if_ap.value = true
+
+	} else if (ty == 'edit') {
+		await updateApplicant(req)
+		await updateRequestType(req, 'approved')
+		if_ap.value = true
+	}
+}
+
+async function handleReject(req: Requests) {
+	let ty = req.modify_type
+	if (ty == 'delete') {
+		await updateRequestType(req, 'rejected')
+		if_rej.value = true
+	}
+	if (ty == 'discount') {
+		await updateRequestType(req, 'rejected')
+		if_rej.value = true
+	}
+	if (ty == 'edit') {
+		await updateRequestType(req, 'rejected')
+		if_rej.value = true
+	}
+}
+
 </script>
 
 <style scoped></style>

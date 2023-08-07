@@ -149,9 +149,9 @@
 									class="join-item btn btn-error btn-sm">Reject</label>
 								<label :for="`my_modal_${i}`" v-if="req.modify_type !== 'discount' && role" @click="handleOpen(req)"
 									class="join-item btn btn-primary btn-sm">Open</label>
-								<label :for="`my_modal_${i}`" class="join-item btn btn-sm">Close!</label>
+								<label :for="`my_modal_${i}`" class="join-item btn btn-sm">Close</label>
 							</div>
-							<label v-else :for="`my_modal_${i}`" class="join-item btn btn-sm">Close!</label>
+							<label v-else :for="`my_modal_${i}`" class="join-item btn btn-sm">Close</label>
 						</div>
 					</div>
 				</div>

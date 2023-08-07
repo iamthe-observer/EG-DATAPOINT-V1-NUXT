@@ -134,14 +134,37 @@
 					</div>
 				</div>
 			</div>
-			<div v-if="announcements.length > 0"
-				class="ann_btn w-[90%] whitespace-nowrap text-sm mx-auto bg-neutral-700 py-3 text-center rounded-xl hover:text-secondary cursor-pointer dark:text-white dark:bg-primary"
-				@click="$router.push('/database')">view
-				{{
-					announcements.length < 5 ? `` : `(${announcements.length - 4})` }} more announcement(s)</div>
+
+			<div class="indicator">
+				<span v-if="announcements.length >= 5" class="indicator-item badge badge-secondary badge-sm">{{
+					announcements.length < 5 ? 0 : `(${announcements.length - 4})` }} </span>
+						<btn v-if="announcements.length > 0"
+							class="ann_btn w-full px-4 text-sm mx-auto py-3 hover:text-secondary dark:hover:text-accent cursor-pointer dark:text-neutral-700 btn-neo bg-neutral-700"
+							@click="$router.push('/database')">more announcements</btn>
 			</div>
+
 		</div>
+	</div>
 </template>
+
+<style scoped>
+.btn-neo {
+	transition: all .5s ease-out;
+	border-radius: 11px;
+	background: #e0e0e0;
+	box-shadow: inset 29px 29px 59px #dadada,
+		inset -29px -29px 59px rgb(255, 255, 255);
+}
+
+/* .btn-neo {
+	trannn: all .5s ease-out;
+	border-radius: 11px;
+	background: #e0e0e0;
+box-shadow: inset 29px 29px 59px #4e4e4e,
+inset -29px -29px 59px rgb(64 64 64);
+}
+*/
+</style>
 
 <script setup lang="ts">
 import { useAnnStore } from '@/store/announce';
