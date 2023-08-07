@@ -83,7 +83,7 @@
 						<!-- <tr v-for="(apl, i) in all_my_apls" -->
 						<tr v-for="(apl, i) in curr_filtered_apls"
 							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-black dark:hover:bg-neutral-200"
-							@dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }">
+							@dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!); }">
 							<th class="font-normal">
 								{{ i + 1 }}
 							</th>
@@ -178,7 +178,6 @@
 
 					<tbody class="">
 						<!-- row -->
-						<!-- <tr v-for="(apl, i) in all_my_apls" -->
 						<tr @dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
 							v-for="(apl, i) in _curr_filtered_apls"
 							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-black dark:hover:bg-neutral-200">
@@ -343,6 +342,7 @@ function NextPage(idx: number) {
 function PrevPage(idx: number) {
 	if (idx != 1) page_index.value--
 }
+
 
 const filter_alpha = ref(false)
 const filter_recent = ref(true)
