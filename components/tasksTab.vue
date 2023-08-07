@@ -52,7 +52,7 @@
 						</label>
 					</div>
 				</span>
-				<span class="flex flex-col justify-center truncate flex-1 overflow-x-hidden text-sm">
+				<span class="flex flex-col justify-center truncate truncate- w-[100px] flex-1 overflow-x-hidden text-sm">
 					<span :class="['truncate-', task.done ? 'text-neutral-600 line-through' : '']">{{ task.body }}</span>
 				</span>
 				<div class="flex flex-col text-xs text-right text-neutral-400">

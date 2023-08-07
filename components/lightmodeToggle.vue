@@ -1,6 +1,6 @@
 <template>
 	<section class="__lightmode w-full h-fit flex flex-col items-center gap-2 pb-4">
-		<div class="dark:font-semibold dark:text-accent"><span>Mode</span></div>
+		<div class="dark:font-semibold dark:text-accent"><span class="text-sm">Mode</span></div>
 		<div ref="toggle"
 			class="__mode w-10 dark:bg-neutral-300 bg-neutral-900 h-full rounded-full flex flex-col relative items-center justify-evenly gap-5 py-3 transition-all ease-out duration-200">
 			<SvgsLight @click="toggleLight" :state="dark_mode" class="z-10" />

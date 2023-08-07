@@ -90,7 +90,7 @@
 							<th>
 								<div class="dropdown dropdown-right">
 									<label tabindex="0"
-										class="btn btn-xs dark:border-none dark:text-neutral-900 dark:bg-white rounded-full m-1">options <svg
+										class="btn btn-xs dark:border-none dark:text-neutral-900 dark:bg-white rounded-full m-1 btn-circle"><svg
 											class="w-4 aspect-square" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
 											<path fill="#888888"
 												d="M4.957 5a1 1 0 0 0-.821 1.571l2.633 3.784a1.5 1.5 0 0 0 2.462 0l2.633-3.784A1 1 0 0 0 11.043 5H4.957Z" />
@@ -188,7 +188,7 @@
 							<th>
 								<div class="dropdown dropdown-right">
 									<label tabindex="0"
-										class="btn btn-xs dark:border-none dark:text-neutral-900 dark:bg-white rounded-full m-1">options <svg
+										class="btn btn-xs dark:border-none dark:text-neutral-900 dark:bg-white rounded-full m-1 btn-circle"><svg
 											class="w-4 aspect-square" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
 											<path fill="#888888"
 												d="M4.957 5a1 1 0 0 0-.821 1.571l2.633 3.784a1.5 1.5 0 0 0 2.462 0l2.633-3.784A1 1 0 0 0 11.043 5H4.957Z" />
@@ -344,8 +344,8 @@ function PrevPage(idx: number) {
 	if (idx != 1) page_index.value--
 }
 
-const filter_alpha = ref(true)
-const filter_recent = ref(false)
+const filter_alpha = ref(false)
+const filter_recent = ref(true)
 const filter_reverse = ref(false)
 
 const order_alpha_apls = computed(() => sortAplsByName(all_my_apls.value).slice((page_index.value * step.value) - step.value, page_index.value * step.value))

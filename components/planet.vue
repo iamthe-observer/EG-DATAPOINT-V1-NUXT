@@ -15,7 +15,7 @@ onMounted(() => {
 	let aspect = window.innerWidth / window.innerHeight;
 	let camera = new THREE.PerspectiveCamera(45, aspect, 0.1, 1500);
 	let cameraRotation = 0;
-	let cameraRotationSpeed = 0.001;
+	let cameraRotationSpeed = 0.002;
 	let cameraAutoRotation = true;
 
 	// Lights
@@ -34,7 +34,7 @@ onMounted(() => {
 		material: function (options) {
 			let material = new THREE.MeshPhongMaterial();
 			if (options) {
-				for (var property in options) {
+				for (let property in options) {
 					material[property] = options[property];
 				}
 			}
@@ -189,12 +189,12 @@ onMounted(() => {
 	// Marker Proto
 	let markerProto = {
 		latLongToVector3: function latLongToVector3(latitude, longitude, radius, height) {
-			var phi = (latitude) * Math.PI / 180;
-			var theta = (longitude - 180) * Math.PI / 180;
+			let phi = (latitude) * Math.PI / 180;
+			let theta = (longitude - 180) * Math.PI / 180;
 
-			var x = -(radius + height) * Math.cos(phi) * Math.cos(theta);
-			var y = (radius + height) * Math.sin(phi);
-			var z = (radius + height) * Math.cos(phi) * Math.sin(theta);
+			let x = -(radius + height) * Math.cos(phi) * Math.cos(theta);
+			let y = (radius + height) * Math.sin(phi);
+			let z = (radius + height) * Math.cos(phi) * Math.sin(theta);
 
 			return new THREE.Vector3(x, y, z);
 		},
@@ -245,6 +245,27 @@ onMounted(() => {
 		};
 	}
 
+	function positionDotOnEquator(object3D, size, color) {
+		const equatorPosition = new THREE.Vector3(0, 0, 0);
+		const equatorRadius = earth.getObjectByName('surface').geometry.parameters.radius;
+		const equatorHeight = 0;
+
+		const position = markerProto.latLongToVector3(6, 4, equatorRadius, equatorHeight);
+		const dot = markerProto.marker(size, color, position);
+
+		object3D.add(dot);
+	}
+
+	// Call the function to place the glowing pulsing dot on the equator
+	positionDotOnEquator(earth, 0.01, 0xff0000); // Adjust size and color as needed
+
+	// On window resize, adjust camera aspect ratio and renderer size
+	window.addEventListener('resize', function () {
+		camera.aspect = window.innerWidth / window.innerHeight;
+		camera.updateProjectionMatrix();
+		renderer.setSize(window.innerWidth, window.innerHeight);
+	});
+
 	// Galaxy
 	let galaxyGeometry = new THREE.SphereGeometry(100, 32, 32);
 	let galaxyMaterial = new THREE.MeshBasicMaterial({
@@ -284,13 +305,6 @@ onMounted(() => {
 	earth.castShadow = true;
 	earth.getObjectByName('surface').geometry.center();
 
-	// On window resize, adjust camera aspect ratio and renderer size
-	window.addEventListener('resize', function () {
-		camera.aspect = window.innerWidth / window.innerHeight;
-		camera.updateProjectionMatrix();
-		renderer.setSize(window.innerWidth, window.innerHeight);
-	});
-
 	// Main render function
 	let render = function () {
 		earth.getObjectByName('surface').rotation.y += 1 / 32 * 0.01;
@@ -307,6 +321,8 @@ onMounted(() => {
 	};
 
 	render();
+
+
 
 })
 </script>

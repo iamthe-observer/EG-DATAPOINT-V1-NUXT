@@ -77,7 +77,9 @@
 					</button>
 				</div>
 
-				<span v-if="!edit_mode" class="font-semibold">{{ fullName ? fullName : 'Applicant' }}</span>
+				<span v-if="!edit_mode" class="font-semibold text-right">{{ fullName ? fullName : 'Applicant' }}<br />By: {{
+					creator
+				}}</span>
 				<div v-else class="flex gap-3">
 					<div class="form-control w-full max-w-xs">
 						<label class="label">
@@ -198,6 +200,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
 import { useAplStore } from '@/store/apl'
+import { useProfileStore } from '@/store/profile'
 import { useRequestStore } from '@/store/requests'
 import { Applicant, Requests } from 'interfaces/interfaces';
 import ViewApplicant from '@/components/ViewApplicant.vue';
@@ -221,6 +224,7 @@ const request_body = ref<string>()
 const curr_apl = ref<Applicant>()
 const default_apl = ref<Applicant>()
 const if_sent = ref(false)
+const creator = ref()
 
 watchEffect(() => {
 	console.log(fullName.value);
@@ -230,6 +234,7 @@ watchEffect(() => {
 const handleEmit = (e: Applicant) => {
 	curr_apl.value = e
 	default_apl.value = e
+	creator.value = useProfileStore().profiles.find(prof => prof.id == e.user_id)?.fullname
 	// fullName.value = e.fullName
 	firstName.value = e.pfirstName
 	otherName.value = e.potherName

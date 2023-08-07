@@ -5,7 +5,7 @@
 			<div class="containers total_applicants flex items-center px-3 justify-between w-full h-full gap-4">
 				<p class="flex flex-col gap-2 h-full w-full justify-center">
 					<textarea v-model="new_task"
-						class="textarea outline outline-4 outline-neutral-700 text-sm h-[80%] w-full dark:bg-neutral-300 dark:outline-neutral-400"
+						class="textarea outline outline-4 outline-neutral-700 text-sm h-[80%] w-full dark:bg-neutral-300 bg-neutral-900 dark:outline-neutral-200"
 						placeholder="Create a new Task..."></textarea>
 				</p>
 
@@ -47,7 +47,7 @@
 			<div class="containers total_applicants flex items-center px-3 justify-between w-full h-full gap-4">
 				<p class="flex flex-col gap-2 h-full w-full justify-center">
 					<textarea v-model="new_task"
-						class="textarea outline outline-4 outline-neutral-700 text-sm h-[80%] w-full dark:bg-neutral-300 dark:outline-neutral-400"
+						class="textarea outline outline-4 outline-neutral-700 text-sm h-[80%] w-full dark:bg-neutral-300 bg-neutral-900 dark:outline-neutral-200"
 						placeholder="Create a new Task..."></textarea>
 				</p>
 
@@ -135,8 +135,8 @@
 				<div class="flex flex-col gap- w-3/5 h-full items-center justify-center">
 					<span class="text-neutral-500 text-sm">Recent Daily Applicants</span>
 					<div v-for="i in [5, 4, 3, 2, 1]" class="flex gap-2 w-full items-center">
-						<progress class="progress progress-secondary bg-neutral-700 dark:bg-white" :value="getAplNumByDay(i)"
-							:max="getMaxDay.maxCount"></progress>
+						<progress class="progress progress-secondary dark:progress-accent bg-neutral-700 dark:bg-white"
+							:value="getAplNumByDay(i)" :max="getMaxDay.maxCount"></progress>
 						<span
 							:class="i == 0 ? 'w-6 text-md text-secondary tooltip tooltip-secondary tooltip-right' : 'w-6 text-sm tooltip tooltip-secondary tooltip-right'"
 							:data-tip="i == 0 ? `Today / GHC${getTotalPaymentByDay(i)}.00` : `${i} days ago / GHC${getTotalPaymentByDay(i)}.00`">{{

@@ -40,7 +40,7 @@
 								:src="URLs![idx].signedUrl !== null ? URLs![idx].signedUrl : '/svg/image.svg'" />
 						</div>
 					</div>
-					<p class="font-bold pt-4 text-sm justify-end">{{ apl.fullName }}</p>
+					<p class="font-bold pt-4 text-sm text-center justify-end">{{ apl.fullName }}</p>
 
 					<p class="font-normal text-neutral-400 text-xs dark:text-neutral-600">{{ apl.pcontact }}</p>
 
@@ -97,7 +97,7 @@
 								:src="URLs![idx].signedUrl !== null ? URLs![idx].signedUrl : '/svg/image.svg'" />
 						</div>
 					</div>
-					<p class="font-semibold pt-4 text-sm justify-end">{{ apl.fullName }}</p>
+					<p class="font-semibold pt-4 text-sm text-center justify-end">{{ apl.fullName }}</p>
 
 					<p class="font-normal text-neutral-400 text-xs dark:text-neutral-600">{{ apl.pcontact }}</p>
 

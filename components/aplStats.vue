@@ -14,7 +14,7 @@
 				<div :class="['stat-title font-semibold', dark_mode ? 'text-neutral-500' : 'text-neutral-700']">Today's Sales
 				</div>
 				<div :class="[dark_mode ? 'text-neutral-500' : 'text-neutral-400', 'stat-value flex items-center gap-1']">
-					<SvgsCedis :classer="`w-5 fill-neutral-500`" />{{ today_sales_admin }}.00
+					<SvgsCedis :classer="`w-5 fill-neutral-500`" />{{ today_sales }}.00
 				</div>
 				<div class="flex w-full text-sm stat-desc drop-shadow-lg">
 					<span :class="[dark_mode ? 'text-primary' : 'text-secondary', 'whitespace-pre-wrap']">{{

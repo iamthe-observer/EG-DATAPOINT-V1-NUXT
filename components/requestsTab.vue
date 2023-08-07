@@ -177,7 +177,7 @@
 						{{ getCreatedAtTime(req) }}
 					</span>
 					<span
-						:class="[getStatus(req) == 'pending' ? 'text-secondary' : '', getStatus(req) == 'rejected' ? 'text-error' : '', getStatus(req) == 'approved' ? 'text-success' : '']">
+						:class="[getStatus(req) == 'pending' ? 'text-secondary dark:text-accent' : '', getStatus(req) == 'rejected' ? 'text-error' : '', getStatus(req) == 'approved' ? 'text-success' : '', 'text-sm']">
 						{{ getStatus(req) }}
 					</span>
 				</div>
@@ -191,6 +191,7 @@ import { storeToRefs } from 'pinia';
 import { useRequestStore } from '@/store/requests';
 import { Applicant, Requests } from '@/interfaces/interfaces';
 import { useProfileStore } from '@/store/profile';
+import { useAplStore } from '@/store/apl';
 
 const { $SB } = useNuxtApp()
 defineProps<{
@@ -332,6 +333,10 @@ async function handleReject(req: Requests) {
 }
 
 async function handleOpen(req: Requests) {
+	useNuxtApp().$router.push(`/compareApl/${req.id}`)
+	useAplStore().$patch({
+		curr_compared_request: req
+	})
 	console.log(req.modified_apl?.fullName);
 }
 

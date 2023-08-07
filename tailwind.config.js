@@ -60,10 +60,7 @@ module.exports = {
         'span-7': 'span 7 / span 7',
       },
       fontFamily: {
-        Jost: 'Jost',
-        Fredoka: 'Fredoka',
-        Lekton: 'Lekton',
-        Foldit: 'Foldit',
+        Urbanist: 'Urbanist',
       },
     },
   },

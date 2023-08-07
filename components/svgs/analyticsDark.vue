@@ -15,13 +15,11 @@ const state = computed(() => {
 		// hovered
 		return {
 			fill1: '#a020f03f',
-			fill2: '#a020f03f',
 			stroke: '#a020f0',
 		}
 		// !hovered
 	} else return {
 		fill1: '#222',
-		fill2: '#222',
 		stroke: 'none',
 	}
 })
