@@ -6,8 +6,8 @@
 			<h1
 				class="px-5 py-5 rounded-2xl bg-neutral-700 dark:bg-primary text-2xl w-full flex justify-between items-center sticky top-0 mb-2 shadow-lg z-10">
 				<span ref="header"
-					class="flex flex-col gap-1 dark:text-white dark:hover:text-purple-600 hover:text-neutral-600 group">Add a new
-					Applicant
+					class="flex flex-col gap-1 dark:text-white dark:hover:text-purple-600 hover:text-neutral-600 group">
+					<span class="text-lg">Add a new Applicant</span>
 					<button v-if="if_hover_header" onclick="request_modal.showModal()"
 						class="btn btn-ghost btn-xs dark:group-hover:text-white group-hover:text-secondary">Request Discount</button>
 

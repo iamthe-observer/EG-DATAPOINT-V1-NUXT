@@ -1,35 +1,41 @@
 <template>
 	<div class="relative w-full grid grid-cols-12 gap-5 px-5 py-2">
-		<div class="col-span-2 translate-x-1 row-span-2 flex flex-col items-center gap-3">
-			<avatarSelect :src="primeSRC" class="" />
 
-			<input @change="handleFile" type="file"
-				class="file-input file-input-primary dark:text-neutral-900 dark:bg-white file-input-xs w-full max-w-xs" />
-		</div>
+		<div class="col-span-full flex">
+			<div class="col-span-2 translate-x-1 row-span-2 flex flex-col items-center gap-3">
+				<avatarSelect :src="primeSRC" class="" />
 
-		<!-- name -->
-		<div class="flex gap-4 col-span-10 pl-6 justify-center">
-			<TextInput v-model="applicant.plastName">Last Name</TextInput>
-			<TextInput v-model="applicant.pfirstName">First Name</TextInput>
-			<TextInput v-model="applicant.potherName">Other Name</TextInput>
-		</div>
+				<input @change="handleFile" type="file"
+					class="file-input file-input-primary dark:text-neutral-900 dark:bg-white file-input-xs w-full max-w-xs" />
+			</div>
 
-		<div class="flex gap-4 col-span-10 pl-6 justify-center">
-			<DatePicker dark :color="'purple'" is-dark v-model="applicant.pdob" mode="date">
-				<template #default="{ togglePopover }">
-					<TextInput :icon="true" :value="applicant.pdob ? $formatDate(new Date(applicant.pdob!)) : ''"
-						@click="togglePopover">Date of
-						Birth
-					</TextInput>
-					<!-- <TextInput :icon="true" :value="pdob ? $formatDate(new Date(pdob)) : $formatDate(prime_apl.pdob!) || ''"
+			<div class="flex flex-col flex-1 justify-evenly">
+				<!-- name -->
+				<div class="flex gap-4 col-span-10 pl-6 justify-center">
+					<TextInput v-model="applicant.plastName">Last Name</TextInput>
+					<TextInput v-model="applicant.pfirstName">First Name</TextInput>
+					<TextInput v-model="applicant.potherName">Other Name</TextInput>
+				</div>
+
+				<div class="flex gap-4 col-span-10 pl-6 justify-center">
+					<DatePicker dark :color="'purple'" is-dark v-model="applicant.pdob" mode="date">
+						<template #default="{ togglePopover }">
+							<TextInput :icon="true" :value="applicant.pdob ? $formatDate(new Date(applicant.pdob!)) : ''"
+								@click="togglePopover">Date of
+								Birth
+							</TextInput>
+							<!-- <TextInput :icon="true" :value="pdob ? $formatDate(new Date(pdob)) : $formatDate(prime_apl.pdob!) || ''"
 						@click="togglePopover">Date of Birth
 					</TextInput> -->
-				</template>
-			</DatePicker>
-			<SelectInput :options="['male', 'female']" v-model="applicant.pgender">
-				Gender
-			</SelectInput>
-			<TextInput v-model="applicant.pcity_ob">City of Birth</TextInput>
+						</template>
+					</DatePicker>
+					<SelectInput :options="['male', 'female']" v-model="applicant.pgender">
+						Gender
+					</SelectInput>
+					<TextInput v-model="applicant.pcity_ob">City of Birth</TextInput>
+				</div>
+
+			</div>
 		</div>
 
 		<!-- <div class="flex gap-4 col-span-12 justify-center">
