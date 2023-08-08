@@ -105,6 +105,11 @@
 						Date(apl.created_at!)) }}
 					</p>
 
+					<p class="font-normal text-neutral-400 text-xs dark:text-neutral-600">By: {{ profiles.find(user => user.id ==
+						apl.user_id)!.fullname ||
+						'User' }}
+					</p>
+
 					<div class="flex absolute bottom-1 left-1 justify-center pt-5 gap-1 items-center">
 						<button @click="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
 							class="btn btn-primary mr-3 rounded-xl">View</button>
@@ -125,7 +130,7 @@ import { useAppStore } from '@/store/app';
 import { useProfileStore } from '@/store/profile';
 import { useViewAplStore } from '@/store/viewApl';
 
-const { role } = storeToRefs(useProfileStore())
+const { role, profiles } = storeToRefs(useProfileStore())
 
 // const role = computed(() => {
 // 	return profile.value?.role || false
@@ -141,6 +146,10 @@ const path = computed(() => {
 		return useNuxtApp().$sortByRecency(total_daily_applicants.value).map(apl => apl.aplImg_path.primePath[0])
 	}
 })
+const path_all = computed(() => {
+	return useNuxtApp().$sortByRecency(total_daily_applicants.value).map(apl => apl.aplImg_path.primePath[0])
+})
+
 const path_admin = computed(() => {
 	if (total_apls.value.length >= 5) {
 		return useNuxtApp().$sortByRecency(total_apls.value).map(apl => apl.aplImg_path.primePath[0]).slice(0, 5)
@@ -167,11 +176,17 @@ async function loadUrls() {
 		if (!role.value) {
 			if (total_daily_applicants.value.length == 0) return
 			let { data, error } = await useNuxtApp().$SB.storage.from('applicants').createSignedUrls(path.value, 10)
+			let { data: data_all, error: err } = await useNuxtApp().$SB.storage.from('applicants').createSignedUrls(path_all.value, 10)
 			// console.log(data);
 
 			if (error) throw error
+			if (err) throw err
 			loading.value = false
 			URLs.value = data
+
+			useAppStore().$patch({
+				daily_urls: data_all
+			})
 			// console.log(URLs.value);
 		} else if (role.value) {
 			if (APLS!.length == 0) return

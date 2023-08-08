@@ -96,7 +96,19 @@
 			</div>
 
 			<!-- total daily applicants -->
-			<div class="containers total_applicants px-4 flex items-center justify-between w-full h-full">
+			<div onclick="viewtodayapls.showModal()"
+				class="containers total_applicants px-4 flex items-center justify-between w-full h-full hover:cursor-pointer hover:bg-neutral-700 transition-all duration-200 ease-out">
+
+				<dialog id="viewtodayapls" class="modal">
+					<form method="dialog"
+						class="modal-box dark:bg-neutral-50 dark:text-black bg-neutral-800 text-white text-center max-w-full h-5/6">
+						<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+
+						<ViewTodayApplicants />
+
+					</form>
+				</dialog>
+
 				<p class="flex flex-col gap-2">
 					<span class="text-sm text-neutral-500">Today's Applicants</span>
 					<span class="font-medium text-2xl">{{ total_daily_applicants?.length }}</span>

@@ -21,7 +21,7 @@
 				</svg>
 			</div>
 		</div>
-		<div v-if="username" class="__username text-sm">@{{ username || 'User' }}</div>
+		<!-- <div v-if="username" class="__username text-sm">@{{ username || 'User' }}</div> -->
 		<div v-if="role"
 			class="__username text-[.6rem] bg-red-600 dark:bg-red-400 dark:text-white dark:outline dark:outline-1 dark:outline-red-200 px-2 rounded-full outline-1 outline-white outline">
 			{{ role
