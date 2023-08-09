@@ -121,10 +121,10 @@
 							</td>
 							<td>
 								<div class="flex flex-col items-end">
-									<span class="">
+									<span class="text-right">
 										{{ apl.pcontact }}
 									</span>
-									<span class="text-xs">
+									<span class="text-xs text-right">
 										{{ apl.pother_contact }}
 									</span>
 								</div>
@@ -173,6 +173,7 @@
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Phone Number</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Created</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Type</th>
+							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Location</th>
 						</tr>
 					</thead>
 
@@ -218,10 +219,10 @@
 							</td>
 							<td>
 								<div class="flex flex-col items-end">
-									<span class="">
+									<span class="text-right">
 										{{ apl.pcontact }}
 									</span>
-									<span class="text-xs">
+									<span class="text-xs text-right">
 										{{ apl.pother_contact }}
 									</span>
 								</div>
@@ -243,6 +244,11 @@
 							<td>
 								<div class="">
 									{{ typeOfApl(apl) }}
+								</div>
+							</td>
+							<td>
+								<div class="text-right">
+									{{ apl.location![0].toUpperCase() + apl.location?.substring(1) }}
 								</div>
 							</td>
 						</tr>
