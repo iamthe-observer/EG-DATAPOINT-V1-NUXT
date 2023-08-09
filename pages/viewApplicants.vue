@@ -12,6 +12,7 @@
 						View All Applicants
 					</span>
 					<span class="text-2xl">({{ total_apls.length }})</span>
+
 					<select v-model="curr_user"
 						class="select w-full select-sm rounded-full bg-[rgb(13,13,13)] dark:bg-neutral-50 dark:text-black">
 						<option selected value="all">All Users</option>
