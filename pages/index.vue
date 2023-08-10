@@ -1,6 +1,6 @@
 <template>
 	<div class="w-full h-full flex justify-between p-7 relative">
-		<Planet />
+		<!-- <Planet /> -->
 		<div class="absolute bg- inset-0 my-7 mx-7">
 			<div class="w-full h-full flex relative">
 				<div class="l-slide bg-white w-[00px] rounded-2xl relative"></div>
