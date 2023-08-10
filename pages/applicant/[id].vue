@@ -1,5 +1,5 @@
 <template>
-	<div :key="num" class="w-full h-full flex flex-col rounded-2xl pb-2">
+	<div :key="num" class="w-full h-full flex flex-col rounded-2xl">
 		<div id="style-1"
 			class="w-full h-full rounded-2xl bg-neutral-800 dark:bg-neutral-50 col-span-full row-span-full pb-2 overflow-y-auto text-justify px-0 relative">
 			<h1

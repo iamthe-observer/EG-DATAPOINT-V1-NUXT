@@ -1,7 +1,7 @@
 <template>
-	<div :key="num" class="w-full h-full flex flex-col rounded-2xl pb-2">
+	<div :key="num" class="w-full h-full flex flex-col rounded-2xl">
 		<div ref="container"
-			class="w-full h-full rounded-2xl dark:bg-neutral-50 bg-neutral-800 col-span-full row-span-full pb-2 overflow-y-scroll text-justify px-0 relative dark:shadow-xl"
+			class="w-full h-full rounded-2xl dark:bg-neutral-50 bg-neutral-800 col-span-full row-span-full overflow-y-scroll text-justify px-0 relative dark:shadow-xl"
 			id="style-1">
 			<h1
 				class="px-5 py-5 rounded-2xl bg-neutral-700 dark:bg-primary text-2xl w-full flex justify-between items-center sticky top-0 mb-2 shadow-lg z-10">

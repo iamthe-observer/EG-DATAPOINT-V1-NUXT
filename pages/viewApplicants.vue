@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full h-full flex flex-col rounded-2xl pb-2">
+	<div class="w-full h-full flex flex-col rounded-2xl">
 		<div
 			class="w-full h-full rounded-2xl dark:bg-neutral-50 dark:shadow-xl bg-neutral-800 col-span-full row-span-full text-justify relative flex flex-col">
 
@@ -12,7 +12,6 @@
 						View All Applicants
 					</span>
 					<span class="text-2xl">({{ total_apls.length }})</span>
-
 					<select v-model="curr_user"
 						class="select w-full select-sm rounded-full bg-[rgb(13,13,13)] dark:bg-neutral-50 dark:text-black">
 						<option selected value="all">All Users</option>
@@ -117,7 +116,10 @@
 							<td>
 								{{ useNuxtApp().$formatDateWords(new Date(apl.pdob!)) }}
 								<br />
-								<span class="badge badge-ghost badge-sm dark:badge-accent mr-1">{{ apl.pcity_ob }}</span>
+								<span
+									class="badge badge-ghost badge-sm dark:badge-accent mr-1 truncate- truncate max-w-[100px] text-ellipsis">{{
+										apl.pcity_ob
+									}}</span>
 								<span class="badge badge-ghost badge-sm dark:badge-accent">{{ apl.pcountry_ob }}</span>
 							</td>
 							<td>
@@ -215,7 +217,9 @@
 							<td>
 								{{ useNuxtApp().$formatDateWords(new Date(apl.pdob!)) }}
 								<br />
-								<span class="badge badge-ghost badge-sm dark:badge-accent mr-1">{{ apl.pcity_ob }}</span>
+								<span
+									class="badge badge-ghost badge-sm dark:badge-accent mr-1 truncate- truncate max-w-[100px] text-ellipsis">{{
+										apl.pcity_ob }}</span>
 								<span class="badge badge-ghost badge-sm dark:badge-accent">{{ apl.pcountry_ob }}</span>
 							</td>
 							<td>
