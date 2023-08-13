@@ -44,6 +44,14 @@ export const useAppStore = defineStore("app", () => {
   const total_apls = ref<Applicant[]>([]);
   const prices = ref<Prices>();
   const app_loading = ref(false);
+  const locations = ref([
+    "circle",
+    "madina",
+    "accra",
+    "ashaiman",
+    "lapaz",
+    "kaneshie",
+  ]);
 
   const price = computed(() => {
     const pp = prices.value;
@@ -304,6 +312,7 @@ export const useAppStore = defineStore("app", () => {
     .subscribe();
 
   return {
+    locations,
     dark_mode,
     setDarkMode,
     all_my_apls,
