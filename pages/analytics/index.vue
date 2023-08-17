@@ -16,7 +16,9 @@
 				}" class="px-2 py-1 rounded-full bg-white text-black font-bold cursor-pointer" v-for="user in normal_users">
 					{{ user.fullname || 'User' }}
 				</span>
+				{{ total_daily_applicants_admin.filter(apl => apl.location == curr_location) }}
 			</div>
+
 		</div>
 	</div>
 
@@ -40,7 +42,7 @@
 				</select>
 			</div>
 
-			<section class="grid grid-cols-4 w-full gap-5">
+			<section class="grid grid-cols-3 w-full gap-5">
 				<div
 					class="flex justify-center items-center gap-3 p-5 flex-1 bg-neutral-900 dark:bg-purple-200 min-h-[8rem] rounded-xl shadow-xl">
 					<div class="p-3 rounded-full bg-purple-600 bg-opacity-30 w-16 aspect-square"><svg
@@ -54,7 +56,7 @@
 						<span class="text-sm text-neutral-500 dark:text-neutral-800">Total Applicants</span>
 					</p>
 				</div>
-				<div
+				<!-- <div
 					class="flex justify-center items-center gap-3 p-5 flex-1 bg-neutral-900 dark:bg-fuchsia-200 min-h-[8rem] rounded-xl shadow-xl">
 					<div class="p-3 rounded-full bg-accent bg-opacity-30 w-16 aspect-square"><svg xmlns="http://www.w3.org/2000/svg"
 							class="w-full" viewBox="0 0 24 24">
@@ -70,7 +72,7 @@
 						<span class="text-xl font-bold">GHC {{ totalSales }}.00</span>
 						<span class="text-sm text-neutral-500 dark:text-neutral-800">Total Sales</span>
 					</p>
-				</div>
+				</div> -->
 				<div
 					class="flex justify-center items-center gap-3 p-5 flex-1 bg-neutral-900 dark:bg-yellow-200 min-h-[8rem] rounded-xl shadow-xl">
 					<div class="p-3 rounded-full bg-secondary bg-opacity-30 w-16 aspect-square"><svg
@@ -192,10 +194,12 @@ const today_sales_admin = computed(() => {
 			return 0;
 		}
 	} else {
-		if (total_daily_applicants_admin.value.filter(apl => apl.location == curr_location.value).length > 0) {
+		let filtered_apls = total_daily_applicants_admin.value.filter(apl => apl.location == curr_location.value)
+
+		if (filtered_apls.length > 0) {
 			let sum = 0;
-			for (let i = 0; i < total_daily_applicants_admin.value!.length; i++) {
-				const payment = total_daily_applicants_admin.value![i].totalPayment;
+			for (let i = 0; i < filtered_apls!.length; i++) {
+				const payment = filtered_apls![i].totalPayment;
 				if (!isNaN(payment)) {
 					sum += payment;
 				}
