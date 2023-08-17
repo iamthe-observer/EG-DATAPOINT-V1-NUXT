@@ -43,7 +43,11 @@ export const useAppStore = defineStore("app", () => {
 
   const all_my_apls = ref<Applicant[]>([]);
   const total_apls = ref<Applicant[]>([]);
-  const prices = ref<Prices>();
+  const prices = ref<Prices>({
+    adult: 0,
+    child: 0,
+    id: 0,
+  });
   const app_loading = ref(false);
   const locations = ref([
     "circle",
@@ -77,7 +81,11 @@ export const useAppStore = defineStore("app", () => {
   function reset() {
     all_my_apls.value = [];
     total_apls.value = [];
-    prices.value = undefined;
+    prices.value = {
+      adult: 0,
+      child: 0,
+      id: 0,
+    };
   }
 
   function setAppLoading(val: boolean) {
@@ -167,10 +175,11 @@ export const useAppStore = defineStore("app", () => {
 
       if (user![0].location == "madina" || user![0].location == "ablekuma") {
         prices.value = data![1];
+        console.log(prices.value);
       } else {
         prices.value = data![0];
+        console.log(prices.value);
       }
-      console.log(prices.value);
 
       return data![0];
     } catch (err: any) {

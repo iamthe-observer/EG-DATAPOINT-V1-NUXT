@@ -217,25 +217,6 @@ export const useAplStore = defineStore(
         wdob: { required },
       };
     });
-    const price = computed(() => {
-      const pp = prices.value;
-      const if_sp = applicant.value.pmarital_status == "MARRIED";
-      const if_wa = applicant.value.children_number! > 0;
-
-      if (pp) {
-        if (!if_sp && if_wa) {
-          return pp.adult + pp.child * applicant.value.children_number!;
-        } else if (if_sp && !if_wa) {
-          return pp.adult * 2;
-        } else if (if_sp && if_wa) {
-          return pp.adult * 2 + pp.child * applicant.value.children_number!;
-        } else if (!if_sp && !if_wa) {
-          return pp.adult;
-        }
-      } else {
-        return 0;
-      }
-    });
 
     watch(
       () => applicant.value.children_number,
@@ -301,8 +282,12 @@ export const useAplStore = defineStore(
         "Error! Validation Failed. (Go over and check if all the fields have been filled.)";
       applicant.value.apl_id = uuidv4();
       applicant.value.fullName = `${applicant.value.plastName} ${applicant.value.pfirstName} ${applicant.value.potherName}`;
-      let pricer = await useAppStore().getPrices();
+
+      // let pricer = await useAppStore().getPrices();
+      const pricer = useAppStore().prices;
       let price: number = 0;
+      console.log(pricer);
+
       const if_sp = applicant.value.pmarital_status == "MARRIED";
       const if_wa = applicant.value.children_number > 0;
 
@@ -321,7 +306,7 @@ export const useAplStore = defineStore(
         throw new Error("Get Prices First");
       }
 
-      console.log(pricer, price);
+      // console.log(pricer, price);
 
       applicant.value.totalPayment = price;
 
