@@ -153,6 +153,8 @@
 						}}</span>
 						<span class="text-sm text-neutral-500 dark:text-neutral-700">Entries: {{ getUserSalesToday(user.id)[1]
 						}}</span>
+						<span class="text-sm text-neutral-500 dark:text-neutral-700">Location: {{ user.location![0].toUpperCase() +
+							user.location?.substring(1) }}</span>
 					</div>
 				</div>
 			</section>

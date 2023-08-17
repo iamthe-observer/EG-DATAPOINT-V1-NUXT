@@ -1,112 +1,122 @@
 // @ts-ignore
-import { v4 as uuidv4 } from 'uuid'
-import {
-  Applicant,
-  FileWithAplType,
-  WardsApplicant,
-} from '@/interfaces/interfaces'
-import { storeToRefs } from 'pinia'
-import { useAppStore } from '@/store/app'
-import { required, numeric } from '@vuelidate/validators'
-import { useImageStore } from '@/store/images'
-import useVuelidate from '@vuelidate/core'
+import { v4 as uuidv4 } from "uuid";
+import { Applicant, Requests, WardsApplicant } from "@/interfaces/interfaces";
+import { storeToRefs } from "pinia";
+import { useAppStore } from "@/store/app";
+import { required, numeric } from "@vuelidate/validators";
+import { useImageStore } from "@/store/images";
+import useVuelidate from "@vuelidate/core";
+import { useProfileStore } from "@/store/profile";
+import { useStorage } from "@vueuse/core";
 
-export const useApl = () => {
-  // state
-  const edit_mode = ref(false)
-  const apl_sending = ref(false)
-  const if_sent = ref(false)
-  const if_updated = ref(false)
-  const { $SB,$trimStringProperties } = useNuxtApp()
-  const { total_apls } = storeToRefs(useAppStore())
-  const { has_files } = storeToRefs(useImageStore())
-  const prime_image = ref()
-  const sec_image = ref()
-  const wards_image = ref<any[]>([])
-  const prime_file = ref<FileWithAplType>()
-  const sec_file = ref<FileWithAplType>()
-  const wards_file = ref<FileWithAplType[]>([])
-  const curr_ward_file = ref<FileWithAplType>()
-
-  // const applicant = ref<Applicant>()
+export const useApl = (id?: string) => {
+  const { prices, total_apls } = storeToRefs(useAppStore());
+  const { profile } = storeToRefs(useProfileStore());
+  const { has_files } = storeToRefs(useImageStore());
+  const { $SB, $trimStringProperties } = useNuxtApp();
+  const user = useSupabaseUser();
+  const edit_mode = ref(false);
+  const if_sent = ref<boolean>(false);
+  const if_req_sent = ref<boolean>(false);
+  const apl_sending = ref(false);
+  const request = ref<Requests>({
+    apl_id: "",
+    modified_apl: null,
+    modify_type: "",
+    body: "",
+    status: "",
+    user_id: "",
+  });
+  const empty_req = ref<Requests>({
+    apl_id: "",
+    modified_apl: null,
+    modify_type: "",
+    body: "",
+    status: "",
+    user_id: "",
+  });
+  const curr_compared_request = ref(
+    useStorage<Requests>("curr_compared_request", {
+      ...empty_req.value,
+    }),
+  );
   const applicant = ref<Applicant>({
-    created_at: new Date(),
-    plastName: '',
-    pfirstName: '',
-    potherName: '',
+    // created_at: new Date(),
+    plastName: "",
+    pfirstName: "",
+    potherName: "",
     pdob: null,
-    pcity_ob: '',
-    pcountry_ob: '',
-    pgender: '',
-    pconf_code: '',
-    pemail: '',
-    ppassport_number: '',
+    pcity_ob: "",
+    pcountry_ob: "",
+    pgender: "",
+    pconf_code: "",
+    pemail: "",
+    ppassport_number: "",
     passport_ex: null,
-    pcountry_live_today: '',
-    peducation_level: '',
-    ppostal: '',
-    pmarital_status: 'UNMARRIED',
+    pcountry_live_today: "",
+    peducation_level: "",
+    ppostal: "",
+    pmarital_status: "UNMARRIED",
     children_number: 0,
-    fullName: '',
-    user_id: useSupabaseUser().value?.id!,
-    pcontact: '',
+    fullName: "",
+    user_id: user.value?.id!,
+    pcontact: "",
     wards: [],
     totalPayment: 0,
-    pother_contact: '',
+    pother_contact: "",
     psocial_media: {
-      facebook: '',
-      instagram: '',
-      twitter: '',
+      facebook: "",
+      instagram: "",
+      twitter: "",
     },
     aplImg_path: {
       primePath: [],
       secPath: [],
       wardsPath: [],
     },
-    slastName: '',
-    sfirstName: '',
-    sotherName: '',
-    scity_ob: '',
-    scountry_ob: '',
-    scontact: '',
-    sgender: '',
+    slastName: "",
+    sfirstName: "",
+    sotherName: "",
+    scity_ob: "",
+    scountry_ob: "",
+    scontact: "",
+    sgender: "",
     sdob: null,
-  })
+    location: "",
+  });
   const empty_ward = ref<WardsApplicant>({
-    wlastName: '',
-    wfirstName: '',
-    wotherName: '',
-    wcity_ob: '',
-    wcountry_ob: '',
-    wgender: '',
+    wlastName: "",
+    wfirstName: "",
+    wotherName: "",
+    wcity_ob: "",
+    wcountry_ob: "",
+    wgender: "",
     wdob: null,
     index: null,
-  })
-
-  // getters
+  });
   const applicant_type = computed(() => {
     if (
-      applicant.value.pmarital_status == 'MARRIED' &&
+      applicant.value.pmarital_status == "MARRIED" &&
       applicant.value.children_number == 0
     ) {
-      return 'spouse only'
+      return "spouse only";
     } else if (
-      applicant.value.pmarital_status == 'MARRIED' &&
+      applicant.value.pmarital_status == "MARRIED" &&
       applicant.value.children_number > 0
     ) {
-      return 'family'
+      return "family";
     } else if (
-      applicant.value.pmarital_status != 'MARRIED' &&
+      applicant.value.pmarital_status != "MARRIED" &&
       applicant.value.children_number > 0
     ) {
-      return 'wards only'
+      return "wards only";
     } else if (
-      applicant.value.pmarital_status != 'MARRIED' &&
+      applicant.value.pmarital_status != "MARRIED" &&
       applicant.value.children_number == 0
     ) {
-      return 'single'
+      return "single";
     }
-  })
+  });
   const single_rules = computed(() => {
     return {
       plastName: { required },
@@ -123,8 +133,8 @@ export const useApl = () => {
       pcontact: { required },
       totalPayment: { required },
       user_id: { required },
-    }
-  })
+    };
+  });
   const spouse_only_rules = computed(() => {
     return {
       plastName: { required },
@@ -148,8 +158,8 @@ export const useApl = () => {
       scontact: { required },
       sgender: { required },
       sdob: { required },
-    }
-  })
+    };
+  });
   const wards_only_rules = computed(() => {
     return {
       plastName: { required },
@@ -167,8 +177,8 @@ export const useApl = () => {
       totalPayment: { required },
       user_id: { required },
       wards: { required },
-    }
-  })
+    };
+  });
   const family_rules = computed(() => {
     return {
       plastName: { required },
@@ -193,8 +203,8 @@ export const useApl = () => {
       scontact: { required },
       sgender: { required },
       sdob: { required },
-    }
-  })
+    };
+  });
   const ward_rules = computed(() => {
     return {
       wlastName: { required },
@@ -203,450 +213,393 @@ export const useApl = () => {
       wcountry_ob: { required },
       wgender: { required },
       wdob: { required },
-    }
-  })
+    };
+  });
+  const price = computed(() => {
+    const pp = prices.value;
+    const if_sp = applicant.value.pmarital_status == "MARRIED";
+    const if_wa = applicant.value.children_number! > 0;
 
-  // methods
-  async function getApplicant(id: string) {
-    try {
-      let { data, error } = await $SB
-        .from('applicants')
-        .select('*')
-        .eq('apl_id', id)
-      if (error) throw error
-      applicant.value = data![0]
-      return data
-    } catch (error) {
-      console.log(error)
+    if (pp) {
+      if (!if_sp && if_wa) {
+        return pp.adult + pp.child * applicant.value.children_number!;
+      } else if (if_sp && !if_wa) {
+        return pp.adult * 2;
+      } else if (if_sp && if_wa) {
+        return pp.adult * 2 + pp.child * applicant.value.children_number!;
+      } else if (!if_sp && !if_wa) {
+        return pp.adult;
+      }
+    } else {
+      return 0;
     }
+  });
+
+  function setApl() {
+    applicant.value = total_apls.value.find((apl) => apl.apl_id == id)!;
   }
-  function setApplicant(apl: Applicant) {
-    applicant.value = apl
-  }
+
+  watch(
+    () => applicant.value.children_number,
+    (newVal) => {
+      applicant.value.wards = [];
+      applicant.value.aplImg_path.wardsPath = [];
+      for (let idx = 0; idx < newVal; idx++) {
+        let ward = { ...empty_ward.value };
+        ward.index = idx;
+        applicant.value.wards.push(ward);
+        applicant.value.aplImg_path.wardsPath.push(`ward${idx}`);
+      }
+      // console.log(applicant.value.aplImg_path.wardsPath);
+    },
+  );
+
   function toggleEditMode(val: boolean) {
-    edit_mode.value = val
+    edit_mode.value = val!;
   }
+
   async function validate(rules: ComputedRef, value: any) {
-    const v$ = useVuelidate(rules, value)
-    const val = await v$.value.$validate()
-    return val
+    const v$ = useVuelidate(rules, value);
+    const val = await v$.value.$validate();
+    return val;
   }
+
   const submitApl = async (apl: Applicant) => {
-    if_sent.value = false
-    console.log(apl.aplImg_path.wardsPath)
+    apl_sending.value = true;
+    console.log(apl.aplImg_path.wardsPath);
     try {
       if (has_files.value) {
         let { primePath, secPath, wardsPath } =
-          await useImageStore().uploadFiles(apl.apl_id)
-        apl.aplImg_path.primePath = primePath
-        apl.aplImg_path.secPath = secPath
-        wardsPath.forEach(path => {
+          await useImageStore().uploadFiles(apl.apl_id);
+        apl.aplImg_path.primePath = primePath;
+        apl.aplImg_path.secPath = secPath;
+        wardsPath.forEach((path) => {
           for (let i = 0; i < apl.aplImg_path.wardsPath.length; i++) {
-            const el = apl.aplImg_path.wardsPath[i]
-            if (path.includes(el)) apl.aplImg_path.wardsPath[i] = path
+            const el = apl.aplImg_path.wardsPath[i];
+            if (path.includes(el)) apl.aplImg_path.wardsPath[i] = path;
           }
-        })
-        console.log(apl.aplImg_path.wardsPath, wardsPath)
+        });
+        console.log(apl.aplImg_path.wardsPath, wardsPath);
       }
 
-      const { error } = await $SB.from('applicants').insert([apl])
+      const { error } = await $SB
+        .from("applicants")
+        .insert([$trimStringProperties(apl)]);
 
-      if (error) throw error
-      if_sent.value = true
-      apl_sending.value = false
-      resetAplData()
-      return 'done'
+      if (error) throw error;
+      if_sent.value = true;
+      apl_sending.value = false;
+      resetAplData();
+      return "done";
     } catch (err: any) {
-      apl_sending.value = false
-      console.log(err)
+      if_sent.value = false;
+      apl_sending.value = false;
+      console.log(err);
     }
-  }
+  };
+
   async function handleSend() {
     let err_msg =
-      'Error! Validation Failed. (Go over and check if all the fields have been filled.)'
-    applicant.value.apl_id = uuidv4()
-    applicant.value.fullName = `${applicant.value.plastName} ${applicant.value.pfirstName} ${applicant.value.potherName}`
-    let pricer = await useAppStore().getPrices()
-    let price: number = 0
-    const if_sp = applicant.value.pmarital_status == 'MARRIED'
-    const if_wa = applicant.value.children_number > 0
+      "Error! Validation Failed. (Go over and check if all the fields have been filled.)";
+    applicant.value.apl_id = uuidv4();
+    applicant.value.fullName = `${applicant.value.plastName} ${applicant.value.pfirstName} ${applicant.value.potherName}`;
+    let pricer = await useAppStore().getPrices();
+    let price: number = 0;
+    const if_sp = applicant.value.pmarital_status == "MARRIED";
+    const if_wa = applicant.value.children_number > 0;
 
     if (pricer) {
       if (!if_sp && if_wa) {
-        price = pricer.adult + pricer.child * applicant.value.children_number
+        price = pricer.adult + pricer.child * applicant.value.children_number;
       } else if (if_sp && !if_wa) {
-        price = pricer.adult * 2
+        price = pricer.adult * 2;
       } else if (if_sp && if_wa) {
         price =
-          pricer.adult * 2 + pricer.child * applicant.value.children_number
+          pricer.adult * 2 + pricer.child * applicant.value.children_number;
       } else if (!if_sp && !if_wa) {
-        price = pricer.adult
+        price = pricer.adult;
       }
     } else {
-      throw new Error('Get Prices First')
+      throw new Error("Get Prices First");
     }
 
-    console.log(pricer, price)
+    console.log(pricer, price);
 
-    // applicant.value.totalPayment = price.value!
+    applicant.value.totalPayment = price;
 
-    if (applicant_type.value == 'spouse only') {
-      let if_spouse = await validate(spouse_only_rules, applicant.value)
-      console.log(if_spouse)
+    if (applicant_type.value == "spouse only") {
+      let if_spouse = await validate(spouse_only_rules, applicant.value);
+      console.log(if_spouse);
 
       if (await validate(spouse_only_rules, applicant.value)) {
-        await sendApplicant(applicant.value)
+        await sendApplicant(applicant.value);
       } else {
-        console.log(applicant_type.value)
+        console.log(applicant_type.value);
 
-        if_sent.value = false
-        alert(err_msg)
+        if_sent.value = false;
+        alert(err_msg);
       }
-    } else if (applicant_type.value == 'family') {
+    } else if (applicant_type.value == "family") {
       // getting val for all wards
-      let val: boolean[] = []
+      let val: boolean[] = [];
       for (let idx = 0; idx < applicant.value.wards.length; idx++) {
-        const ward = { ...applicant.value.wards[idx] }
-        val.push(await validate(ward_rules, ward))
+        const ward = { ...applicant.value.wards[idx] };
+        val.push(await validate(ward_rules, ward));
       }
       if (
         (await validate(family_rules, applicant.value)) &&
-        val.every(ward => ward == true)
+        val.every((ward) => ward == true)
       ) {
-        await sendApplicant(applicant.value)
+        await sendApplicant(applicant.value);
       } else {
-        console.log(applicant_type.value)
+        console.log(applicant_type.value);
 
-        if_sent.value = false
-        alert(err_msg)
+        if_sent.value = false;
+        alert(err_msg);
       }
-    } else if (applicant_type.value == 'wards only') {
+    } else if (applicant_type.value == "wards only") {
       // getting val for all wards
-      let val: boolean[] = []
+      let val: boolean[] = [];
       for (let idx = 0; idx < applicant.value.wards.length; idx++) {
-        const ward = { ...applicant.value.wards[idx] }
-        val.push(await validate(ward_rules, ward))
+        const ward = { ...applicant.value.wards[idx] };
+        val.push(await validate(ward_rules, ward));
       }
       if (
         (await validate(wards_only_rules, applicant.value)) &&
-        val.every(ward => ward == true)
+        val.every((ward) => ward == true)
       ) {
-        await sendApplicant(applicant.value)
+        await sendApplicant(applicant.value);
       } else {
-        console.log(applicant_type.value)
+        console.log(applicant_type.value);
 
-        if_sent.value = false
-        alert(err_msg)
+        if_sent.value = false;
+        alert(err_msg);
       }
-    } else if (applicant_type.value == 'single') {
-      let if_spouse = await validate(single_rules, applicant.value)
-      console.log(if_spouse)
+    } else if (applicant_type.value == "single") {
+      let if_spouse = await validate(single_rules, applicant.value);
+      console.log(if_spouse);
       if (await validate(single_rules, applicant.value)) {
-        await sendApplicant(applicant.value)
+        await sendApplicant(applicant.value);
       } else {
-        console.log(applicant_type.value)
+        console.log(applicant_type.value);
 
-        if_sent.value = false
-        alert(err_msg)
+        if_sent.value = false;
+        alert(err_msg);
       }
     }
   }
+
   async function sendApplicant(apl_info: any) {
-    await submitApl(apl_info)
-    console.log('done')
+    apl_info.location = profile.value?.location;
+    console.log(apl_info);
+
+    await submitApl(apl_info);
+    console.log("done");
   }
+
+  function handleFile(evt: any, type: string) {
+    let file = evt.target.files[0];
+    useImageStore().setFiles(file, type);
+  }
+
+  async function requestDiscount() {
+    let err_msg =
+      "Error! Validation Failed. (Go over and check if all the fields have been filled.)";
+
+    applicant.value.apl_id = uuidv4();
+    applicant.value.fullName =
+      `${applicant.value.plastName} ${applicant.value.pfirstName} ${applicant.value.potherName}`.trim();
+    let pricer = await useAppStore().getPrices();
+    let price: number = 0;
+    const if_sp = applicant.value.pmarital_status == "MARRIED";
+    const if_wa = applicant.value.children_number > 0;
+
+    if (pricer) {
+      if (!if_sp && if_wa) {
+        price = pricer.adult + pricer.child * applicant.value.children_number;
+      } else if (if_sp && !if_wa) {
+        price = pricer.adult * 2;
+      } else if (if_sp && if_wa) {
+        price =
+          pricer.adult * 2 + pricer.child * applicant.value.children_number;
+      } else if (!if_sp && !if_wa) {
+        price = pricer.adult;
+      }
+    } else {
+      throw new Error("Get Prices First");
+    }
+
+    applicant.value.totalPayment = price;
+
+    if (applicant_type.value == "spouse only") {
+      if (await validate(spouse_only_rules, applicant.value)) {
+        await sendDiscountRequest(applicant.value);
+      } else {
+        console.log(applicant_type.value);
+
+        if_req_sent.value = false;
+        alert(err_msg);
+      }
+    } else if (applicant_type.value == "family") {
+      // getting val for all wards
+      let val: boolean[] = [];
+      for (let idx = 0; idx < applicant.value.wards.length; idx++) {
+        const ward = { ...applicant.value.wards[idx] };
+        val.push(await validate(ward_rules, ward));
+      }
+      if (
+        (await validate(family_rules, applicant.value)) &&
+        val.every((ward) => ward == true)
+      ) {
+        await sendDiscountRequest(applicant.value);
+      } else {
+        console.log(applicant_type.value);
+
+        if_req_sent.value = false;
+        alert(err_msg);
+      }
+    } else if (applicant_type.value == "wards only") {
+      // getting val for all wards
+      let val: boolean[] = [];
+      for (let idx = 0; idx < applicant.value.wards.length; idx++) {
+        const ward = { ...applicant.value.wards[idx] };
+        val.push(await validate(ward_rules, ward));
+      }
+      if (
+        (await validate(wards_only_rules, applicant.value)) &&
+        val.every((ward) => ward == true)
+      ) {
+        await sendDiscountRequest(applicant.value);
+      } else {
+        console.log(applicant_type.value);
+
+        if_req_sent.value = false;
+        alert(err_msg);
+      }
+    } else if (applicant_type.value == "single") {
+      let if_spouse = await validate(single_rules, applicant.value);
+      console.log(if_spouse);
+      if (await validate(single_rules, applicant.value)) {
+        await sendDiscountRequest(applicant.value);
+      } else {
+        console.log(applicant_type.value);
+
+        if_req_sent.value = false;
+        alert(err_msg);
+      }
+    }
+  }
+
+  async function sendDiscountRequest(applicant: Applicant) {
+    console.log(applicant.aplImg_path.wardsPath);
+    try {
+      if (has_files.value) {
+        let { primePath, secPath, wardsPath } =
+          await useImageStore().uploadFiles(applicant.apl_id);
+        applicant.aplImg_path.primePath = primePath;
+        applicant.aplImg_path.secPath = secPath;
+        wardsPath.forEach((path) => {
+          for (let i = 0; i < applicant.aplImg_path.wardsPath.length; i++) {
+            const el = applicant.aplImg_path.wardsPath[i];
+            if (path.includes(el)) applicant.aplImg_path.wardsPath[i] = path;
+          }
+        });
+        console.log(applicant.aplImg_path.wardsPath, wardsPath);
+      }
+
+      request.value.apl_id = applicant.apl_id!;
+      request.value.modified_apl = applicant;
+      request.value.modify_type = "discount";
+      request.value.status = "pending";
+      request.value.user_id = useSupabaseUser().value?.id!;
+
+      console.log(request.value);
+
+      const { error } = await $SB
+        .from("requests")
+        .insert([$trimStringProperties(request.value)]);
+
+      if (error) throw error;
+      if_req_sent.value = true;
+      apl_sending.value = false;
+      resetAplData();
+      resetRequest();
+      return "done";
+    } catch (err: any) {
+      if_req_sent.value = false;
+      apl_sending.value = false;
+      console.log(err);
+    }
+  }
+
   function resetAplData() {
     applicant.value = {
-      created_at: new Date(),
-      plastName: '',
-      pfirstName: '',
-      potherName: '',
+      // created_at: new Date(),
+      plastName: "",
+      pfirstName: "",
+      potherName: "",
       pdob: null,
-      pcity_ob: '',
-      pcountry_ob: '',
-      pgender: '',
-      pconf_code: '',
-      pemail: '',
-      ppassport_number: '',
+      pcity_ob: "",
+      pcountry_ob: "",
+      pgender: "",
+      pconf_code: "",
+      pemail: "",
+      ppassport_number: "",
       passport_ex: null,
-      pcountry_live_today: '',
-      peducation_level: '',
-      ppostal: '',
-      pmarital_status: 'UNMARRIED',
+      pcountry_live_today: "",
+      peducation_level: "",
+      ppostal: "",
+      pmarital_status: "UNMARRIED",
       children_number: 0,
-      fullName: '',
-      user_id: useSupabaseUser().value!.id,
-      pcontact: '',
+      fullName: "",
+      user_id: user.value?.id!,
+      pcontact: "",
       wards: [],
       totalPayment: 0,
-      pother_contact: '',
+      pother_contact: "",
       psocial_media: {
-        facebook: '',
-        instagram: '',
-        twitter: '',
+        facebook: "",
+        instagram: "",
+        twitter: "",
       },
       aplImg_path: {
         primePath: [],
         secPath: [],
         wardsPath: [],
       },
-      slastName: '',
-      sfirstName: '',
-      sotherName: '',
-      scity_ob: '',
-      scountry_ob: '',
-      scontact: '',
-      sgender: '',
+      slastName: "",
+      sfirstName: "",
+      sotherName: "",
+      scity_ob: "",
+      scountry_ob: "",
+      scontact: "",
+      sgender: "",
       sdob: null,
-    }
-  }
-  async function loadUrl() {
-    try {
-      const { data, error } = await $SB.storage
-        .from('applicants')
-        .createSignedUrls(
-          [
-            applicant.value.aplImg_path.primePath[0],
-            applicant.value.aplImg_path.secPath[0],
-            ...applicant.value.aplImg_path.wardsPath,
-          ],
-          3600
-        )
-
-      if (error) throw error
-
-      console.log(data)
-
-      prime_image.value = data[0].signedUrl || ''
-      sec_image.value = data[1].signedUrl || ''
-      wards_image.value = data.slice(2).map(img => img.signedUrl)
-      // wards_data.value = data.slice(2)
-    } catch (err: any) {
-      console.log(err)
-    }
-  }
-  function handleDate(e: { name: string; date: Date; ward_idx?: number }) {
-    if (e.name == 'pdob') {
-      applicant.value.pdob = e.date
-      console.log(applicant.value)
-    } else if (e.name == 'sdob') {
-      applicant.value.sdob = e.date
-      console.log(applicant.value)
-    } else if (e.name == 'passport_ex') {
-      applicant.value.passport_ex = e.date
-      console.log(applicant.value)
-    } else if (e.name == 'wdob') {
-      applicant.value.wards[e.ward_idx! - 1].wdob = e.date
-      console.log(applicant.value)
-    }
-  }
-  function handleFile(evt: any, type: string, idx?: number) {
-    // console.log(evt.target.files[0], type);
-    let file = evt.target.files[0]
-    file.apl_type = type
-    curr_ward_file.value = file
-
-    console.log(file, type)
-
-    if (type === 'prime') {
-      prime_file.value = file
-      prime_image.value = URL.createObjectURL(file)
-    } else if (type === 'sec') {
-      sec_file.value = file
-      sec_image.value = URL.createObjectURL(file)
-    } else if (type.includes('ward')) {
-      // const updatedImages = wards_file.value.filter(
-      // 	x => x.apl_type !== file.apl_type
-      // )
-      // updatedImages.push(file)
-      // wards_file.value = updatedImages
-      wards_file.value = []
-      wards_file.value.push(file)
-      wards_image.value[idx!] = URL.createObjectURL(file)
-      console.log(wards_file.value)
-      console.log(wards_image.value)
-    }
-  }
-  async function handlePrimeUpdate() {
-    let aplVal = total_apls.value.filter(
-      applicant => applicant.apl_id == useNuxtApp()._route.params.id
-    )[0]
-    if (!prime_file.value) return
-    if (applicant.value.aplImg_path.primePath.length == 0) {
-      try {
-        // let apl_paths = applicant.value.aplImg_path
-        prime_file.value!.apl_type = 'prime'
-        let path = await useImageStore().uploadAplImg2(
-          applicant.value.apl_id,
-          prime_file.value
-        )
-        aplVal.aplImg_path.primePath.push(path)
-        console.log(aplVal)
-        console.log(path)
-        if (!path) return
-        const { error: err } = await $SB
-          .from('applicants')
-          .delete()
-          .eq('apl_id', aplVal.apl_id)
-        if (err) {
-          console.log('delete err')
-          throw err
-        }
-        let { data, error } = await $SB
-          .from('applicants')
-          .insert([$trimStringProperties(aplVal)])
-          .eq('apl_id', aplVal.apl_id!)
-          .select()
-        if (error) throw error
-        if_updated.value = true
-        console.log(data)
-      } catch (error) {
-        console.log(error)
-      }
-    } else {
-      let path = await useImageStore().updateSingleAplImg(
-        applicant.value.aplImg_path.primePath[0],
-        prime_file.value!
-      )
-      if (path) if_updated.value = true
-    }
-  }
-  async function handleSecUpdate() {
-    let aplVal = total_apls.value.filter(
-      applicant => applicant.apl_id == useNuxtApp()._route.params.id
-    )[0]
-    if (!sec_file.value) return
-    if (applicant.value.aplImg_path.secPath.length == 0) {
-      try {
-        sec_file.value!.apl_type = 'sec'
-        let path = await useImageStore().uploadAplImg2(
-          applicant.value.apl_id,
-          sec_file.value
-        )
-        aplVal.aplImg_path.secPath.push(path)
-        console.log(aplVal)
-        console.log(path)
-        if (!path) return
-        const { error: err } = await $SB
-          .from('applicants')
-          .delete()
-          .eq('apl_id', aplVal.apl_id)
-        if (err) {
-          console.log('delete err')
-          throw err
-        }
-        let { data, error } = await $SB
-          .from('applicants')
-          .insert([$trimStringProperties(aplVal)])
-          .eq('apl_id', aplVal.apl_id!)
-          .select()
-        if (error) throw error
-        if_updated.value = true
-        console.log(data)
-      } catch (error) {
-        console.log(error)
-      }
-    } else {
-      let path = await useImageStore().updateSingleAplImg(
-        applicant.value.aplImg_path.secPath[0],
-        sec_file.value!
-      )
-      if (path) if_updated.value = true
-    }
-  }
-  async function handleWardUpdate(idx: number) {
-    let aplVal = total_apls.value.filter(
-      applicant => applicant.apl_id == useNuxtApp()._route.params.id
-    )[0]
-
-    // to see if theres a file before going ahead and sending
-    if (wards_file.value.length == 0) return
-
-    if (
-      applicant.value.aplImg_path.wardsPath[idx] == `ward${idx}` ||
-      applicant.value.aplImg_path.wardsPath[idx] == ''
-    ) {
-      try {
-        console.log(wards_file.value)
-
-        let path = await useImageStore().uploadAplImg2(
-          applicant.value.apl_id,
-          wards_file.value[0]
-        )
-        aplVal.aplImg_path.wardsPath[idx] = path
-        console.log(aplVal)
-        console.log(path)
-        if (!path) return
-        const { error: err } = await $SB
-          .from('applicants')
-          .delete()
-          .eq('apl_id', aplVal.apl_id)
-        if (err) {
-          console.log('delete err')
-          throw err
-        }
-        let { data, error } = await $SB
-          .from('applicants')
-          .insert([$trimStringProperties(aplVal)])
-          .eq('apl_id', aplVal.apl_id!)
-          .select()
-        if (error) throw error
-        if_updated.value = true
-        console.log(data)
-        wards_file.value = []
-      } catch (error) {
-        console.log(error)
-        wards_file.value = []
-      } finally {
-        wards_file.value = []
-      }
-    } else {
-      let path = await useImageStore().updateSingleAplImg(
-        applicant.value.aplImg_path.wardsPath[idx],
-        wards_file.value[0]
-      )
-      if (path) if_updated.value = true
-    }
+    };
+    request.value = empty_req.value;
   }
 
-  // watchers
-  watch(
-    () => applicant.value.children_number,
-    newVal => {
-      applicant.value.wards = []
-      for (let idx = 0; idx < newVal; idx++) {
-        let ward = { ...empty_ward.value }
-        ward.index = idx
-        applicant.value.wards.push(ward)
-      }
-    }
-  )
+  function resetRequest() {
+    request.value = empty_req.value;
+  }
 
   return {
+    setApl,
     applicant,
-    getApplicant,
-    setApplicant,
+    applicant_type,
+    empty_ward,
+    resetAplData,
     edit_mode,
     toggleEditMode,
-    handleSend,
     validate,
-    resetAplData,
-    applicant_type,
+    handleSend,
     if_sent,
     apl_sending,
-    loadUrl,
-    prime_image,
-    sec_image,
-    wards_image,
-    handleDate,
     handleFile,
-    handlePrimeUpdate,
-    handleSecUpdate,
-    handleWardUpdate,
-    prime_file,
-    sec_file,
-    wards_file,
-    if_updated,
-    curr_ward_file,
-  }
-}
+    request,
+    requestDiscount,
+    resetRequest,
+    if_req_sent,
+    curr_compared_request,
+  };
+};

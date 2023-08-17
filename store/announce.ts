@@ -22,6 +22,7 @@ export const useAnnStore = defineStore('announcements', () => {
         .select('*')
       if (error) throw error
       announcements.value = data!
+      return data
     } catch (error) {
       console.log(error)
     }

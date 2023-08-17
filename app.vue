@@ -23,8 +23,7 @@ useServerSeoMeta({
 
 // document.body.style
 const { $SB } = useNuxtApp()
-const { app_loading, dark_mode } = storeToRefs(useAppStore())
-
+const { app_loading, is_mobile } = storeToRefs(useAppStore())
 const { $onInitLoadAppData, $router } = useNuxtApp()
 
 $SB.auth.onAuthStateChange((event: string) => {
@@ -44,5 +43,9 @@ $SB.auth.onAuthStateChange((event: string) => {
 onMounted(async () => {
   await $onInitLoadAppData()
   document.documentElement.setAttribute('data-theme', 'EG')
+
+  useAppStore().$patch({
+    is_mobile: useNuxtApp().$mobileCheck()
+  })
 })
 </script>

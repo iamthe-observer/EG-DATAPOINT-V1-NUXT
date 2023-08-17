@@ -34,7 +34,7 @@ const date = ref<Date | null>(null)
 
 watch(() => props.date, () => {
 	date.value = props.date!
-	console.log(date.value);
+	// console.log(date.value);
 })
 
 const emit = defineEmits(['date'])

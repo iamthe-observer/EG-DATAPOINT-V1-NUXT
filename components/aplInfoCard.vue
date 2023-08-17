@@ -10,9 +10,20 @@
 		</span>
 		<span v-if="!edit_mode" class="info truncate">{{ modelValue }}</span>
 
-		<input v-else-if="edit_mode && !disabled" oninput="this.value = this.value.toUpperCase()" type="text"
+		<input v-else-if="edit_mode && !disabled && !select" oninput="this.value = this.value.toUpperCase()" type="text"
 			class="info_edit bg-neutral-700 dark:bg-neutral-100" @input="$emit('update:modelValue', $event.target?.value)"
 			:value="modelValue ? modelValue : value" :placeholder="placeholder ? placeholder : ''">
+
+		<select v-else-if="edit_mode && !disabled && select"
+			class="select w-full bg-neutral-600 dark:bg-neutral-300 rounded-b-xl rounded-t-none"
+			@input="$emit('update:modelValue', $event.target?.value)" :value="modelValue ? modelValue : value">
+			<option v-if="options" disabled selected>Pick one</option>
+			<option v-if="num_options" disabled selected>Pick number</option>
+			<option v-if="options" v-for="(option, i) in  options" :key="i" :value="option.toUpperCase()">{{
+				option.toUpperCase() }}</option>
+			<option v-if="num_options" v-for="(option, i) in  num_options" :key="i" :value="option">{{ option }}</option>
+		</select>
+
 	</p>
 </template>
 
@@ -28,6 +39,9 @@ defineProps<{
 	value?: string
 	placeholder?: string
 	disabled?: boolean
+	select?: boolean
+	options?: string[]
+	num_options?: number[]
 }>()
 </script>
 

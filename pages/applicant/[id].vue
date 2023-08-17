@@ -4,7 +4,7 @@
 			class="w-full h-full rounded-2xl bg-neutral-800 dark:bg-neutral-50 col-span-full row-span-full pb-2 overflow-y-auto text-justify px-0 relative">
 			<h1
 				:class="['px-5 py-5 rounded-2xl bg-neutral-700 dark:bg-primary dark:text-white text-2xl w-full flex justify-between items-center mb-2 sticky top-0 shadow-lg z-10 transition-all duration-200 ease-in-out', edit_mode ? 'dark:bg-blue-400' : 'dark:bg-primary']">
-				<span v-if="!edit_mode" class="">Applicant Information</span>
+				<span v-if="!edit_mode" class="text-3xl">Applicant Information</span>
 
 				<div class="join join-vertical lg:join-horizontal">
 					<button v-if="edit_mode" onclick="my_modal_1.showModal()"
@@ -225,11 +225,6 @@ const curr_apl = ref<Applicant>()
 const default_apl = ref<Applicant>()
 const if_sent = ref(false)
 const creator = ref()
-
-watchEffect(() => {
-	console.log(fullName.value);
-
-})
 
 const handleEmit = (e: Applicant) => {
 	curr_apl.value = e

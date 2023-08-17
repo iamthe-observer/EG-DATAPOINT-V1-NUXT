@@ -54,7 +54,7 @@
 
 						<div @click="handlePage('requests')" :class="[
 							'transition-all duration-500 ease-in-out hover:bg-neutral-800 group dark:hover:bg-neutral-50 rounded-xl relative',
-							curr_page !== 'requests' ? 'flex-1' : 'w-4/5 dark:shadow-xl dark:bg-neutral-50 bg-neutral-800'
+							curr_page !== 'requests' ? 'flex-1 max-w-lg' : 'w-4/5 dark:shadow-xl dark:bg-neutral-50 bg-neutral-800'
 						]">
 							<span v-if="curr_page != 'requests' && curr_page != ''"
 								class="vertical-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 tracking-[-0.2rem] font-semibold text-neutral-600 dark:group-hover:text-accent group-hover:text-secondary text-[2rem] cursor-pointer transition-all duration-300 ease-out group-hover:scale-110">REQUESTS</span>

@@ -22,7 +22,8 @@
 			<div class="grid grid-cols-3 gap-2 w-full">
 				<AplInfoCardDate :heading="`Date of Birth`" :date="apl.pdob!" @date="handleDate" :name_type="'pdob'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.pcity_ob" :heading="'City Of Birth'" />
-				<AplInfoCard @update:model-value="logger" v-model="apl.pcountry_ob" :heading="'Country of Birth'" />
+				<AplInfoCard @update:model-value="logger" :select="true" :options="$countries" v-model="apl.pcountry_ob"
+					:heading="'Country of Birth'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.pcontact" :heading="'Contact'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.pother_contact" :heading="'Next of Kin Contact'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.pcountry_live_today"
@@ -31,14 +32,18 @@
 				<AplInfoCardDate @update:model-value="logger" :date="apl.passport_ex!" @date="handleDate"
 					:name_type="'passport_ex'" :heading="'Passport Expiry Date'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.pemail" :heading="'Email'" />
-				<AplInfoCard @update:model-value="logger" v-model="apl.pgender" :heading="'Gender'" />
-				<AplInfoCard @update:model-value="logger" v-model="apl.pmarital_status" :heading="'Marital Status'" />
-				<AplInfoCard @update:model-value="logger" v-model="apl.peducation_level" :heading="'Education Level'" />
+				<AplInfoCard @update:model-value="logger" :select="true" :options="['MALE', 'FEMALE']" v-model="apl.pgender"
+					:heading="'Gender'" />
+				<AplInfoCard @update:model-value="logger" :select="true" :options="$marital_status" v-model="apl.pmarital_status"
+					:heading="'Marital Status'" />
+				<AplInfoCard @update:model-value="logger" :select="true" :options="$highest_level_ed"
+					v-model="apl.peducation_level" :heading="'Education Level'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.ppostal" :heading="'Residential Address'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.pconf_code" :heading="'Confirmation Code'" />
-				<AplInfoCard @update:model-value="logger" v-model="apl.children_number" :heading="'Number of Children'" />
-				<AplInfoCard v-if="!role && !edit_mode" :disabled="true" @update:model-value="logger" v-model="apl.totalPayment"
-					:heading="'Paid Amount'" />
+				<AplInfoCard @update:model-value="logger" :select="true" :num_options="[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+					v-model="apl.children_number" :heading="'Number of Children'" />
+				<AplInfoCard class="col-span-full mx-auto w-fit" v-if="!edit_mode" :disabled="true" @update:model-value="logger"
+					v-model="apl.totalPayment" :heading="'Paid Amount'" />
 			</div>
 		</div>
 
@@ -68,14 +73,18 @@
 				<h2 class="col-span-full py-3 text-2xl font-bold flex justify-between items-center">
 					<span>Spouse Information</span>
 					<span v-if="!edit_mode" class="font-normal">{{
-						`${apl.slastName} ${apl.sfirstName} ${apl.sotherName}`.trimEnd() }}
+						`${apl.slastName} ${apl.sfirstName}
+											${apl.sotherName}`.trimEnd() }}
 					</span>
 					<div v-else class="flex gap-3 w-fit">
-						<TextInput @update:model-value="logger" classer="input-sm" v-model="apl.slastName">Last Name
+						<TextInput @update:model-value="logger" classer="input-sm" v-model="apl.slastName">Last
+							Name
 						</TextInput>
-						<TextInput @update:model-value="logger" classer="input-sm" v-model="apl.sfirstName">First Name
+						<TextInput @update:model-value="logger" classer="input-sm" v-model="apl.sfirstName">First
+							Name
 						</TextInput>
-						<TextInput @update:model-value="logger" classer="input-sm" v-model="apl.sotherName">Other Name
+						<TextInput @update:model-value="logger" classer="input-sm" v-model="apl.sotherName">Other
+							Name
 						</TextInput>
 					</div>
 
@@ -167,18 +176,36 @@ import { useImageStore } from '@/store/images';
 import { useViewAplStore } from '@/store/viewApl';
 import { useProfileStore } from '@/store/profile';
 
-const resetApl = async () => {
-	// let aplVal = await getApplicant(APL_ID.value!)
-	// apl.value = aplVal
+const { $SB, $trimStringProperties } = useNuxtApp()
+const { total_apls } = storeToRefs(useAppStore())
+const { APL_ID } = storeToRefs(useViewAplStore())
+const { role } = storeToRefs(useProfileStore())
+const emit = defineEmits(['apl', 'request'])
 
-	apl.value = total_apls.value.find(aplz => aplz.apl_id == apl.value.apl_id)!
-}
-
-defineExpose({
-	resetApl
-})
+const apl_data = useApl(APL_ID.value)
+apl_data.setApl()
+console.log(apl_data.applicant.value);
 
 const if_updated = ref(false)
+const { edit_mode } = storeToRefs(useAplStore())
+const p_loading = ref(false)
+const s_loading = ref(false)
+const w_loading = ref(false)
+const prime_file = ref<FileWithAplType>()
+const sec_file = ref<FileWithAplType>()
+const wards_file = ref<FileWithAplType[]>([])
+const curr_ward_file = ref<FileWithAplType>()
+const prime_image = ref()
+const sec_image = ref()
+const wards_image = ref<any[]>([])
+const request = ref<Requests>({
+	apl_id: '',
+	modified_apl: null,
+	modify_type: '',
+	body: '',
+	status: '',
+	user_id: '',
+})
 const apl = ref<Applicant>({
 	apl_id: '',
 	aplImg_path: {
@@ -187,7 +214,7 @@ const apl = ref<Applicant>({
 		wardsPath: []
 	},
 	children_number: 0,
-	created_at: null,
+	created_at: undefined,
 	fullName: '',
 	passport_ex: null,
 	pcity_ob: '',
@@ -223,23 +250,6 @@ const apl = ref<Applicant>({
 	user_id: useSupabaseUser().value?.id!,
 	wards: []
 })
-const { edit_mode } = storeToRefs(useAplStore())
-const { $SB, $trimStringProperties } = useNuxtApp()
-const { total_apls } = storeToRefs(useAppStore())
-const { APL_ID } = storeToRefs(useViewAplStore())
-const { role } = storeToRefs(useProfileStore())
-const emit = defineEmits(['apl', 'request'])
-const p_loading = ref(false)
-const s_loading = ref(false)
-const w_loading = ref(false)
-const request = ref<Requests>({
-	apl_id: '',
-	modified_apl: null,
-	modify_type: '',
-	body: '',
-	status: '',
-	user_id: '',
-})
 
 async function getApplicant(id: string) {
 	try {
@@ -256,16 +266,9 @@ async function getApplicant(id: string) {
 
 onMounted(async () => {
 	let aplVal = await getApplicant(APL_ID.value!)
-
 	apl.value = aplVal
 
-	console.log(apl.value);
-
-	// let aplVal = total_apls.value.filter(applicant => apl.value.apl_id! == useNuxtApp()._route.params.id)[0]
-
-	// setTimeout(async () => {
 	await loadUrl()
-	// }, 1000)
 
 	request.value.apl_id = apl.value.apl_id!
 	request.value.modify_type = 'edit'
@@ -280,15 +283,6 @@ onMounted(async () => {
 	useAplStore().toggleEditMode(false)
 })
 
-// onBeforeUnmount(() => {
-// 	useAplStore().toggleEditMode(false)
-// })
-
-const prime_image = ref()
-const sec_image = ref()
-const wards_image = ref<any[]>([])
-// const wards_data = ref<any[]>([])
-
 async function loadUrl() {
 	try {
 		const { data, error } = await $SB
@@ -297,16 +291,16 @@ async function loadUrl() {
 			.createSignedUrls([apl.value.aplImg_path!.primePath[0], apl.value.aplImg_path.secPath[0], ...apl.value.aplImg_path.wardsPath], 3600)
 
 		if (error) throw error
-		console.log(apl.value.aplImg_path);
+		// console.log(apl.value.aplImg_path);
 
-		console.log(data);
+		// console.log(data);
 
 
 		prime_image.value = data[0].signedUrl || ''
 		sec_image.value = data[1].signedUrl || ''
 		if (!data) return
 		wards_image.value = data.slice(2).map(img => img.signedUrl)
-		console.log(wards_image.value);
+		// console.log(wards_image.value);
 
 	}
 	catch (err: any) {
@@ -344,11 +338,6 @@ function logger(e: any) {
 		emit('request', request.value)
 	}, 10)
 }
-
-const prime_file = ref<FileWithAplType>()
-const sec_file = ref<FileWithAplType>()
-const wards_file = ref<FileWithAplType[]>([])
-const curr_ward_file = ref<FileWithAplType>()
 
 function handleFile(evt: any, type: string, idx?: number) {
 	// console.log(evt.target.files[0], type);
@@ -509,6 +498,18 @@ async function handleWardUpdate(idx: number) {
 		w_loading.value = false
 	}
 }
+
+const resetApl = async () => {
+	// let aplVal = await getApplicant(APL_ID.value!)
+	// apl.value = aplVal
+
+	apl.value = total_apls.value.find(aplz => aplz.apl_id == apl.value.apl_id)!
+}
+
+defineExpose({
+	resetApl
+})
+
 </script>
 
 <style scoped>

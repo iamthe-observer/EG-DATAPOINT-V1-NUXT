@@ -85,10 +85,10 @@
 		</div>
 
 		<div class="flex gap-4 col-span-12 justify-center">
-			<SelectInput :options="marital_status" v-model="applicant.pmarital_status">
+			<SelectInput :options="$marital_status" v-model="applicant.pmarital_status">
 				Marital
 				Status</SelectInput>
-			<SelectInput :options="highest_level_ed" v-model="applicant.peducation_level">
+			<SelectInput :options="$highest_level_ed" v-model="applicant.peducation_level">
 				Highest
 				Level of Education
 			</SelectInput>
@@ -124,25 +124,6 @@ function handleFile(evt: any) {
 }
 
 // TODO work on discounting system
-const marital_status = [
-	'UNMARRIED',
-	'MARRIED',
-	'DIVORCED',
-	'WIDOWED',
-	'LEGALLY SEPARATED'
-];
-const highest_level_ed = [
-	"PRIMARY SCHOOL ONLY",
-	"HIGH SCHOOL, NO DEGREE",
-	"HIGH SCHOOL DEGREE",
-	"VOCATIONAL SCHOOL",
-	"SOME UNIVERSITY COURSES",
-	"UNIVERSITY DEGREE",
-	"SOME GRADUATE LEVEL COURSES",
-	"MASTER'S DEGREE",
-	"SOME DOCTORATE LEVEL COURSES",
-	"DOCTORATE DEGREE"
-]
 
 </script>
 

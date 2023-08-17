@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full h-full flex justify-between p-7 relative">
+	<div v-if="!useAppStore().is_mobile" class="w-full h-full flex justify-between p-7 relative">
 		<!-- <Planet /> -->
 		<div class="absolute bg- inset-0 my-7 mx-7">
 			<div class="w-full h-full flex relative">
@@ -17,9 +17,16 @@
 		<AuthRegister @toLogin="toLogin" class="__register opacity-0 z-10" />
 		<AuthLogin @login="$loadAppData" class="__login opacity-100 z-10" />
 	</div>
+
+	<div class="w-full h-full flex justify-center items-center p-7 relative" v-else>
+		<AuthLogin @login="$loadAppData" class="__login opacity-100 z-10" />
+	</div>
 </template>
 
 <script setup lang="ts">
+import { useAppStore } from '@/store/app';
+
+
 definePageMeta({
 	layout: 'auth',
 	// middleware: 'auth'

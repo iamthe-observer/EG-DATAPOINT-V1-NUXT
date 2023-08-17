@@ -1,15 +1,15 @@
 export default defineNuxtConfig({
-  plugins: [{ src: '~/plugins/dragscroll', ssr: false }],
-  modules: ['@vueuse/nuxt', '@nuxtjs/supabase', '@pinia/nuxt'],
+  plugins: [{ src: "~/plugins/dragscroll", ssr: false }],
+  modules: ["@vueuse/nuxt", "@nuxtjs/supabase", "@pinia/nuxt"],
   alias: {
-    assets: '<rootDir>/assets',
+    assets: "<rootDir>/assets",
   },
-  devtools: { enabled: true },
-  css: ['~/assets/css/main.css', '~/assets/css/fonts.css'],
+  devtools: { enabled: false },
+  css: ["~/assets/css/main.css", "~/assets/css/fonts.css"],
   postcss: {
     plugins: {
       tailwindcss: {},
       autoprefixer: {},
     },
   },
-})
+});

@@ -5,7 +5,8 @@
 
 			<header
 				class="w-full min-h-[4rem] dark:bg-primary bg-neutral-700 rounded-2xl flex items-center justify-between px-4">
-				<h1 v-if="!role" class="text-2xl dark:text-neutral-50">View All Applicants <span class="">({{ all_my_apls.length
+				<h1 v-if="!role" class="text-2xl dark:text-neutral-50">View All Applicants <span class="text-2xl">({{
+					all_my_apls.length
 				}})</span></h1>
 				<h1 v-else class="flex items-center gap-3 dark:text-neutral-50">
 					<span class="text-2xl whitespace-nowrap">
@@ -225,7 +226,7 @@
 							<td>
 								<div class="flex flex-col items-end">
 									<span class="text-right">
-										{{ apl.pcontact }}
+										{{ apl.pcontact.substring(0, 10) }}
 									</span>
 									<span class="text-xs text-right">
 										{{ apl.pother_contact }}

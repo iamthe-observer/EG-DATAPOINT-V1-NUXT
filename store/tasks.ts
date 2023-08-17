@@ -22,6 +22,7 @@ export const useTasksStore = defineStore("tasks", () => {
 
       if (error) throw error;
       _tasks.value = data!;
+      return data;
     } catch (error) {
       console.log(error);
     }

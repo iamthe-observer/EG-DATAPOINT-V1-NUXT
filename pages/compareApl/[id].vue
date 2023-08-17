@@ -154,6 +154,15 @@
 					</Divider>
 					<Divider class="">
 						<template #modified_apl="props">
+							{{ props.original?.ppostal }}
+						</template>
+						Residential<br />Address
+						<template #apl="props">
+							{{ props.edited?.ppostal }}
+						</template>
+					</Divider>
+					<Divider class="">
+						<template #modified_apl="props">
 							{{ props.original?.psocial_media.facebook }}
 						</template>
 						Facebook

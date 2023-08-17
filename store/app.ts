@@ -7,6 +7,7 @@ export const useAppStore = defineStore("app", () => {
   const { $SB } = useNuxtApp();
   const { applicant } = storeToRefs(useAplStore());
   const dark_mode = ref(useLocalStorage("dark_mode", false));
+  const is_mobile = ref(false);
   const daily_urls = ref<
     | {
         error: string | null;
@@ -155,10 +156,22 @@ export const useAppStore = defineStore("app", () => {
 
   async function getPrices() {
     try {
-      let { data, error } = await $SB.from("prices").select("*");
+      let { data: user, error: err } = await $SB
+        .from("profiles")
+        .select("location")
+        .eq("id", useSupabaseUser().value?.id);
+      if (err) throw err;
 
+      let { data, error } = await $SB.from("prices").select("*");
       if (error) throw error;
-      prices.value = data![0];
+
+      if (user![0].location == "madina" || user![0].location == "ablekuma") {
+        prices.value = data![1];
+      } else {
+        prices.value = data![0];
+      }
+      console.log(prices.value);
+
       return data![0];
     } catch (err: any) {
       console.log(err);
@@ -335,5 +348,6 @@ export const useAppStore = defineStore("app", () => {
     perc_compared_to_yesterday,
     perc_compared_to_yesterday_admin,
     daily_urls,
+    is_mobile,
   };
 });
