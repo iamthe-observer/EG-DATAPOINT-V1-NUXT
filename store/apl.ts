@@ -12,7 +12,6 @@ import { useProfileStore } from "./profile";
 export const useAplStore = defineStore(
   "apl",
   () => {
-    const { prices } = storeToRefs(useAppStore());
     const { profile } = storeToRefs(useProfileStore());
     const { has_files } = storeToRefs(useImageStore());
     const { $SB, $trimStringProperties } = useNuxtApp();

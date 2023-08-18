@@ -243,7 +243,7 @@ const getMaxDay = computed(() => {
 		}
 	}
 
-	console.log({ maxCount, daysAgo: daysAgoMaxCount });
+	// console.log({ maxCount, daysAgo: daysAgoMaxCount });
 
 	return { maxCount, daysAgo: daysAgoMaxCount };
 })

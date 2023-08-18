@@ -15,23 +15,77 @@
 			</div>
 		</div>
 		<AuthRegister @toLogin="toLogin" class="__register opacity-0 z-10" />
-		<AuthLogin @login="$loadAppData" class="__login opacity-100 z-10" />
+		<AuthLogin @login="loadAppData" class="__login opacity-100 z-10" />
 	</div>
 
 	<div class="w-full h-full flex justify-center items-center p-7 relative" v-else>
-		<AuthLogin @login="$loadAppData" class="__login opacity-100 z-10" />
+		<AuthLogin @login="loadAppData" class="__login opacity-100 z-10" />
 	</div>
 </template>
 
 <script setup lang="ts">
 import { useAppStore } from '@/store/app';
+import { useAnnStore } from '@/store/announce';
+import { useProfileStore } from '@/store/profile';
+import { useRequestStore } from '@/store/requests';
+import { useTasksStore } from '@/store/tasks';
 
-
+const { $router, $SB, _route } = useNuxtApp()
 definePageMeta({
 	layout: 'auth',
 	// middleware: 'auth'
 })
 
+const loadAppData = async () => {
+	const app = useAppStore();
+	app.$patch({
+		app_loading: true,
+	});
+
+	try {
+		let currentSession = await $SB.auth.getSession();
+
+		if (currentSession.data.session == null) {
+			throw currentSession.error;
+		} else {
+			let {
+				data: { user },
+			} = await $SB.auth.getUser();
+
+			const promises = await Promise.allSettled([
+				useProfileStore().getProfile(),
+				useProfileStore().getProfiles(),
+				useAppStore().getTotalApls(),
+				useAppStore().getPrices(),
+				useAnnStore().getAnnounce(),
+				useRequestStore().getRequests(),
+				useTasksStore().getTasks(),
+			]);
+
+			// @ts-ignore
+			let values = promises
+				.filter((val) => val.status == "fulfilled")
+				.map((val) => val.value);
+
+			if (values.length == promises.length) {
+				if (_route.path == "/") {
+					$router.push("/dashboard");
+				}
+				await $SB.auth.startAutoRefresh();
+				app.$patch({
+					app_loading: false,
+				});
+				return user;
+			}
+		}
+	} catch (error) {
+		$router.push("/");
+		console.log(error);
+		app.$patch({
+			app_loading: false,
+		});
+	}
+};
 
 function toRegister() {
 	setTimeout(() => {

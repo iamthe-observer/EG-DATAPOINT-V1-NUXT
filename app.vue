@@ -1,6 +1,6 @@
 <template>
   <div class="h-screen bg-neutral-900 text-white dark:bg-neutral-200 dark:text-neutral-900">
-    <div v-if="!app_loading" class="w-full h-full grid place-items-center bg-neutral-900 dark:bg-neutral-50">
+    <div v-if="app_loading" class="w-full h-full grid place-items-center bg-neutral-900 dark:bg-neutral-50">
       <Loading />
     </div>
     <NuxtLayout v-else>
@@ -12,6 +12,10 @@
 <script setup lang="ts">
 import { useAplStore } from '@/store/apl';
 import { useAppStore } from '@/store/app';
+import { useAnnStore } from '@/store/announce';
+import { useProfileStore } from '@/store/profile';
+import { useRequestStore } from '@/store/requests';
+import { useTasksStore } from '@/store/tasks';
 import { storeToRefs } from 'pinia';
 
 useServerSeoMeta({
@@ -24,25 +28,68 @@ useServerSeoMeta({
 // document.body.style
 const { $SB } = useNuxtApp()
 const { app_loading, is_mobile } = storeToRefs(useAppStore())
-const { $onInitLoadAppData, $router } = useNuxtApp()
+const { $router, _route } = useNuxtApp()
+const app = useAppStore()
 
 $SB.auth.onAuthStateChange((event: string) => {
   if (event === 'SIGNED_OUT') {
-    // set(logged, false)
-    // profileStore.reset()
-    // useSearchStore().resetRecentSearch()
-    // useDashStore().reset()
-    // useAnnStore().reset()
-    // useRequestStore().reset()
-
     useAplStore().resetAplData()
     $router.push('/')
   }
 })
 
+const onInitLoadAppData = async () => {
+  app.$patch({
+    app_loading: true
+  })
+
+  try {
+    let currentSession = await $SB.auth.getSession();
+    console.log(currentSession.data.session);
+
+    if (currentSession.data.session == null) {
+      throw currentSession.error;
+    } else {
+      let {
+        data: { user },
+      } = await $SB.auth.getUser();
+
+      const promises = await Promise.allSettled([
+        useProfileStore().getProfile(),
+        useProfileStore().getProfiles(),
+        useAppStore().getTotalApls(),
+        useAppStore().getPrices(),
+        useAnnStore().getAnnounce(),
+        useRequestStore().getRequests(),
+        useTasksStore().getTasks(),
+      ])
+
+      // @ts-ignore
+      let values = promises.filter(val => val.status == 'fulfilled').map(val => val.value);
+
+      if (values.length == promises.length) {
+        if (_route.path == "/") {
+          $router.push("/dashboard");
+        }
+        await $SB.auth.startAutoRefresh();
+        app.$patch({
+          app_loading: false
+        })
+        return user;
+      }
+    }
+  } catch (error) {
+    $router.push("/");
+    console.log(error);
+    app.$patch({
+      app_loading: false
+    })
+  }
+};
+
 onMounted(async () => {
-  await $onInitLoadAppData()
   document.documentElement.setAttribute('data-theme', 'EG')
+  await onInitLoadAppData()
 
   useAppStore().$patch({
     is_mobile: useNuxtApp().$mobileCheck()

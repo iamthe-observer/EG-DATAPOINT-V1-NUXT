@@ -1,12 +1,12 @@
 <template>
-	<div v-if="!view" class="w-full h-full rounded-2xl overflow-y-auto" id="style-2">
+	<!-- <div v-if="!view" class="w-full h-full rounded-2xl overflow-y-auto" id="style-2">
 		<div
 			class="w-full min-h-full rounded-s-2xl bg-neutral-800 dark:bg-neutral-50 dark:shadow-xl col-span-full row-span-full p-3 overflow-y-auto text-justify relative flex flex-col gap-5"
 			id="style-1">
 
 			<header classs="">
 				<span @dblclick="view = !view" class="">Overview</span>
-				<!-- loction -->
+				loction
 			</header>
 
 			<div class="w-full grid grid-cols-4 gap-3">
@@ -20,11 +20,11 @@
 			</div>
 
 		</div>
-	</div>
+	</div> -->
 
 
 
-	<div v-if="view" class="w-full h-full rounded-2xl overflow-y-auto" id="style-2">
+	<div class="w-full h-full rounded-2xl overflow-y-auto" id="style-2">
 		<div
 			class="w-full min-h-full rounded-s-2xl bg-neutral-800 dark:bg-neutral-50 dark:shadow-xl col-span-full row-span-full p-3 overflow-y-auto text-justify relative flex flex-col gap-5"
 			id="style-1">

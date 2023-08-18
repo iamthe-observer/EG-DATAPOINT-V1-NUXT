@@ -29,18 +29,6 @@ export const useAppStore = defineStore("app", () => {
     dark_mode.value = params;
   }
 
-  const formatDate = (date: Date | null) => {
-    if (date == null) {
-      return "";
-    } else {
-      const day = String(date.getDate()).padStart(2, "0");
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      const year = String(date.getFullYear());
-
-      return `${day}/${month}/${year}`;
-    }
-  };
-
   const all_my_apls = ref<Applicant[]>([]);
   const total_apls = ref<Applicant[]>([]);
   const prices = ref<Prices>({
@@ -48,7 +36,7 @@ export const useAppStore = defineStore("app", () => {
     child: 0,
     id: 0,
   });
-  const app_loading = ref(false);
+  const app_loading = ref(true);
   const locations = ref([
     "circle",
     "madina",
@@ -56,6 +44,8 @@ export const useAppStore = defineStore("app", () => {
     "ashaiman",
     "lapaz",
     "kaneshie",
+    "ablekuma",
+    "spintex",
   ]);
 
   const price = computed(() => {
@@ -77,20 +67,6 @@ export const useAppStore = defineStore("app", () => {
       return 0;
     }
   });
-
-  function reset() {
-    all_my_apls.value = [];
-    total_apls.value = [];
-    prices.value = {
-      adult: 0,
-      child: 0,
-      id: 0,
-    };
-  }
-
-  function setAppLoading(val: boolean) {
-    app_loading.value = val;
-  }
 
   const getPayments_admin = async () => {
     try {
@@ -175,10 +151,10 @@ export const useAppStore = defineStore("app", () => {
 
       if (user![0].location == "madina" || user![0].location == "ablekuma") {
         prices.value = data![1];
-        console.log(prices.value);
+        // console.log(prices.value);
       } else {
         prices.value = data![0];
-        console.log(prices.value);
+        // console.log(prices.value);
       }
 
       return data![0];
@@ -189,13 +165,17 @@ export const useAppStore = defineStore("app", () => {
 
   const total_daily_applicants = computed(() => {
     return all_my_apls.value?.filter(
-      (apl) => formatDate(new Date(apl.created_at!)) == formatDate(new Date()),
+      (apl) =>
+        useNuxtApp().$formatDate(new Date(apl.created_at!)) ==
+        useNuxtApp().$formatDate(new Date()),
     );
   });
 
   const total_daily_applicants_admin = computed(() => {
     return total_apls.value?.filter(
-      (apl) => formatDate(new Date(apl.created_at!)) == formatDate(new Date()),
+      (apl) =>
+        useNuxtApp().$formatDate(new Date(apl.created_at!)) ==
+        useNuxtApp().$formatDate(new Date()),
     );
   });
 
@@ -310,6 +290,16 @@ export const useAppStore = defineStore("app", () => {
     }
   });
 
+  function reset() {
+    all_my_apls.value = [];
+    total_apls.value = [];
+    prices.value = {
+      adult: 0,
+      child: 0,
+      id: 0,
+    };
+  }
+
   // real-time channels
   $SB
     .channel("applicants-channel")
@@ -346,7 +336,6 @@ export const useAppStore = defineStore("app", () => {
     price,
     getAllMyApls,
     getTotalApls,
-    setAppLoading,
     getPrices,
     getApplicant,
     reset,
