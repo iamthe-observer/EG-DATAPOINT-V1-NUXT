@@ -244,18 +244,6 @@ async function handleClose() {
 	await viewApl.value?.resetApl()
 }
 
-// function logger(e: any) {
-// 	console.log(e);
-
-// 	setTimeout(() => {
-// 		curr_request.value!.modified_apl!.pfirstName = firstName.value
-// 		curr_request.value!.modified_apl!.plastName = lastName.value
-// 		curr_request.value!.modified_apl!.potherName = otherName.value
-// 		curr_request.value!.modified_apl!.fullName = `${lastName.value} ${firstName.value} ${otherName.value}`.trimEnd()
-// 		curr_request.value!.fullName = `${lastName.value} ${firstName.value} ${otherName.value}`.trimEnd()
-// 	}, 10)
-// }
-
 async function handleSubmit() {
 	if (!request_body.value) return
 	curr_request.value!.body = request_body.value!

@@ -99,6 +99,18 @@
 			</div>
 			<label class="modal-backdrop bg-[rgb(0,0,0,.7)]" for="request_modal_1">Close</label>
 		</div>
+
+		<Teleport to="body">
+			<div v-if="if_val_err" class="absolute bottom-0 left-1/2 -translate-x-1/2 pb-6">
+				<div class="alert alert-error">
+					<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+							d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+					</svg>
+					<span class="">Error! Validation Failed. <br />(Go over and check if all the fields have been filled)</span>
+				</div>
+			</div>
+		</Teleport>
 	</div>
 </template>
 
@@ -112,7 +124,7 @@ import { useTitle } from '@vueuse/core';
 useTitle('EG Datapoint | Add Applicant')
 
 const { price } = storeToRefs(useAppStore())
-const { applicant, if_sent, if_req_sent, apl_sending, request } = storeToRefs(useAplStore())
+const { applicant, if_sent, if_req_sent, apl_sending, request, if_val_err } = storeToRefs(useAplStore())
 const container = ref<HTMLDivElement>()
 const steps_ = ref([{ name: 'Primary', page: 'prime' }])
 const curr_page = ref('prime')

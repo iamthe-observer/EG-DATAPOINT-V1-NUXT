@@ -20,6 +20,9 @@ export const useAplStore = defineStore(
     const if_sent = ref<boolean>(false);
     const if_req_sent = ref<boolean>(false);
     const apl_sending = ref(false);
+    const if_val_err = ref(false);
+    let val_err_msg =
+      "Error! Validation Failed. (Go over and check if all the fields have been filled.)";
     const request = ref<Requests>({
       apl_id: "",
       modified_apl: null,
@@ -276,9 +279,15 @@ export const useAplStore = defineStore(
       }
     };
 
+    function handleValidationError() {
+      if_val_err.value = true;
+
+      setTimeout(() => {
+        if_val_err.value = false;
+      }, 4000);
+    }
+
     async function handleSend() {
-      let err_msg =
-        "Error! Validation Failed. (Go over and check if all the fields have been filled.)";
       applicant.value.apl_id = uuidv4();
       applicant.value.fullName = `${applicant.value.plastName} ${applicant.value.pfirstName} ${applicant.value.potherName}`;
 
@@ -319,7 +328,7 @@ export const useAplStore = defineStore(
           console.log(applicant_type.value);
 
           if_sent.value = false;
-          alert(err_msg);
+          handleValidationError();
         }
       } else if (applicant_type.value == "family") {
         // getting val for all wards
@@ -337,7 +346,7 @@ export const useAplStore = defineStore(
           console.log(applicant_type.value);
 
           if_sent.value = false;
-          alert(err_msg);
+          handleValidationError();
         }
       } else if (applicant_type.value == "wards only") {
         // getting val for all wards
@@ -355,7 +364,7 @@ export const useAplStore = defineStore(
           console.log(applicant_type.value);
 
           if_sent.value = false;
-          alert(err_msg);
+          handleValidationError();
         }
       } else if (applicant_type.value == "single") {
         let if_spouse = await validate(single_rules, applicant.value);
@@ -366,7 +375,7 @@ export const useAplStore = defineStore(
           console.log(applicant_type.value);
 
           if_sent.value = false;
-          alert(err_msg);
+          handleValidationError();
         }
       }
     }
@@ -566,6 +575,7 @@ export const useAplStore = defineStore(
     }
 
     return {
+      if_val_err,
       applicant,
       applicant_type,
       empty_ward,
@@ -582,6 +592,7 @@ export const useAplStore = defineStore(
       resetRequest,
       if_req_sent,
       curr_compared_request,
+      val_err_msg,
     };
   },
   {

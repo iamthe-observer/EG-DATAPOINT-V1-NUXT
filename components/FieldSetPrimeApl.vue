@@ -122,8 +122,5 @@ onMounted(() => {
 function handleFile(evt: any) {
 	useImageStore().setFiles(evt.target.files[0], `prime`)
 }
-
-// TODO work on discounting system
-
 </script>
 

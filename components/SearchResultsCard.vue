@@ -21,7 +21,6 @@
 </template>
 
 <script setup lang="ts">
-// TODO	sort out userDash recent apls
 import { Applicant, SearchParams } from '@/interfaces/interfaces';
 import { asyncComputed } from '@vueuse/core'
 import { useViewAplStore } from '@/store/viewApl';

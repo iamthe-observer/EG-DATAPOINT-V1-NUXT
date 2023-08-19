@@ -3,7 +3,6 @@ import { defineStore } from "pinia";
 import { useStorage } from "@vueuse/core";
 
 export const useViewAplStore = defineStore("view_apl", () => {
-  const state = useApl();
   const APL_ID = ref(useStorage<string>("apl_id", ""));
   const USER_ID = ref(useStorage<string>("user_id", ""));
 
@@ -16,7 +15,6 @@ export const useViewAplStore = defineStore("view_apl", () => {
   }
 
   return {
-    state,
     APL_ID,
     USER_ID,
     setID,

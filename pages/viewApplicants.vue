@@ -26,7 +26,7 @@
 				<div v-if="role ? total_apls.length > step : all_my_apls.length > step" class="join">
 					<button class="join-item btn btn-sm rounded-full btn-primary" @click="PrevPage(page_index)">«</button>
 					<button class="join-item btn btn-sm rounded-full btn-primary">Page {{ page_index }}</button>
-					<button class="join-item btn btn-sm rounded-full btn-primary" @click="NextPage(page_index)">»</button>
+					<button class="join-item btn btn-sm rounded-full btn-primary" @click="NextPage()">»</button>
 				</div>
 
 				<div class="flex items-center gap-2">
@@ -63,14 +63,14 @@
 			</header>
 
 
-			<div v-if="!role && curr_filtered_apls?.length! > 0" id="style-1"
+			<div ref="scroll_container" v-if="!role && curr_filtered_apls?.length! > 0" id="style-1"
 				class="overflow-x-auto overflow-Y-auto pb -3 px-2">
 				<table class="table relative">
 					<!-- head -->
 					<thead class="sticky top-0 backdrop-blur-lg border-none z-50">
 						<tr class="border-none z-50">
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Pos.</th>
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Action</th>
+							<!-- <th class="font-semibold text-center dark:text-neutral-700 text-sm">Pos.</th> -->
+							<!-- <th class="font-semibold text-center dark:text-neutral-700 text-sm">Action</th> -->
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Name</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Bio</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Phone Number</th>
@@ -85,10 +85,10 @@
 						<tr v-for="(apl, i) in curr_filtered_apls"
 							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-black dark:hover:bg-neutral-200"
 							@dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!); }">
-							<th class="font-normal">
+							<!-- <th class="font-normal">
 								{{ i + 1 }}
-							</th>
-							<th>
+							</th> -->
+							<!-- <th>
 								<div class="dropdown dropdown-right">
 									<label tabindex="0"
 										class="btn btn-xs dark:border-none dark:text-neutral-900 dark:bg-white rounded-full m-1 btn-circle"><svg
@@ -103,7 +103,7 @@
 										<li class="hover:bg-accent hover:text-black rounded-lg"><a>Request Delete</a></li>
 									</ul>
 								</div>
-							</th>
+							</th> -->
 							<td>
 								<div class="flex items-center space-x-3">
 									<div>
@@ -170,8 +170,8 @@
 					<!-- head -->
 					<thead class="sticky top-0 backdrop-blur-lg border-none z-50">
 						<tr class="border-none z-50">
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Pos.</th>
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Action</th>
+							<!-- <th class="font-semibold text-center dark:text-neutral-700 text-sm">Pos.</th> -->
+							<!-- <th class="font-semibold text-center dark:text-neutral-700 text-sm">Action</th> -->
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Name</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Bio</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Phone Number</th>
@@ -186,10 +186,10 @@
 						<tr @dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
 							v-for="(apl, i) in _curr_filtered_apls"
 							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-black dark:hover:bg-neutral-200">
-							<th class="font-normal">
+							<!-- <th class="font-normal">
 								{{ i + 1 }}
-							</th>
-							<th>
+							</th> -->
+							<!-- <th>
 								<div class="dropdown dropdown-right">
 									<label tabindex="0"
 										class="btn btn-xs dark:border-none dark:text-neutral-900 dark:bg-white rounded-full m-1 btn-circle"><svg
@@ -204,7 +204,7 @@
 										<li class="hover:bg-accent hover:text-black rounded-lg"><a>Request Delete</a></li>
 									</ul>
 								</div>
-							</th>
+							</th> -->
 							<td>
 								<div class="flex items-center space-x-3">
 									<div>
@@ -346,15 +346,18 @@ const { role, profiles } = storeToRefs(useProfileStore())
 const page_index = ref(1)
 const step = ref(50)
 const curr_user = ref('all')
+const scroll_container = ref<HTMLDivElement>()
 
-function NextPage(idx: number) {
-	if (role) if (_curr_filtered_apls.value?.length! == 50) page_index.value++
-	if (!role) if (curr_filtered_apls.value?.length! == 50) page_index.value++
+function NextPage() {
+	if (role) if (_curr_filtered_apls.value?.length! == step.value) page_index.value++
+	if (!role) if (curr_filtered_apls.value?.length! == step.value) page_index.value++
+	scroll_container.value!.scrollTo({ top: 0, behavior: 'smooth' })
 }
+
 function PrevPage(idx: number) {
 	if (idx != 1) page_index.value--
+	scroll_container.value!.scrollTo({ top: 0, behavior: 'smooth' })
 }
-
 
 const filter_alpha = ref(false)
 const filter_recent = ref(true)

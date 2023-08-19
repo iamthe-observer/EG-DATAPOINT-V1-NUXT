@@ -78,6 +78,63 @@ export default defineNuxtPlugin((nuxtApp) => {
     });
   }
 
+  // function deepCompareObjects<T>(obj1: T, obj2: T) {
+  //   const differences: any[] = [];
+
+  //   function compareRecursive(o1: any, o2: any, currentKey = "") {
+  //     for (const key in o1) {
+  //       if (o1.hasOwnProperty(key) && o2.hasOwnProperty(key)) {
+  //         const newKey = currentKey ? `${currentKey}.${key}` : key;
+
+  //         if (typeof o1[key] === "object" && typeof o2[key] === "object") {
+  //           compareRecursive(o1[key], o2[key], newKey);
+  //         } else if (o1[key] !== o2[key]) {
+  //           differences.push({
+  //             key: newKey,
+  //             value1: o1[key],
+  //             value2: o2[key],
+  //           });
+  //         }
+  //       }
+  //     }
+  //   }
+
+  //   compareRecursive(obj1, obj2);
+  //   return differences;
+  // }
+
+  function deepCompareObjects<T extends Record<string, any>>(obj1: T, obj2: T) {
+    interface Difference {
+      key: string;
+      value1: any;
+      value2: any;
+    }
+
+    const differences: Difference[] = [];
+
+    function compareRecursive(o1: any, o2: any, currentKey = "") {
+      for (const key in o1) {
+        if (o1.hasOwnProperty(key) && o2.hasOwnProperty(key)) {
+          const newKey = currentKey ? `${currentKey}.${key}` : key;
+
+          if (typeof o1[key] === "object" && typeof o2[key] === "object") {
+            compareRecursive(o1[key], o2[key], newKey);
+          } else if (o1[key] !== o2[key]) {
+            differences.push({
+              key: newKey,
+              value1: o1[key],
+              value2: o2[key],
+            });
+          }
+        }
+      }
+    }
+
+    compareRecursive(obj1, obj2);
+
+    return differences;
+  }
+
   function extractNumFromPhrase(phrase: string): number | null {
     const regex = /ward(\d+)/; // Matches "ward" followed by one or more digits
     const match = phrase.match(regex);
@@ -368,6 +425,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   return {
     provide: {
+      deepCompareObjects,
       formatDate,
       formatDateTime,
       formatDateWords,
