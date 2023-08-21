@@ -77,9 +77,12 @@
 					</button>
 				</div>
 
-				<span v-if="!edit_mode" class="font-semibold text-right">{{ fullName ? fullName : 'Applicant' }}<br />By: {{
-					creator
-				}}</span>
+				<span v-if="!edit_mode" class="text-sm font-semibold text-right">{{ fullName ? fullName : 'Applicant' }}<br />By:
+					{{
+						creator
+					}}<br />Location:
+					{{ curr_apl?.location?.toUpperCase() }}
+				</span>
 				<div v-else class="flex gap-3">
 					<div class="form-control w-full max-w-xs">
 						<label class="label">
@@ -225,6 +228,7 @@ const curr_apl = ref<Applicant>()
 const default_apl = ref<Applicant>()
 const if_sent = ref(false)
 const creator = ref()
+
 
 const handleEmit = (e: Applicant) => {
 	curr_apl.value = e

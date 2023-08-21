@@ -3,7 +3,7 @@ import { useStorage } from "@vueuse/core";
 import { v4 as uuidv4 } from "uuid";
 import { defineStore, storeToRefs } from "pinia";
 import { required, numeric } from "@vuelidate/validators";
-import useVuelidate from "@vuelidate/core";
+import useVuelidate, { Validation } from "@vuelidate/core";
 import { Applicant, Requests, WardsApplicant } from "@/interfaces/interfaces";
 import { useImageStore } from "./images";
 import { useAppStore } from "./app";
@@ -121,105 +121,107 @@ export const useAplStore = defineStore(
         return "single";
       }
     });
+    const vuelidate_err = ref(false);
     const single_rules = computed(() => {
       return {
-        plastName: { required },
-        pfirstName: { required },
-        pdob: { required },
-        pcity_ob: { required },
-        pcountry_ob: { required },
-        pgender: { required },
-        pcountry_live_today: { required },
-        peducation_level: { required },
-        ppostal: { required },
-        pmarital_status: { required },
-        children_number: { required, numeric },
-        pcontact: { required },
-        totalPayment: { required },
-        user_id: { required },
+        plastName: { required, $autoDirty: true },
+        pfirstName: { required, $autoDirty: true },
+        pdob: { required, $autoDirty: true },
+        pcity_ob: { required, $autoDirty: true },
+        pcountry_ob: { required, $autoDirty: true },
+        pgender: { required, $autoDirty: true },
+        pcountry_live_today: { required, $autoDirty: true },
+        peducation_level: { required, $autoDirty: true },
+        ppostal: { required, $autoDirty: true },
+        pmarital_status: { required, $autoDirty: true },
+        children_number: { required, $autoDirty: true, numeric },
+        pcontact: { required, $autoDirty: true },
+        totalPayment: { required, $autoDirty: true },
+        user_id: { required, $autoDirty: true },
       };
     });
     const spouse_only_rules = computed(() => {
       return {
-        plastName: { required },
-        pfirstName: { required },
-        pdob: { required },
-        pcity_ob: { required },
-        pcountry_ob: { required },
-        pgender: { required },
-        pcountry_live_today: { required },
-        peducation_level: { required },
-        ppostal: { required },
-        pmarital_status: { required },
-        children_number: { required, numeric },
-        pcontact: { required },
-        totalPayment: { required },
-        user_id: { required },
-        slastName: { required },
-        sfirstName: { required },
-        scity_ob: { required },
-        scountry_ob: { required },
-        scontact: { required },
-        sgender: { required },
-        sdob: { required },
+        plastName: { required, $autoDirty: true },
+        pfirstName: { required, $autoDirty: true },
+        pdob: { required, $autoDirty: true },
+        pcity_ob: { required, $autoDirty: true },
+        pcountry_ob: { required, $autoDirty: true },
+        pgender: { required, $autoDirty: true },
+        pcountry_live_today: { required, $autoDirty: true },
+        peducation_level: { required, $autoDirty: true },
+        ppostal: { required, $autoDirty: true },
+        pmarital_status: { required, $autoDirty: true },
+        children_number: { required, $autoDirty: true, numeric },
+        pcontact: { required, $autoDirty: true },
+        totalPayment: { required, $autoDirty: true },
+        user_id: { required, $autoDirty: true },
+        slastName: { required, $autoDirty: true },
+        sfirstName: { required, $autoDirty: true },
+        scity_ob: { required, $autoDirty: true },
+        scountry_ob: { required, $autoDirty: true },
+        scontact: { required, $autoDirty: true },
+        sgender: { required, $autoDirty: true },
+        sdob: { required, $autoDirty: true },
       };
     });
     const wards_only_rules = computed(() => {
       return {
-        plastName: { required },
-        pfirstName: { required },
-        pdob: { required },
-        pcity_ob: { required },
-        pcountry_ob: { required },
-        pgender: { required },
-        pcountry_live_today: { required },
-        peducation_level: { required },
-        ppostal: { required },
-        pmarital_status: { required },
-        children_number: { required, numeric },
-        pcontact: { required },
-        totalPayment: { required },
-        user_id: { required },
-        wards: { required },
+        plastName: { required, $autoDirty: true },
+        pfirstName: { required, $autoDirty: true },
+        pdob: { required, $autoDirty: true },
+        pcity_ob: { required, $autoDirty: true },
+        pcountry_ob: { required, $autoDirty: true },
+        pgender: { required, $autoDirty: true },
+        pcountry_live_today: { required, $autoDirty: true },
+        peducation_level: { required, $autoDirty: true },
+        ppostal: { required, $autoDirty: true },
+        pmarital_status: { required, $autoDirty: true },
+        children_number: { required, $autoDirty: true, numeric },
+        pcontact: { required, $autoDirty: true },
+        totalPayment: { required, $autoDirty: true },
+        user_id: { required, $autoDirty: true },
+        wards: { required, $autoDirty: true },
       };
     });
     const family_rules = computed(() => {
       return {
-        plastName: { required },
-        pfirstName: { required },
-        pdob: { required },
-        pcity_ob: { required },
-        pcountry_ob: { required },
-        pgender: { required },
-        pcountry_live_today: { required },
-        peducation_level: { required },
-        ppostal: { required },
-        pmarital_status: { required },
-        children_number: { required, numeric },
-        pcontact: { required },
-        totalPayment: { required },
-        user_id: { required },
-        wards: { required },
-        slastName: { required },
-        sfirstName: { required },
-        scity_ob: { required },
-        scountry_ob: { required },
-        scontact: { required },
-        sgender: { required },
-        sdob: { required },
+        plastName: { required, $autoDirty: true },
+        pfirstName: { required, $autoDirty: true },
+        pdob: { required, $autoDirty: true },
+        pcity_ob: { required, $autoDirty: true },
+        pcountry_ob: { required, $autoDirty: true },
+        pgender: { required, $autoDirty: true },
+        pcountry_live_today: { required, $autoDirty: true },
+        peducation_level: { required, $autoDirty: true },
+        ppostal: { required, $autoDirty: true },
+        pmarital_status: { required, $autoDirty: true },
+        children_number: { required, $autoDirty: true, numeric },
+        pcontact: { required, $autoDirty: true },
+        totalPayment: { required, $autoDirty: true },
+        user_id: { required, $autoDirty: true },
+        wards: { required, $autoDirty: true },
+        slastName: { required, $autoDirty: true },
+        sfirstName: { required, $autoDirty: true },
+        scity_ob: { required, $autoDirty: true },
+        scountry_ob: { required, $autoDirty: true },
+        scontact: { required, $autoDirty: true },
+        sgender: { required, $autoDirty: true },
+        sdob: { required, $autoDirty: true },
       };
     });
     const ward_rules = computed(() => {
       return {
-        wlastName: { required },
-        wfirstName: { required },
-        wcity_ob: { required },
-        wcountry_ob: { required },
-        wgender: { required },
-        wdob: { required },
+        wlastName: { required, $autoDirty: true },
+        wfirstName: { required, $autoDirty: true },
+        wcity_ob: { required, $autoDirty: true },
+        wcountry_ob: { required, $autoDirty: true },
+        wgender: { required, $autoDirty: true },
+        wdob: { required, $autoDirty: true },
       };
     });
 
+    // watches and add appliants on children_number change
     watch(
       () => applicant.value.children_number,
       (newVal) => {
@@ -245,7 +247,7 @@ export const useAplStore = defineStore(
       return val;
     }
 
-    const submitApl = async (apl: Applicant) => {
+    async function submitApl(apl: Applicant) {
       apl_sending.value = true;
       console.log(apl.aplImg_path.wardsPath);
       try {
@@ -277,10 +279,31 @@ export const useAplStore = defineStore(
         apl_sending.value = false;
         console.log(err);
       }
-    };
+    }
 
-    function handleValidationError() {
+    async function handleValidationError() {
       if_val_err.value = true;
+
+      if (applicant_type.value == "single") {
+        let v$ = useVuelidate(single_rules, applicant.value);
+        await v$.value.$validate();
+        vuelidate_err.value = await v$.value.$validate();
+        console.log(vuelidate_err.value);
+      } else if (applicant_type.value == "family") {
+        let v$ = useVuelidate(family_rules, applicant.value);
+        await v$.value.$validate();
+        vuelidate_err.value = await v$.value.$validate();
+        console.log(vuelidate_err.value);
+      } else if (applicant_type.value == "spouse only") {
+        let v$ = useVuelidate(spouse_only_rules, applicant.value);
+        await v$.value.$validate();
+        vuelidate_err.value = await v$.value.$validate();
+        console.log(vuelidate_err.value);
+      } else if (applicant_type.value == "wards only") {
+        let v$ = useVuelidate(wards_only_rules, applicant.value);
+        await v$.value.$validate();
+        console.log(v$.value.$errors);
+      }
 
       setTimeout(() => {
         if_val_err.value = false;
@@ -291,10 +314,8 @@ export const useAplStore = defineStore(
       applicant.value.apl_id = uuidv4();
       applicant.value.fullName = `${applicant.value.plastName} ${applicant.value.pfirstName} ${applicant.value.potherName}`;
 
-      // let pricer = await useAppStore().getPrices();
       const pricer = useAppStore().prices;
       let price: number = 0;
-      console.log(pricer);
 
       const if_sp = applicant.value.pmarital_status == "MARRIED";
       const if_wa = applicant.value.children_number > 0;
@@ -368,7 +389,7 @@ export const useAplStore = defineStore(
         }
       } else if (applicant_type.value == "single") {
         let if_spouse = await validate(single_rules, applicant.value);
-        console.log(if_spouse);
+
         if (await validate(single_rules, applicant.value)) {
           await sendApplicant(applicant.value);
         } else {
@@ -575,10 +596,11 @@ export const useAplStore = defineStore(
     }
 
     return {
+      vuelidate_err,
+      empty_ward,
       if_val_err,
       applicant,
       applicant_type,
-      empty_ward,
       resetAplData,
       edit_mode,
       toggleEditMode,

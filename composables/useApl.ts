@@ -1,6 +1,11 @@
 // @ts-ignore
 import { v4 as uuidv4 } from "uuid";
-import { Applicant, Requests, WardsApplicant } from "@/interfaces/interfaces";
+import {
+  Applicant,
+  FileWithAplType,
+  Requests,
+  WardsApplicant,
+} from "@/interfaces/interfaces";
 import { storeToRefs } from "pinia";
 import { useAppStore } from "@/store/app";
 import { useProfileStore } from "@/store/profile";
@@ -8,6 +13,8 @@ import { useImageStore } from "@/store/images";
 import { required, numeric } from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import { useStorage } from "@vueuse/core";
+import { useRequestStore } from "@/store/requests";
+import { useAplStore } from "@/store/apl";
 
 export const useApl = (id?: string) => {
   const { prices, total_apls } = storeToRefs(useAppStore());
@@ -19,6 +26,14 @@ export const useApl = (id?: string) => {
   const if_sent = ref<boolean>(false);
   const if_req_sent = ref<boolean>(false);
   const apl_sending = ref(false);
+  const prime_image = ref();
+  const sec_image = ref();
+  const wards_image = ref<any[]>([]);
+  const prime_file = ref<FileWithAplType>();
+  const sec_file = ref<FileWithAplType>();
+  const wards_file = ref<FileWithAplType[]>([]);
+  const curr_ward_file = ref<FileWithAplType>();
+
   const request = ref<Requests>({
     apl_id: "",
     modified_apl: null,
@@ -40,50 +55,10 @@ export const useApl = (id?: string) => {
       ...empty_req.value,
     }),
   );
-  const applicant = ref<Applicant>({
-    // created_at: new Date(),
-    plastName: "",
-    pfirstName: "",
-    potherName: "",
-    pdob: null,
-    pcity_ob: "",
-    pcountry_ob: "",
-    pgender: "",
-    pconf_code: "",
-    pemail: "",
-    ppassport_number: "",
-    passport_ex: null,
-    pcountry_live_today: "",
-    peducation_level: "",
-    ppostal: "",
-    pmarital_status: "UNMARRIED",
-    children_number: 0,
-    fullName: "",
-    user_id: user.value?.id!,
-    pcontact: "",
-    wards: [],
-    totalPayment: 0,
-    pother_contact: "",
-    psocial_media: {
-      facebook: "",
-      instagram: "",
-      twitter: "",
-    },
-    aplImg_path: {
-      primePath: [],
-      secPath: [],
-      wardsPath: [],
-    },
-    slastName: "",
-    sfirstName: "",
-    sotherName: "",
-    scity_ob: "",
-    scountry_ob: "",
-    scontact: "",
-    sgender: "",
-    sdob: null,
-    location: "",
-  });
+  const applicant = ref<Applicant>(
+    total_apls.value.find((apl) => apl.apl_id == id)!,
+  );
+
   const empty_ward = ref<WardsApplicant>({
     wlastName: "",
     wfirstName: "",
@@ -254,6 +229,38 @@ export const useApl = (id?: string) => {
     },
   );
 
+  watch(applicant, (val) => {
+    console.log(val);
+  });
+
+  async function loadUrl() {
+    try {
+      const { data, error } = await $SB.storage
+        .from("applicants")
+        .createSignedUrls(
+          [
+            applicant.value.aplImg_path!.primePath[0],
+            applicant.value.aplImg_path.secPath[0],
+            ...applicant.value.aplImg_path.wardsPath,
+          ],
+          3600,
+        );
+
+      if (error) throw error;
+      // console.log(apl.value.aplImg_path);
+
+      // console.log(data);
+
+      prime_image.value = data[0].signedUrl || "";
+      sec_image.value = data[1].signedUrl || "";
+      if (!data) return;
+      wards_image.value = data.slice(2).map((img) => img.signedUrl);
+      // console.log(wards_image.value);
+    } catch (err: any) {
+      console.log(err);
+    }
+  }
+
   function toggleEditMode(val: boolean) {
     edit_mode.value = val!;
   }
@@ -297,6 +304,22 @@ export const useApl = (id?: string) => {
       console.log(err);
     }
   };
+
+  function handleDate(e: { name: string; date: Date; ward_idx?: number }) {
+    if (e.name == "pdob") {
+      applicant.value.pdob = e.date;
+      console.log(applicant.value);
+    } else if (e.name == "sdob") {
+      applicant.value.sdob = e.date;
+      console.log(applicant.value);
+    } else if (e.name == "passport_ex") {
+      applicant.value.passport_ex = e.date;
+      console.log(applicant.value);
+    } else if (e.name == "wdob") {
+      applicant.value.wards[e.ward_idx! - 1].wdob = e.date;
+      console.log(applicant.value);
+    }
+  }
 
   async function handleSend() {
     let err_msg =
@@ -583,7 +606,23 @@ export const useApl = (id?: string) => {
     request.value = empty_req.value;
   }
 
+  async function onLoad() {
+    await loadUrl();
+
+    request.value.apl_id = applicant.value.apl_id!;
+    request.value.modify_type = "edit";
+    request.value.modified_apl = applicant.value;
+    request.value.status = "pending";
+    request.value.fullName = applicant.value.fullName;
+    request.value.user_id = useSupabaseUser().value?.id!;
+    useRequestStore().setRequest(request.value);
+
+    useAplStore().toggleEditMode(false);
+  }
+
   return {
+    onLoad,
+    handleDate,
     setApl,
     applicant,
     applicant_type,
@@ -601,5 +640,6 @@ export const useApl = (id?: string) => {
     resetRequest,
     if_req_sent,
     curr_compared_request,
+    loadUrl,
   };
 };

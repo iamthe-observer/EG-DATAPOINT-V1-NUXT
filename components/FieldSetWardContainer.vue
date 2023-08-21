@@ -11,16 +11,6 @@ import { useAplStore } from '@/store/apl';
 
 const { applicant } = storeToRefs(useAplStore())
 
-onMounted(() => {
-	setTimeout(() => {
-		props.container.scrollTo({ top: 0, behavior: 'smooth' });
-	}, 100)
-})
-
-const props = defineProps<{
-	container: HTMLDivElement
-}>()
-
 const emit = defineEmits(['handleWardInput', 'file'])
 
 function handleFile(e: any) {

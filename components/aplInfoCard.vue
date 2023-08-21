@@ -16,7 +16,8 @@
 
 		<select v-else-if="edit_mode && !disabled && select"
 			class="select w-full bg-neutral-600 dark:bg-neutral-300 rounded-b-xl rounded-t-none"
-			@input="$emit('update:modelValue', $event.target?.value)" :value="modelValue ? modelValue : value">
+			@input="$emit('update:modelValue', num_options ? Number($event.target?.value) : $event.target?.value)"
+			:value="modelValue ? modelValue : value">
 			<option v-if="options" disabled selected>Pick one</option>
 			<option v-if="num_options" disabled selected>Pick number</option>
 			<option v-if="options" v-for="(option, i) in  options" :key="i" :value="option.toUpperCase()">{{

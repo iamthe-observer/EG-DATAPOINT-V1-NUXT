@@ -179,6 +179,11 @@ const { profiles } = storeToRefs(useProfileStore())
 const view = ref(false)
 const curr_location = ref('all')
 
+onMounted(async () => {
+	const app = useAppStore()
+	await app.getTotalApls()
+})
+
 const today_sales_admin = computed(() => {
 	if (curr_location.value == 'all') {
 		if (total_daily_applicants_admin.value.length > 0) {

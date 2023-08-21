@@ -4,7 +4,8 @@
 			<SvgsHome v-if="!dark_mode" class="__icons" />
 			<SvgsHomeDark v-else class="__icons" />
 		</NuxtLink>
-		<NuxtLink to="/newApl" class="__icons_container tooltip tooltip-primary z-20 tooltip-right" data-tip="Add Applicant">
+		<NuxtLink to="/newApplicant" class="__icons_container tooltip tooltip-primary z-20 tooltip-right"
+			data-tip="Add Applicant">
 			<SvgsContact v-if="!dark_mode" class="__icons" />
 			<SvgsContactDark v-else class="__icons" />
 		</NuxtLink>

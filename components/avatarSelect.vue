@@ -1,6 +1,6 @@
 <template>
-	<div
-		:class="`relative min-h-[200px] min-w-[200px] dark:bg-neutral-300 bg-neutral-600 rounded-lg ${classer ? classer : ''}`">
+	<div :class="`relative aspect-square w-full dark:bg-neutral-300 bg-neutral-600 rounded-lg ${classer ? classer : ''}`">
+		<!-- :class="`relative min-h-[200px] min-w-[200px] dark:bg-neutral-300 bg-neutral-600 rounded-lg ${classer ? classer : ''}`"> -->
 		<div v-if="!src" class="absolute inset-1 rounded-md bg-neutral-700 dark:bg-neutral-200 grid place-items-center">
 			<SvgsImage class="w-10" />
 		</div>

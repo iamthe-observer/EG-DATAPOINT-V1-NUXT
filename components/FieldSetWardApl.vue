@@ -9,25 +9,30 @@
 		</div>
 		<!-- name -->
 		<div class="flex gap-4 col-span-10 pl-6 justify-center">
-			<TextInput v-model="applicant.wards[idx].wlastName">Last Name</TextInput>
-			<TextInput v-model="applicant.wards[idx].wfirstName">First Name</TextInput>
+			<TextInput :val_err="vuelidate_err == false && applicant.wards[idx].wlastName.length == 0"
+				v-model="applicant.wards[idx].wlastName">Last Name</TextInput>
+			<TextInput :val_err="vuelidate_err == false && applicant.wards[idx].wfirstName.length == 0"
+				v-model="applicant.wards[idx].wfirstName">First Name</TextInput>
 			<TextInput v-model="applicant.wards[idx].wotherName">Other Name</TextInput>
 		</div>
 
 		<div class="flex gap-4 col-span-10 pl-6 justify-center">
 			<DatePicker dark :color="'purple'" is-dark v-model="applicant.wards[idx].wdob" mode="date">
 				<template #default="{ togglePopover }">
-					<TextInput :icon="true"
+					<TextInput :val_err="vuelidate_err == false && !applicant.wards[idx].wdob" :icon="true"
 						:value="applicant.wards[idx].wdob ? $formatDate(new Date(applicant.wards[idx].wdob!)) : ''"
 						@click="togglePopover">Date
 						of Birth
 					</TextInput>
 				</template>
 			</DatePicker>
-			<SelectInput :options="['MALE', 'FEMALE']" v-model="applicant.wards[idx].wgender">Gender
+			<SelectInput :val_err="vuelidate_err == false && applicant.wards[idx].wgender.length == 0"
+				:options="['MALE', 'FEMALE']" v-model="applicant.wards[idx].wgender">Gender
 			</SelectInput>
-			<TextInput v-model="applicant.wards[idx].wcity_ob">City of Birth</TextInput>
-			<SelectInput :options="$countries" v-model="applicant.wards[idx].wcountry_ob">
+			<TextInput :val_err="vuelidate_err == false && applicant.wards[idx].wcity_ob.length == 0"
+				v-model="applicant.wards[idx].wcity_ob">City of Birth</TextInput>
+			<SelectInput :val_err="vuelidate_err == false && applicant.wards[idx].wcountry_ob.length == 0" :options="$countries"
+				v-model="applicant.wards[idx].wcountry_ob">
 				Country of Birth
 			</SelectInput>
 		</div>
@@ -36,13 +41,12 @@
 </template>
 
 <script setup lang="ts">
-import { WardsApplicant } from 'interfaces/interfaces';
 import { useAplStore } from '@/store/apl';
 import { storeToRefs } from 'pinia';
 import { useImageStore } from '@/store/images';
 
 const { wardIMG } = storeToRefs(useImageStore())
-const { applicant } = storeToRefs(useAplStore())
+const { applicant, vuelidate_err } = storeToRefs(useAplStore())
 const props = defineProps<{
 	idx: number
 }>()
