@@ -39,7 +39,7 @@
 
 						<div class="avatar pt-5 justify-start">
 							<div class="w-32 rounded-full justify-center">
-								<img v-if="URLs?.length! > 0" class=""
+								<img loading="lazy" v-if="URLs?.length! > 0" class=""
 									:src="URLs![idx].signedUrl !== null ? URLs![idx].signedUrl : '/svg/image.svg'" />
 							</div>
 						</div>
@@ -100,7 +100,7 @@
 
 						<div class="avatar pt-5 justify-start">
 							<div class="w-32 rounded-full justify-center">
-								<img v-if="URLs?.length! > 0" class=""
+								<img loading="lazy" v-if="URLs?.length! > 0" class=""
 									:src="URLs![idx].signedUrl !== null ? URLs![idx].signedUrl : '/svg/image.svg'" />
 							</div>
 						</div>

@@ -48,9 +48,15 @@ const loadAppData = async () => {
 		if (currentSession.data.session == null) {
 			throw currentSession.error;
 		} else {
+
 			let {
 				data: { user },
 			} = await $SB.auth.getUser();
+
+
+			let { data } = await $SB.from('restricted_users').select('*')
+			if (data?.some(USER => USER.user_id == user?.id)) return app.$patch({ restricted_user: true })
+
 
 			const promises = await Promise.allSettled([
 				useProfileStore().getProfile(),

@@ -8,6 +8,7 @@ export const useAppStore = defineStore("app", () => {
   const { applicant } = storeToRefs(useAplStore());
   const dark_mode = ref(useLocalStorage("dark_mode", false));
   const is_mobile = ref(false);
+  const restricted_user = ref(false);
   const daily_urls = ref<
     | {
         error: string | null;
@@ -324,6 +325,7 @@ export const useAppStore = defineStore("app", () => {
     .subscribe();
 
   return {
+    restricted_user,
     locations,
     dark_mode,
     setDarkMode,

@@ -20,7 +20,7 @@
 			</div>
 
 			<div class="grid grid-cols-3 gap-2 w-full">
-				<AplInfoCardDate :heading="`Date of Birth`" :date="apl.pdob!" @date="handleDate" :name_type="'pdob'" />
+				<AplInfoCardDate :heading="`Date of Birth`" :date="new Date(apl.pdob!)" @date="handleDate" :name_type="'pdob'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.pcity_ob" :heading="'City Of Birth'" />
 				<AplInfoCard @update:model-value="logger" :select="true" :options="$countries" v-model="apl.pcountry_ob"
 					:heading="'Country of Birth'" />
@@ -29,8 +29,8 @@
 				<AplInfoCard @update:model-value="logger" v-model="apl.pcountry_live_today"
 					:heading="'Country You Live in Today'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.ppassport_number" :heading="'Passport Number'" />
-				<AplInfoCardDate @update:model-value="logger" :date="apl.passport_ex!" @date="handleDate"
-					:name_type="'passport_ex'" :heading="'Passport Expiry Date'" />
+				<AplInfoCardDate @update:model-value="logger" :date="apl.passport_ex ? new Date(apl.passport_ex!) : undefined"
+					@date="handleDate" :name_type="'passport_ex'" :heading="'Passport Expiry Date'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.pemail" :heading="'Email'" />
 				<AplInfoCard @update:model-value="logger" :select="true" :options="['MALE', 'FEMALE']" v-model="apl.pgender"
 					:heading="'Gender'" />
@@ -98,10 +98,10 @@
 			</div>
 		</div>
 
-		<div v-if="apl.wards.length > 0" class="divider"></div>
+		<div v-if="apl.children_number > 0" class="divider"></div>
 
 
-		<div v-if="apl.wards.length > 0" class="flex flex-col gap-10">
+		<div v-if="apl.children_number > 0" class="flex flex-col gap-10">
 			<div v-for="(ward, i) in apl.wards" class="flex gap-5">
 				<!-- image -->
 				<div class="flex flex-col gap-2">
@@ -178,6 +178,7 @@ import { useProfileStore } from '@/store/profile';
 
 const { $SB, $trimStringProperties } = useNuxtApp()
 const { total_apls } = storeToRefs(useAppStore())
+const { empty_ward } = storeToRefs(useAplStore())
 const { APL_ID } = storeToRefs(useViewAplStore())
 const { role } = storeToRefs(useProfileStore())
 const emit = defineEmits(['apl', 'request'])
@@ -206,68 +207,28 @@ const request = ref<Requests>({
 	status: '',
 	user_id: '',
 })
-const apl = ref<Applicant>({
-	apl_id: '',
-	aplImg_path: {
-		primePath: [],
-		secPath: [],
-		wardsPath: []
-	},
-	children_number: 0,
-	created_at: undefined,
-	fullName: '',
-	passport_ex: null,
-	pcity_ob: '',
-	pconf_code: '',
-	pcontact: '',
-	pcountry_live_today: '',
-	pcountry_ob: '',
-	pdob: null,
-	peducation_level: '',
-	pemail: '',
-	pfirstName: '',
-	pgender: '',
-	plastName: '',
-	pmarital_status: '',
-	pother_contact: '',
-	potherName: '',
-	ppassport_number: '',
-	ppostal: '',
-	psocial_media: {
-		facebook: '',
-		instagram: '',
-		twitter: '',
-	},
-	scity_ob: '',
-	scontact: '',
-	scountry_ob: '',
-	sdob: null,
-	sfirstName: '',
-	sgender: '',
-	slastName: '',
-	sotherName: '',
-	totalPayment: 0,
-	user_id: useSupabaseUser().value?.id!,
-	wards: []
-})
+const apl = ref<Applicant>(total_apls.value.find(apl => apl.apl_id == APL_ID.value)!)
+const init_ward_count = ref(total_apls.value.find(apl => apl.apl_id == APL_ID.value)!.wards.length)
 
-async function getApplicant(id: string) {
-	try {
-		let { data, error } = await $SB
-			.from('applicants')
-			.select('*')
-			.eq('apl_id', id)
-		if (error) throw error
-		return data![0]
-	} catch (error) {
-		console.log(error)
-	}
-}
+watch(
+	() => apl.value.children_number,
+	(newVal) => {
+
+		// apl.value.wards = [];
+		// apl.value.aplImg_path.wardsPath = [];
+		for (let idx = 0; idx < newVal; idx++) {
+			let ward = { ...empty_ward.value };
+			ward.index = idx;
+			apl.value.wards.push(ward);
+			apl.value.aplImg_path.wardsPath.push(`ward${idx}`);
+		}
+		console.log(apl.value.wards);
+		console.log(apl.value.aplImg_path.wardsPath);
+	},
+);
+
 
 onMounted(async () => {
-	let aplVal = await getApplicant(APL_ID.value!)
-	apl.value = aplVal
-
 	await loadUrl()
 
 	request.value.apl_id = apl.value.apl_id!

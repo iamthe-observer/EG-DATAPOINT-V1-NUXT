@@ -38,6 +38,24 @@ $SB.auth.onAuthStateChange((event: string) => {
   }
 })
 
+
+// onMounted(async () => {
+//   let { data: circle_sales } = await $SB.from('applicants').select('totalPayment').eq('location', 'circle')
+//   let { data: kaneshie_sales } = await $SB.from('applicants').select('totalPayment').eq('location', 'kaneshie')
+//   let { data: ashaiman_sales } = await $SB.from('applicants').select('totalPayment').eq('location', 'ashaiman')
+
+//   let data = [...circle_sales!, ...kaneshie_sales!, ...ashaiman_sales!]
+
+//   let sum = 0
+//   for (let ii = 0; ii < data.length; ii++) {
+//     const sales = data[ii].totalPayment;
+//     sum += sales
+//   }
+//   console.log(sum);
+
+
+// })
+
 const onInitLoadAppData = async () => {
   app.$patch({
     app_loading: true
@@ -53,6 +71,10 @@ const onInitLoadAppData = async () => {
       let {
         data: { user },
       } = await $SB.auth.getUser();
+
+
+      let { data } = await $SB.from('restricted_users').select('*')
+      if (data?.some(USER => USER.user_id == user?.id)) return app.$patch({ restricted_user: true })
 
       const promises = await Promise.allSettled([
         useProfileStore().getProfile(),

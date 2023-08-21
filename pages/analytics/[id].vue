@@ -36,6 +36,12 @@
 				</div>
 			</div>
 
+			<section class="grid grid-col-2">
+				<div class="col-span-full rounded-xl shadow-xl bg-neutral-900 dark:bg-neutral-50 p-2">
+					<BarChart :chartData="barData" :options="barOptions" />
+				</div>
+			</section>
+
 
 			<div class="grid grid-cols-2 gap-3">
 				<div
@@ -49,12 +55,6 @@
 					<span class="text-4xl font-bold">GHC {{ total_sales }}.00</span>
 				</div>
 			</div>
-
-			<section class="grid grid-col-2">
-				<div class="col-span-full rounded-xl shadow-xl bg-neutral-900 dark:bg-neutral-50 p-2">
-					<BarChart :chartData="barData" :options="barOptions" />
-				</div>
-			</section>
 
 		</div>
 	</div>

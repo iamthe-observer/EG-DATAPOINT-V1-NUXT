@@ -1,5 +1,6 @@
 <template>
-	<div :class="['w-full h-full grid place-items-center', dark_mode ? 'bg-white' : 'bg-neutral-900']">
+	<div
+		:class="['w-full h-full flex flex-col justify-center items-center gap-4', dark_mode ? 'bg-white' : 'bg-neutral-900']">
 		<svg class="pl" viewBox="0 0 200 200" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
 			<defs>
 				<linearGradient id="pl-grad1" x1="1" y1="0.5" x2="0" y2="0.5">
@@ -16,13 +17,21 @@
 			<line class="pl__ball" stroke="url(#pl-grad2)" x1="100" y1="18" x2="100.01" y2="182" stroke-width="36"
 				stroke-dasharray="1 165" stroke-linecap="round" />
 		</svg>
+
+		<label v-if="restricted_user" @click="logout" class="btn btn-ghost btn-sm rounded-full px-2">Log Out</label>
 	</div>
 </template>
 
 <script setup lang="ts">
 import { useAppStore } from '@/store/app';
 import { storeToRefs } from 'pinia';
-const { dark_mode } = storeToRefs(useAppStore())
+const { dark_mode, restricted_user } = storeToRefs(useAppStore())
+
+async function logout() {
+	await useNuxtApp().$SB.auth.signOut()
+	useNuxtApp().$router.push('/')
+	useAppStore().$patch({ app_loading: false, restricted_user: false })
+}
 </script>
 
 <style scoped>
@@ -30,7 +39,7 @@ const { dark_mode } = storeToRefs(useAppStore())
 	border: 0;
 	box-sizing: border-box;
 	margin: 0;
-	padding: 0;
+	/* padding: 0; */
 }
 
 :root {

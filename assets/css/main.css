@@ -95,7 +95,7 @@
 
 html,
 body {
-  @apply h-full w-full bg-transparent;
+  @apply h-full w-full overflow-y-hidden bg-transparent;
   scroll-behavior: smooth;
 }
 
