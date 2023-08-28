@@ -544,7 +544,13 @@ export const useAplStore = defineStore(
       }
     }
 
+    const reset_data = ref(false);
+
     function resetAplData() {
+      reset_data.value = true;
+      setTimeout(() => {
+        reset_data.value = false;
+      }, 10);
       applicant.value = {
         // created_at: new Date(),
         plastName: "",
@@ -596,6 +602,7 @@ export const useAplStore = defineStore(
     }
 
     return {
+      reset_data,
       vuelidate_err,
       empty_ward,
       if_val_err,

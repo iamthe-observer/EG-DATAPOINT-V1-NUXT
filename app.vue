@@ -38,7 +38,6 @@ $SB.auth.onAuthStateChange((event: string) => {
   }
 })
 
-
 // onMounted(async () => {
 //   let { data: circle_sales } = await $SB.from('applicants').select('totalPayment').eq('location', 'circle')
 //   let { data: kaneshie_sales } = await $SB.from('applicants').select('totalPayment').eq('location', 'kaneshie')
@@ -112,6 +111,9 @@ const onInitLoadAppData = async () => {
 onMounted(async () => {
   document.documentElement.setAttribute('data-theme', 'EG')
   await onInitLoadAppData()
+  useAppStore().$patch({
+    dark_mode: useProfileStore().profile?.is_dark
+  })
 
   useAppStore().$patch({
     is_mobile: useNuxtApp().$mobileCheck()

@@ -1,3 +1,5 @@
+import { UUID } from "crypto";
+
 export type FileWithAplType = File & { apl_type: string };
 export type _Null<T> = T | null;
 
@@ -19,6 +21,7 @@ export interface Announcement {
   title: string;
   body: string;
   urgency?: boolean;
+  seen?: string[];
 }
 
 export interface WardsApplicant {

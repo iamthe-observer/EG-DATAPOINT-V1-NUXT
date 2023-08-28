@@ -21,15 +21,39 @@
 					</TextInput>
 				</div>
 
-				<div class="flex gap-4 col-span-10 pl-6 justify-center">
-					<DatePicker dark :color="'purple'" is-dark v-model="applicant.pdob" mode="date">
-						<template #default="{ togglePopover }">
-							<TextInput :val_err="vuelidate_err == false && !applicant.pdob" :icon="true"
+				<div class="grid grid-cols-3 gap-4 col-span-10 pl-6 justify-center">
+					<!-- <DatePicker dark :color="'purple'" is-dark v-model="applicant.pdob" mode="date">
+						<template #default="{ togglePopover }"> -->
+					<!-- <TextInput :val_err="vuelidate_err == false && !applicant.pdob" :icon="true"
 								:value="applicant.pdob ? $formatDate(new Date(applicant.pdob!)) : ''" @click="togglePopover">Date of
 								Birth
-							</TextInput>
-						</template>
-					</DatePicker>
+							</TextInput> -->
+
+					<div class="form-control w-full">
+
+						<label class="label">
+							<span class="label-text dark:text-neutral-900 dark:font-semibold">
+								Date Of Birth
+							</span>
+						</label>
+
+						<div class="indicator w-full">
+							<span
+								:class="['transition-all duration-300 ease-in pointer-events-none indicator-item badge-sm badge bg-red-400 border-transparent drop-shadow-xl', vuelidate_err == false && !applicant.pdob ? 'opacity-100' : 'opacity-0']"></span>
+
+							<div class="flex items-end flex-1 gap-4">
+								<input v-model="dates.pdob.dd" type="number" min="1" max="31" maxlength="2" placeholder="DD"
+									class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+								<input v-model="dates.pdob.mm" type="number" min="1" max="12" maxlength="2" placeholder="MM"
+									class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+								<input v-model="dates.pdob.yyyy" type="number" maxlength="4" placeholder="YYYY"
+									class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+							</div>
+						</div>
+					</div>
+
+					<!-- </template>
+					</DatePicker> -->
 					<SelectInput :val_err="vuelidate_err == false && applicant.pgender.length == 0" :options="['male', 'female']"
 						v-model="applicant.pgender">
 						Gender
@@ -63,15 +87,31 @@
 
 		<div class="flex gap-4 col-span-12 justify-center">
 			<TextInput v-model="applicant.ppassport_number">Passport Number</TextInput>
-			<DatePicker dark :color="'purple'" is-dark v-model="applicant.passport_ex" mode="date">
-				<template #default="{ togglePopover }">
-					<TextInput :icon="true" :value="applicant.passport_ex ? $formatDate(new Date(applicant.passport_ex!)) : ''"
-						@click="togglePopover">
-						Passport
-						Expiration Date
-					</TextInput>
-				</template>
-			</DatePicker>
+			<!-- <DatePicker dark :color="'purple'" is-dark v-model="applicant.passport_ex" mode="date">
+				<template> -->
+			<div class="form-control w-full">
+				<label class="label">
+					<span class="label-text dark:text-neutral-900 dark:font-semibold">
+						Passport Expiration
+					</span>
+				</label>
+
+				<div class="indicator w-full">
+					<span
+						:class="['transition-all duration-300 ease-in pointer-events-none indicator-item badge-sm badge bg-red-400 border-transparent drop-shadow-xl', vuelidate_err == false && !applicant.passport_ex ? 'opacity-100' : 'opacity-0']"></span>
+
+					<div class="flex items-end flex-1 gap-4">
+						<input v-model="dates.passport_ex.dd" type="number" min="1" max="31" maxlength="2" placeholder="DD"
+							class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+						<input v-model="dates.passport_ex.mm" type="number" min="1" max="12" maxlength="2" placeholder="MM"
+							class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+						<input v-model="dates.passport_ex.yyyy" type="number" maxlength="4" placeholder="YYYY"
+							class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+					</div>
+				</div>
+			</div>
+			<!-- </template>
+			</DatePicker> -->
 		</div>
 
 		<div class="flex gap-4 col-span-12 justify-center">
@@ -112,23 +152,103 @@ import { storeToRefs } from 'pinia';
 import { useAplStore } from '@/store/apl';
 import { useImageStore } from '@/store/images';
 
-const props = defineProps<{
-	container?: HTMLDivElement
-}>()
-const { applicant, vuelidate_err } = storeToRefs(useAplStore())
+const { applicant, vuelidate_err, reset_data } = storeToRefs(useAplStore())
 const { primeIMG } = storeToRefs(useImageStore())
 const primeSRC = computed(() => {
 	if (primeIMG.value) return URL.createObjectURL(primeIMG.value) || ''
 })
 
-const comp = computed(() => {
-	if (vuelidate_err.value == false && applicant.value.plastName.length == 0) {
-		return true
-	} else return false
+const dates = reactive<{
+	pdob: {
+		dd: number | null,
+		mm: number | null,
+		yyyy: number | null
+	},
+	passport_ex: {
+		dd: number | null,
+		mm: number | null,
+		yyyy: number | null
+	}
+}>({
+	pdob: {
+		dd: null,
+		mm: null,
+		yyyy: null
+	},
+	passport_ex: {
+		dd: null,
+		mm: null,
+		yyyy: null
+	}
 })
 
-watchEffect(() => {
-	console.log(comp.value);
+const { passport_ex, pdob } = toRefs(dates)
+
+const date_of_birth = computed(() => {
+	if (pdob.value.yyyy !== null && pdob.value.mm !== null && pdob.value.dd !== null) return new Date(pdob.value.yyyy!, pdob.value.mm! - 1, pdob.value.dd!)
+	return null
+})
+const passport_expiration = computed(() => {
+	if (passport_ex.value.yyyy !== null && passport_ex.value.mm !== null && passport_ex.value.dd !== null) return new Date(passport_ex.value.yyyy!, passport_ex.value.mm! - 1, passport_ex.value.dd!)
+	return null
+})
+
+watch(date_of_birth, val => {
+	if (!pdob.value.dd || !pdob.value.mm || !pdob.value.yyyy) return useAplStore().$patch(() => {
+		applicant.value.pdob = null
+	})
+
+	if (Object.prototype.toString.call(val) === "[object Date]") {
+		// it is a date
+		useAplStore().$patch(() => {
+			applicant.value.pdob = val
+		})
+
+	} else {
+		// not a date object
+		useAplStore().$patch(() => {
+			applicant.value.pdob = null
+		})
+	}
+
+})
+
+watch(passport_expiration, val => {
+	if (!passport_ex.value.dd || !passport_ex.value.mm || !passport_ex.value.yyyy) return useAplStore().$patch(() => {
+		applicant.value.passport_ex = null
+		console.log(applicant.value.passport_ex);
+	})
+
+	if (Object.prototype.toString.call(val) === "[object Date]") {
+		// it is a date
+		useAplStore().$patch(() => {
+			applicant.value.passport_ex = val
+			console.log(applicant.value.passport_ex);
+		})
+
+	} else {
+		// not a date object
+		useAplStore().$patch(() => {
+			applicant.value.passport_ex = null
+		})
+
+	}
+
+})
+
+watch(reset_data, val => {
+	if (!val) {
+		pdob.value = {
+			dd: null,
+			mm: null,
+			yyyy: null
+		}
+		passport_ex.value = {
+			dd: null,
+			mm: null,
+			yyyy: null
+		}
+	}
 })
 
 function handleFile(evt: any) {
@@ -136,3 +256,15 @@ function handleFile(evt: any) {
 }
 </script>
 
+<style scoped>
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+	-moz-appearance: textfield;
+}
+</style>

@@ -22,10 +22,13 @@
 			<div class="w-full h-full scrollbar-hidden relative flex justify-center items-center">
 				<!-- if no Input -->
 				<div v-if="search_results.length == 0" class="flex flex-col gap-2 w-fit">
-					<span v-if="!if_first" class="text-center text-2xl drop-shadow-lg">Search For <br />Applicants over
+					<span v-if="!if_first && !search_loading" class="text-center text-2xl drop-shadow-lg">Search For
+						<br />Applicants over
 						<br />here!</span>
-					<span v-if="if_first" class="text-center text-2xl drop-shadow-lg">No Applicants Found
+					<span v-if="if_first && !search_loading" class="text-center text-2xl drop-shadow-lg">No Applicants Found
 						<br />Check the spelling!</span>
+
+					<span v-if="search_loading" class="loading loading-infinity loading-xs scale-[400%]"></span>
 
 					<div class=" absolute bottom-16 left-1/2 -translate-x-1/2 z-20 flex flex-col gap-2 text-sm justify-self-end">
 						<span v-if="recent_search!.length > 0"
@@ -72,6 +75,7 @@ const props = defineProps<{
 const search = ref<string>()
 const search_bar_input = ref<HTMLInputElement>()
 const search_results = ref<Applicant[]>([])
+const search_loading = ref(false)
 let if_first = ref(false)
 
 watchEffect(() => {
@@ -86,7 +90,8 @@ async function startSearch() {
 	}
 
 	if (!search.value || search.value.length < 3) return not_long_enough_search.value = true
+	search_loading.value = true
 	search_results.value = await useSearchStore().getSearch(search.value!.toUpperCase())
-	console.log(search_results.value);
+	search_loading.value = false
 }
 </script>

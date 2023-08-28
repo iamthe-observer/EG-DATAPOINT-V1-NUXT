@@ -19,14 +19,39 @@
 				</div>
 
 				<div class="flex gap-4 col-span-10 pl-6 justify-center">
-					<DatePicker dark :color="'purple'" is-dark v-model="applicant.sdob" mode="date">
-						<template #default="{ togglePopover }">
-							<TextInput :val_err="vuelidate_err == false && !applicant.sdob" :icon="true"
+					<!-- <DatePicker dark :color="'purple'" is-dark v-model="applicant.sdob" mode="date">
+						<template #default="{ togglePopover }"> -->
+					<!-- <TextInput :val_err="vuelidate_err == false && !applicant.sdob" :icon="true"
 								:value="applicant.sdob ? $formatDate(new Date(applicant.sdob!)) : ''" @click="togglePopover">
 								Date of Birth
-							</TextInput>
-						</template>
-					</DatePicker>
+							</TextInput> -->
+
+					<div class="form-control w-full">
+
+						<label class="label">
+							<span class="label-text dark:text-neutral-900 dark:font-semibold">
+								Date Of Birth
+							</span>
+						</label>
+
+						<div class="indicator w-full">
+							<span
+								:class="['transition-all duration-300 ease-in pointer-events-none indicator-item badge-sm badge bg-red-400 border-transparent drop-shadow-xl', vuelidate_err == false && !applicant.sdob ? 'opacity-100' : 'opacity-0']"></span>
+
+
+							<div class="flex items-end flex-1 gap-4">
+								<input v-model="dates.sdob.dd" type="number" min="1" max="31" maxlength="2" placeholder="DD"
+									class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+								<input v-model="dates.sdob.mm" type="number" min="1" max="12" maxlength="2" placeholder="MM"
+									class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+								<input v-model="dates.sdob.yyyy" type="number" maxlength="4" placeholder="YYYY"
+									class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+							</div>
+						</div>
+					</div>
+
+					<!-- </template>
+					</DatePicker> -->
 					<SelectInput :val_err="vuelidate_err == false && applicant.sgender.length == 0" :options="['MALE', 'FEMALE']"
 						v-model="applicant.sgender">Gender
 					</SelectInput>
@@ -53,13 +78,76 @@ import { storeToRefs } from 'pinia';
 import { useAplStore } from '@/store/apl';
 import { useImageStore } from '@/store/images';
 
-const { applicant, vuelidate_err } = storeToRefs(useAplStore())
+const { applicant, vuelidate_err, reset_data } = storeToRefs(useAplStore())
 const { secIMG } = storeToRefs(useImageStore())
 const secSRC = computed(() => {
 	if (secIMG.value) return URL.createObjectURL(secIMG.value) || ''
+})
+
+const dates = reactive<{
+	sdob: {
+		dd: number | null,
+		mm: number | null,
+		yyyy: number | null
+	},
+}>({
+	sdob: {
+		dd: null,
+		mm: null,
+		yyyy: null
+	},
+})
+
+const { sdob } = toRefs(dates)
+
+const date_of_birth = computed(() => {
+	if (sdob.value.yyyy !== null && sdob.value.mm !== null && sdob.value.dd !== null) return new Date(sdob.value.yyyy!, sdob.value.mm! - 1, sdob.value.dd!)
+	return null
+})
+
+watch(date_of_birth, val => {
+	if (!sdob.value.dd || !sdob.value.mm || !sdob.value.yyyy) return useAplStore().$patch(() => {
+		applicant.value.sdob = null
+	})
+
+	if (Object.prototype.toString.call(val) === "[object Date]") {
+		// it is a date
+		useAplStore().$patch(() => {
+			applicant.value.sdob = val
+		})
+
+	} else {
+		// not a date object
+		useAplStore().$patch(() => {
+			applicant.value.sdob = null
+		})
+	}
+})
+
+watch(reset_data, val => {
+	if (!val) {
+		sdob.value = {
+			dd: null,
+			mm: null,
+			yyyy: null
+		}
+	}
 })
 
 function handleFile(evt: any) {
 	useImageStore().setFiles(evt.target.files[0], `sec`)
 }
 </script>
+
+<style scoped>
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+	-moz-appearance: textfield;
+}
+</style>

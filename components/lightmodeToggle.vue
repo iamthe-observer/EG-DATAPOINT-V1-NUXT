@@ -21,10 +21,21 @@ const { dark_mode } = storeToRefs(useAppStore())
 const toggle = ref<HTMLDivElement>()!
 const store = useAppStore()
 
-const toggleLight = () => {
-	store.setDarkMode(true)
+async function setMode(mode: boolean) {
+	try {
+		let { data, error } = await useNuxtApp().$SB.from('profiles').update({ is_dark: mode }).eq('id', useSupabaseUser().value?.id).select()
+		if (error) throw error
+	} catch (error) {
+		console.log(error);
+	}
 }
-const toggleDark = () => {
+
+const toggleLight = async () => {
+	store.setDarkMode(true)
+	await setMode(true)
+}
+const toggleDark = async () => {
 	store.setDarkMode(false)
+	await setMode(false)
 }
 </script>

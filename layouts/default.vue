@@ -1,5 +1,5 @@
 <template>
-	<div class="flex gap-5 w-full h-full px-2 py-2">
+	<div class="flex gap-2 w-full h-full px-2 py-2">
 		<div class="min-w-[100px] min-h-full">
 			<navigation />
 		</div>

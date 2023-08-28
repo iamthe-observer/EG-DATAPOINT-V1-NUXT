@@ -316,7 +316,7 @@ export const useApl = (id?: string) => {
       applicant.value.passport_ex = e.date;
       console.log(applicant.value);
     } else if (e.name == "wdob") {
-      applicant.value.wards[e.ward_idx! - 1].wdob = e.date;
+      applicant.value.wards[e.ward_idx!].wdob = e.date;
       console.log(applicant.value);
     }
   }
@@ -641,5 +641,6 @@ export const useApl = (id?: string) => {
     if_req_sent,
     curr_compared_request,
     loadUrl,
+    prime_image,sec_image,wards_image
   };
 };

@@ -4,7 +4,10 @@
 			class="w-full h-full rounded-2xl bg-neutral-800 dark:bg-neutral-50 col-span-full row-span-full pb-2 overflow-y-auto text-justify px-0 relative">
 			<h1
 				:class="['px-5 py-5 rounded-2xl bg-neutral-700 dark:bg-primary dark:text-white text-2xl w-full flex justify-between items-center mb-2 sticky top-0 shadow-lg z-10 transition-all duration-200 ease-in-out', edit_mode ? 'dark:bg-blue-400' : 'dark:bg-primary']">
-				<span v-if="!edit_mode" class="text-3xl">Applicant Information</span>
+				<span v-if="!edit_mode" class="text-3xl">Applicant Information
+					<br>
+					<span class="text-sm">Created At: {{ $formatDateWords(new Date(applicant.created_at!)) }}</span>
+				</span>
 
 				<div class="join join-vertical lg:join-horizontal">
 					<button v-if="edit_mode" onclick="my_modal_1.showModal()"
@@ -30,7 +33,7 @@
 						Quit
 					</button>
 
-					<button v-if="!edit_mode" @click="useAplStore().toggleEditMode(true)"
+					<button v-if="!edit_mode" @click="useViewAplStore().$patch(() => edit_mode = true)"
 						class="btn btn-outline btn-sm rounded-xl text-white hover:text-blue-500 dark:hover:text-blue-300 join-item bg-none hover:btn-ghost relative">
 						<svg xmlns="http://www.w3.org/2000/svg" class="w-6 aspect-square" viewBox="0 0 24 24">
 							<g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
@@ -77,45 +80,25 @@
 					</button>
 				</div>
 
-				<span v-if="!edit_mode" class="text-sm font-semibold text-right">{{ fullName ? fullName : 'Applicant' }}<br />By:
+				<span v-if="!edit_mode" class="text-sm font-semibold text-right">{{ applicant.fullName ? applicant.fullName :
+					'Applicant' }}<br />By:
 					{{
 						creator
 					}}<br />Location:
-					{{ curr_apl?.location?.toUpperCase() }}
+					{{ applicant?.location?.toUpperCase() }}
 				</span>
 				<div v-else class="flex gap-3">
-					<div class="form-control w-full max-w-xs">
-						<label class="label">
-							<span class="text-white text-xs badge badge-ghost label-text">Last Name</span>
-						</label>
-						<input v-model="lastName" type="text" placeholder="Type here"
-							class="input input-ghost text-center w-full  focus:text-white focus:bg-transparent  max-w-xs" />
-					</div>
-
-					<div class="form-control w-full max-w-xs">
-						<label class="label">
-							<span class="text-white text-xs badge badge-ghost label-text">First Name</span>
-						</label>
-						<input v-model="firstName" type="text" placeholder="Type here"
-							class="input input-ghost text-center w-full focus:text-white focus:bg-transparent   max-w-xs" />
-					</div>
-
-					<div class="form-control w-full max-w-xs">
-						<label class="label">
-							<span class="text-white text-xs badge badge-ghost label-text">Other Name</span>
-						</label>
-						<input v-model="otherName" type="text" placeholder="Type here"
-							class="input input-ghost text-center w-full focus:text-white focus:bg-transparent   max-w-xs" />
-					</div>
-
-					<!-- <TextInput @update:model-value="logger" classer="" v-model="lastName">Last Name</TextInput>
-					<TextInput @update:model-value="logger" classer="" v-model="firstName">First Name</TextInput>
-					<TextInput @update:model-value="logger" classer="" v-model="otherName">Other Name</TextInput> -->
+					<TextInput v-model="applicant.plastName">Last Name</TextInput>
+					<TextInput v-model="applicant.pfirstName">First Name</TextInput>
+					<TextInput v-model="applicant.potherName">Other Name</TextInput>
 				</div>
 			</h1>
 
 
-			<ViewApplicant @apl="handleEmit" />
+			<ViewApplicantV2 v-if="!loading" />
+			<div v-else class="w-full h-1/2 flex items-end">
+				<Loading class="bg-transparent" />
+			</div>
 
 		</div>
 		<dialog id="my_modal_1" class="modal">
@@ -138,7 +121,7 @@
 					</svg>
 					Are you sure you want to send this request?
 				</h3>
-				<textarea v-model="request_body"
+				<textarea v-model="request.body"
 					class="textarea textarea-bordered w-full bg-black dark:bg-neutral-200 dark:text-black dark:border-none text-white mt-3"
 					placeholder="What's your reason for editing?..."></textarea>
 				<p class="text-white font-semibold py-4 text-right text-sm dark:text-red-400">Review and
@@ -147,8 +130,8 @@
 				</p>
 				<div class="modal-action">
 					<!-- if there is a button in form, it will close the modal -->
-					<button v-if="request_body" class="btn btn-primary text-white" @click="handleSubmit">Submit</button>
-					<button @click="request_body = ''" class="btn btn-error text-white">Close</button>
+					<button v-if="request.body" class="btn btn-primary text-white" @click="handleEditSubmit">Submit</button>
+					<button @click="request.body = ''" class="btn btn-error text-white">Close</button>
 				</div>
 			</form>
 		</dialog>
@@ -172,15 +155,15 @@
 						</circle>
 					</svg>
 					Are you sure you want to send this request to delete the Applicant:<br /> <span class="text-bold">{{
-						curr_apl?.fullName }}</span>
+						applicant?.fullName }}</span>
 				</h3>
-				<textarea v-model="request_body" class="textarea textarea-bordered w-full bg-red-900 border-none text-white mt-3"
+				<textarea v-model="request.body" class="textarea textarea-bordered w-full bg-red-900 border-none text-white mt-3"
 					placeholder="What's your reason for editing?..."></textarea>
 				<p class="text-white py-4 text-right text-xs">Review and cross-check your request before sending!</p>
 				<div class="modal-action">
 					<!-- if there is a button in form, it will close the modal -->
-					<button @click="handleDeleteSubmit" v-if="request_body" class="btn btn-primary text-white">Submit</button>
-					<button @click="request_body = ''" class="btn btn-error text-white">Close</button>
+					<button @click="handleDeleteSubmit" v-if="request.body" class="btn btn-primary text-white">Submit</button>
+					<button @click="request.body = ''" class="btn btn-error text-white">Close</button>
 				</div>
 			</form>
 		</dialog>
@@ -205,87 +188,144 @@ import { storeToRefs } from 'pinia';
 import { useAplStore } from '@/store/apl'
 import { useProfileStore } from '@/store/profile'
 import { useRequestStore } from '@/store/requests'
-import { Applicant, Requests } from 'interfaces/interfaces';
-import ViewApplicant from '@/components/ViewApplicant.vue';
+import { useViewAplStore } from '@/store/viewApl';
+import { Applicant, Requests } from '@/interfaces/interfaces';
+import { useAppStore } from '@/store/app';
 
-
-onMounted(() => {
-	useAplStore().toggleEditMode(false)
-})
 let num = ref(0)
-const { edit_mode } = storeToRefs(useAplStore())
-const { curr_request } = storeToRefs(useRequestStore())
-const viewApl = ref<InstanceType<typeof ViewApplicant> | null>()
-const fullName = computed(() => {
-	if (!otherName.value) return `${lastName.value} ${firstName.value}`.trim()
-	if (otherName.value) return `${lastName.value} ${firstName.value} ${otherName.value}`.trim()
-})
-const lastName = ref('')
-const firstName = ref('')
-const otherName = ref('')
-const request_body = ref<string>()
-const curr_apl = ref<Applicant>()
-const default_apl = ref<Applicant>()
+const { applicant, edit_mode, request } = storeToRefs(useViewAplStore())
+
+let loading = ref(false)
 const if_sent = ref(false)
-const creator = ref()
 
+onMounted(async () => {
+	loading.value = true
+	const data = await getApl(applicant.value.apl_id!)
+	loading.value = false
+	useViewAplStore().$patch(() => {
+		edit_mode.value = false
+		request.value = nullReq.value
+		applicant.value = data
+	})
+})
 
-const handleEmit = (e: Applicant) => {
-	curr_apl.value = e
-	default_apl.value = e
-	creator.value = useProfileStore().profiles.find(prof => prof.id == e.user_id)?.fullname
-	// fullName.value = e.fullName
-	firstName.value = e.pfirstName
-	otherName.value = e.potherName
-	lastName.value = e.plastName
-}
+const fullName = computed(() => {
+	if (!applicant.value.potherName) return `${applicant.value.plastName} ${applicant.value.pfirstName}`.trim()
+	if (applicant.value.potherName) return `${applicant.value.plastName} ${applicant.value.pfirstName} ${applicant.value.potherName}`.trim()
+})
+
+const creator = computed(() => useProfileStore().profiles.find(prof => prof.id == applicant.value.user_id)?.fullname)
 
 async function handleClose() {
-	firstName.value = default_apl.value!.pfirstName
-	otherName.value = default_apl.value!.potherName
-	lastName.value = default_apl.value!.plastName
-	useAplStore().toggleEditMode(false)
-	await viewApl.value?.resetApl()
+	const data = await getApl(applicant.value.apl_id!)
+	useViewAplStore().$patch(() => {
+		edit_mode.value = false
+		request.value = nullReq.value
+		applicant.value = data
+	})
 }
 
-async function handleSubmit() {
-	if (!request_body.value) return
-	curr_request.value!.body = request_body.value!
-	if (curr_request.value!.modified_apl == null) return
-	curr_request.value!.modified_apl.pfirstName = firstName.value
-	curr_request.value!.modified_apl.plastName = lastName.value
-	curr_request.value!.modified_apl.potherName = otherName.value
-	curr_request.value!.modified_apl.fullName = fullName.value!
-	curr_request.value!.fullName = fullName.value
-	let data = await useRequestStore().sendRequest(curr_request.value!)
+async function getApl(id: string) {
+	try {
+		let { data, error } = await useNuxtApp().$SB.from('applicants').select('*').eq('apl_id', id)
+		if (error) throw error
+
+		return data![0]
+	} catch (err) {
+		console.log(err);
+	}
+}
+
+function assignPrice(applicant: Applicant) {
+	const pricer = useAppStore().prices;
+	let price: number = 0;
+
+	const if_sp = applicant.pmarital_status == "MARRIED";
+	const if_wa = applicant.children_number > 0;
+
+	if (pricer) {
+		if (!if_sp && if_wa) {
+			price = pricer.adult + pricer.child * applicant.children_number;
+		} else if (if_sp && !if_wa) {
+			price = pricer.adult * 2;
+		} else if (if_sp && if_wa) {
+			price =
+				pricer.adult * 2 + pricer.child * applicant.children_number;
+		} else if (!if_sp && !if_wa) {
+			price = pricer.adult;
+		}
+	} else {
+		throw new Error("Get Prices First");
+	}
+
+	// console.log(pricer, price);
+
+	applicant.totalPayment = price;
+
+	console.log(price);
+	console.log(applicant.totalPayment);
+
+	return applicant
+}
+
+async function handleEditSubmit() {
+	const viewApl = useViewAplStore()
+	if (!request.value.body) return
+	applicant.value.fullName = fullName.value!
+
+	let apl = assignPrice(applicant.value)
+
+	viewApl.$patch(() => {
+		request.value.fullName = fullName.value
+		request.value.modified_apl = apl
+		request.value.apl_id = apl.apl_id!
+		request.value.modify_type = 'edit'
+		request.value.status = 'pending'
+		request.value.user_id = useSupabaseUser().value?.id!
+	})
+
+	loading.value = true
+	let data = await useRequestStore().sendRequest(request.value!)
 	if (data) if_sent.value = true
-	console.log("🚀 ~ file: [id].vue:135 ~ handleSubmit ~ data:", data)
+	loading.value = false
+
 	console.log('done');
-	useAplStore().toggleEditMode(false)
+
+	const DATA = await getApl(applicant.value.apl_id!)
+	viewApl.$patch(() => {
+		edit_mode.value = false
+		applicant.value = DATA
+		request.value = nullReq.value
+	})
 	num.value++
-	request_body.value = ''
-	useRequestStore().setRequest(nullReq.value)
+	await useAppStore().getTotalApls()
 }
 
 async function handleDeleteSubmit() {
-	if (!request_body.value) return
-	let req = nullReq.value
-	req.body = request_body.value
-	req.apl_id = curr_apl.value?.apl_id!
-	req.fullName = curr_apl.value?.fullName!
-	req.modify_type = 'delete'
-	req.status = 'pending'
-	req.user_id = useSupabaseUser().value?.id!
+	const viewApl = useViewAplStore()
+	if (!request.value.body) return
 
-	let data = await useRequestStore().sendRequest(req)
+	viewApl.$patch(() => {
+		request.value.fullName = fullName.value
+		request.value.modified_apl = applicant.value
+		request.value.apl_id = applicant.value.apl_id!
+		request.value.modify_type = 'delete'
+		request.value.status = 'pending'
+		request.value.user_id = useSupabaseUser().value?.id!
+	})
+
+	loading.value = true
+	let data = await useRequestStore().sendRequest(request.value!)
 	if (data) if_sent.value = true
-	console.log("🚀 ~ file: [id].vue:135 ~ handleSubmit ~ data:", data)
-	console.log('done');
-	useAplStore().toggleEditMode(false)
-	num.value++
-	request_body.value = ''
-	useRequestStore().setRequest(nullReq.value)
+	loading.value = false
 
+	console.log('done');
+
+	viewApl.$patch(() => {
+		edit_mode.value = false
+		request.value = nullReq.value
+	})
+	num.value++
 }
 
 const nullReq = ref<Requests>({

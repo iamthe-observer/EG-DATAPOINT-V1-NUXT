@@ -17,7 +17,7 @@
 		</div>
 
 		<div class="flex gap-4 col-span-10 pl-6 justify-center">
-			<DatePicker dark :color="'purple'" is-dark v-model="applicant.wards[idx].wdob" mode="date">
+			<!-- <DatePicker dark :color="'purple'" is-dark v-model="applicant.wards[idx].wdob" mode="date">
 				<template #default="{ togglePopover }">
 					<TextInput :val_err="vuelidate_err == false && !applicant.wards[idx].wdob" :icon="true"
 						:value="applicant.wards[idx].wdob ? $formatDate(new Date(applicant.wards[idx].wdob!)) : ''"
@@ -25,7 +25,32 @@
 						of Birth
 					</TextInput>
 				</template>
-			</DatePicker>
+			</DatePicker> -->
+
+			<div class="form-control w-full">
+
+				<label class="label">
+					<span class="label-text dark:text-neutral-900 dark:font-semibold">
+						Date Of Birth
+					</span>
+				</label>
+
+				<div class="indicator w-full">
+					<span
+						:class="['transition-all duration-300 ease-in pointer-events-none indicator-item badge-sm badge bg-red-400 border-transparent drop-shadow-xl', vuelidate_err == false && !applicant.wards[idx].wdob ? 'opacity-100' : 'opacity-0']"></span>
+
+
+					<div class="flex items-end flex-1 gap-4">
+						<input v-model="dates.wdob.dd" type="number" min="1" max="31" maxlength="2" placeholder="DD"
+							class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+						<input v-model="dates.wdob.mm" type="number" min="1" max="12" maxlength="2" placeholder="MM"
+							class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+						<input v-model="dates.wdob.yyyy" type="number" maxlength="4" placeholder="YYYY"
+							class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+					</div>
+				</div>
+			</div>
+
 			<SelectInput :val_err="vuelidate_err == false && applicant.wards[idx].wgender.length == 0"
 				:options="['MALE', 'FEMALE']" v-model="applicant.wards[idx].wgender">Gender
 			</SelectInput>
@@ -46,7 +71,7 @@ import { storeToRefs } from 'pinia';
 import { useImageStore } from '@/store/images';
 
 const { wardIMG } = storeToRefs(useImageStore())
-const { applicant, vuelidate_err } = storeToRefs(useAplStore())
+const { applicant, vuelidate_err, reset_data } = storeToRefs(useAplStore())
 const props = defineProps<{
 	idx: number
 }>()
@@ -57,12 +82,70 @@ const wardSRC = computed(() => {
 	}
 })
 
-function handleFile(evt: any) {
-	// useAplStore().handleWardPath(applicant.value.wards[props.idx])
-	console.log(applicant.value.aplImg_path.wardsPath);
+const dates = reactive<{
+	wdob: {
+		dd: number | null,
+		mm: number | null,
+		yyyy: number | null
+	},
+}>({
+	wdob: {
+		dd: null,
+		mm: null,
+		yyyy: null
+	},
+})
 
-	// wardSRC.value = URL.createObjectURL(evt.target.files[0])
+const { wdob } = toRefs(dates)
+
+const date_of_birth = computed(() => {
+	if (wdob.value.yyyy !== null && wdob.value.mm !== null && wdob.value.dd !== null) return new Date(wdob.value.yyyy!, wdob.value.mm! - 1, wdob.value.dd!)
+	return null
+})
+
+watch(date_of_birth, val => {
+	if (!wdob.value.dd || !wdob.value.mm || !wdob.value.yyyy) return useAplStore().$patch(() => {
+		applicant.value.wards[props.idx].wdob = null
+	})
+
+	if (Object.prototype.toString.call(val) === "[object Date]") {
+		// it is a date
+		useAplStore().$patch(() => {
+			applicant.value.wards[props.idx].wdob = val
+		})
+
+	} else {
+		// not a date object
+		useAplStore().$patch(() => {
+			applicant.value.wards[props.idx].wdob = null
+		})
+	}
+})
+
+watch(reset_data, val => {
+	if (!val) {
+		wdob.value = {
+			dd: null,
+			mm: null,
+			yyyy: null
+		}
+	}
+})
+
+function handleFile(evt: any) {
 	useImageStore().setFiles(evt.target.files[0], `ward${props.idx}`)
-	// console.log(evt);
 }
 </script>
+
+<style scoped>
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+	-moz-appearance: textfield;
+}
+</style>

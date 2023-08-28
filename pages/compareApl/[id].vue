@@ -34,7 +34,7 @@
 					<h2 class="mx-auto mt-3 mb-5 text-3xl font-bold">Primary Applicant</h2>
 
 
-					<Divider>
+					<Divider v-if="if_val('plastName')">
 						<template #modified_apl="props">
 							{{ props.original?.plastName }}
 						</template>
@@ -43,7 +43,7 @@
 							{{ props.edited?.plastName }}
 						</template>
 					</Divider>
-					<Divider>
+					<Divider v-if="if_val('pfirstName')">
 						<template #modified_apl="props">
 							{{ props.original?.pfirstName }}
 						</template>
@@ -52,7 +52,7 @@
 							{{ props.edited?.pfirstName }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('potherName')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.potherName }}
 						</template>
@@ -61,7 +61,7 @@
 							{{ props.edited?.potherName }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('pdob')" class="">
 						<template #modified_apl="props">
 							{{ useNuxtApp().$formatDateWords(new Date(props.original?.pdob!)) }}
 						</template>
@@ -70,7 +70,7 @@
 							{{ useNuxtApp().$formatDateWords(new Date(props.edited?.pdob!)) }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('pgender')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.pgender }}
 						</template>
@@ -79,7 +79,7 @@
 							{{ props.edited?.pgender }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('pcity_ob')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.pcity_ob }}
 						</template>
@@ -88,7 +88,7 @@
 							{{ props.edited?.pcity_ob }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('pcountry_ob')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.pcountry_ob }}
 						</template>
@@ -97,7 +97,7 @@
 							{{ props.edited?.pcountry_ob }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('pcontact')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.pcontact }}
 						</template>
@@ -106,7 +106,7 @@
 							{{ props.edited?.pcontact }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('pother_contact')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.pother_contact }}
 						</template>
@@ -115,7 +115,7 @@
 							{{ props.edited?.pother_contact }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('pemail')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.pemail }}
 						</template>
@@ -124,7 +124,7 @@
 							{{ props.edited?.pemail }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('ppassport_number')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.ppassport_number }}
 						</template>
@@ -133,7 +133,7 @@
 							{{ props.edited?.ppassport_number }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('passport_ex')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.passport_ex ? useNuxtApp().$formatDateWords(new Date(props.original?.passport_ex!)) : ''
 							}}
@@ -143,7 +143,7 @@
 							{{ props.edited?.passport_ex ? useNuxtApp().$formatDateWords(new Date(props.edited?.passport_ex!)) : '' }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('pcountry_live_today')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.pcountry_live_today }}
 						</template>
@@ -152,7 +152,7 @@
 							{{ props.edited?.pcountry_live_today }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('ppostal')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.ppostal }}
 						</template>
@@ -161,7 +161,7 @@
 							{{ props.edited?.ppostal }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('psocial_media.facebook')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.psocial_media.facebook }}
 						</template>
@@ -170,7 +170,7 @@
 							{{ props.edited?.psocial_media.facebook }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('psocial_media.instagram')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.psocial_media.instagram }}
 						</template>
@@ -179,7 +179,7 @@
 							{{ props.edited?.psocial_media.instagram }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('psocial_media.twitter')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.psocial_media.twitter }}
 						</template>
@@ -188,7 +188,7 @@
 							{{ props.edited?.psocial_media.twitter }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('pmarital_status')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.pmarital_status }}
 						</template>
@@ -197,7 +197,7 @@
 							{{ props.edited?.pmarital_status }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('peducation_level')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.peducation_level }}
 						</template>
@@ -206,7 +206,7 @@
 							{{ props.edited?.peducation_level }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('children_number')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.children_number }}
 						</template>
@@ -215,7 +215,7 @@
 							{{ props.edited?.children_number }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('pconf_code')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.pconf_code }}
 						</template>
@@ -231,7 +231,7 @@
 				<section v-if="request.modified_apl?.slastName"
 					class="flex flex-col gap-2 rounded-s-xl rounded-tl-none bg-neutral-800 dark:bg-neutral-50 p-2">
 					<h2 class="mx-auto mt-10 mb-5 text-3xl font-bold">Secondary Applicant</h2>
-					<Divider>
+					<Divider v-if="if_val('slastName')">
 						<template #modified_apl="props">
 							{{ props.original?.slastName }}
 						</template>
@@ -240,7 +240,7 @@
 							{{ props.edited?.slastName }}
 						</template>
 					</Divider>
-					<Divider>
+					<Divider v-if="if_val('sfirstName')">
 						<template #modified_apl="props">
 							{{ props.original?.sfirstName }}
 						</template>
@@ -249,7 +249,7 @@
 							{{ props.edited?.sfirstName }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('sotherName')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.sotherName }}
 						</template>
@@ -258,7 +258,7 @@
 							{{ props.edited?.sotherName }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('sdob')" class="">
 						<template #modified_apl="props">
 							{{ useNuxtApp().$formatDateWords(new Date(props.original?.sdob!)) }}
 						</template>
@@ -267,7 +267,7 @@
 							{{ useNuxtApp().$formatDateWords(new Date(props.edited?.sdob!)) }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('sgender')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.sgender }}
 						</template>
@@ -276,7 +276,7 @@
 							{{ props.edited?.sgender }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('scity_ob')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.scity_ob }}
 						</template>
@@ -285,7 +285,7 @@
 							{{ props.edited?.scity_ob }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('scountry_ob')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.scountry_ob }}
 						</template>
@@ -294,7 +294,7 @@
 							{{ props.edited?.scountry_ob }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val('scontact')" class="">
 						<template #modified_apl="props">
 							{{ props.original?.scontact }}
 						</template>
@@ -309,7 +309,7 @@
 				<section v-for="(ward, idx) in request.modified_apl?.wards" v-if="request.modified_apl?.wards.length! > 0"
 					class="flex flex-col gap-2 rounded-s-xl rounded-tl-none bg-neutral-800 dark:bg-neutral-50 p-2">
 					<h2 class="mx-auto mt-10 mb-5 text-3xl font-bold">Ward Applicant {{ idx + 1 }}</h2>
-					<Divider>
+					<Divider v-if="if_val(`wards.${idx}.wlastName`)">
 						<template #modified_apl="props">
 							{{ props.original?.wards[idx].wlastName }}
 						</template>
@@ -318,7 +318,7 @@
 							{{ props.edited?.wards[idx].wlastName }}
 						</template>
 					</Divider>
-					<Divider>
+					<Divider v-if="if_val(`wards.${idx}.wfirstName`)">
 						<template #modified_apl="props">
 							{{ props.original?.wards[idx].wfirstName }}
 						</template>
@@ -327,7 +327,7 @@
 							{{ props.edited?.wards[idx].wfirstName }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val(`wards.${idx}.wotherName`)" class="">
 						<template #modified_apl="props">
 							{{ props.original?.wards[idx].wotherName }}
 						</template>
@@ -336,7 +336,7 @@
 							{{ props.edited?.wards[idx].wotherName }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val(`wards.${idx}.wdob`)" class="">
 						<template #modified_apl="props">
 							{{ useNuxtApp().$formatDateWords(new Date(props.original?.wards[idx].wdob!)) }}
 						</template>
@@ -345,7 +345,7 @@
 							{{ useNuxtApp().$formatDateWords(new Date(props.edited?.wards[idx].wdob!)) }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val(`wards.${idx}.wgender`)" class="">
 						<template #modified_apl="props">
 							{{ props.original?.wards[idx].wgender }}
 						</template>
@@ -354,7 +354,7 @@
 							{{ props.edited?.wards[idx].wgender }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val(`wards.${idx}.wcity_ob`)" class="">
 						<template #modified_apl="props">
 							{{ props.original?.wards[idx].wcity_ob }}
 						</template>
@@ -363,7 +363,7 @@
 							{{ props.edited?.wards[idx].wcity_ob }}
 						</template>
 					</Divider>
-					<Divider class="">
+					<Divider v-if="if_val(`wards.${idx}.wcountry_ob`)" class="">
 						<template #modified_apl="props">
 							{{ props.original?.wards[idx].wcountry_ob }}
 						</template>
@@ -404,15 +404,26 @@
 
 <script setup lang="ts">
 import { useAplStore } from '@/store/apl';
-import { Requests } from '@/interfaces/interfaces';
+import { Applicant, Requests } from '@/interfaces/interfaces';
 import { storeToRefs } from 'pinia';
+import { useAppStore } from '@/store/app';
 
 const apl_ = useAplStore()
+const app_ = useAppStore()
 const { curr_compared_request: request } = storeToRefs(apl_)
-const { $SB } = useNuxtApp()
+const { total_apls } = storeToRefs(app_)
+const { $SB, $deepCompareObjects } = useNuxtApp()
 const if_rej = ref(false)
 const if_ap = ref(false)
+let apl = total_apls.value.find(apl => apl.apl_id == request.value.apl_id)
 
+const difference = $deepCompareObjects(apl!, request.value.modified_apl!)
+console.log(difference);
+
+const if_val = (val: string) => {
+	if (difference.find(value => value.key == val)) return true
+	return false
+}
 
 onMounted(() => {
 	if (!request.value.modified_apl) useNuxtApp().$router.push({ path: '/database' })
@@ -454,16 +465,40 @@ async function approveDiscount(req: Requests) {
 }
 
 async function updateApplicant(req: Requests) {
-	let apl = req.modified_apl
+	let req_apl = req.modified_apl
+	let apl = total_apls.value.find(apl => apl.apl_id == req.apl_id)
+
+	const diff = $deepCompareObjects(apl!, req_apl!);
+
+	const APL: Partial<Applicant> = {}
+	let data = diff.map(apl => {
+		return {
+			key: apl.key, value: apl.value2
+		}
+	})
+
+	function mergeArrayOfObjects(arr: { key: string, value: any }[]): Record<string, any> {
+		const mergedObject: Record<string, any> = {};
+
+		for (const entry of arr) {
+			mergedObject[entry.key] = entry.value;
+		}
+
+		return mergedObject;
+	}
+
+	console.log(mergeArrayOfObjects(data));
+
 	try {
-		let { data, error } = await $SB
+		let { data: dat, error } = await $SB
 			.from('applicants')
-			.update(apl)
+			.update(mergeArrayOfObjects(data))
 			.eq('apl_id', req.apl_id)
 			.select()
 		if (error) throw error
-		console.log(data);
-		return data
+		await updateRequestType(req, 'approved')
+		console.log(dat);
+		return dat
 	} catch (error) {
 		console.log(error);
 	}
@@ -474,34 +509,32 @@ async function handleApprove(req: Requests) {
 	let ty = req.modify_type
 
 	if (ty == 'delete') {
-		await deleteApplicant(req)
-		await updateRequestType(req, 'approved')
-		if_ap.value = true
+		// await deleteApplicant(req)
+		// await updateRequestType(req, 'approved')
+		// if_ap.value = true
 	} else if (ty == 'discount') {
-		await approveDiscount(req)
-		await updateRequestType(req, 'approved')
-		if_ap.value = true
-
+		// await approveDiscount(req)
+		// await updateRequestType(req, 'approved')
+		// if_ap.value = true
 	} else if (ty == 'edit') {
 		await updateApplicant(req)
-		await updateRequestType(req, 'approved')
-		if_ap.value = true
+		// if_ap.value = true
 	}
 }
 
 async function handleReject(req: Requests) {
 	let ty = req.modify_type
 	if (ty == 'delete') {
-		await updateRequestType(req, 'rejected')
-		if_rej.value = true
+		// await updateRequestType(req, 'rejected')
+		// if_rej.value = true
 	}
 	if (ty == 'discount') {
-		await updateRequestType(req, 'rejected')
-		if_rej.value = true
+		// await updateRequestType(req, 'rejected')
+		// if_rej.value = true
 	}
 	if (ty == 'edit') {
-		await updateRequestType(req, 'rejected')
-		if_rej.value = true
+		// await updateRequestType(req, 'rejected')
+		// if_rej.value = true
 	}
 }
 

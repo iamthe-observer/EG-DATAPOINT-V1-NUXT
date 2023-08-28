@@ -15,9 +15,7 @@
 
 					<div v-for="(ann, i) in recent_ann" class="px-4">
 
-						<label
-							class="w-full h-16 border-t-2 dark:border-t-[2px] dark:border-neutral-200 border-neutral-700 flex items-center justify-between gap-2 cursor-pointer hover:text-neutral-300 transition-all duration-200 ease-in-out"
-							:for="`my_modal_${i}`">
+						<label class="" :for="`my_modal_${i}`">
 
 							<input type="checkbox" :id="`my_modal_${i}`" class="modal-toggle" />
 							<div class="modal">
@@ -78,43 +76,49 @@
 								</div>
 							</div>
 
+							<div
+								class="w-full h-16 border-t-2 dark:border-t-[2px] dark:border-neutral-200 border-neutral-700 flex items-center justify-between gap-2 cursor-pointer hover:text-neutral-300 transition-all duration-200 ease-in-out">
 
-							<div class="w-10 h-10 aspect-square rounded-xl grid place-items-center">
-								<svg v-if="!ann.urgency" xmlns="http://www.w3.org/2000/svg" class="w-8 aspect-square" viewBox="0 0 24 24">
-									<g stroke="#888888" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-										<circle cx="12" cy="12" r="9" fill="#888888" fill-opacity="0">
-											<animate fill="freeze" attributeName="fill-opacity" begin="0.2s" dur="0.15s" values="0;0.3" />
+								<div class="w-10 h-10 aspect-square rounded-xl grid place-items-center">
+									<svg v-if="!ann.urgency" xmlns="http://www.w3.org/2000/svg" class="w-8 aspect-square"
+										viewBox="0 0 24 24">
+										<g stroke="#888888" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+											<circle cx="12" cy="12" r="9" fill="#888888" fill-opacity="0">
+												<animate fill="freeze" attributeName="fill-opacity" begin="0.2s" dur="0.15s" values="0;0.3" />
+											</circle>
+											<path fill="none" stroke-dasharray="14" stroke-dashoffset="14" d="M8 12L11 15L16 10">
+												<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.2s" values="14;0" />
+											</path>
+										</g>
+									</svg>
+									<svg v-else xmlns="http://www.w3.org/2000/svg" class="w-8 aspect-square" viewBox="0 0 24 24">
+										<g stroke="#dc2626" stroke-linecap="round" stroke-width="2">
+											<path fill="#dc2626" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
+												d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z">
+												<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0" />
+												<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3" />
+											</path>
+											<path fill="none" stroke-dasharray="8" stroke-dashoffset="8" d="M12 7V13">
+												<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="8;0" />
+											</path>
+										</g>
+										<circle cx="12" cy="17" r="1" fill="#dc2626" fill-opacity="0">
+											<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1" />
 										</circle>
-										<path fill="none" stroke-dasharray="14" stroke-dashoffset="14" d="M8 12L11 15L16 10">
-											<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.2s" values="14;0" />
-										</path>
-									</g>
-								</svg>
-								<svg v-else xmlns="http://www.w3.org/2000/svg" class="w-8 aspect-square" viewBox="0 0 24 24">
-									<g stroke="#dc2626" stroke-linecap="round" stroke-width="2">
-										<path fill="#dc2626" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
-											d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z">
-											<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0" />
-											<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3" />
-										</path>
-										<path fill="none" stroke-dasharray="8" stroke-dashoffset="8" d="M12 7V13">
-											<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="8;0" />
-										</path>
-									</g>
-									<circle cx="12" cy="17" r="1" fill="#dc2626" fill-opacity="0">
-										<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1" />
-									</circle>
-								</svg>
+									</svg>
+								</div>
+								<div class="flex-1 flex flex-col truncate">
+									<span class="text-md truncate">{{ ann.title }}</span>
+								</div>
+								<div class="text-xs flex flex-col items-end">
+									<span>{{ new Date(ann.created_at!).toLocaleTimeString([], {
+										hour: '2-digit', minute: '2-digit', hour12: true
+									}) }}</span>
+									<span>{{ useNuxtApp().$formatDate(new Date(ann.created_at!)) }}</span>
+								</div>
+
 							</div>
-							<div class="flex-1 flex flex-col truncate">
-								<span class="text-md truncate">{{ ann.title }}</span>
-							</div>
-							<div class="text-xs flex flex-col items-end">
-								<span>{{ new Date(ann.created_at!).toLocaleTimeString([], {
-									hour: '2-digit', minute: '2-digit', hour12: true
-								}) }}</span>
-								<span>{{ useNuxtApp().$formatDate(new Date(ann.created_at!)) }}</span>
-							</div>
+
 						</label>
 					</div>
 

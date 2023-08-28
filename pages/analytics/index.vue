@@ -133,7 +133,7 @@
 			<h1 class="col-span-full w-full font-bold text-2xl text-center">EG-Datapoint Users</h1>
 			<h2 class="col-span-full w-full font-bold text-sm text-center text-neutral-500">Today</h2>
 
-			<section class="grid grid-cols-4 w-full min-h-full gap-5">
+			<section class="grid grid-cols-2 w-full min-h-full gap-5">
 				<div @click="() => {
 					useViewAplStore().setUSER(user.id)
 					$router.push(`/analytics/${user.id}_${user.fullname}`)

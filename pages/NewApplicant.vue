@@ -145,6 +145,10 @@ watch(if_sent, val => {
 	}
 })
 
+onBeforeUnmount(() => {
+	useAplStore().resetAplData()
+	useImageStore().resetFiles()
+})
 
 watch(if_val_err, (val) => {
 	if (val) {
@@ -162,5 +166,8 @@ watch(if_val_err, (val) => {
 	}
 })
 
+function logger(val: any) {
+	console.log(val);
+}
 useTitle('EG Datapoint | Add Applicant')
 </script>
