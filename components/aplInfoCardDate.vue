@@ -38,6 +38,7 @@ watch(() => props.date, () => {
 })
 
 const emit = defineEmits(['date'])
+
 function logger() {
 	if (props.idx) {
 		console.log(props);

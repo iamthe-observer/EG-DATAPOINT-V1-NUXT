@@ -1,7 +1,8 @@
 <template>
-	<div v-if="!useAppStore().is_mobile"
-		class="w-full h-full dark:bg-neutral-50 dark:shadow-2xl bg-neutral-800 p-0 rounded-xl gap-5 flex flex-col justify-between">
-		<div class="dropdown dropdown-right">
+	<div
+		:class="[useAppStore().is_mobile ? 'flex-row w-full h-fit justify-between px-6' : 'flex-col w-full h-full justify-between', 'dark:bg-neutral-50 dark:shadow-2xl bg-neutral-800 p-0 rounded-xl gap-5 flex']">
+		<div :class="['dropdown', useAppStore().is_mobile ? 'w-full dropdown-bottom' : 'dropdown-right']">
+
 			<label tabindex="0" class="">
 				<Avatar :username="profile?.username!" :role="profile?.role!" :url="profile?.avatar_url" />
 			</label>
@@ -23,44 +24,6 @@
 		</div>
 		<nav-links />
 		<lightmode-toggle />
-	</div>
-
-	<div v-else class="drawer">
-		<input id="my-drawer" type="checkbox" class="drawer-toggle" />
-		<div class="drawer-content">
-			<!-- Page content here -->
-			<label for="my-drawer" class="btn btn-primary drawer-button">Open drawer</label>
-		</div>
-		<div class="drawer-side">
-			<label for="my-drawer" class="drawer-overlay"></label>
-
-			<div
-				class="w-24 h-full dark:bg-neutral-50 dark:shadow-2xl bg-neutral-800 p-0 rounded-xl gap-5 flex flex-col justify-between">
-				<div class="dropdown dropdown-right">
-					<label tabindex="0" class="">
-						<Avatar :username="profile?.username!" :role="profile?.role!" :url="profile?.avatar_url" />
-					</label>
-					<ul tabindex="0"
-						class="dropdown-content menu p-2 shadow bg-base-100 border-2 border-neutral-900 dark:bg-neutral-50 dark:border-none dark:shadow-2xl rounded-box w-52 z-[500]">
-						<li class="">
-							<div class="cursor-text flex justify-between items-center">
-								{{ profile?.username || 'User' }}
-								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
-									<circle cx="26" cy="16" r="4" fill="#009900" />
-									<path fill="#888888"
-										d="M22 30h-2v-5a5 5 0 0 0-5-5H9a5 5 0 0 0-5 5v5H2v-5a7 7 0 0 1 7-7h6a7 7 0 0 1 7 7zM12 4a5 5 0 1 1-5 5a5 5 0 0 1 5-5m0-2a7 7 0 1 0 7 7a7 7 0 0 0-7-7z" />
-								</svg>
-							</div>
-						</li>
-						<li @click="handleLogout" class="bg-error rounded-lg shadow-xl text-white"><a v-if="!logout_loading">Log
-								out</a><span v-else class="loading loading-infinity loading-xs mx-auto"></span></li>
-					</ul>
-				</div>
-				<nav-links />
-				<lightmode-toggle />
-			</div>
-
-		</div>
 	</div>
 </template>
 

@@ -31,18 +31,18 @@
 
 			<div class="w-full flex items-center justify-between">
 				<div class="flex gap-2 items-center">
-					<span @dblclick="view = !view" class="font-bold text-3xl">Overview</span>
+					<span @dblclick="view = !view" :class="['font-bold', ISM ? 'text-xl' : 'text-3xl']">Overview</span>
 				</div>
 
 				<select v-model="curr_location"
-					class="select w-40 select-sm rounded-full bg-[rgb(13,13,13)] dark:bg-neutral-50 dark:text-black">
+					:class="['select rounded-full bg-[rgb(13,13,13)] dark:bg-neutral-50 dark:text-black', ISM ? 'select-xs w-32' : 'select-sm w-40']">
 					<option selected value="all">All Locations</option>
 					<option v-for="location in locations" :value="location">{{ location![0].toUpperCase() + location?.substring(1)
 					}}</option>
 				</select>
 			</div>
 
-			<section class="grid grid-cols-3 w-full gap-5">
+			<section :class="['grid w-full gap-5', ISM ? 'grid-cols-1' : 'grid-cols-3']">
 				<div
 					class="flex justify-center items-center gap-3 p-5 flex-1 bg-neutral-900 dark:bg-purple-200 min-h-[8rem] rounded-xl shadow-xl">
 					<div class="p-3 rounded-full bg-purple-600 bg-opacity-30 w-16 aspect-square"><svg
@@ -108,11 +108,11 @@
 			</section>
 
 			<section class="grid grid-cols-4 w-full min-h-full gap-5">
-				<div class="col-span-3 rounded-xl shadow-xl bg-neutral-900 dark:bg-neutral-50 p-2">
+				<div :class="['rounded-xl shadow-xl bg-neutral-900 dark:bg-neutral-50 p-2', ISM ? 'col-span-4' : 'col-span-3']">
 					<LineChart :chartData="lineData" :options="lineOptions" />
 				</div>
 
-				<div
+				<div v-if="!ISM"
 					class="bg-neutral-900 dark:bg-neutral-50 min-h-[8rem] rounded-xl shadow-xl flex flex-col items-center justify-between p-2">
 					<!-- <h1 class="mx-auto">Total Amount By Users</h1> -->
 
@@ -133,12 +133,12 @@
 			<h1 class="col-span-full w-full font-bold text-2xl text-center">EG-Datapoint Users</h1>
 			<h2 class="col-span-full w-full font-bold text-sm text-center text-neutral-500">Today</h2>
 
-			<section class="grid grid-cols-2 w-full min-h-full gap-5">
+			<section :class="['grid w-full min-h-full gap-5', ISM ? 'grid-cols-1' : 'grid-cols-2']">
 				<div @click="() => {
 					useViewAplStore().setUSER(user.id)
 					$router.push(`/analytics/${user.id}_${user.fullname}`)
 				}" v-for="user in normal_users" :key="user.id"
-					class="col-span-1 bg-neutral-900 dark:bg-neutral-50 dark:hover:bg-neutral-200 cursor-pointer p-3 dark:shadow-xl rounded-xl flex items-center">
+					class="col-span-1 bg-neutral-900 dark:bg-neutral-50 dark:hover:bg-neutral-200 cursor-pointer p-3 dark:shadow-xl rounded-xl flex items-center hover:scale-105 transition-all duration-100 ease-out hover:bg-neutral-00">
 					<div class="avatar">
 						<div class="w-24 mask mask-square">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -173,7 +173,7 @@ import { useViewAplStore } from '@/store/viewApl';
 import { BarChart, PieChart, LineChart } from 'vue-chart-3';
 import { ChartData, ChartOptions } from 'chart.js';
 
-const { total_apls, dark_mode, total_daily_applicants_admin, locations
+const { is_mobile: ISM, total_apls, dark_mode, total_daily_applicants_admin, locations
 } = storeToRefs(useAppStore())
 const { profiles } = storeToRefs(useProfileStore())
 const view = ref(false)

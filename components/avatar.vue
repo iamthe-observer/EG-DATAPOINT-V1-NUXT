@@ -1,8 +1,9 @@
 <template>
-	<section class="__avatar w-full max-h-full p-2 flex flex-col items-center gap-1">
+	<section
+		:class="is_mobile ? '__avatar w-full max-h-full py-2 flex flex-row items-center justify-between gap-1' : '__avatar w-full max-h-full p-2 flex flex-col items-center gap-1'">
 		<div class="avatar">
 			<div
-				class="w-20 rounded-xl flex justify-center items-center hover:bg-black group hover:bg-opacity-25 cursor-pointer transition-all duration-300 ease-out">
+				:class="is_mobile ? 'w-8 rounded-xl flex justify-center items-center hover:bg-black group hover:bg-opacity-25 cursor-pointer transition-all duration-300 ease-out' : 'w-20 rounded-xl flex justify-center items-center hover:bg-black group hover:bg-opacity-25 cursor-pointer transition-all duration-300 ease-out'">
 				<svg v-if="!role" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 					<path fill="#888888"
 						class="group-hover:fill-white transition-all duration-300 ease-out group-hover:drop-shadow-lg"
@@ -21,21 +22,27 @@
 				</svg>
 			</div>
 		</div>
-		<div v-if="username" class="__username text-sm px-1">{{ username || 'User' }}</div>
+
+		<div v-if="username" :class="['__username px-1', is_mobile ? 'text-lg font-bold' : 'text-sm']">{{ username || 'User'
+		}}
+		</div>
 		<div v-if="role"
 			class="__username text-[.6rem] bg-red-600 dark:bg-red-400 dark:text-white dark:outline dark:outline-1 dark:outline-red-200 px-2 rounded-full outline-1 outline-white outline">
 			{{ role
 				?
 				'ADMIN' :
-				'' }}</div>
+				'' }}
+		</div>
 	</section>
 </template>
 
 <script setup lang="ts">
 import { useProfileStore } from '@/store/profile';
+import { useAppStore } from '@/store/app';
 import { storeToRefs } from 'pinia';
 
 const { role } = storeToRefs(useProfileStore())
+const { is_mobile } = storeToRefs(useAppStore())
 
 const props = defineProps<{
 	username: string | undefined

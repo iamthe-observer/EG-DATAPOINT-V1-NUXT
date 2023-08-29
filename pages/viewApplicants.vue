@@ -254,7 +254,7 @@
 							</td>
 							<td>
 								<div class="text-right">
-									{{ apl.location![0].toUpperCase() + apl.location?.substring(1) }}
+									{{ apl.location ? apl.location![0].toUpperCase() + apl.location?.substring(1) : '' }}
 								</div>
 							</td>
 						</tr>

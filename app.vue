@@ -75,6 +75,11 @@ const onInitLoadAppData = async () => {
       let { data } = await $SB.from('restricted_users').select('*')
       if (data?.some(USER => USER.user_id == user?.id)) return app.$patch({ restricted_user: true })
 
+      let { data: DATA } = await $SB.from('profiles').select('*').eq('id', user?.id)
+      if (!DATA![0].role && useNuxtApp().$mobileCheck()) {
+        alert('Open site on a computer to continue!...')
+        return $router.push('/')
+      }
       const promises = await Promise.allSettled([
         useProfileStore().getProfile(),
         useProfileStore().getProfiles(),
@@ -89,8 +94,10 @@ const onInitLoadAppData = async () => {
       let values = promises.filter(val => val.status == 'fulfilled').map(val => val.value);
 
       if (values.length == promises.length) {
-        if (_route.path == "/") {
+        if (_route.path == "/" && !useNuxtApp().$mobileCheck()) {
           $router.push("/dashboard");
+        } else {
+          $router.push("/analytics");
         }
         await $SB.auth.startAutoRefresh();
         app.$patch({
@@ -105,6 +112,11 @@ const onInitLoadAppData = async () => {
     app.$patch({
       app_loading: false
     })
+  }
+  finally {
+    app.$patch({
+      app_loading: false,
+    });
   }
 };
 

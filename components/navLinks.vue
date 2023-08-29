@@ -1,5 +1,5 @@
 <template>
-	<section ref="svg" class="__navs w-full flex-1 flex flex-col gap-8 items-center justify-center">
+	<section v-if="!is_mobile" ref="svg" class="__navs w-full flex-1 flex flex-col gap-8 items-center justify-center">
 		<NuxtLink to="/dashboard" class="__icons_container tooltip tooltip-primary z-20 tooltip-right" data-tip="Dashboard">
 			<SvgsHome v-if="!dark_mode" class="__icons" />
 			<SvgsHomeDark v-else class="__icons" />
@@ -24,6 +24,21 @@
 			<SvgsAnalyticsDark v-else class="__icons" />
 		</NuxtLink>
 	</section>
+
+	<!-- <section v-if="is_mobile" ref="svg" class="__navs w-fit flex flex-row gap-8 items-center justify-center">
+		<NuxtLink :to="{ path: '/viewApplicants' }" class="__icons_container	">
+			<SvgsAplTable v-if="!dark_mode" class="__icons" />
+			<SvgsAplTableDark v-else class="__icons" />
+		</NuxtLink>
+		<NuxtLink to="/database" class="__icons_container	">
+			<SvgsDatabase v-if="!dark_mode" class="__icons" />
+			<SvgsDatabaseDark v-else class="__icons" />
+		</NuxtLink>
+		<NuxtLink v-if="role" to="/analytics" class="__icons_container	">
+			<SvgsAnalytics v-if="!dark_mode" class="__icons" />
+			<SvgsAnalyticsDark v-else class="__icons" />
+		</NuxtLink>
+	</section> -->
 </template>
 
 <script setup lang="ts">
@@ -32,7 +47,7 @@ import { useAppStore } from '@/store/app'
 import { storeToRefs } from 'pinia'
 
 const { role } = storeToRefs(useProfileStore())
-const { dark_mode } = storeToRefs(useAppStore())
+const { dark_mode, is_mobile } = storeToRefs(useAppStore())
 </script>
 
 <style scoped>

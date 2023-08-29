@@ -139,13 +139,10 @@
 				</div>
 			</div>
 
-			<div class="indicator w-full px-4">
-				<span v-if="announcements.length >= 5" class="indicator-item badge badge-secondary badge-sm">{{
-					announcements.length < 5 ? 0 : `(${announcements.length - 4})` }} </span>
-						<p v-if="announcements.length > 0"
-							class="ann_btn w-full px-4 text-sm mx-auto py-3 hover:text-secondary dark:hover:text-accent cursor-pointer dark:text-neutral-700 rounded-xl dark:bg-neutral-200 dark:shadow-xl bg-neutral-700 text-center"
-							@click="$router.push('/database')">more announcements</p>
-			</div>
+			<p v-if="announcements.length > 0"
+				class="ann_btn w-5/6 px-4 text-sm mx-auto py-3 hover:text-secondary dark:hover:text-accent cursor-pointer dark:text-neutral-700 rounded-xl dark:bg-neutral-200 dark:shadow-xl bg-neutral-700 text-center"
+				@click="$router.push('/database')">more announcements {{ announcements.length < 5 ? 0 : `(${announcements.length -
+					4})` }}</p>
 
 		</div>
 	</div>

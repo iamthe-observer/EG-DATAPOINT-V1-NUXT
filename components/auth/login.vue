@@ -75,7 +75,18 @@ async function loginUser() {
 		if (error) throw error
 		console.log('Logged In!')
 		loading.value = false
-		useNuxtApp().$router.push('/dashboard')
+
+		let { data: DATA } = await $SB.from('profiles').select('*').eq('id', useSupabaseUser().value?.id)
+		if (!DATA![0].role && useNuxtApp().$mobileCheck()) {
+			alert('Open site on a computer to continue!...')
+			return useNuxtApp().$router.push('/')
+		}
+
+		if (useNuxtApp().$mobileCheck()) {
+			useNuxtApp().$router.push('/analytics')
+		} else {
+			useNuxtApp().$router.push('/dashboard')
+		}
 
 		emit('login')
 		return true

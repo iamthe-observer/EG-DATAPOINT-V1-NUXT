@@ -141,8 +141,8 @@
 						</div>
 					</h2>
 
-					<AplInfoCardDate @update:model-value="logger" :date="new Date(ward.wdob!)" @date="handleDate"
-						:name_type="'wdob'" :idx="ward.index!" :heading="'Date of Birth'" />
+					<AplInfoCardDate @update:model-value="logger" v-model="ward.wdob" :date="new Date(ward.wdob!)"
+						@date="handleDate" :name_type="'wdob'" :idx="ward.index!" :heading="'Date of Birth'" />
 					<AplInfoCard @update:model-value="logger" v-model="ward.wgender" :heading="'Gender'" />
 					<AplInfoCard @update:model-value="logger" v-model="ward.wcity_ob" :heading="'City of Birth'" />
 					<AplInfoCard @update:model-value="logger" v-model="ward.wcountry_ob" :heading="'Country of Birth'" />
@@ -174,18 +174,12 @@ import { useRequestStore } from '@/store/requests';
 import { useAplStore } from '@/store/apl';
 import { useImageStore } from '@/store/images';
 import { useViewAplStore } from '@/store/viewApl';
-import { useProfileStore } from '@/store/profile';
 
 const { $SB, $trimStringProperties } = useNuxtApp()
 const { total_apls } = storeToRefs(useAppStore())
 const { empty_ward } = storeToRefs(useAplStore())
 const { APL_ID } = storeToRefs(useViewAplStore())
-const { role } = storeToRefs(useProfileStore())
 const emit = defineEmits(['apl', 'request'])
-
-const apl_data = useApl(APL_ID.value)
-apl_data.setApl()
-console.log(apl_data.applicant.value);
 
 const if_updated = ref(false)
 const { edit_mode } = storeToRefs(useAplStore())
@@ -208,24 +202,23 @@ const request = ref<Requests>({
 	user_id: '',
 })
 const apl = ref<Applicant>(total_apls.value.find(apl => apl.apl_id == APL_ID.value)!)
-const init_ward_count = ref(total_apls.value.find(apl => apl.apl_id == APL_ID.value)!.wards.length)
 
-watch(
-	() => apl.value.children_number,
-	(newVal) => {
+// watch(
+// 	() => apl.value.children_number,
+// 	(newVal) => {
 
-		// apl.value.wards = [];
-		// apl.value.aplImg_path.wardsPath = [];
-		for (let idx = 0; idx < newVal; idx++) {
-			let ward = { ...empty_ward.value };
-			ward.index = idx;
-			apl.value.wards.push(ward);
-			apl.value.aplImg_path.wardsPath.push(`ward${idx}`);
-		}
-		console.log(apl.value.wards);
-		console.log(apl.value.aplImg_path.wardsPath);
-	},
-);
+// 		// apl.value.wards = [];
+// 		// apl.value.aplImg_path.wardsPath = [];
+// 		for (let idx = 0; idx < newVal; idx++) {
+// 			let ward = { ...empty_ward.value };
+// 			ward.index = idx;
+// 			apl.value.wards.push(ward);
+// 			apl.value.aplImg_path.wardsPath.push(`ward${idx}`);
+// 		}
+// 		console.log(apl.value.wards);
+// 		console.log(apl.value.aplImg_path.wardsPath);
+// 	},
+// );
 
 
 onMounted(async () => {
@@ -280,9 +273,10 @@ function handleDate(e: { name: string, date: Date, ward_idx?: number }) {
 		apl.value.passport_ex = e.date
 		console.log(apl.value);
 	} else if (e.name == 'wdob') {
-		apl.value.wards[e.ward_idx! - 1].wdob = e.date
+		apl.value.wards[e.ward_idx!].wdob = e.date
 		console.log(apl.value);
 	}
+	return
 }
 
 function logger(e: any) {
