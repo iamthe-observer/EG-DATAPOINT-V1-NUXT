@@ -61,6 +61,7 @@ const loadAppData = async () => {
 			let { data: DATA } = await $SB.from('profiles').select('*').eq('id', useSupabaseUser().value?.id)
 			if (!DATA![0].role && useNuxtApp().$mobileCheck()) {
 				alert('Open site on a computer to continue!...')
+				await $SB.auth.signOut()
 				return useNuxtApp().$router.push('/')
 			}
 
@@ -80,10 +81,10 @@ const loadAppData = async () => {
 				.map((val) => val.value);
 
 			if (values.length == promises.length) {
-				if (_route.path == "/" && !useNuxtApp().$mobileCheck()) {
-					$router.push("/dashboard");
-				} else {
+				if (useProfileStore().profile!.role && useNuxtApp().$mobileCheck()) {
 					$router.push("/analytics");
+				} else {
+					$router.push("/dashboard");
 				}
 				await $SB.auth.startAutoRefresh();
 				app.$patch({

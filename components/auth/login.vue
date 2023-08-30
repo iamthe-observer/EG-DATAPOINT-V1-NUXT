@@ -9,7 +9,8 @@
 				<p class="w-full text-center text-2xl">Hello</p>
 				<p class="w-full text-center mb-5 text-primary text-sm">Welcome back to<br />
 					Ebbysgold Datapoint!</p>
-				<textInput :no_uppercase="true" :bg="'neutral-700'" v-model="email_" :placeholder="'Enter username / email'" />
+				<textInput :no_uppercase="true" :bg="'neutral-700'" v-model="email_"
+					:placeholder="'Enter username / email'" />
 				<textInput :type="'password'" :no_uppercase="true" :bg="'neutral-700'" v-model="password"
 					:placeholder="'Password'" class="mb-2" />
 				<span onclick="my_modal_23.showModal()"
@@ -77,16 +78,22 @@ async function loginUser() {
 		loading.value = false
 
 		let { data: DATA } = await $SB.from('profiles').select('*').eq('id', useSupabaseUser().value?.id)
+		console.log(DATA);
+		console.log(useNuxtApp().$mobileCheck());
+
 		if (!DATA![0].role && useNuxtApp().$mobileCheck()) {
 			alert('Open site on a computer to continue!...')
+			await $SB.auth.signOut()
 			return useNuxtApp().$router.push('/')
 		}
 
-		if (useNuxtApp().$mobileCheck()) {
-			useNuxtApp().$router.push('/analytics')
-		} else {
-			useNuxtApp().$router.push('/dashboard')
-		}
+		// if (DATA![0].role && useNuxtApp().$mobileCheck()) {
+		// 	useNuxtApp().$router.push('/analytics')
+		// } else if (DATA![0].role && !useNuxtApp().$mobileCheck()) {
+		// 	useNuxtApp().$router.push('/dashboard')
+		// } else {
+		// 	useNuxtApp().$router.push('/dashboard')
+		// }
 
 		emit('login')
 		return true

@@ -24,7 +24,7 @@
 
 
 
-	<div class="w-full h-full rounded-2xl overflow-y-auto" id="style-2">
+	<div v-if="role" class="w-full h-full rounded-2xl overflow-y-auto" id="style-2">
 		<div
 			class="w-full min-h-full rounded-s-2xl bg-neutral-800 dark:bg-neutral-50 dark:shadow-xl col-span-full row-span-full p-3 overflow-y-auto text-justify relative flex flex-col gap-5"
 			id="style-1">
@@ -175,11 +175,13 @@ import { ChartData, ChartOptions } from 'chart.js';
 
 const { is_mobile: ISM, total_apls, dark_mode, total_daily_applicants_admin, locations
 } = storeToRefs(useAppStore())
-const { profiles } = storeToRefs(useProfileStore())
+const { profiles, role } = storeToRefs(useProfileStore())
 const view = ref(false)
 const curr_location = ref('all')
 
-onMounted(async () => {
+onBeforeMount(async () => {
+	if (!role.value) return useNuxtApp().$router.push('/dashboard')
+
 	const app = useAppStore()
 	await app.getTotalApls()
 })
