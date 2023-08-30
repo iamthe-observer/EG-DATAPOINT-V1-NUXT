@@ -175,12 +175,14 @@ import { ChartData, ChartOptions } from 'chart.js';
 
 const { is_mobile: ISM, total_apls, dark_mode, total_daily_applicants_admin, locations
 } = storeToRefs(useAppStore())
-const { profiles, role } = storeToRefs(useProfileStore())
+const { profiles, role, profile } = storeToRefs(useProfileStore())
 const view = ref(false)
 const curr_location = ref('all')
 
 onBeforeMount(async () => {
 	if (!role.value) return useNuxtApp().$router.push('/dashboard')
+
+	if (profile.value?.location == 'madina' && role.value) curr_location.value = 'madina'
 
 	const app = useAppStore()
 	await app.getTotalApls()

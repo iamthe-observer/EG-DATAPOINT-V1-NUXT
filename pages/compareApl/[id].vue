@@ -427,6 +427,8 @@ const if_val = (val: string) => {
 
 onMounted(() => {
 	if (!request.value.modified_apl) useNuxtApp().$router.push({ path: '/database' })
+	console.log(request.value.modified_apl?.wards);
+
 });
 
 async function deleteApplicant(req: Requests) {
