@@ -73,7 +73,13 @@ const onInitLoadAppData = async () => {
 
 
       let { data } = await $SB.from('restricted_users').select('*')
-      if (data?.some(USER => USER.user_id == user?.id)) return app.$patch({ restricted_user: true })
+      if (data?.some(USER => USER.user_id == user?.id)) {
+        await $SB.auth.signOut()
+        $router.push('/')
+        return app.$patch({ restricted_user: true })
+      } else {
+        app.$patch({ restricted_user: false })
+      }
 
       let { data: DATA } = await $SB.from('profiles').select('*').eq('id', user?.id)
       if (!DATA![0].role && useNuxtApp().$mobileCheck()) {

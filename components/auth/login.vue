@@ -9,8 +9,7 @@
 				<p class="w-full text-center text-2xl">Hello</p>
 				<p class="w-full text-center mb-5 text-primary text-sm">Welcome back to<br />
 					Ebbysgold Datapoint!</p>
-				<textInput :no_uppercase="true" :bg="'neutral-700'" v-model="email_"
-					:placeholder="'Enter username / email'" />
+				<textInput :no_uppercase="true" :bg="'neutral-700'" v-model="email_" :placeholder="'Enter username / email'" />
 				<textInput :type="'password'" :no_uppercase="true" :bg="'neutral-700'" v-model="password"
 					:placeholder="'Password'" class="mb-2" />
 				<span onclick="my_modal_23.showModal()"
@@ -39,6 +38,7 @@
 import { required, email } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 import { useTitle } from '@vueuse/core';
+import { useAppStore } from '@/store/app';
 
 useTitle('EG Datapoint | Home | Login')
 
@@ -76,6 +76,17 @@ async function loginUser() {
 		if (error) throw error
 		console.log('Logged In!')
 		loading.value = false
+
+
+		let { data } = await $SB.from('restricted_users').select('*')
+		if (data?.some(USER => USER.user_id == useSupabaseUser().value?.id)) {
+			await $SB.auth.signOut()
+			alert('Bad Login')
+			return useAppStore().$patch({ restricted_user: true })
+		} else {
+			useAppStore().$patch({ restricted_user: false })
+		}
+
 
 		let { data: DATA } = await $SB.from('profiles').select('*').eq('id', useSupabaseUser().value?.id)
 		console.log(DATA);
