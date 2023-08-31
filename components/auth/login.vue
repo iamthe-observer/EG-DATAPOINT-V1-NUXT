@@ -1,39 +1,58 @@
 <template>
-	<div class="bg-green-5001 text-white rounded-xl w-[400px] h-full p-4 flex flex-col justify-center">
-		<!-- <div class="w-full text-right">Not a member Yet? <span @click="$emit('toRegister')"
-				class="cursor-pointer text-amber-600">Register
-				Here</span>
-		</div> -->
-		<form action="" class="flex flex-col">
-			<div class="flex flex-col w-full h-full justify-center px-12">
-				<p class="w-full text-center text-2xl">Hello</p>
-				<p class="w-full text-center mb-5 text-primary text-sm">Welcome back to<br />
-					Ebbysgold Datapoint!</p>
-				<textInput :no_uppercase="true" :bg="'neutral-700'" v-model="email_"
-					:placeholder="'Enter username / email'" />
-				<textInput :type="'password'" :no_uppercase="true" :bg="'neutral-700'" v-model="password"
-					:placeholder="'Password'" class="mb-2" />
-				<span onclick="my_modal_23.showModal()"
-					class="hover:cursor-pointer hover:text-secondary w-full text-right mb-6">Recover
-					Password</span>
-				<button @click.prevent="loginUser" class="btn mb-9 hover:bg-primary">
-					<span v-if="loading" class="loading loading-ring loading-sm text-white"></span>
-					<span v-else>Sign In</span>
-				</button>
-			</div>
-		</form>
+	<!-- container -->
+	<div class="w-full text-black bg-neutral-50 h-full flex relative">
 
-		<dialog id="my_modal_23" class="modal">
-			<form method="dialog" class="modal-box text-white w-fit outline-4 outline-neutral-700 outline">
-				<p class="">Response:</p>
-				<h3 class="font-semibold text-2xl">Contact the IT Head.</h3>
+		<img src="../../assets/images/loginImg.jpg" alt="" class="absolute inset-0 w-full h-full object-cover">
+
+		<div class="sm:w-[40%] w-full backdrop-blur-sm justify-center h-full flex flex-col px-10 z-10">
+			<!-- company title -->
+			<h3 class="font-semibold">
+				Ebbysgold Group
+			</h3>
+
+			<div class="flex flex-col mt-10">
+				<h1 class="text-3xl font-bold">Sign In</h1>
+				<p class="text-sm text-neutral-500">Welcome to <span class="text-purple-500 text-sm">Ebbysgold Datapoint</span>,
+					enter
+					account details
+					below.</p>
+			</div>
+
+			<form @submit.prevent="loginUser" class="flex flex-col gap-2 mt-10">
+				<!-- email -->
+				<div class="form-control w-full max-w-full">
+					<label class="label">
+						<span class="label-text text-sm text-black">Email</span>
+					</label>
+					<input v-model="email_" type="email" placeholder="email over here"
+						class="input input-bordered bg-white rounded-sm w-full max-w-full focus:shadow-box shadow-box-null transition-all duration-150 ease-out" />
+				</div>
+
+				<!-- password -->
+				<div class="form-control w-full max-w-full">
+					<label class="label">
+						<span class="label-text text-sm text-black">Password</span>
+					</label>
+					<input v-model="password" type="password" placeholder="super secret password 😉"
+						class="input input-bordered bg-white rounded-sm w-full max-w-full focus:shadow-box shadow-box-null transition-all duration-150 ease-out" />
+				</div>
+
+				<div class="self-end hover:text-purple-500 hover:scale-110 transition-all duration-100 ease-out cursor-pointer">
+					Reset Password
+				</div>
 			</form>
-			<form method="dialog" class="modal-backdrop bg-black bg-opacity-70">
-				<button>close</button>
-			</form>
-		</dialog>
+
+			<button @click="loginUser"
+				class="mt-10 border border-black font-semibold p-3 rounded-sm bg-primary text-black shadow-box active:shadow-box-null transition-all duration-150 ease-out hover:bg-white flex items-center justify-center">
+				<span v-if="loading" class="loading loading-infinity loading-md"></span>
+				<span class="" v-else>Sign In</span>
+			</button>
+		</div>
+
 	</div>
 </template>
+
+<style scoped></style>
 
 <script setup lang="ts">
 import { required, email } from '@vuelidate/validators'

@@ -1,26 +1,5 @@
 <template>
-	<div v-if="!useAppStore().is_mobile" class="w-full h-full flex justify-between p-7 relative">
-		<!-- <Planet /> -->
-		<div class="absolute bg- inset-0 my-7 mx-7">
-			<div class="w-full h-full flex relative">
-				<div class="l-slide bg-white w-[00px] rounded-2xl relative"></div>
-				<div class="flex-1 rounded-2xl bg-black1 relative">
-					<!-- <span class="z-[500] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[8rem]">
-						<span class="text-primary font-Foldit">Ebbysgold</span>
-						<br />
-						<span class="text-secondary font-Foldit">Datapoint</span>
-					</span> -->
-				</div>
-				<div class="r-slide w-[400px] rounded-2xl backdrop-blur-xl bg-black bg-opacity-20"></div>
-			</div>
-		</div>
-		<AuthRegister @toLogin="toLogin" class="__register opacity-0 z-10" />
-		<AuthLogin @login="loadAppData" class="__login opacity-100 z-10" />
-	</div>
-
-	<div class="w-full h-full flex justify-center items-center p-7 relative" v-else>
-		<AuthLogin @login="loadAppData" class="__login opacity-100 z-10" />
-	</div>
+	<AuthLogin @login="loadAppData" class="__login opacity-100 z-10" />
 </template>
 
 <script setup lang="ts">
