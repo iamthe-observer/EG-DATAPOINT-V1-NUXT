@@ -1,6 +1,6 @@
 <template>
 	<svg ref="svg" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-		<g :fill="state.fill" :stroke="state.stroke" strokeLinecap="round" strokeWidth="2">
+		<g :fill="state.fill" :class="classer" :stroke="state.stroke" strokeLinecap="round" strokeWidth="2">
 			<path strokeDasharray="4" strokeDashoffset="4" d="M12 3V5">
 				<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.2s" values="4;0"></animate>
 			</path>
@@ -17,6 +17,9 @@
 </template>
 
 <script setup lang="ts">
+defineProps<{
+	classer?: string
+}>()
 const svg = ref<SVGElement>()
 const isHover = useElementHover(svg)
 const state = computed(() => {

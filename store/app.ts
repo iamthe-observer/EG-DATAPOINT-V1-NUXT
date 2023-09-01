@@ -255,19 +255,21 @@ export const useAppStore = defineStore("app", () => {
       ((today_sales.value - yesterday_sales.value) / yesterday_sales.value) *
       100;
 
-    if (!isFinite(percentageChange)) {
-      return "No change in sales compared to yesterday.";
-    } else if (percentageChange > 0) {
-      return `There was a ${percentageChange.toFixed(
-        2,
-      )}% increase in sales compared to yesterday.`;
-    } else if (percentageChange < 0) {
-      return `There was a ${Math.abs(percentageChange).toFixed(
-        2,
-      )}% decrease in sales compared to yesterday.`;
-    } else {
-      return "No change in sales compared to yesterday.";
-    }
+    return percentageChange;
+
+    // if (!isFinite(percentageChange)) {
+    //   return "No change in sales compared to yesterday.";
+    // } else if (percentageChange > 0) {
+    //   return `There was a ${percentageChange.toFixed(
+    //     2,
+    //   )}% increase in sales compared to yesterday.`;
+    // } else if (percentageChange < 0) {
+    //   return `There was a ${Math.abs(percentageChange).toFixed(
+    //     2,
+    //   )}% decrease in sales compared to yesterday.`;
+    // } else {
+    //   return "No change in sales compared to yesterday.";
+    // }
   });
 
   const perc_compared_to_yesterday_admin = computed(() => {
