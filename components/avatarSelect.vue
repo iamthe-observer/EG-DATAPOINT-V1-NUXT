@@ -7,7 +7,7 @@
 		</div>
 
 		<div class="absolute inset-1 rounded-md dark:bg-neutral-200 bg-neutral-700 grid place-items-center" v-else><img
-				:src="src ? src : ''" :alt="alt" class="w-full h-full rounded-md object-cover"></div>
+				:src="src ? src : ''" :alt="alt" class="w-full h-full rounded-sm object-cover"></div>
 	</div>
 </template>
 

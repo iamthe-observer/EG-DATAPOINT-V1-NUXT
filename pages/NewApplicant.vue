@@ -88,26 +88,28 @@
 		<!-- Put this part before </body> tag -->
 		<input :checked="if_sent" type="checkbox" id="my_modal_7" class="modal-toggle" />
 		<div class="modal">
-			<div class="modal-box dark:bg-white dark:outline dark:outline-4 dark:outline-success">
+			<div
+				class="modal-box text-black bg-white font-bold border-black border rounded-sm shadow-box dark:outline dark:outline-4 dark:outline-success">
 				<p class="py-4 text-center text-4xl dark:text-success dark:font-semibold">
 					Applicant Saved!</p>
 			</div>
-			<label @click="useAplStore().$patch({ if_sent: false })" class="modal-backdrop bg-[rgb(0,0,0,.7)]">Close</label>
+			<label @click="useAplStore().$patch({ if_sent: false })" class="modal-backdrop bg-[rgb(0,0,0,.4)]">Close</label>
 		</div>
 
 		<input :checked="if_req_sent" type="checkbox" id="request_modal_1" class="modal-toggle" />
 		<div class="modal">
-			<div class="modal-box dark:bg-white dark:outline dark:outline-4 dark:outline-success">
+			<div
+				class="modal-box text-black bg-white font-bold border-black border rounded-sm shadow-box dark:outline dark:outline-4 dark:outline-success">
 				<p class="py-4 text-center text-4xl dark:text-success dark:font-semibold">
-					Request Sent!</p>
+					Discount Request Sent!</p>
 			</div>
-			<label class="modal-backdrop bg-[rgb(0,0,0,.7)]" for="request_modal_1">Close</label>
+			<label class="modal-backdrop bg-[rgb(0,0,0,.4)]" for="request_modal_1">Close</label>
 		</div>
 
 		<Teleport to="body">
-			<div :class="['transition-all duration-500 pointer-events-none ease-out absolute bottom-0 left-1/2 -translate-x-1/2 pb-6',
+			<div :class="['transition-all duration-500 pointer-events-none ease-out absolute bottom-0 left-1/2 -translate-x-1/2 pb-6 z-[5000]',
 				if_val_err ? 'opacity-100' : 'opacity-0']">
-				<div id="alert" class="alert alert-error">
+				<div id="alert" class="alert alert-error border-black border rounded-sm shadow-box">
 					<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
 							d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -149,6 +151,10 @@ onBeforeUnmount(() => {
 	useAplStore().resetAplData()
 	useImageStore().resetFiles()
 })
+onBeforeMount(() => {
+	useAplStore().resetAplData()
+	useImageStore().resetFiles()
+})
 
 watch(if_val_err, (val) => {
 	if (val) {
@@ -166,9 +172,6 @@ watch(if_val_err, (val) => {
 	}
 })
 
-function logger(val: any) {
-	console.log(val);
-}
 useTitle('EG Datapoint | Add Applicant')
 </script>
 

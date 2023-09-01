@@ -5,7 +5,7 @@
 		<div class="col-span-2 row-span-2 flex flex-col items-center gap-3">
 			<avatarSelect :src="wardSRC" class="col-span-2 row-span-2" />
 			<input @change="handleFile" type="file"
-				class="file-input file-input-primary dark:text-neutral-900 dark:bg-white file-input-xs w-full max-w-xs" />
+				class="file-input file-input-ghost border outline outline-4 outline-neutral-400 border-black text-black rounded-sm bg-white file-input-xs w-full max-w-xs" />
 		</div>
 		<!-- name -->
 		<div class="flex gap-4 col-span-10 pl-6 justify-center">
@@ -30,23 +30,23 @@
 			<div class="form-control w-full">
 
 				<label class="label">
-					<span class="label-text dark:text-neutral-900 dark:font-semibold">
+					<span class="label-text text-neutral-800 dark:font-semibold">
 						Date Of Birth
 					</span>
 				</label>
 
 				<div class="indicator w-full">
 					<span
-						:class="['transition-all duration-300 ease-in pointer-events-none indicator-item badge-sm badge bg-red-400 border-transparent drop-shadow-xl', vuelidate_err == false && !applicant.wards[idx].wdob ? 'opacity-100' : 'opacity-0']"></span>
+						:class="['transition-all indicator-start duration-300 ease-in pointer-events-none indicator-item badge-sm badge bg-red-400 border-transparent drop-shadow-xl', vuelidate_err == false && !applicant.wards[idx].wdob ? 'opacity-100' : 'opacity-0']"></span>
 
 
 					<div class="flex items-end flex-1 gap-4">
 						<input v-model="dates.wdob.dd" type="number" min="1" max="31" maxlength="2" placeholder="DD"
-							class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+							class="input w-full max-w-xs bg-white border border-black focus:shadow-box focus:outline-none transition-all duration-150 ease-out rounded-sm dark:bg-neutral-300" />
 						<input v-model="dates.wdob.mm" type="number" min="1" max="12" maxlength="2" placeholder="MM"
-							class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+							class="input w-full max-w-xs bg-white border border-black focus:shadow-box focus:outline-none transition-all duration-150 ease-out rounded-sm dark:bg-neutral-300" />
 						<input v-model="dates.wdob.yyyy" type="number" maxlength="4" placeholder="YYYY"
-							class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+							class="input w-full max-w-xs bg-white border border-black focus:shadow-box focus:outline-none transition-all duration-150 ease-out rounded-sm dark:bg-neutral-300" />
 					</div>
 				</div>
 			</div>
