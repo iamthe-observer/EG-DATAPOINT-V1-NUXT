@@ -31,7 +31,7 @@
 
 			<div class="w-full flex items-center justify-between">
 				<div class="flex gap-2 items-center">
-					<span @dblclick="view = !view" :class="['font-bold', ISM ? 'text-xl' : 'text-3xl']">Overview</span>
+					<span @dblclick="shown = !shown" :class="['font-bold', ISM ? 'text-xl' : 'text-3xl']">Overview</span>
 				</div>
 
 				<select v-model="curr_location"
@@ -42,7 +42,7 @@
 				</select>
 			</div>
 
-			<section :class="['grid w-full gap-5', ISM ? 'grid-cols-1' : 'grid-cols-3']">
+			<section :class="['grid w-full gap-5', ISM ? 'grid-cols-1' : 'grid-cols-4']">
 				<div
 					class="flex justify-center items-center gap-3 p-5 flex-1 bg-neutral-900 dark:bg-purple-200 min-h-[8rem] rounded-xl shadow-xl">
 					<div class="p-3 rounded-full bg-purple-600 bg-opacity-30 w-16 aspect-square"><svg
@@ -56,7 +56,7 @@
 						<span class="text-sm text-neutral-500 dark:text-neutral-800">Total Applicants</span>
 					</p>
 				</div>
-				<!-- <div
+				<div v-if="shown"
 					class="flex justify-center items-center gap-3 p-5 flex-1 bg-neutral-900 dark:bg-fuchsia-200 min-h-[8rem] rounded-xl shadow-xl">
 					<div class="p-3 rounded-full bg-accent bg-opacity-30 w-16 aspect-square"><svg xmlns="http://www.w3.org/2000/svg"
 							class="w-full" viewBox="0 0 24 24">
@@ -72,7 +72,7 @@
 						<span class="text-xl font-bold">GHC {{ totalSales }}.00</span>
 						<span class="text-sm text-neutral-500 dark:text-neutral-800">Total Sales</span>
 					</p>
-				</div> -->
+				</div>
 				<div
 					class="flex justify-center items-center gap-3 p-5 flex-1 bg-neutral-900 dark:bg-yellow-200 min-h-[8rem] rounded-xl shadow-xl">
 					<div class="p-3 rounded-full bg-secondary bg-opacity-30 w-16 aspect-square"><svg
@@ -177,6 +177,7 @@ const { is_mobile: ISM, total_apls, dark_mode, total_daily_applicants_admin, loc
 } = storeToRefs(useAppStore())
 const { profiles, role, profile } = storeToRefs(useProfileStore())
 const view = ref(false)
+const shown = ref(false)
 const curr_location = ref('all')
 
 onBeforeMount(async () => {
