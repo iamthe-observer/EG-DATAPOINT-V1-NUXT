@@ -32,14 +32,17 @@
 				</div>
 			</StatCard>
 
-			<StatCard :head="`Today's Applicants`" :val="total_daily_applicants.length"
+			<StatCard :head="`Today's Applicants`"
+				:val="role ? total_daily_applicants_admin.length : total_daily_applicants.length"
 				:stat="`${isNaN(Number(perc_compared_to_yesterday.toFixed(1))) ? 0 : perc_compared_to_yesterday.toFixed(1)}%`">
 				<div class="flex flex-col w-full gap-1">
 					<div class="flex-1 flex justify-between items-center">
 						<span class="text-sm">Singles</span>
 						<span class="text-sm">
-							{{ role ? total_daily_applicants_admin.filter(apl => apl.pmarital_status !== 'MARRIED').length :
-								total_daily_applicants.filter(apl => apl.pmarital_status !== 'MARRIED').length }}
+							{{ role ? total_daily_applicants_admin.filter(apl => apl.pmarital_status !== 'MARRIED' && apl.wards.length
+								== 0).length :
+								total_daily_applicants.filter(apl => apl.pmarital_status !== 'MARRIED' && apl.wards.length
+									== 0).length }}
 						</span>
 					</div>
 					<div class="flex-1 flex justify-between items-center">
@@ -53,17 +56,19 @@
 					<div class="flex-1 flex justify-between items-center">
 						<span class="text-sm">W/Kids</span>
 						<span class="text-sm">
-							{{ role ? total_daily_applicants_admin.filter(apl => apl.pmarital_status !== 'MARRIED' && apl.wards.length >
+							{{ role ? total_daily_applicants_admin.filter(apl => apl.pmarital_status !== 'MARRIED' && apl.wards.length
+								!==
 								0).length :
-								total_daily_applicants.filter(apl => apl.pmarital_status !== 'MARRIED' && apl.wards.length > 0).length }}
+								total_daily_applicants.filter(apl => apl.pmarital_status !== 'MARRIED' && apl.wards.length !== 0).length }}
 						</span>
 					</div>
 					<div class="flex-1 flex justify-between items-center">
 						<span class="text-sm">Family</span>
 						<span class="text-sm">
-							{{ role ? total_daily_applicants_admin.filter(apl => apl.pmarital_status === 'MARRIED' && apl.wards.length >
+							{{ role ? total_daily_applicants_admin.filter(apl => apl.pmarital_status === 'MARRIED' && apl.wards.length
+								!==
 								0).length :
-								total_daily_applicants.filter(apl => apl.pmarital_status === 'MARRIED' && apl.wards.length > 0).length }}
+								total_daily_applicants.filter(apl => apl.pmarital_status === 'MARRIED' && apl.wards.length !== 0).length }}
 						</span>
 					</div>
 				</div>
@@ -87,8 +92,76 @@
 			<div class="flex-1 pl-10 text-black">
 				<h1 class="mt-3 mb-2 font-bold w-full text-black">Tasks</h1>
 
-				<div class="flex flex-col gap-4 max-h-[300px] border border-black">
-					<header class="w-full p-2 border-b border-black">Uncompleted</header>
+				<div class="flex flex-col min-h-[300px] max-h-[400px] border border-black overflow-y-auto relative bg-white">
+					<header class="w-full flex items-center justify-between p-2 border-b sticky top-0 border-black bg-white z-50">
+						<span class="font-bold">{{ task_type ? task_type![0].toUpperCase() + task_type?.substring(1) : '' }}
+							<div class="dropdown dropdown-right dropdown-hover">
+								<label tabindex="0" class=" ">※</label>
+								<ul tabindex="0"
+									class="dropdown-content z-[1000] text-black menu p-2 border border-black bg-white rounded-sm hover:shadow-box transition-all duration-150 ease-out w-52">
+									<li @click="task_type = 'uncompleted'"><a>Uncompleted</a></li>
+									<li @click="task_type = 'completed'"><a>Completed</a></li>
+									<li @click="task_type = 'all'"><a>All</a></li>
+								</ul>
+							</div>
+
+						</span>
+
+						<NButton onclick="my_modal_3.showModal()">New Task</NButton>
+
+						<dialog id="my_modal_3" class="modal">
+							<form method="dialog" class="modal-box bg-white shadow-box rounded-sm">
+								<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+								<h3 class="font-bold text-lg pb-5">New Task</h3>
+								<textarea v-model="new_task" class="w-full min-h-12 border border-black rounded-sm p-3"></textarea>
+								<span class="text-xs italic">Enter task to send!</span>
+
+								<div class="modal-action">
+									<NButton class="" v-if="new_task.length > 0" @click="async () => {
+										await useTasksStore().sendTasks({
+											body: new_task,
+											user_id: useSupabaseUser().value?.id!,
+										})
+										new_task = ''
+									}">
+
+										<span v-if="!loading_task" class="">Add</span>
+										<span v-else class="loading loading-infinity loading-md"></span>
+									</NButton>
+								</div>
+							</form>
+						</dialog>
+					</header>
+
+					<div class="flex flex-col w-full">
+						<div v-for="(task, i) in tasks_computed" v-if="_tasks"
+							:class="['flex items-center justify-between p-2 px-5 border-b border-black', task.done ? 'bg-green-200' : '']"
+							:key="i">
+							<div class="w-full flex gap-5 items-center">
+								<span class="text-xs">{{ i + 1 }}</span>
+								<div class="flex flex-col gap-1">
+									<span class="">{{ task.body }}</span>
+									<span class="text-xs">{{ $formatDate(new Date(task.created_at!)) }} | {{ $formatDateTime(new
+										Date(task.created_at!)) }}</span>
+								</div>
+							</div>
+
+							<div class="dropdown dropdown-left dropdown-hover">
+								<label tabindex="0" class=" ">※</label>
+								<ul tabindex="0"
+									class="dropdown-content z-[1000] text-black menu p-2 border border-black bg-white rounded-sm hover:shadow-box transition-all duration-150 ease-out w-52">
+									<li @click="useTasksStore().updateTask(task.done!, task.id!)"><a>{{ !task.done ? 'Mark as Done' : `Mark
+											as not Done` }}</a></li>
+									<li @click="useTasksStore().deleteTask(task.id!)" class="bg-red-200 text-white rounded-sm"><a
+											class="">Delete</a></li>
+								</ul>
+							</div>
+
+						</div>
+					</div>
+
+					<span v-if="loading_task"
+						class="absolute top-1/2 left-1/2 -translate-x-1/2 z-50 -translate-y-1/2 loading loading-infinity loading-lg"></span>
 
 				</div>
 			</div>
@@ -112,8 +185,8 @@
 								class="w-full border-b border-black p-2 flex items-center justify-between gap-2 bg-white hover:bg-purple-50 cursor-pointer transition-all duration-100 ease-out group z-50 group">
 								<!-- img -->
 								<div class="h-14 aspect-square border border-black rounded-sm">
-									<!-- <img loading="lazy" v-if="URLs?.length! > 0" class=""
-										:src="URLs![i].signedUrl !== null ? URLs![i].signedUrl : '/svg/image.svg'" /> -->
+									<img loading="lazy" v-if="URLs?.length! > 0" class=""
+										:src="URLs![i].signedUrl !== null ? URLs![i].signedUrl : '/svg/image.svg'" />
 								</div>
 
 								<!-- name -->
@@ -202,36 +275,46 @@ import { useTitle } from '@vueuse/core';
 useTitle('EG Datapoint | Dashboard')
 import { useAppStore } from '@/store/app';
 import { useProfileStore } from '@/store/profile';
+import { useTasksStore } from '@/store/tasks';
 import { storeToRefs } from 'pinia';
 import { useViewAplStore } from '@/store/viewApl';
 
 const { total_apls, all_my_apls, perc_compared_to_yesterday, total_daily_applicants, total_daily_applicants_admin, today_sales_admin, perc_compared_to_yesterday_admin, today_sales } = storeToRefs(useAppStore())
+const { _tasks, done_task, loading_task } = storeToRefs(useTasksStore())
 const loading = ref(false)
 const quick_search = ref('')
+const new_task = ref('')
 const { role, profiles } = storeToRefs(useProfileStore())
 const { $formatDate, $sortByRecency: SR } = useNuxtApp()
+const task_type = ref('uncompleted')
+const URLs = ref<{
+	error: string | null;
+	path: string | null;
+	signedUrl: string;
+}[] | null | undefined>()
+const tasks_computed = computed(() => {
+	if (task_type.value == 'uncompleted') return _tasks.value.filter(t => !t.done)
+	if (task_type.value == 'completed') return _tasks.value.filter(t => t.done)
+	if (task_type.value == 'all') return _tasks.value
+})
+
+onMounted(async () => {
+	await loadUrls()
+})
+
+watchEffect(() => {
+	console.log(loading.value, URLs.value);
+})
 
 const path = computed(() => {
-	if (useNuxtApp().$sortByRecency(total_daily_applicants.value).length >= 5) {
-		return useNuxtApp().$sortByRecency(total_daily_applicants.value).map(apl => apl.aplImg_path.primePath[0]).slice(0, 5)
-	} else {
-		return useNuxtApp().$sortByRecency(total_daily_applicants.value).map(apl => apl.aplImg_path.primePath[0])
-	}
-})
-const path_all = computed(() => {
 	return useNuxtApp().$sortByRecency(total_daily_applicants.value).map(apl => apl.aplImg_path.primePath[0])
 })
-
-// const path_admin = computed(() => {
-// 	if (total_apls.value.length >= 5) {
-// 		return useNuxtApp().$sortByRecency(total_apls.value).map(apl => apl.aplImg_path.primePath[0]).slice(0, 5)
-// 	} else {
-// 		return useNuxtApp().$sortByRecency(total_apls.value).map(apl => apl.aplImg_path.primePath[0])
-// 	}
-// })
+const path_all = computed(() => {
+	return useNuxtApp().$sortByRecency(total_apls.value).map(apl => apl.aplImg_path.primePath[0])
+})
 
 const path_admin = computed(() => {
-	return useNuxtApp().$sortByRecency(total_apls.value).map(apl => apl.aplImg_path.primePath[0]).slice(0, 10)
+	return useNuxtApp().$sortByRecency(total_daily_applicants_admin.value).map(apl => apl.aplImg_path.primePath[0])
 })
 
 const recent_apls = computed(() => {
@@ -250,20 +333,6 @@ const recent_apls = computed(() => {
 			return SR(total_daily_applicants_admin.value.filter(apl => apl.fullName.includes(quick_search.value.toUpperCase())))
 		}
 	}
-})
-
-const URLs = ref<{
-	error: string | null;
-	path: string | null;
-	signedUrl: string;
-}[] | null | undefined>()
-
-onMounted(async () => {
-	await loadUrls()
-})
-
-watchEffect(() => {
-	console.log(loading.value, URLs.value);
 })
 
 async function loadUrls() {
@@ -325,6 +394,8 @@ function getAplNumByDay(num: number) {
 		return yesterday_apls;
 	}
 }
+
+// create a car class
 
 function getTotalPaymentByDay(num: number) {
 	const today = new Date();

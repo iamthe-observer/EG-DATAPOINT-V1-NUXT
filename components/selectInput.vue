@@ -1,15 +1,16 @@
 <template>
 	<div class="form-control w-full">
 		<label class="label">
-			<span class="label-text dark:text-neutral-900 dark:font-semibold">
+			<span class="label-text text-neutral-800 dark:font-semibold">
 				<slot />
 			</span>
 		</label>
 		<div class="indicator w-full">
 			<span
-				:class="['transition-all duration-300 ease-in pointer-events-none indicator-item badge-sm badge bg-red-400 border-transparent drop-shadow-xl', val_err ? 'opacity-100' : 'opacity-0']"></span>
+				:class="['transition-all duration-300 ease-in pointer-events-none indicator-item badge-sm badge bg-red-400 border-transparent drop-shadow-xl indicator-start', val_err ? 'opacity-100' : 'opacity-0']"></span>
 
-			<select class="select w-full bg-neutral-600 dark:bg-neutral-300 rounded-xl"
+			<select
+				class="select w-full bg-white border border-black focus:shadow-box dark:bg-neutral-300 rounded-sm transition-all duration-150 ease-out"
 				@input="$emit('update:modelValue', $event.target?.value)" :value="modelValue">
 				<option v-if="options" disabled selected>Pick one</option>
 				<option v-if="num_options" disabled selected>Pick number</option>
