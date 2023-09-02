@@ -10,7 +10,8 @@
 		}" v-for="(apl, i) in useNuxtApp().$sortByRecency(total_daily_applicants)" class="flex gap-2">
 			<div class="avatar">
 				<div class="w-24 rounded-xl">
-					<img :src="daily_urls![i].signedUrl !== null ? daily_urls![i].signedUrl : '/svg/image.svg'" />
+					<img v-if="daily_urls?.length! > 0"
+						:src="daily_urls![i].signedUrl !== null ? daily_urls![i].signedUrl : '/svg/image.svg'" />
 				</div>
 			</div>
 

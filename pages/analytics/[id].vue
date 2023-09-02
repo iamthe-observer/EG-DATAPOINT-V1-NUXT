@@ -174,6 +174,7 @@ const pastWeekSales = computed(() => {
 const total_daily_applicants = computed(() => {
 	return total_apls.value.filter(apl => apl.user_id == id.value).filter(apl => useNuxtApp().$formatDate(date.value) == useNuxtApp().$formatDate(new Date(apl.created_at!)))
 });
+
 const total_applicants = computed(() => {
 	return total_apls.value.filter(apl => apl.user_id == id.value)
 });

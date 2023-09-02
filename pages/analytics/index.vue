@@ -1,11 +1,14 @@
 <template>
 	<!-- <div v-if="!view" class="w-full h-full rounded-2xl overflow-y-auto" id="style-2">
+	<div v-if="!date" clas<Date>sw-full h-full rounded-2xl overflow-y-auto" id="style-2">
 		<div
 			class="w-full min-h-full rounded-s-2xl bg-neutral-800 dark:bg-neutral-50 dark:shadow-xl col-span-full row-span-full p-3 overflow-y-auto text-justify relative flex flex-col gap-5"
 			id="style-1">
 
 			<header classs="">
 				<span @dblclick="view = !view" class="">Overview</span>
+				<span @dblclick="view = !view" class="">Overview</span>
+				<span @dblclick="date = !dat<Date>e clas<Date>sOverview</span>
 				loction
 			</header>
 
@@ -16,7 +19,7 @@
 				}" class="px-2 py-1 rounded-full bg-white text-black font-bold cursor-pointer" v-for="user in normal_users">
 					{{ user.fullname || 'User' }}
 				</span>
-				{{ total_daily_applicants_admin.filter(apl => apl.location == curr_location) }}
+				{{ daily_applicants.filter(apl => apl.location == curr_location) }}
 			</div>
 
 		</div>
@@ -33,6 +36,15 @@
 				<div class="flex gap-2 items-center">
 					<span @dblclick="shown = !shown" :class="['font-bold', ISM ? 'text-xl' : 'text-3xl']">Overview</span>
 				</div>
+
+				<DatePicker dark :color="'purple'" is-dark v-model="date" mode="date">
+					<template #default="{ togglePopover }">
+						<span @click="togglePopover"
+							class="text-2xl font-bold px-2 py-1 dark:hover:bg-neutral-300 hover:text-accent hover:bg-neutral-900 rounded-xl transition-all duration-200 ease-in-out cursor-pointer">{{
+								$formatDateWords(date!) }}</span>
+					</template>
+				</DatePicker>
+
 
 				<select v-model="curr_location"
 					:class="['select rounded-full bg-[rgb(13,13,13)] dark:bg-neutral-50 dark:text-black', ISM ? 'select-xs w-32' : 'select-sm w-40']">
@@ -81,8 +93,8 @@
 								d="M12 22.575q-.2 0-.375-.062T11.3 22.3L9 20H5q-.825 0-1.413-.588T3 18V4q0-.825.588-1.413T5 2h14q.825 0 1.413.588T21 4v14q0 .825-.588 1.413T19 20h-4l-2.3 2.3q-.15.15-.325.213t-.375.062ZM5 16.85q1.35-1.325 3.138-2.087T12 14q2.075 0 3.863.763T19 16.85V4H5v12.85ZM12 12q1.45 0 2.475-1.025T15.5 8.5q0-1.45-1.025-2.475T12 5q-1.45 0-2.475 1.025T8.5 8.5q0 1.45 1.025 2.475T12 12Zm0-2q-.625 0-1.063-.438T10.5 8.5q0-.625.438-1.063T12 7q.625 0 1.063.438T13.5 8.5q0 .625-.438 1.063T12 10Zm0 10.2l2.2-2.2H17v-.25q-1.05-.875-2.325-1.312T12 16q-1.4 0-2.675.438T7 17.75V18h2.8l2.2 2.2Zm0-9.775Z" />
 						</svg></div>
 					<p class="flex flex-col">
-						<span class="text-xl font-bold">{{ curr_location == 'all' ? total_daily_applicants_admin.length :
-							total_daily_applicants_admin.filter(apl => apl.location == curr_location).length }}</span>
+						<span class="text-xl font-bold">{{ curr_location == 'all' ? daily_applicants.length :
+							daily_applicants.filter(apl => apl.location == curr_location).length }}</span>
 						<span class="text-sm text-neutral-500 dark:text-neutral-800">Daily Applicants</span>
 					</p>
 				</div>
@@ -173,10 +185,11 @@ import { useViewAplStore } from '@/store/viewApl';
 import { BarChart, PieChart, LineChart } from 'vue-chart-3';
 import { ChartData, ChartOptions } from 'chart.js';
 
-const { is_mobile: ISM, total_apls, dark_mode, total_daily_applicants_admin, locations
+const { is_mobile: ISM, total_apls, dark_mode, locations
 } = storeToRefs(useAppStore())
 const { profiles, role, profile } = storeToRefs(useProfileStore())
 const view = ref(false)
+const date = ref<Date>(new Date())
 const shown = ref(false)
 const curr_location = ref('all')
 
@@ -189,12 +202,20 @@ onBeforeMount(async () => {
 	await app.getTotalApls()
 })
 
+const daily_applicants = computed(() => {
+	return total_apls.value?.filter(
+		(apl) =>
+			useNuxtApp().$formatDate(new Date(apl.created_at!)) ==
+			useNuxtApp().$formatDate(date.value),
+	);
+})
+
 const today_sales_admin = computed(() => {
 	if (curr_location.value == 'all') {
-		if (total_daily_applicants_admin.value.length > 0) {
+		if (daily_applicants.value.length > 0) {
 			let sum = 0;
-			for (let i = 0; i < total_daily_applicants_admin.value!.length; i++) {
-				const payment = total_daily_applicants_admin.value![i].totalPayment;
+			for (let i = 0; i < daily_applicants.value!.length; i++) {
+				const payment = daily_applicants.value![i].totalPayment;
 				if (!isNaN(payment)) {
 					sum += payment;
 				}
@@ -204,7 +225,7 @@ const today_sales_admin = computed(() => {
 			return 0;
 		}
 	} else {
-		let filtered_apls = total_daily_applicants_admin.value.filter(apl => apl.location == curr_location.value)
+		let filtered_apls = daily_applicants.value.filter(apl => apl.location == curr_location.value)
 
 		if (filtered_apls.length > 0) {
 			let sum = 0;
@@ -231,7 +252,7 @@ const normal_users = computed(() => {
 
 function getUserSalesToday(id: string) {
 	let amount = 0
-	const user_apls = total_daily_applicants_admin.value.filter(apl => apl.user_id == id)
+	const user_apls = daily_applicants.value.filter(apl => apl.user_id == id)
 	for (let idx = 0; idx < user_apls.length; idx++) {
 		const payment = user_apls[idx].totalPayment;
 
