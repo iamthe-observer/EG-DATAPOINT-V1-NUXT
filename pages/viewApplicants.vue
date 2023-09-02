@@ -1,20 +1,20 @@
 <template>
-	<div class="w-full h-full flex flex-col rounded-2xl">
+	<div class="w-full h-full flex flex-col rounded-sm">
 		<div
-			class="w-full h-full rounded-2xl dark:bg-neutral-50 dark:shadow-xl bg-neutral-800 col-span-full row-span-full text-justify relative flex flex-col">
+			class="w-full h-full rounded-sm dark:bg-neutral-50 dark:shadow-xl bg-neutral-50 text-black col-span-full row-span-full text-justify relative flex flex-col">
 
 			<header
-				class="w-full min-h-[4rem] dark:bg-primary bg-neutral-700 rounded-2xl flex items-center justify-between px-4">
-				<h1 v-if="!role" class="text-2xl dark:text-neutral-50">View All Applicants <span class="text-2xl">({{
+				class="w-full min-h-[4rem] dark:bg-primary bg-white border-b border-black rounded-sm flex items-center justify-between px-4">
+				<h1 v-if="!role" class="text-2xl dark:text-neutral-50 font-bold">View All Applicants <span class="text-2xl">({{
 					all_my_apls.length
 				}})</span></h1>
-				<h1 v-else class="flex items-center gap-3 dark:text-neutral-50">
+				<h1 v-else class="font-bold flex items-center gap-3 dark:text-neutral-50">
 					<span class="text-2xl whitespace-nowrap">
 						View All Applicants
 					</span>
 					<span class="text-2xl">({{ total_apls.length }})</span>
 					<select v-model="curr_user"
-						class="select w-full select-sm rounded-full bg-[rgb(13,13,13)] dark:bg-neutral-50 dark:text-black">
+						class="select w-full select-sm bg-neutral-100 border border-black rounded-sm dark:bg-neutral-50 dark:text-black">
 						<option selected value="all">All Users</option>
 						<option v-for="user in profiles" :value="user.id">{{ `${user.fullname || 'User'} (${total_apls.filter(apl =>
 							apl.user_id
@@ -23,39 +23,40 @@
 					</select>
 				</h1>
 
-				<div v-if="role ? total_apls.length > step : all_my_apls.length > step" class="join">
-					<button class="join-item btn btn-sm rounded-full btn-primary" @click="PrevPage(page_index)">«</button>
-					<button class="join-item btn btn-sm rounded-full btn-primary">Page {{ page_index }}</button>
-					<button class="join-item btn btn-sm rounded-full btn-primary" @click="NextPage()">»</button>
+				<div v-if="role ? total_apls.length > step : all_my_apls.length > step"
+					class="join border border-black rounded-sm">
+					<button class="join-item btn btn-sm rounded-sm btn-primary" @click="PrevPage(page_index)">«</button>
+					<button class="join-item btn btn-sm rounded-sm btn-primary">Page {{ page_index }}</button>
+					<button class="join-item btn btn-sm rounded-sm btn-primary" @click="NextPage()">»</button>
 				</div>
 
 				<div class="flex items-center gap-2">
-					<div class="join">
+					<div class="join border border-black rounded-sm">
 						<input @click="() => {
 							filter_alpha = true
 							filter_recent = false
 							filter_reverse = false
 							page_index = 1
-						}" :checked="filter_alpha" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+						}" :checked="filter_alpha" class="join-item btn btn-xs rounded-sm dark:bg-purple-500 dark:border-none"
 							type="radio" name="options" aria-label="Alphabetic" />
 						<input @click="() => {
 							filter_alpha = false
 							filter_recent = true
 							filter_reverse = false
 							page_index = 1
-						}" :checked="filter_recent" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+						}" :checked="filter_recent" class="join-item btn btn-xs rounded-sm dark:bg-purple-500 dark:border-none"
 							type="radio" name="options" aria-label="Recency" />
 						<input @click="() => {
 							filter_alpha = false
 							filter_recent = false
 							filter_reverse = true
 							page_index = 1
-						}" :checked="filter_reverse" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+						}" :checked="filter_reverse" class="join-item btn btn-xs rounded-sm dark:bg-purple-500 dark:border-none"
 							type="radio" name="options" aria-label="Reverse" />
 					</div>
 
 					<select v-model="step"
-						class="select w-full select-xs rounded-full bg-[rgb(13,13,13)] dark:bg-neutral-50 dark:text-black">
+						class="select w-full select-xs rounded-sm bg-white border border-black dark:bg-neutral-50 text-black">
 						<option value="50">50</option>
 						<option value="100">100</option>
 					</select>
@@ -63,7 +64,7 @@
 			</header>
 
 
-			<div ref="scroll_container" v-if="!role && curr_filtered_apls?.length! > 0" id="style-1"
+			<div ref="scroll_container" v-if="!role && curr_filtered_apls?.length! > 0"
 				class="overflow-x-auto overflow-Y-auto pb -3 px-2">
 				<table class="table relative">
 					<!-- head -->
@@ -85,25 +86,6 @@
 						<tr v-for="(apl, i) in curr_filtered_apls"
 							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-black dark:hover:bg-neutral-200"
 							@dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!); }">
-							<!-- <th class="font-normal">
-								{{ i + 1 }}
-							</th> -->
-							<!-- <th>
-								<div class="dropdown dropdown-right">
-									<label tabindex="0"
-										class="btn btn-xs dark:border-none dark:text-neutral-900 dark:bg-white rounded-full m-1 btn-circle"><svg
-											class="w-4 aspect-square" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-											<path fill="#888888"
-												d="M4.957 5a1 1 0 0 0-.821 1.571l2.633 3.784a1.5 1.5 0 0 0 2.462 0l2.633-3.784A1 1 0 0 0 11.043 5H4.957Z" />
-										</svg></label>
-									<ul tabindex="0"
-										class="dropdown-content dark:bg-white dark:border-2 dark:border-neutral-300 dark:font-semibold dark:text-neutral-900 z-[100] menu p-1 shadow bg-base-100 rounded-lg w-52 font-normal">
-										<li @click="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
-											class="hover:bg-accent hover:text-black rounded-lg"><a>View</a></li>
-										<li class="hover:bg-accent hover:text-black rounded-lg"><a>Request Delete</a></li>
-									</ul>
-								</div>
-							</th> -->
 							<td>
 								<div class="flex items-center space-x-3">
 									<div>
@@ -164,20 +146,19 @@
 				</table>
 			</div>
 
-			<div v-if="role && _curr_filtered_apls?.length! > 0" id="style-1"
-				class="overflow-x-auto overflow-Y-auto pb -3 px-2">
+			<div v-if="role && _curr_filtered_apls?.length! > 0" class="overflow-x-auto overflow-Y-auto pb -3 px-2">
 				<table class="table relative">
 					<!-- head -->
 					<thead class="sticky top-0 backdrop-blur-lg border-none z-50">
 						<tr class="border-none z-50">
 							<!-- <th class="font-semibold text-center dark:text-neutral-700 text-sm">Pos.</th> -->
 							<!-- <th class="font-semibold text-center dark:text-neutral-700 text-sm">Action</th> -->
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Name</th>
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Bio</th>
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Phone Number</th>
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Created</th>
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Type</th>
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Location</th>
+							<th class="font-semibold text-center text-neutral-400 text-sm">Name</th>
+							<th class="font-semibold text-center text-neutral-400 text-sm">Bio</th>
+							<th class="font-semibold text-center text-neutral-400 text-sm">Phone Number</th>
+							<th class="font-semibold text-center text-neutral-400 text-sm">Created</th>
+							<th class="font-semibold text-center text-neutral-400 text-sm">Type</th>
+							<th class="font-semibold text-center text-neutral-400 text-sm">Location</th>
 						</tr>
 					</thead>
 
@@ -185,7 +166,7 @@
 						<!-- row -->
 						<tr @dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
 							v-for="(apl, i) in _curr_filtered_apls"
-							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-black dark:hover:bg-neutral-200">
+							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-primary dark:hover:bg-neutral-200 group">
 							<!-- <th class="font-normal">
 								{{ i + 1 }}
 							</th> -->
@@ -209,7 +190,8 @@
 								<div class="flex items-center space-x-3">
 									<div>
 										<div class="font-semibold">{{ apl.fullName }}</div>
-										<div class="text-sm text-neutral-400 z-0">{{ apl.pconf_code ? apl.pconf_code : 'No Confirmation Code'
+										<div class="group-hover:text-black text-sm text-neutral-400 z-0">{{ apl.pconf_code ? apl.pconf_code :
+											'No Confirmation Code'
 										}}
 										</div>
 									</div>
@@ -239,12 +221,14 @@
 										apl.user_id)[0].fullname ||
 										'User'
 									}}</span>
-									<span class="text-neutral-300 dark:text-neutral-700">{{ useNuxtApp().$formatDate(new
-										Date(apl.created_at!)) }}</span>
-									<span class="text-neutral-300 dark:text-neutral-700">{{ new Date(apl.created_at!).toLocaleTimeString([],
-										{
-											hour: '2-digit', minute: '2-digit', hour12: true
-										}) }}</span>
+									<span class="text-neutral-400 dark:text-neutral-700 group-hover:text-black">{{
+										useNuxtApp().$formatDate(new
+											Date(apl.created_at!)) }}</span>
+									<span class="text-neutral-400 dark:text-neutral-700 group-hover:text-black">{{ new
+										Date(apl.created_at!).toLocaleTimeString([],
+											{
+												hour: '2-digit', minute: '2-digit', hour12: true
+											}) }}</span>
 								</div>
 							</td>
 							<td>

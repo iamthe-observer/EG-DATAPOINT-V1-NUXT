@@ -58,6 +58,20 @@ export const useTasksStore = defineStore("tasks", () => {
     }
   }
 
+  async function deleteTask(id: string) {
+    try {
+      let { data, error } = await $SB
+        .from("tasks")
+        .delete()
+        .eq("id", id)
+
+        if (error) throw error;
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   $SB
     .channel("prices-channel")
     .on(
@@ -84,5 +98,6 @@ export const useTasksStore = defineStore("tasks", () => {
     _tasks,
     setDoneTask,
     updateTask,
+    deleteTask,
   };
 });

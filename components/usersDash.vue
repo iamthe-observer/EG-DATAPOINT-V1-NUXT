@@ -144,8 +144,8 @@ const { role, profiles } = storeToRefs(useProfileStore())
 // 	return profile.value?.role || false
 // })
 
-const loading = ref(false)
 const { total_daily_applicants, total_apls } = storeToRefs(useAppStore())
+const loading = ref(false)
 
 const path = computed(() => {
 	if (useNuxtApp().$sortByRecency(total_daily_applicants.value).length >= 5) {

@@ -58,6 +58,7 @@
 import { required, email } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 import { useTitle } from '@vueuse/core';
+import { useAppStore } from '@/store/app';
 
 useTitle('EG Datapoint | Home | Login')
 
@@ -95,6 +96,15 @@ async function loginUser() {
 		if (error) throw error
 		console.log('Logged In!')
 		loading.value = false
+
+		let { data } = await $SB.from('restricted_users').select('*')
+		if (data?.some(USER => USER.user_id == useSupabaseUser().value?.id)) {
+			await $SB.auth.signOut()
+			alert('Bad Login')
+			return useAppStore().$patch({ restricted_user: true })
+		} else {
+			useAppStore().$patch({ restricted_user: false })
+		}
 
 		let { data: DATA } = await $SB.from('profiles').select('*').eq('id', useSupabaseUser().value?.id)
 		console.log(DATA);

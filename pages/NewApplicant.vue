@@ -1,29 +1,29 @@
 <template>
 	<div id="APL_NEW"
-		class="bg-neutral-800 dark:shadow-xl dark:bg-neutral-50 rounded-xl w-full h-full flex flex-col relative">
+		class="bg-neutral-50 dark:shadow-xl dark:bg-neutral-50 rounded-sm w-full h-full flex flex-col relative">
 		<h1 ref="header_ref"
-			class="w-full bg-neutral-700 dark:bg-primary rounded-xl shadow-xl flex justify-between items-center p-5">
+			class="w-full bg-white dark:bg-primary rounded-sm border-b border-black flex justify-between items-center p-5">
 			<span ref="discount_ref"
 				class="flex flex-col gap-1 dark:text-white dark:hover:text-purple-600 hover:text-neutral-600 group">
 				<p class="text-lg flex flex-col">
-					<span id="text" class="text-xl">Add a new Applicant</span>
-					<button v-if="if_hover_discount" onclick="request_modal.showModal()"
-						class="request_btn btn btn-ghost btn-xs dark:group-hover:text-white group-hover:text-secondary">Request
-						Discount</button>
+					<span id="text" class="text-xl text-black font-bold">Add a new Applicant</span>
+					<NButton classer="justify-center" v-if="if_hover_discount" onclick="request_modal.showModal()">Request
+						Discount</NButton>
 				</p>
 
 				<dialog id="request_modal" class="modal">
-					<form method="dialog" class="modal-box dark:bg-neutral-50 flex flex-col gap-4">
+					<form method="dialog"
+						class="modal-box bg-neutral-50 border border-black rounded-sm shadow-box flex flex-col gap-4">
 						<button @click="useAplStore().resetRequest()"
 							class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-red-500">✕</button>
 						<div class="flex flex-col gap-2 items-center">
-							<h3 class="font-semibold text-2xl text-neutral-300 dark:text-neutral-900 mb-5">Input discounted amount
+							<h3 class="font-semibold text-2xl text-black dark:text-neutral-900 mb-5">Input discounted amount
 								only
 							</h3>
 							<div class="flex gap-2 items-center">
 								<span class="text-neutral-600 text-xl dark:text-neutral-900">GHC</span>
 								<input v-model="request.body" type="number" min="0"
-									class="input input-xl w-fit outline outline-4 outline-neutral-700 dark:outline-neutral-300 dark:text-neutral-900 dark:bg-white text-2xl text-center text-white"
+									class="input input-xl w-full max-w-[100px] dark:bg-white text-2xl text-center text-black bg-white border border-black rounded-sm"
 									placeholder="" />
 								<span class="text-neutral-600 dark:text-neutral-900">.00</span>
 							</div>
@@ -35,16 +35,16 @@
 										d="M11.75 19h-.25q-3.55 0-6.025-2.475T3 10.5q0-3.55 2.475-6.025T11.5 2q1.775 0 3.313.662t2.7 1.825q1.162 1.163 1.824 2.7T20 10.5q0 3.35-1.888 6.225t-4.762 4.5q-.25.125-.5.138t-.45-.113q-.2-.125-.35-.325t-.175-.475L11.75 19Zm-.275-3.025q.425 0 .725-.3t.3-.725q0-.425-.3-.725t-.725-.3q-.425 0-.725.3t-.3.725q0 .425.3.725t.725.3ZM9.3 8.375q.275.125.55.013t.45-.363q.225-.3.525-.463T11.5 7.4q.6 0 .975.337t.375.863q0 .325-.188.65t-.662.8q-.625.55-.925 1.038t-.3.987q0 .3.213.513t.512.212q.3 0 .5-.225t.3-.525q.125-.425.45-.775t.6-.625q.525-.525.788-1.05t.262-1.05q0-1.15-.788-1.85T11.5 6q-.8 0-1.475.388t-1.1 1.062q-.15.275-.038.537t.413.388Z" />
 								</svg>
 							</span>
-							<button @click="useAplStore().requestDiscount()" class="btn btn-sm btn-primary border-none">Request</button>
+							<NButton @click="useAplStore().requestDiscount()">Request</NButton>
 						</div>
 					</form>
 				</dialog>
 			</span>
 
-			<div class="text-md flex gap-2">
-				<button v-if="!apl_sending && if_hover_header" @click="() => {
+			<div class="text-md flex items-center gap-2">
+				<NButton v-if="!apl_sending && if_hover_header" @click="() => {
 					useAplStore().resetAplData(); useImageStore().resetFiles(); container!.scrollTo({ top: 0, behavior: 'smooth' })
-				}" class="btn font-normal btn-ghost rounded-xl text-white group hover:bg-base-100 hover:text-white group">
+				}" class="bg-warning text-black">
 					Reset
 					<svg xmlns="http://www.w3.org/2000/svg" class="w-4 aspect-square stroke-red-500" viewBox="0 0 24 24">
 						<path fill="none" stroke="" stroke-dasharray="12" stroke-dashoffset="12" stroke-linecap="round"
@@ -52,17 +52,17 @@
 							<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="12;0" />
 						</path>
 					</svg>
-				</button>
-				<button v-if="!apl_sending" @click="async () => {
+				</NButton>
+				<NButton v-if="!apl_sending" @click="async () => {
 					await useAplStore().handleSend()
 					// curr_page = 'prime'
-				}" class="btn btn-outline rounded-xl text-white group hover:bg-accent font-normal hover:text-white group">
+				}" class="text-black">
 					SUBMIT
 					<SvgsCedis
-						class="w-4 aspect-square stroke-white fill-white transition-all duration-150 ease-linear group-hover:fill-white" />
+						class="w-4 aspect-square stroke-black fill-black transition-all duration-150 ease-linear group-hover:fill-black" />
 					{{
 						price }}.00
-				</button>
+				</NButton>
 				<button v-else class="btn btn-ghost rounded-xl text-white">
 					<span class="loading loading-spinner"></span>
 					loading
@@ -70,7 +70,7 @@
 			</div>
 		</h1>
 
-		<main ref="container" class="flex-1 rounded-xl overflow-y-auto py-2 pb-6 pl-2 flex flex-col" id="style-1">
+		<main ref="container" class="flex-1 rounded-xl overflow-y-auto py-2 pb-6 pl-2 flex flex-col text-black">
 
 			<p class="font-bold uppercase text-3xl drop-shadow-lg mx-auto pt-10 pb-5">Primary Applicant</p>
 			<FieldSetPrimeApl />
@@ -88,26 +88,28 @@
 		<!-- Put this part before </body> tag -->
 		<input :checked="if_sent" type="checkbox" id="my_modal_7" class="modal-toggle" />
 		<div class="modal">
-			<div class="modal-box dark:bg-white dark:outline dark:outline-4 dark:outline-success">
+			<div
+				class="modal-box text-black bg-white font-bold border-black border rounded-sm shadow-box dark:outline dark:outline-4 dark:outline-success">
 				<p class="py-4 text-center text-4xl dark:text-success dark:font-semibold">
 					Applicant Saved!</p>
 			</div>
-			<label @click="useAplStore().$patch({ if_sent: false })" class="modal-backdrop bg-[rgb(0,0,0,.7)]">Close</label>
+			<label @click="useAplStore().$patch({ if_sent: false })" class="modal-backdrop bg-[rgb(0,0,0,.4)]">Close</label>
 		</div>
 
 		<input :checked="if_req_sent" type="checkbox" id="request_modal_1" class="modal-toggle" />
 		<div class="modal">
-			<div class="modal-box dark:bg-white dark:outline dark:outline-4 dark:outline-success">
+			<div
+				class="modal-box text-black bg-white font-bold border-black border rounded-sm shadow-box dark:outline dark:outline-4 dark:outline-success">
 				<p class="py-4 text-center text-4xl dark:text-success dark:font-semibold">
-					Request Sent!</p>
+					Discount Request Sent!</p>
 			</div>
-			<label class="modal-backdrop bg-[rgb(0,0,0,.7)]" for="request_modal_1">Close</label>
+			<label class="modal-backdrop bg-[rgb(0,0,0,.4)]" for="request_modal_1">Close</label>
 		</div>
 
 		<Teleport to="body">
-			<div :class="['transition-all duration-500 pointer-events-none ease-out absolute bottom-0 left-1/2 -translate-x-1/2 pb-6',
+			<div :class="['transition-all duration-500 pointer-events-none ease-out absolute bottom-0 left-1/2 -translate-x-1/2 pb-6 z-[5000]',
 				if_val_err ? 'opacity-100' : 'opacity-0']">
-				<div id="alert" class="alert alert-error">
+				<div id="alert" class="alert alert-error border-black border rounded-sm shadow-box">
 					<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
 							d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -149,6 +151,10 @@ onBeforeUnmount(() => {
 	useAplStore().resetAplData()
 	useImageStore().resetFiles()
 })
+onBeforeMount(() => {
+	useAplStore().resetAplData()
+	useImageStore().resetFiles()
+})
 
 watch(if_val_err, (val) => {
 	if (val) {
@@ -166,8 +172,18 @@ watch(if_val_err, (val) => {
 	}
 })
 
-function logger(val: any) {
-	console.log(val);
-}
 useTitle('EG Datapoint | Add Applicant')
 </script>
+
+<style scoped>
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+	-moz-appearance: textfield;
+}
+</style>

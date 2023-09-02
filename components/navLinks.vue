@@ -1,35 +1,36 @@
 <template>
 	<section ref="svg" class="__navs w-full flex-1 flex flex-col">
 		<header class="pb-1 text-white text-xs">Navigation</header>
-		<NuxtLink to="/dashboard" class="hover:bg-primary rounded-sm flex gap-2 items-center p-2">
+		<NuxtLink to="/dashboard" class="hover:bg-primary hover:text-black rounded-sm flex gap-2 items-center p-2">
 			<SvgsHome class="" />
 			<span class="">Dashboard</span>
 		</NuxtLink>
-		<NuxtLink to="/newApplicant" class="hover:bg-primary rounded-sm flex gap-2 items-center p-2">
+		<NuxtLink to="/newApplicant" class="hover:bg-primary hover:text-black rounded-sm flex gap-2 items-center p-2">
 			<SvgsHome class="" />
 			<span class="">New Applicant</span>
 		</NuxtLink>
-		<NuxtLink to="/viewApplicants" class="hover:bg-primary rounded-sm flex gap-2 items-center p-2">
+		<NuxtLink to="/viewApplicants" class="hover:bg-primary hover:text-black rounded-sm flex gap-2 items-center p-2">
 			<SvgsHome class="" />
 			<span class="">All Applicants</span>
 		</NuxtLink>
-		<NuxtLink to="/database" class="hover:bg-primary rounded-sm flex gap-2 items-center p-2">
+		<NuxtLink to="/database" class="hover:bg-primary hover:text-black rounded-sm flex gap-2 items-center p-2">
 			<SvgsHome class="" />
 			<span class="">Database</span>
 		</NuxtLink>
-		<NuxtLink to="/dashboard" class="hover:bg-primary rounded-sm flex gap-2 items-center p-2">
+		<NuxtLink to="/dashboard" class="hover:bg-primary hover:text-black rounded-sm flex gap-2 items-center p-2">
 			<SvgsHome class="" />
 			<span class="">Requests</span>
 		</NuxtLink>
-		<NuxtLink to="/dashboard" class="hover:bg-primary rounded-sm flex gap-2 items-center p-2">
+		<NuxtLink to="/dashboard" class="hover:bg-primary hover:text-black rounded-sm flex gap-2 items-center p-2">
 			<SvgsHome class="" />
 			<span class="">Tasks</span>
 		</NuxtLink>
-		<NuxtLink to="/dashboard" class="hover:bg-primary rounded-sm flex gap-2 items-center p-2">
+		<NuxtLink to="/dashboard" class="hover:bg-primary hover:text-black rounded-sm flex gap-2 items-center p-2">
 			<SvgsHome class="" />
 			<span class="">Announcements</span>
 		</NuxtLink>
-		<NuxtLink v-if="role" to="/analytics" class="hover:bg-primary rounded-sm flex gap-2 items-center p-2">
+		<NuxtLink v-if="role" to="/analytics"
+			class="hover:bg-primary hover:text-black rounded-sm flex gap-2 items-center p-2">
 			<SvgsHome class="" />
 			<span class="">Analytics</span>
 		</NuxtLink>

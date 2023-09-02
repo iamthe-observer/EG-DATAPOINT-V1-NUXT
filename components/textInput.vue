@@ -1,19 +1,19 @@
 <template>
 	<div class="form-control w-full">
 		<label class="label">
-			<span class="label-text dark:text-neutral-900 dark:font-semibold">
+			<span class="label-text dark:text-neutral-900 dark:font-semibold text-neutral-800">
 				<slot />
 			</span>
 		</label>
 		<div class="flex w-full">
 			<div v-if="!no_uppercase" class="indicator w-full">
 				<span
-					:class="['transition-all duration-300 ease-in pointer-events-none indicator-item badge-sm badge bg-red-400 border-transparent drop-shadow-xl', val_err ? 'opacity-100' : 'opacity-0']"></span>
+					:class="['transition-all indicator-start duration-300 ease-in pointer-events-none indicator-item badge-sm badge bg-red-400 border-transparent drop-shadow-xl', val_err ? 'opacity-100' : 'opacity-0']"></span>
 
 				<input oninput="this.value = this.value.toUpperCase()" :value="modelValue ? modelValue : value"
 					@input="$emit('update:modelValue', $event.target?.value)" :type="type ? type : 'text'"
 					:placeholder="placeholder ? placeholder : ''"
-					:class="[`input input-bordered w-full border-none dark:bg-neutral-300 dark:font-semibold bg-${bg} ${icon ? 'rounded-l-xl rounded-r-none bg-neutral-600' : 'rounded-xl bg-neutral-600'} ${classer}`]" />
+					:class="[`input w-full dark:bg-neutral-300 dark:font-semibold bg-white focus:shadow-box transition-all duration-150 ease-out focus:outline-none border border-black bg-${bg} ${icon ? 'rounded-l-sm rounded-r-none' : 'rounded-sm'} ${classer}`]" />
 
 				<div v-if="icon" :class='`icon grid place-items-center p-2 bg-neutral-700 dark:bg-primary bg-${bg} rounded-e-xl`'>
 					<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">
