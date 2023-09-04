@@ -1,5 +1,5 @@
 <template>
-	<svg xmlns="http://www.w3.org/2000/svg" class="w-6" viewBox="0 0 24 24">
+	<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24">
 		<path :fill="state.fill1" d="M12 12V2c5.523 0 10 4.477 10 10H12z" opacity=".25" />
 		<path :fill="state.fill1" d="m12 12l5 8.66A10.01 10.01 0 0 0 22 12H12z" opacity=".5" />
 		<path :fill="state.fill1"

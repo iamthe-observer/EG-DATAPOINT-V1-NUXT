@@ -5,7 +5,7 @@
 				<avatarSelect :src="secSRC" class="" />
 
 				<input @change="handleFile" type="file"
-					class="file-input file-input-ghost border outline outline-4 outline-neutral-400 border-black text-black rounded-sm bg-white file-input-xs w-[300px]" />
+					class="file-input file-input-ghost border border-black outline outline-1 outline-offset-4 outline-black text-black rounded-sm bg-white file-input-xs w-[300px]" />
 			</div>
 
 			<div class="col-span-10 w-full h-full flex flex-col justify-between">

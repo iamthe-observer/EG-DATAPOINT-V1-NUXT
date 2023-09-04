@@ -338,10 +338,10 @@ const recent_apls = computed(() => {
 async function loadUrls() {
 	loading.value = true
 	try {
-		const APLS = await useAppStore().getTotalApls()
 
 		if (!role.value) {
 			if (total_daily_applicants.value.length == 0) return loading.value = false
+			if (path.value.length == 0) return loading.value = false
 			let { data, error } = await useNuxtApp().$SB.storage.from('applicants').createSignedUrls(path.value, 10)
 			let { data: data_all, error: err } = await useNuxtApp().$SB.storage.from('applicants').createSignedUrls(path_all.value, 10)
 			// console.log(data);
@@ -356,7 +356,7 @@ async function loadUrls() {
 			loading.value = false
 			// console.log(URLs.value);
 		} else if (role.value) {
-			if (APLS!.length == 0) return loading.value = false
+			if (path_admin.value.length == 0) return loading.value = false
 			let { data, error } = await useNuxtApp().$SB.storage.from('applicants').createSignedUrls(path_admin.value, 10)
 			// console.log(data);
 

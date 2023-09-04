@@ -5,7 +5,7 @@
 		<div class="col-span-2 row-span-2 flex flex-col items-center gap-3">
 			<avatarSelect :src="wardSRC" class="col-span-2 row-span-2" />
 			<input @change="handleFile" type="file"
-				class="file-input file-input-ghost border outline outline-4 outline-neutral-400 border-black text-black rounded-sm bg-white file-input-xs w-full max-w-xs" />
+				class="file-input file-input-ghost border border-black outline outline-1 outline-offset-4 outline-black text-black rounded-sm bg-white file-input-xs w-full max-w-xs" />
 		</div>
 		<!-- name -->
 		<div class="flex gap-4 col-span-10 pl-6 justify-center">
@@ -17,15 +17,6 @@
 		</div>
 
 		<div class="flex gap-4 col-span-10 pl-6 justify-center">
-			<!-- <DatePicker dark :color="'purple'" is-dark v-model="applicant.wards[idx].wdob" mode="date">
-				<template #default="{ togglePopover }">
-					<TextInput :val_err="vuelidate_err == false && !applicant.wards[idx].wdob" :icon="true"
-						:value="applicant.wards[idx].wdob ? $formatDate(new Date(applicant.wards[idx].wdob!)) : ''"
-						@click="togglePopover">Date
-						of Birth
-					</TextInput>
-				</template>
-			</DatePicker> -->
 
 			<div class="form-control w-full">
 
@@ -51,7 +42,7 @@
 				</div>
 			</div>
 
-			<SelectInput :val_err="vuelidate_err == false && applicant.wards[idx].wgender.length == 0"
+			<SelectInput class="max-w-[120px]" :val_err="vuelidate_err == false && applicant.wards[idx].wgender.length == 0"
 				:options="['MALE', 'FEMALE']" v-model="applicant.wards[idx].wgender">Gender
 			</SelectInput>
 			<TextInput :val_err="vuelidate_err == false && applicant.wards[idx].wcity_ob.length == 0"

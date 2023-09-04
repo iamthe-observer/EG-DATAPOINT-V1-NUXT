@@ -1,19 +1,27 @@
 <template>
 	<div class="bg-neutral-900 h-full p-3 relative">
-		<h1 class="font-bold text-2xl flex items-center justify-between">{{ profile?.username ?
-			profile?.username :
-			'User' }}
+		<h1 :class="mini ? 'flex items-center justify-center pb-8' : 'flex items-center justify-between'">
+			<span v-if="!mini" class="['font-bold text-2xl']"> {{ profile?.username ?
+				profile?.username :
+				'User' }}
+			</span>
 			<span class="w-3 h-3 rounded-full bg-green-500 border border-white"></span>
 		</h1>
-		<p class="text-xs mb-10 text-neutral-700">EG-Datapoint ©</p>
+		<p :class="mini ? 'flex items-center justify-center pb-10' : 'flex items-center justify-between'">
+			<span v-if="!mini" class="text-xs mb-10 text-neutral-700">EG-Datapoint ©</span>
+			<span class="text-xs text-white uppercase font-bold cursor-pointer hover:text-primary"
+				@click="useAppStore().$patch({ if_minimize: !useAppStore().if_minimize })">{{ mini ? 'maximize' :
+					'minimize' }}</span>
+		</p>
 
 
 		<!-- navigation links -->
-		<navLinks />
+		<NavLinks />
 
 
-		<div class="absolute bottom-0 left-0 w-full p-2 px-4 flex justify-between items-center">
-			<span class="text-sm">{{ profile?.fullname ?
+		<div
+			:class="mini ? 'absolute bottom-0 left-0 w-full p-2 px-4 flex justify-center items-center' : 'absolute bottom-0 left-0 w-full p-2 px-4 flex justify-between items-center'">
+			<span v-if="!mini" class="text-sm">{{ profile?.fullname ?
 				profile?.fullname :
 				'User' }}</span>
 
@@ -42,6 +50,7 @@ import { useSearchStore } from '@/store/search';
 import { useImageStore } from '@/store/images';
 import { useAplStore } from '@/store/apl';
 const { profile } = storeToRefs(useProfileStore())
+const { if_minimize: mini } = storeToRefs(useAppStore())
 const { $router, $SB } = useNuxtApp()
 const logout_loading = ref(false)
 

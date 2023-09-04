@@ -1,33 +1,7 @@
 <template>
-	<!-- <div v-if="!view" class="w-full h-full rounded-2xl overflow-y-auto" id="style-2">
+	<div v-if="role" class="w-full h-full rounded-sm overflow-y-auto">
 		<div
-			class="w-full min-h-full rounded-s-2xl bg-neutral-800 dark:bg-neutral-50 dark:shadow-xl col-span-full row-span-full p-3 overflow-y-auto text-justify relative flex flex-col gap-5"
-			id="style-1">
-
-			<header classs="">
-				<span @dblclick="view = !view" class="">Overview</span>
-				loction
-			</header>
-
-			<div class="w-full grid grid-cols-4 gap-3">
-				<span @click="() => {
-					useViewAplStore().setUSER(user.id)
-					$router.push(`/analytics/${user.id}_${user.fullname}`);
-				}" class="px-2 py-1 rounded-full bg-white text-black font-bold cursor-pointer" v-for="user in normal_users">
-					{{ user.fullname || 'User' }}
-				</span>
-				{{ total_daily_applicants_admin.filter(apl => apl.location == curr_location) }}
-			</div>
-
-		</div>
-	</div> -->
-
-
-
-	<div v-if="role" class="w-full h-full rounded-2xl overflow-y-auto" id="style-2">
-		<div
-			class="w-full min-h-full rounded-s-2xl bg-neutral-800 dark:bg-neutral-50 dark:shadow-xl col-span-full row-span-full p-3 overflow-y-auto text-justify relative flex flex-col gap-5"
-			id="style-1">
+			class="w-full min-h-full rounded-s-sm bg-neutral-100 dark:bg-neutral-50 dark:shadow-xl col-span-full row-span-full p-3 overflow-y-auto text-justify relative flex flex-col gap-5 text-black">
 
 			<div class="w-full flex items-center justify-between">
 				<div class="flex gap-2 items-center">
@@ -35,16 +9,16 @@
 				</div>
 
 				<select v-model="curr_location"
-					:class="['select rounded-full bg-[rgb(13,13,13)] dark:bg-neutral-50 dark:text-black', ISM ? 'select-xs w-32' : 'select-sm w-40']">
+					:class="['select rounded-sm bg-white border border-black focus:shadow-box dark:bg-neutral-50 dark:text-black', ISM ? 'select-xs w-32' : 'select-sm w-40']">
 					<option selected value="all">All Locations</option>
 					<option v-for="location in locations" :value="location">{{ location![0].toUpperCase() + location?.substring(1)
 					}}</option>
 				</select>
 			</div>
 
-			<section :class="['grid w-full gap-5', ISM ? 'grid-cols-1' : 'grid-cols-3']">
+			<section :class="['grid w-full gap-5', ISM ? 'grid-cols-1' : 'grid-cols-4']">
 				<div
-					class="flex justify-center items-center gap-3 p-5 flex-1 bg-neutral-900 dark:bg-purple-200 min-h-[8rem] rounded-xl shadow-xl">
+					class="flex justify-center items-center gap-3 p-5 flex-1 bg-white border border-black transition-all duration-150 ease-out hover:shadow-box rounded-sm dark:bg-purple-200 min-h-[8rem]">
 					<div class="p-3 rounded-full bg-purple-600 bg-opacity-30 w-16 aspect-square"><svg
 							xmlns="http://www.w3.org/2000/svg" class="w-full" viewBox="0 0 24 24">
 							<path class="fill-purple-700"
@@ -56,8 +30,8 @@
 						<span class="text-sm text-neutral-500 dark:text-neutral-800">Total Applicants</span>
 					</p>
 				</div>
-				<!-- <div
-					class="flex justify-center items-center gap-3 p-5 flex-1 bg-neutral-900 dark:bg-fuchsia-200 min-h-[8rem] rounded-xl shadow-xl">
+				<div
+					class="flex justify-center items-center gap-3 p-5 flex-1 bg-white border border-black transition-all duration-150 ease-out hover:shadow-box rounded-sm dark:bg-purple-200 min-h-[8rem]">
 					<div class="p-3 rounded-full bg-accent bg-opacity-30 w-16 aspect-square"><svg xmlns="http://www.w3.org/2000/svg"
 							class="w-full" viewBox="0 0 24 24">
 							<g class="fill-accent">
@@ -72,9 +46,9 @@
 						<span class="text-xl font-bold">GHC {{ totalSales }}.00</span>
 						<span class="text-sm text-neutral-500 dark:text-neutral-800">Total Sales</span>
 					</p>
-				</div> -->
+				</div>
 				<div
-					class="flex justify-center items-center gap-3 p-5 flex-1 bg-neutral-900 dark:bg-yellow-200 min-h-[8rem] rounded-xl shadow-xl">
+					class="flex justify-center items-center gap-3 p-5 flex-1 bg-white border border-black transition-all duration-150 ease-out hover:shadow-box rounded-sm dark:bg-purple-200 min-h-[8rem]">
 					<div class="p-3 rounded-full bg-secondary bg-opacity-30 w-16 aspect-square"><svg
 							xmlns="http://www.w3.org/2000/svg" class="w-full" viewBox="0 0 24 24">
 							<path class="fill-secondary"
@@ -87,7 +61,7 @@
 					</p>
 				</div>
 				<div
-					class="flex justify-center items-center gap-3 p-5 flex-1 bg-neutral-900 dark:bg-green-200 min-h-[8rem] rounded-xl shadow-xl">
+					class="flex justify-center items-center gap-3 p-5 flex-1 bg-white border border-black transition-all duration-150 ease-out hover:shadow-box rounded-sm dark:bg-purple-200 min-h-[8rem]">
 					<div class="p-3 rounded-full bg-green-300 bg-opacity-30 w-16 aspect-square"><svg
 							xmlns="http://www.w3.org/2000/svg" class="w-full" viewBox="0 0 24 24">
 							<g class="fill-green-900">
@@ -108,37 +82,38 @@
 			</section>
 
 			<section class="grid grid-cols-4 w-full min-h-full gap-5">
-				<div :class="['rounded-xl shadow-xl bg-neutral-900 dark:bg-neutral-50 p-2', ISM ? 'col-span-4' : 'col-span-3']">
+				<div
+					:class="['rounded-sm bg-white border border-black hover:shadow-box transition-all duration-150 ease-out dark:bg-neutral-50 p-2', ISM ? 'col-span-4' : 'col-span-3']">
 					<LineChart :chartData="lineData" :options="lineOptions" />
 				</div>
 
 				<div v-if="!ISM"
-					class="bg-neutral-900 dark:bg-neutral-50 min-h-[8rem] rounded-xl shadow-xl flex flex-col items-center justify-between p-2">
+					class="bg-white border border-black hover:shadow-box transition-all duration-150 ease-out dark:bg-neutral-50 min-h-[8rem] rounded-sm flex flex-col items-center justify-between p-2">
 					<!-- <h1 class="mx-auto">Total Amount By Users</h1> -->
 
-					<PieChart :chartData="pieData" :options="pieOptions">
-					</PieChart>
+					<PieChart :chartData="pieData" :options="pieOptions" />
 
-					<span class="btn btn-primary w-full" @click="$router.push('/viewApplicants')">View All Applicants</span>
+					<NButton class="w-full justify-center" @click="$router.push('/viewApplicants')">View All Applicants</NButton>
 				</div>
 			</section>
 
 			<section class="grid grid-cols-4 w-full min-h-full gap-5">
-				<div class="col-span-full rounded-xl shadow-xl bg-neutral-900 dark:bg-neutral-50 p-2">
+				<div
+					class="col-span-full rounded-sm bg-white border border-black hover:shadow-box transition-all duration-150 ease-out dark:bg-neutral-50 p-2">
 					<BarChart :chartData="barData" :options="barOptions" />
 				</div>
 
 			</section>
 
-			<h1 class="col-span-full w-full font-bold text-2xl text-center">EG-Datapoint Users</h1>
-			<h2 class="col-span-full w-full font-bold text-sm text-center text-neutral-500">Today</h2>
+			<h1 class="col-span-full w-full font-bold text-2xl text-center pt-5 pb-3">EG-Datapoint Users</h1>
+			<!-- <h2 class="col-span-full w-full font-bold text-sm text-center text-neutral-500">Today</h2> -->
 
 			<section :class="['grid w-full min-h-full gap-5', ISM ? 'grid-cols-1' : 'grid-cols-2']">
 				<div @click="() => {
 					useViewAplStore().setUSER(user.id)
 					$router.push(`/analytics/${user.id}_${user.fullname}`)
 				}" v-for="user in normal_users" :key="user.id"
-					class="col-span-1 bg-neutral-900 dark:bg-neutral-50 dark:hover:bg-neutral-200 cursor-pointer p-3 dark:shadow-xl rounded-xl flex items-center hover:scale-105 transition-all duration-100 ease-out hover:bg-neutral-00">
+					class="col-span-1 bg-white border border-black hover:shadow-box transition-all duration-150 ease-out dark:bg-neutral-50 dark:hover:bg-neutral-200 cursor-pointer p-3 rounded-sm flex items-center">
 					<div class="avatar">
 						<div class="w-24 mask mask-square">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -151,11 +126,14 @@
 
 					<div class="flex flex-col">
 						<span class="text-lg font-bold">{{ user.fullname }}</span>
-						<span class="text-sm text-neutral-500 dark:text-neutral-700">Sales: GHC {{ getUserSalesToday(user.id)[0]
+						<span class="text-sm font-semibold text-neutral-500 dark:text-neutral-700">Sales: GHC {{
+							getUserSalesToday(user.id)[0]
 						}}</span>
-						<span class="text-sm text-neutral-500 dark:text-neutral-700">Entries: {{ getUserSalesToday(user.id)[1]
+						<span class="text-sm font-semibold text-neutral-500 dark:text-neutral-700">Entries: {{
+							getUserSalesToday(user.id)[1]
 						}}</span>
-						<span class="text-sm text-neutral-500 dark:text-neutral-700">Location: {{ user.location![0].toUpperCase() +
+						<span class="text-sm font-semibold text-neutral-500 dark:text-neutral-700">Location: {{
+							user.location![0].toUpperCase() +
 							user.location?.substring(1) }}</span>
 					</div>
 				</div>
@@ -408,7 +386,7 @@ const lineOptions = computed<ChartOptions<'bar'>>(() => {
 		responsive: true,
 		elements: {
 			line: {
-				tension: .5,
+				tension: 0,
 				borderColor: !dark_mode.value ? 'rgb(80 80 80)' : 'rgb(80 80 80)',
 			}
 		},

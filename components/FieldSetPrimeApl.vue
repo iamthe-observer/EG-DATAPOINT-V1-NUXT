@@ -6,7 +6,7 @@
 				<avatarSelect :src="primeSRC" class="" />
 
 				<input @change="handleFile" type="file"
-					class="file-input file-input-ghost border outline outline-4 outline-neutral-400 border-black text-black rounded-sm bg-white file-input-xs w-[300px]" />
+					class="file-input file-input-ghost border border-black outline outline-1 outline-offset-4 outline-black text-black rounded-sm bg-white file-input-xs w-[300px]" />
 			</div>
 
 			<div class="flex flex-col flex-1 justify-between gap-4">
@@ -22,12 +22,6 @@
 				</div>
 
 				<div class="grid grid-cols-3 gap-4 col-span-10 pl-6 justify-center">
-					<!-- <DatePicker dark :color="'purple'" is-dark v-model="applicant.pdob" mode="date">
-						<template #default="{ togglePopover }"> -->
-					<!-- <TextInput :val_err="vuelidate_err == false && !applicant.pdob" :icon="true"
-								:value="applicant.pdob ? $formatDate(new Date(applicant.pdob!)) : ''" @click="togglePopover">Date of
-								Birth
-							</TextInput> -->
 
 					<div class="form-control w-full">
 
@@ -52,8 +46,6 @@
 						</div>
 					</div>
 
-					<!-- </template>
-					</DatePicker> -->
 					<SelectInput :val_err="vuelidate_err == false && applicant.pgender.length == 0" :options="['male', 'female']"
 						v-model="applicant.pgender">
 						Gender

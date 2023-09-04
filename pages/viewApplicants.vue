@@ -72,11 +72,11 @@
 						<tr class="border-none z-50">
 							<!-- <th class="font-semibold text-center dark:text-neutral-700 text-sm">Pos.</th> -->
 							<!-- <th class="font-semibold text-center dark:text-neutral-700 text-sm">Action</th> -->
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Name</th>
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Bio</th>
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Phone Number</th>
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Created</th>
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Type</th>
+							<th class="font-semibold text-center text-neutral-400 text-sm">Name</th>
+							<th class="font-semibold text-center text-neutral-400 text-sm">Bio</th>
+							<th class="font-semibold text-center text-neutral-400 text-sm">Phone Number</th>
+							<th class="font-semibold text-center text-neutral-400 text-sm">Created</th>
+							<th class="font-semibold text-center text-neutral-400 text-sm">Type</th>
 						</tr>
 					</thead>
 
@@ -84,13 +84,14 @@
 						<!-- row -->
 						<!-- <tr v-for="(apl, i) in all_my_apls" -->
 						<tr v-for="(apl, i) in curr_filtered_apls"
-							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-black dark:hover:bg-neutral-200"
+							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-primary group dark:hover:bg-neutral-200"
 							@dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!); }">
 							<td>
 								<div class="flex items-center space-x-3">
 									<div>
 										<div class="font-semibold">{{ apl.fullName }}</div>
-										<div class="text-sm text-neutral-400 z-0">{{ apl.pconf_code ? apl.pconf_code : 'No Confirmation Code'
+										<div class="text-sm text-neutral-400 group-hover:text-black z-0">{{ apl.pconf_code ? apl.pconf_code :
+											'No Confirmation Code'
 										}}
 										</div>
 									</div>
@@ -117,12 +118,14 @@
 							</td>
 							<td class="">
 								<div class="flex flex-col items-end justify-center text-xs">
-									<span class="text-neutral-300 dark:text-neutral-700">{{ useNuxtApp().$formatDate(new
-										Date(apl.created_at!)) }}</span>
-									<span class="text-neutral-300 dark:text-neutral-700">{{ new Date(apl.created_at!).toLocaleTimeString([],
-										{
-											hour: '2-digit', minute: '2-digit', hour12: true
-										}) }}</span>
+									<span class="text-neutral-400 group-hover:text-black dark:text-neutral-700">{{
+										useNuxtApp().$formatDate(new
+											Date(apl.created_at!)) }}</span>
+									<span class="text-neutral-400 group-hover:text-black dark:text-neutral-700">{{ new
+										Date(apl.created_at!).toLocaleTimeString([],
+											{
+												hour: '2-digit', minute: '2-digit', hour12: true
+											}) }}</span>
 								</div>
 							</td>
 							<td>

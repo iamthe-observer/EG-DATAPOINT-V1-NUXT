@@ -9,6 +9,7 @@ export const useAppStore = defineStore("app", () => {
   const dark_mode = ref(useLocalStorage("dark_mode", false));
   const is_mobile = ref(false);
   const restricted_user = ref(false);
+  const if_minimize = ref(false);
   const daily_urls = ref<
     | {
         error: string | null;
@@ -351,5 +352,6 @@ export const useAppStore = defineStore("app", () => {
     perc_compared_to_yesterday_admin,
     daily_urls,
     is_mobile,
+    if_minimize,
   };
 });

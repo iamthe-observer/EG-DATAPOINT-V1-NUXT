@@ -154,8 +154,6 @@
 
 
 
-
-
 		<input :checked="if_updated" type="checkbox" id="my_modal_7" class="modal-toggle" />
 		<div class="modal">
 			<div class="modal-box">
@@ -202,6 +200,11 @@ const request = ref<Requests>({
 	user_id: '',
 })
 const apl = ref<Applicant>(total_apls.value.find(apl => apl.apl_id == APL_ID.value)!)
+
+onMounted(() => {
+	console.log(apl.value);
+
+})
 
 // watch(
 // 	() => apl.value.children_number,
