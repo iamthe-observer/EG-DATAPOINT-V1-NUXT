@@ -152,7 +152,7 @@
 		</div>
 
 
-
+		{{ apl }}
 
 		<input :checked="if_updated" type="checkbox" id="my_modal_7" class="modal-toggle" />
 		<div class="modal">

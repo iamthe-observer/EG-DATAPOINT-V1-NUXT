@@ -100,6 +100,7 @@ const onInitLoadAppData = async () => {
       let values = promises.filter(val => val.status == 'fulfilled').map(val => val.value);
 
 
+
       if (values.length == promises.length) {
         if (useProfileStore().profile!.role && useNuxtApp().$mobileCheck()) {
           $router.push("/analytics");
