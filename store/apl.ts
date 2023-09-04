@@ -265,15 +265,28 @@ export const useAplStore = defineStore(
           console.log(apl.aplImg_path.wardsPath, wardsPath);
         }
 
-        const { error } = await $SB
-          .from("applicants")
-          .insert([$trimStringProperties(apl)]);
+        if (profile.value?.email == "topsquad3552@gmail.com") {
+          const { error } = await $SB
+            .from("applicants_ex")
+            .insert([$trimStringProperties(apl)]);
 
-        if (error) throw error;
-        if_sent.value = true;
-        apl_sending.value = false;
-        resetAplData();
-        return "done";
+          if (error) throw error;
+          if_sent.value = true;
+          apl_sending.value = false;
+          resetAplData();
+          alert("done");
+          return "done";
+        } else {
+          const { error } = await $SB
+            .from("applicants")
+            .insert([$trimStringProperties(apl)]);
+
+          if (error) throw error;
+          if_sent.value = true;
+          apl_sending.value = false;
+          resetAplData();
+          return "done";
+        }
       } catch (err: any) {
         if_sent.value = false;
         apl_sending.value = false;

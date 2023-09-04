@@ -96,18 +96,13 @@
 					</span>
 				</label>
 
-				<div class="indicator w-full">
-					<span
-						:class="['transition-all duration-300 ease-in pointer-events-none indicator-item badge-sm badge bg-red-400 border-transparent drop-shadow-xl', vuelidate_err == false && !applicant.passport_ex ? 'opacity-100' : 'opacity-0']"></span>
-
-					<div class="flex items-end flex-1 gap-4">
-						<input v-model="dates.passport_ex.dd" type="number" min="1" max="31" maxlength="2" placeholder="DD"
-							class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
-						<input v-model="dates.passport_ex.mm" type="number" min="1" max="12" maxlength="2" placeholder="MM"
-							class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
-						<input v-model="dates.passport_ex.yyyy" type="number" maxlength="4" placeholder="YYYY"
-							class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
-					</div>
+				<div class="flex items-end flex-1 gap-4">
+					<input v-model="dates.passport_ex.dd" type="number" min="1" max="31" maxlength="2" placeholder="DD"
+						class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+					<input v-model="dates.passport_ex.mm" type="number" min="1" max="12" maxlength="2" placeholder="MM"
+						class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+					<input v-model="dates.passport_ex.yyyy" type="number" maxlength="4" placeholder="YYYY"
+						class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
 				</div>
 			</div>
 			<!-- </template>
