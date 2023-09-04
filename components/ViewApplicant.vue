@@ -152,7 +152,7 @@
 		</div>
 
 
-
+		{{ apl }}
 
 
 
@@ -202,6 +202,11 @@ const request = ref<Requests>({
 	user_id: '',
 })
 const apl = ref<Applicant>(total_apls.value.find(apl => apl.apl_id == APL_ID.value)!)
+
+onMounted(() => {
+	console.log(apl.value);
+
+})
 
 // watch(
 // 	() => apl.value.children_number,
