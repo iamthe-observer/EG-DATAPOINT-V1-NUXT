@@ -15,6 +15,7 @@ export const useAnnStore = defineStore("announcements", () => {
     title: "",
     seen: [],
   });
+  const ann_loading = ref(false);
   const { $SB } = useNuxtApp();
 
   async function getAnnounce() {
@@ -47,6 +48,24 @@ export const useAnnStore = defineStore("announcements", () => {
     }
   }
 
+  async function delAnnounce(id: string) {
+    ann_loading.value = true;
+    try {
+      let { data, error } = await $SB
+        .from("announcements")
+        .delete()
+        .eq("uuid", id);
+      if (error) throw error;
+      console.log(data);
+      ann_loading.value = false;
+      await getAnnounce();
+      return data;
+    } catch (error) {
+      console.log(error);
+      ann_loading.value = false;
+    }
+  }
+
   function reset() {
     announcements.value = [];
     announcement.value = announcement_def.value;
@@ -68,6 +87,8 @@ export const useAnnStore = defineStore("announcements", () => {
     announcements,
     Announce,
     announcement,
+    ann_loading,
+    delAnnounce,
     reset,
   };
 });

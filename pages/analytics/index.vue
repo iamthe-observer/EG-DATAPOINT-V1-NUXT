@@ -49,7 +49,7 @@
 				<select v-model="curr_location"
 					:class="['select rounded-full bg-[rgb(13,13,13)] dark:bg-neutral-50 dark:text-black', ISM ? 'select-xs w-32' : 'select-sm w-40']">
 					<option selected value="all">All Locations</option>
-					<option v-for="location in locations" :value="location">{{ location![0].toUpperCase() + location?.substring(1)
+					<option v-for="location in locationz" :value="location">{{ location![0].toUpperCase() + location?.substring(1)
 					}}</option>
 				</select>
 			</div>
@@ -192,6 +192,14 @@ const view = ref(false)
 const date = ref<Date>(new Date())
 const shown = ref(false)
 const curr_location = ref('all')
+// restricted location list for specific admins
+const locationz = computed(() => {
+	if (profile.value?.location == 'madina' || profile.value?.email == 'topsquad3552@gmail.com') {
+		return locations.value
+	} else {
+		return locations.value.filter(location => location != 'madina')
+	}
+})
 
 onBeforeMount(async () => {
 	if (!role.value) return useNuxtApp().$router.push('/dashboard')
@@ -203,11 +211,19 @@ onBeforeMount(async () => {
 })
 
 const daily_applicants = computed(() => {
-	return total_apls.value?.filter(
-		(apl) =>
-			useNuxtApp().$formatDate(new Date(apl.created_at!)) ==
-			useNuxtApp().$formatDate(date.value),
-	);
+	if (profile.value?.location == 'madina' || profile.value?.email == 'topsquad3552@gmail.com') {
+		return total_apls.value?.filter(
+			(apl) =>
+				useNuxtApp().$formatDate(new Date(apl.created_at!)) ==
+				useNuxtApp().$formatDate(date.value),
+		);
+	} else {
+		return total_apls.value?.filter(
+			(apl) =>
+				useNuxtApp().$formatDate(new Date(apl.created_at!)) ==
+				useNuxtApp().$formatDate(date.value),
+		).filter(apl => apl.location != 'madina');
+	}
 })
 
 const today_sales_admin = computed(() => {
@@ -243,11 +259,52 @@ const today_sales_admin = computed(() => {
 });
 
 const normal_users = computed(() => {
-	if (curr_location.value !== 'all') {
-		return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
+	if (profile.value?.location == 'madina' || profile.value?.email == 'topsquad3552@gmail.com') {
+
+		if (curr_location.value !== 'all') {
+			return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
+				if (a.email < b.email) {
+					return -1;
+				}
+				if (a.email > b.email) {
+					return 1;
+				}
+				return 0;
+			})
+		} else {
+			return profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
+		}
+
+
 	} else {
-		return profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
+		if (curr_location.value !== 'all') {
+			return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
+				if (a.email < b.email) {
+					return -1;
+				}
+				if (a.email > b.email) {
+					return 1;
+				}
+				return 0;
+			})
+		} else {
+			return profiles.value.filter(user => user.location != 'madina').filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
+		}
+
 	}
+	// if (curr_location.value !== 'all') {
+	// 	return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
+	// 		if (a.email < b.email) {
+	// 			return -1;
+	// 		}
+	// 		if (a.email > b.email) {
+	// 			return 1;
+	// 		}
+	// 		return 0;
+	// 	})
+	// } else {
+	// 	return profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
+	// }
 })
 
 function getUserSalesToday(id: string) {
@@ -451,17 +508,17 @@ const lineOptions = computed<ChartOptions<'bar'>>(() => {
 
 const barOptions = ref<ChartOptions<'bar'>>({
 	responsive: true,
-	onClick: (ctx, el) => {
-		if (el.length > 0) {
-			let index = el[0].index
-			const user = profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })[index]
+	// onClick: (ctx, el) => {
+	// 	if (el.length > 0) {
+	// 		let index = el[0].index
+	// 		const user = profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })[index]
 
-			console.log(user.id, user.fullname);
+	// 		console.log(user.id, user.fullname);
 
-			useViewAplStore().setUSER(user.id)
-			useNuxtApp().$router.push(`/analytics/${user.id}_${user.fullname}`)
-		}
-	},
+	// 		useViewAplStore().setUSER(user.id)
+	// 		useNuxtApp().$router.push(`/analytics/${user.id}_${user.fullname}`)
+	// 	}
+	// },
 	plugins: {
 		legend: {
 			display: false,
@@ -479,17 +536,17 @@ const barOptions = ref<ChartOptions<'bar'>>({
 
 const pieOptions = ref<ChartOptions<'bar'>>({
 	responsive: true,
-	onClick: (ctx, el) => {
-		if (el.length > 0) {
-			let index = el[0].index
-			const user = profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })[index]
+	// onClick: (ctx, el) => {
+	// 	if (el.length > 0) {
+	// 		let index = el[0].index
+	// 		const user = profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })[index]
 
-			console.log(user.id, user.fullname);
+	// 		console.log(user.id, user.fullname);
 
-			useViewAplStore().setUSER(user.id)
-			useNuxtApp().$router.push(`/analytics/${user.id}_${user.fullname}`)
-		}
-	},
+	// 		useViewAplStore().setUSER(user.id)
+	// 		useNuxtApp().$router.push(`/analytics/${user.id}_${user.fullname}`)
+	// 	}
+	// },
 	plugins: {
 		legend: {
 			display: false,

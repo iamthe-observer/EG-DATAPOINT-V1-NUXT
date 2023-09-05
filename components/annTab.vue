@@ -110,6 +110,9 @@
 						</p>
 
 						<div class="modal-action">
+							<label v-if="role" :for="`my_modal_${i}`" class="btn btn-sm btn-error"
+								@click="useAnnStore().delAnnounce(ann.uuid!)"><span v-if="ann_loading"
+									class="loading loading-infinity"></span> Delete</label>
 							<label :for="`my_modal_${i}`" class="btn btn-sm">Close!</label>
 						</div>
 					</div>
@@ -119,11 +122,11 @@
 				<span class="text-neutral-600 w-10 text-xs grid place-items-center">
 					{{ i + 1 }}
 				</span>
-				<span class="flex flex-col justify-center truncate- flex-1 overflow-x-hidden text-xl">
+				<span class="flex flex-col justify-center truncate- flex-1 overflow-x-hidden text-lg">
 					{{ ann.title }}<br />
 					<span :class="[
 						'overflow-hidden text-sm text-neutral-400 text-left truncate-',
-						curr_page == 'announcements' ? 'w-full' : 'w-[200px]'
+						curr_page == 'announcements' ? 'max-w-[450px]' : 'w-[200px]'
 					]">{{ ann.body }}</span>
 				</span>
 				<div class="flex flex-col text-xs text-right text-neutral-400">
@@ -202,6 +205,6 @@ import { useProfileStore } from '@/store/profile';
 defineProps<{
 	curr_page: string
 }>()
-const { announcements, announcement } = storeToRefs(useAnnStore())
+const { announcements, announcement, ann_loading } = storeToRefs(useAnnStore())
 const { role } = storeToRefs(useProfileStore())
 </script>

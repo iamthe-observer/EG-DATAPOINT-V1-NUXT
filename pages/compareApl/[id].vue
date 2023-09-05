@@ -8,10 +8,14 @@
 					<span class="text-xs text-neutral-400 dark:text-neutral-600">{{ request.body }}</span>
 				</p>
 
+				<span v-if="loading" class="loading loading-infinity loading-lg"></span>
+
 
 				<div class="join">
 					<label @click="handleApprove(request)" class="join-item btn btn-success btn-sm">Approve</label>
 					<label @click="handleReject(request)" class="join-item btn btn-error btn-sm">Reject</label>
+					<label @click="() => { $router.push(`/applicant/${request.apl_id}`); useViewAplStore().setID(request.apl_id!) }"
+						class="join-item btn btn-primary btn-sm">Open</label>
 					<label class="join-item btn btn-sm">Close</label>
 				</div>
 			</h1>
@@ -407,6 +411,7 @@ import { useAplStore } from '@/store/apl';
 import { Applicant, Requests } from '@/interfaces/interfaces';
 import { storeToRefs } from 'pinia';
 import { useAppStore } from '@/store/app';
+import { useViewAplStore } from '@/store/viewApl';
 
 const apl_ = useAplStore()
 const app_ = useAppStore()
@@ -467,76 +472,103 @@ async function approveDiscount(req: Requests) {
 }
 
 async function updateApplicant(req: Requests) {
-	let req_apl = req.modified_apl
-	let apl = total_apls.value.find(apl => apl.apl_id == req.apl_id)
-
-	const diff = $deepCompareObjects(apl!, req_apl!);
-
-	const APL: Partial<Applicant> = {}
-	let data = diff.map(apl => {
-		return {
-			key: apl.key, value: apl.value2
-		}
-	})
-
-	function mergeArrayOfObjects(arr: { key: string, value: any }[]): Record<string, any> {
-		const mergedObject: Record<string, any> = {};
-
-		for (const entry of arr) {
-			mergedObject[entry.key] = entry.value;
-		}
-
-		return mergedObject;
-	}
-
-	console.log(mergeArrayOfObjects(data));
-
+	let apl = req.modified_apl
 	try {
-		let { data: dat, error } = await $SB
+		let { data, error } = await $SB
 			.from('applicants')
-			.update(mergeArrayOfObjects(data))
+			.update(apl)
 			.eq('apl_id', req.apl_id)
 			.select()
 		if (error) throw error
-		await updateRequestType(req, 'approved')
-		console.log(dat);
-		return dat
+		console.log(data);
+		return data
 	} catch (error) {
 		console.log(error);
 	}
 }
 
+
+// async function updateApplicant(req: Requests) {
+// 	let req_apl = req.modified_apl
+// 	let apl = total_apls.value.find(apl => apl.apl_id == req.apl_id)
+
+// 	const diff = $deepCompareObjects(apl!, req_apl!);
+
+// 	const APL: Partial<Applicant> = {}
+// 	let data = diff.map(apl => {
+// 		return {
+// 			key: apl.key, value: apl.value2
+// 		}
+// 	})
+
+// 	function mergeArrayOfObjects(arr: { key: string, value: any }[]): Record<string, any> {
+// 		const mergedObject: Record<string, any> = {};
+
+// 		for (const entry of arr) {
+// 			mergedObject[entry.key] = entry.value;
+// 		}
+
+// 		return mergedObject;
+// 	}
+
+// 	console.log(mergeArrayOfObjects(data));
+
+// 	// try {
+// 	// 	let { data: dat, error } = await $SB
+// 	// 		.from('applicants')
+// 	// 		.update(mergeArrayOfObjects(data))
+// 	// 		.eq('apl_id', req.apl_id)
+// 	// 		.select()
+// 	// 	if (error) throw error
+// 	// 	await updateRequestType(req, 'approved')
+// 	// 	console.log(dat);
+// 	// 	return dat
+// 	// } catch (error) {
+// 	// 	console.log(error);
+// 	// }
+// }
+
+const loading = ref(false)
 async function handleApprove(req: Requests) {
+	loading.value = true
 	// type of request
 	let ty = req.modify_type
 
 	if (ty == 'delete') {
-		// await deleteApplicant(req)
-		// await updateRequestType(req, 'approved')
-		// if_ap.value = true
+		await deleteApplicant(req)
+		await updateRequestType(req, 'approved')
+		if_ap.value = true
+		loading.value = false
 	} else if (ty == 'discount') {
-		// await approveDiscount(req)
-		// await updateRequestType(req, 'approved')
-		// if_ap.value = true
+		await approveDiscount(req)
+		await updateRequestType(req, 'approved')
+		if_ap.value = true
+		loading.value = false
 	} else if (ty == 'edit') {
 		await updateApplicant(req)
-		// if_ap.value = true
+		await updateRequestType(req, 'approved')
+		if_ap.value = true
+		loading.value = false
 	}
 }
 
 async function handleReject(req: Requests) {
+	loading.value = true
 	let ty = req.modify_type
 	if (ty == 'delete') {
-		// await updateRequestType(req, 'rejected')
-		// if_rej.value = true
+		await updateRequestType(req, 'rejected')
+		if_rej.value = true
+		loading.value = false
 	}
 	if (ty == 'discount') {
-		// await updateRequestType(req, 'rejected')
-		// if_rej.value = true
+		await updateRequestType(req, 'rejected')
+		if_rej.value = true
+		loading.value = false
 	}
 	if (ty == 'edit') {
-		// await updateRequestType(req, 'rejected')
-		// if_rej.value = true
+		await updateRequestType(req, 'rejected')
+		if_rej.value = true
+		loading.value = false
 	}
 }
 

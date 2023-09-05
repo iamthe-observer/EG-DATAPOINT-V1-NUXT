@@ -103,9 +103,10 @@ const onInitLoadAppData = async () => {
       if (values.length == promises.length) {
         if (useProfileStore().profile!.role && useNuxtApp().$mobileCheck()) {
           $router.push("/analytics");
-        } else {
+        } else if (_route.path == '/') {
           $router.push("/dashboard");
         }
+
         await $SB.auth.startAutoRefresh();
         app.$patch({
           app_loading: false
