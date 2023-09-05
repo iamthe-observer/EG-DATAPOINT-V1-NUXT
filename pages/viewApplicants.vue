@@ -83,7 +83,7 @@
 						<!-- row -->
 						<!-- <tr v-for="(apl, i) in all_my_apls" -->
 						<tr v-for="(apl, i) in curr_filtered_apls"
-							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-black dark:hover:bg-neutral-200"
+							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-black transition-all duration-300 ease-out dark:hover:bg-neutral-200"
 							@dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!); }">
 							<!-- <th class="font-normal">
 								{{ i + 1 }}
@@ -185,7 +185,7 @@
 						<!-- row -->
 						<tr @dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
 							v-for="(apl, i) in _curr_filtered_apls"
-							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-black dark:hover:bg-neutral-200">
+							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-black transition-all duration-300 ease-out dark:hover:bg-neutral-200">
 							<!-- <th class="font-normal">
 								{{ i + 1 }}
 							</th> -->

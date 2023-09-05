@@ -53,7 +53,7 @@
 		<!-- contains all requests -->
 		<div v-else id="style-1" class="bg-neutral-800 dark:bg-neutral-50 flex flex-col gap-3 rounded-xl overflow-y-auto">
 			<label :for="`my_modal_${i}`"
-				class="w-full flex gap-2 justify-between p-2 dark:hover:bg-neutral-200 hover:bg-neutral-700 rounded-xl"
+				class="w-full flex gap-2 justify-between p-2 transition-all duration-300 ease-out dark:hover:bg-neutral-200 hover:bg-neutral-700 rounded-xl"
 				v-for="(ann, i) in announcements.sort((a, b) => new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime())"
 				:key="i">
 

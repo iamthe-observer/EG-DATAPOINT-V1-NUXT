@@ -47,7 +47,7 @@
 				<span class="text-neutral-600 w-10 text-xs grid place-items-center">
 					<div class="form-control">
 						<label class="label cursor-pointer">
-							<input @click="useTasksStore().updateTask(task.done!, task.id!)" type="checkbox" v-model="task.done"
+							<input @click="useTasksStore().updateTask(task.done!, task.id!)" type="checkbox" :value="task.done"
 								class="checkbox checkbox-primary" />
 						</label>
 					</div>

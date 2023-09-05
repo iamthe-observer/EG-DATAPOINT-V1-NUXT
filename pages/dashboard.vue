@@ -1,20 +1,14 @@
 <template>
 	<div v-if="!useAppStore().is_mobile" class="__dashboard w-full h-full grid grid-cols-12 gap-1 grid-rows-15">
-		<HeroDash />
-		<Calendar />
-		<UsersDash />
-		<AplInfoDash />
-		<MostRecentApls />
-		<AplStats />
+		<HeroDash class="dash_item" />
+		<Calendar class="dash_item" />
+		<UsersDash class="dash_item" />
+		<AplInfoDash class="dash_item" />
+		<MostRecentApls class="dash_item" />
+		<AplStats class="dash_item" />
 	</div>
 
 	<div v-else class="__dashboard w-full h-full grid grid-cols-12 gap-1 grid-rows-15">
-		<!-- <HeroDash />
-		<Calendar />
-		<UsersDash />
-		<AplInfoDash />
-		<MostRecentApls />
-		<AplStats /> -->
 	</div>
 </template>
 
@@ -22,7 +16,31 @@
 import { useTitle } from '@vueuse/core';
 import { useAppStore } from '@/store/app';
 useTitle('EG Datapoint | Dashboard')
+
+const { $gsap } = useNuxtApp()
+
+onMounted(() => {
+	setTimeout(() => {
+		$gsap.to(".dash_item", {
+			scale: 1,
+			opacity: 1,
+			duration: .2,
+			ease: "power1.inOut",
+			stagger: {
+				from: "random",
+				amount: .6
+			}
+		});
+	}, 500)
+})
 </script>
+
+<style scoped>
+.dash_item {
+	opacity: 0;
+	transform: scale(.8);
+}
+</style>
 
 <style scoped>
 .griddy {

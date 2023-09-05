@@ -8,6 +8,7 @@ import { useTasksStore } from "@/store/tasks";
 import { useProfileStore } from "@/store/profile";
 import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
+import "animate.css";
 
 export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.use(setupCalendar, {});
