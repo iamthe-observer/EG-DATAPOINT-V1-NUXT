@@ -153,9 +153,11 @@ export const useAppStore = defineStore("app", () => {
       if (user![0].location == "madina" || user![0].location == "ablekuma") {
         prices.value = data![1];
         // console.log(prices.value);
+      } else if (user![0].location == "spintex") {
+        prices.value = data![2];
+        // console.log(prices.value);
       } else {
         prices.value = data![0];
-        // console.log(prices.value);
       }
 
       return data![0];
