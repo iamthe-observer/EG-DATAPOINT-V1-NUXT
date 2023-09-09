@@ -193,20 +193,35 @@ import { Applicant, Requests } from '@/interfaces/interfaces';
 import { useAppStore } from '@/store/app';
 
 let num = ref(0)
-const { applicant, edit_mode, request } = storeToRefs(useViewAplStore())
+const { applicant, edit_mode, request, if_applicant_ex } = storeToRefs(useViewAplStore())
 
 let loading = ref(false)
 const if_sent = ref(false)
 
 onMounted(async () => {
 	loading.value = true
-	const data = await getApl(applicant.value.apl_id!)
-	loading.value = false
-	useViewAplStore().$patch(() => {
-		edit_mode.value = false
-		request.value = nullReq.value
-		applicant.value = data
-	})
+	if (!if_applicant_ex.value) {
+		const data = await getApl(applicant.value.apl_id!)
+		loading.value = false
+		useViewAplStore().$patch(() => {
+			edit_mode.value = false
+			request.value = nullReq.value
+			applicant.value = data
+		})
+	} else {
+		try {
+			const { data, error } = await useNuxtApp().$SB.from('applicants_ex').select('*').eq('apl_id', applicant.value.apl_id!)
+			if (error) throw error
+			loading.value = false
+			useViewAplStore().$patch(() => {
+				edit_mode.value = false
+				request.value = nullReq.value
+				applicant.value = data[0]!
+			})
+		} catch (error) {
+			console.error(error)
+		}
+	}
 })
 
 const fullName = computed(() => {

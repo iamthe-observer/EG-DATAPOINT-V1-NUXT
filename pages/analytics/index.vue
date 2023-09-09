@@ -1,38 +1,10 @@
 <template>
-	<!-- <div v-if="!view" class="w-full h-full rounded-2xl overflow-y-auto" id="style-2">
-	<div v-if="!date" clas<Date>sw-full h-full rounded-2xl overflow-y-auto" id="style-2">
-		<div
-			class="w-full min-h-full rounded-s-2xl bg-neutral-800 dark:bg-neutral-50 dark:shadow-xl col-span-full row-span-full p-3 overflow-y-auto text-justify relative flex flex-col gap-5"
-			id="style-1">
-
-			<header classs="">
-				<span @dblclick="view = !view" class="">Overview</span>
-				<span @dblclick="view = !view" class="">Overview</span>
-				<span @dblclick="date = !dat<Date>e clas<Date>sOverview</span>
-				loction
-			</header>
-
-			<div class="w-full grid grid-cols-4 gap-3">
-				<span @click="() => {
-					useViewAplStore().setUSER(user.id)
-					$router.push(`/analytics/${user.id}_${user.fullname}`);
-				}" class="px-2 py-1 rounded-full bg-white text-black font-bold cursor-pointer" v-for="user in normal_users">
-					{{ user.fullname || 'User' }}
-				</span>
-				{{ daily_applicants.filter(apl => apl.location == curr_location) }}
-			</div>
-
-		</div>
-	</div> -->
-
-
-
 	<div v-if="role" class="w-full h-full rounded-2xl overflow-y-auto" id="style-2">
 		<div
 			class="w-full min-h-full rounded-s-2xl bg-neutral-800 dark:bg-neutral-50 dark:shadow-xl col-span-full row-span-full p-3 overflow-y-auto text-justify relative flex flex-col gap-5"
 			id="style-1">
 
-			<div class="w-full flex items-center justify-between">
+			<div :class="['w-full flex items-center justify-between', ISM ? 'flex-col gap-3' : '']">
 				<div class="flex gap-2 items-center">
 					<span @dblclick="shown = !shown" :class="['font-bold', ISM ? 'text-xl' : 'text-3xl']">Overview</span>
 				</div>
@@ -40,7 +12,7 @@
 				<DatePicker dark :color="'purple'" is-dark v-model="date" mode="date">
 					<template #default="{ togglePopover }">
 						<span @click="togglePopover"
-							class="text-2xl font-bold px-2 py-1 dark:hover:bg-neutral-300 hover:text-accent hover:bg-neutral-900 rounded-xl transition-all duration-200 ease-in-out cursor-pointer">{{
+							class="text-2xl font-bold px-2 py-1 dark:hover:bg-neutral-300 hover:text-accent bg-neutral-700 w-full text-center hover:bg-neutral-900 rounded-xl transition-all duration-200 ease-in-out cursor-pointer">{{
 								$formatDateWords(date!) }}</span>
 					</template>
 				</DatePicker>
@@ -183,7 +155,7 @@ import { storeToRefs } from 'pinia'
 import { useAppStore } from '@/store/app'
 import { useProfileStore } from '@/store/profile'
 import { useViewAplStore } from '@/store/viewApl';
-import { BarChart, PieChart, LineChart } from 'vue-chart-3';
+import { BarChart, LineChart } from 'vue-chart-3';
 import { ChartData, ChartOptions } from 'chart.js';
 
 const { is_mobile: ISM, total_apls, dark_mode, locations
@@ -193,13 +165,14 @@ const view = ref(false)
 const date = ref<Date>(new Date())
 const shown = ref(false)
 const curr_location = ref('all')
+
 // restricted location list for specific admins
 const locationz = computed(() => {
-	if (profile.value?.location == 'madina' || profile.value?.email == 'topsquad3552@gmail.com') {
-		return locations.value
-	} else {
-		return locations.value.filter(location => location != 'madina')
-	}
+	// if (profile.value?.location == 'madina' || profile.value?.email == 'topsquad3552@gmail.com') {
+	return locations.value
+	// } else {
+	// 	return locations.value.filter(location => location != 'madina')
+	// }
 })
 
 onBeforeMount(async () => {
@@ -212,19 +185,19 @@ onBeforeMount(async () => {
 })
 
 const daily_applicants = computed(() => {
-	if (profile.value?.location == 'madina' || profile.value?.email == 'topsquad3552@gmail.com') {
-		return total_apls.value?.filter(
-			(apl) =>
-				useNuxtApp().$formatDate(new Date(apl.created_at!)) ==
-				useNuxtApp().$formatDate(date.value),
-		);
-	} else {
-		return total_apls.value?.filter(
-			(apl) =>
-				useNuxtApp().$formatDate(new Date(apl.created_at!)) ==
-				useNuxtApp().$formatDate(date.value),
-		).filter(apl => apl.location != 'madina');
-	}
+	// if (profile.value?.location == 'madina' || profile.value?.email == 'topsquad3552@gmail.com') {
+	return total_apls.value?.filter(
+		(apl) =>
+			useNuxtApp().$formatDate(new Date(apl.created_at!)) ==
+			useNuxtApp().$formatDate(date.value),
+	);
+	// } else {
+	// 	return total_apls.value?.filter(
+	// 		(apl) =>
+	// 			useNuxtApp().$formatDate(new Date(apl.created_at!)) ==
+	// 			useNuxtApp().$formatDate(date.value),
+	// 	).filter(apl => apl.location != 'madina');
+	// }
 })
 
 const today_sales_admin = computed(() => {
@@ -260,39 +233,39 @@ const today_sales_admin = computed(() => {
 });
 
 const normal_users = computed(() => {
-	if (profile.value?.location == 'madina' || profile.value?.email == 'topsquad3552@gmail.com') {
+	// if (profile.value?.location == 'madina' || profile.value?.email == 'topsquad3552@gmail.com') {
 
-		if (curr_location.value !== 'all') {
-			return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
-				if (a.email < b.email) {
-					return -1;
-				}
-				if (a.email > b.email) {
-					return 1;
-				}
-				return 0;
-			})
-		} else {
-			return profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
-		}
-
-
+	if (curr_location.value !== 'all') {
+		return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
+			if (a.email < b.email) {
+				return -1;
+			}
+			if (a.email > b.email) {
+				return 1;
+			}
+			return 0;
+		})
 	} else {
-		if (curr_location.value !== 'all') {
-			return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
-				if (a.email < b.email) {
-					return -1;
-				}
-				if (a.email > b.email) {
-					return 1;
-				}
-				return 0;
-			})
-		} else {
-			return profiles.value.filter(user => user.location != 'madina').filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
-		}
-
+		return profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
 	}
+
+
+	// } else {
+	// 	if (curr_location.value !== 'all') {
+	// 		return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
+	// 			if (a.email < b.email) {
+	// 				return -1;
+	// 			}
+	// 			if (a.email > b.email) {
+	// 				return 1;
+	// 			}
+	// 			return 0;
+	// 		})
+	// 	} else {
+	// 		return profiles.value.filter(user => user.location != 'madina').filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
+	// 	}
+
+	// }
 	// if (curr_location.value !== 'all') {
 	// 	return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
 	// 		if (a.email < b.email) {

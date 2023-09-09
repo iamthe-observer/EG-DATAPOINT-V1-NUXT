@@ -21,7 +21,7 @@ export const useViewAplStore = defineStore("view_apl", () => {
   const APL_ID = ref(useStorage<string>("apl_id", ""));
   const USER_ID = ref(useStorage<string>("user_id", ""));
 
-  const { prices, total_apls } = storeToRefs(useAppStore());
+  const { prices, total_apls, total_apls_ex } = storeToRefs(useAppStore());
   const { profile } = storeToRefs(useProfileStore());
   const { has_files } = storeToRefs(useImageStore());
   const { $SB, $trimStringProperties } = useNuxtApp();
@@ -40,6 +40,7 @@ export const useViewAplStore = defineStore("view_apl", () => {
   const p_loading = ref(false);
   const s_loading = ref(false);
   const w_loading = ref(false);
+  const if_applicant_ex = ref(false);
   const request = ref<Requests>({
     apl_id: "",
     modified_apl: null,
@@ -62,12 +63,16 @@ export const useViewAplStore = defineStore("view_apl", () => {
     }),
   );
 
-  const applicant = ref<Applicant>({
-    ...total_apls.value.find((apl) => apl.apl_id == APL_ID.value)!,
-  });
+  const applicant = ref<Applicant>(
+    if_applicant_ex.value
+      ? { ...total_apls_ex.value.find((apl) => apl.apl_id == APL_ID.value)! }
+      : { ...total_apls.value.find((apl) => apl.apl_id == APL_ID.value)! },
+  );
 
   watch(APL_ID, (val) => {
-    applicant.value = { ...total_apls.value.find((apl) => apl.apl_id == val)! };
+    applicant.value = if_applicant_ex.value
+      ? { ...total_apls_ex.value.find((apl) => apl.apl_id == val)! }
+      : { ...total_apls.value.find((apl) => apl.apl_id == val)! };
   });
 
   const empty_ward = ref<WardsApplicant>({
@@ -838,6 +843,7 @@ export const useViewAplStore = defineStore("view_apl", () => {
   }
 
   return {
+    if_applicant_ex,
     empty_req,
     prime_file,
     sec_file,

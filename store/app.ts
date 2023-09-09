@@ -18,20 +18,10 @@ export const useAppStore = defineStore("app", () => {
     | null
     | undefined
   >();
-  // watchEffect(() => console.log(dark_mode.value))
-
-  watch(dark_mode, () => {
-    if (dark_mode.value) return document.documentElement.classList.add("dark");
-    if (!dark_mode.value)
-      return document.documentElement.classList.remove("dark");
-  });
-
-  function setDarkMode(params: boolean) {
-    dark_mode.value = params;
-  }
 
   const all_my_apls = ref<Applicant[]>([]);
   const total_apls = ref<Applicant[]>([]);
+  const total_apls_ex = ref<Applicant[]>([]);
   const prices = ref<Prices>({
     adult: 0,
     child: 0,
@@ -133,6 +123,22 @@ export const useAppStore = defineStore("app", () => {
       all_my_apls.value = data!.filter(
         (apl) => apl.user_id == useSupabaseUser().value?.id,
       );
+      return data;
+    } catch (err: any) {
+      console.log(err);
+    }
+  }
+
+  async function getTotalAplsEx() {
+    try {
+      let { data, error } = await $SB.from("applicants_ex").select("*");
+
+      if (error) throw error;
+      total_apls_ex.value = data!;
+
+      // all_my_apls.value = data!.filter(
+      //   (apl) => apl.user_id == useSupabaseUser().value?.id,
+      // );
       return data;
     } catch (err: any) {
       console.log(err);
@@ -303,6 +309,18 @@ export const useAppStore = defineStore("app", () => {
     };
   }
 
+  // watchEffect(() => console.log(dark_mode.value))
+
+  watch(dark_mode, () => {
+    if (dark_mode.value) return document.documentElement.classList.add("dark");
+    if (!dark_mode.value)
+      return document.documentElement.classList.remove("dark");
+  });
+
+  function setDarkMode(params: boolean) {
+    dark_mode.value = params;
+  }
+
   // real-time channels
   $SB
     .channel("applicants-channel")
@@ -330,26 +348,28 @@ export const useAppStore = defineStore("app", () => {
     restricted_user,
     locations,
     dark_mode,
-    setDarkMode,
     all_my_apls,
     total_apls,
+    total_apls_ex,
     total_daily_applicants,
     total_daily_applicants_admin,
     app_loading,
     prices,
     price,
-    getAllMyApls,
-    getTotalApls,
-    getPrices,
-    getApplicant,
-    reset,
-    getPayments,
-    getPayments_admin,
     today_sales,
     today_sales_admin,
     perc_compared_to_yesterday,
     perc_compared_to_yesterday_admin,
     daily_urls,
     is_mobile,
+    setDarkMode,
+    getAllMyApls,
+    getTotalApls,
+    getTotalAplsEx,
+    getPrices,
+    getApplicant,
+    reset,
+    getPayments,
+    getPayments_admin,
   };
 });

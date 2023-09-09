@@ -168,7 +168,7 @@ onBeforeMount(async () => {
 
 onBeforeUnmount(() => {
 	viewApl.$patch({
-		prime_image: undefined, sec_image: undefined, wards_image: [], edit_mode: false,
+		prime_image: undefined, sec_image: undefined, wards_image: [], edit_mode: false, if_applicant_ex: false
 	})
 })
 </script>

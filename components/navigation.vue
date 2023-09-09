@@ -22,6 +22,25 @@
 						out</a><span v-else class="loading loading-infinity loading-xs mx-auto"></span></li>
 			</ul>
 		</div>
+
+		<div class="flex justify-center items-center">
+			<NuxtLink v-if="is_mobile && $route.path == '/analytics'" to="/requests" class="z-20">
+				<svg xmlns="http://www.w3.org/2000/svg" class="w-6 aspect-square" viewBox="0 0 48 48">
+					<g fill="none" stroke="#888" class="active:stoke-white" stroke-linejoin="round" stroke-width="4">
+						<path
+							d="M37 44a4 4 0 1 0 0-8a4 4 0 0 0 0 8ZM11 12a4 4 0 1 0 0-8a4 4 0 0 0 0 8Zm0 32a4 4 0 1 0 0-8a4 4 0 0 0 0 8Z" />
+						<path stroke-linecap="round" d="M11 12v24m13-26h9a4 4 0 0 1 4 4v22" />
+						<path stroke-linecap="round" d="m30 16l-6-6l6-6" />
+					</g>
+				</svg>
+			</NuxtLink>
+
+			<NuxtLink v-if="is_mobile && $route.path == '/requests'" to="/analytics" class="z-20">
+				<SvgsAnalytics />
+			</NuxtLink>
+		</div>
+
+
 		<nav-links />
 		<lightmode-toggle />
 	</div>
@@ -38,6 +57,7 @@ import { useSearchStore } from '@/store/search';
 import { useImageStore } from '@/store/images';
 import { useAplStore } from '@/store/apl';
 const { profile } = storeToRefs(useProfileStore())
+const { is_mobile } = storeToRefs(useAppStore())
 const { $router, $SB } = useNuxtApp()
 const logout_loading = ref(false)
 

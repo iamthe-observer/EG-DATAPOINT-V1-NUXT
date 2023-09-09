@@ -350,7 +350,8 @@ export const useAplStore = defineStore(
 
       // console.log(pricer, price);
 
-      applicant.value.totalPayment = price;
+      if (!profile.value?.role) applicant.value.totalPayment = price;
+      if (profile.value?.role) applicant.value.totalPayment = 0;
 
       if (applicant_type.value == "spouse only") {
         let if_spouse = await validate(spouse_only_rules, applicant.value);
@@ -401,7 +402,7 @@ export const useAplStore = defineStore(
           handleValidationError();
         }
       } else if (applicant_type.value == "single") {
-        let if_spouse = await validate(single_rules, applicant.value);
+        // let if_spouse = await validate(single_rules, applicant.value);
 
         if (await validate(single_rules, applicant.value)) {
           await sendApplicant(applicant.value);
