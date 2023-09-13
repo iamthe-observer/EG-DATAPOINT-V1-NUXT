@@ -16,7 +16,7 @@
 					<radial-progress :textclr="`accent`"
 						:amount="Number(((done_tasks.length / _tasks.length) * 100).toFixed(1)) || 0">
 						{{ `${done_tasks.length} / ${_tasks.length}` }}
-					</radial-progress>
+					</radial-progress>``
 				</div>
 
 				<div v-else class="join join-vertical">

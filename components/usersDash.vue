@@ -140,10 +140,6 @@ import { useViewAplStore } from '@/store/viewApl';
 
 const { role, profiles } = storeToRefs(useProfileStore())
 
-// const role = computed(() => {
-// 	return profile.value?.role || false
-// })
-
 const loading = ref(false)
 const { total_daily_applicants, total_apls } = storeToRefs(useAppStore())
 
@@ -172,7 +168,7 @@ const URLs = ref<{
 	signedUrl: string;
 }[] | null | undefined>()
 
-onMounted(async () => {
+onBeforeMount(async () => {
 	await loadUrls()
 })
 

@@ -1,21 +1,22 @@
 <template>
-	<div class="bg-green-5001 text-white rounded-xl w-[400px] h-full p-4 flex flex-col justify-center">
+	<div
+		class="text-black rounded-xl w-[400px] h-full p-4 flex flex-col justify-center bg-neutral-800 bg-opacity-5 backdrop-blur-sm">
 		<!-- <div class="w-full text-right">Not a member Yet? <span @click="$emit('toRegister')"
 				class="cursor-pointer text-amber-600">Register
 				Here</span>
 		</div> -->
 		<form action="" class="flex flex-col">
 			<div class="flex flex-col w-full h-full justify-center px-12">
-				<p class="w-full text-center text-2xl">Hello</p>
-				<p class="w-full text-center mb-5 text-primary text-sm">Welcome back to<br />
+				<p class="w-full text-center text-2xl font-bold">Hello!</p>
+				<p class="w-full text-center mb-5 text-primary text-sm font-semibold">Welcome back to<br />
 					Ebbysgold Datapoint!</p>
 				<textInput :no_uppercase="true" :bg="'neutral-700'" v-model="email_" :placeholder="'Enter username / email'" />
 				<textInput :type="'password'" :no_uppercase="true" :bg="'neutral-700'" v-model="password"
 					:placeholder="'Password'" class="mb-2" />
 				<span onclick="my_modal_23.showModal()"
-					class="hover:cursor-pointer hover:text-secondary w-full text-right mb-6">Recover
+					class="hover:cursor-pointer hover:text-amber-600 w-full text-right mb-6">Recover
 					Password</span>
-				<button @click.prevent="loginUser" class="btn mb-9 hover:bg-primary">
+				<button @click.prevent="loginUser" class="btn mb-9 bg-primary hover:bg-purple-500 text-black border-none">
 					<span v-if="loading" class="loading loading-ring loading-sm text-white"></span>
 					<span v-else>Sign In</span>
 				</button>

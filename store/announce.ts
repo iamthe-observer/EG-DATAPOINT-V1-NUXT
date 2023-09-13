@@ -22,7 +22,8 @@ export const useAnnStore = defineStore("announcements", () => {
     try {
       let { data, error } = await useNuxtApp()
         .$SB.from("announcements")
-        .select("*");
+        .select("*")
+        .returns<Announcement[]>();
       if (error) throw error;
       announcements.value = data!;
       return data;

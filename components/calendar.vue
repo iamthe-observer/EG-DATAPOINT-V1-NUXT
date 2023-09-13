@@ -156,15 +156,6 @@
 	box-shadow: inset 29px 29px 59px #dadada,
 		inset -29px -29px 59px rgb(255, 255, 255);
 }
-
-/* .btn-neo {
-	trannn: all .5s ease-out;
-	border-radius: 11px;
-	background: #e0e0e0;
-box-shadow: inset 29px 29px 59px #4e4e4e,
-inset -29px -29px 59px rgb(64 64 64);
-}
-*/
 </style>
 
 <script setup lang="ts">

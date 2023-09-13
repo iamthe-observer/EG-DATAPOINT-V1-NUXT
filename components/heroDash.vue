@@ -13,9 +13,6 @@
 			}" class="w-9 p-2 aspect-square dark:bg-neutral-50 dark:shadow-xl bg-neutral-800 rounded-xl hover:cursor-pointer">
 				<SvgsSearch class="w-full h-full aspect-square hover:scale-125 transition-all duration-200 ease-in-out" />
 			</div>
-			<!-- <div class="w-9 aspect-square bg-neutral-800 rounded-xl p-2 dark:bg-neutral-50 dark:shadow-xl hover:cursor-pointer">
-				<SvgsBell class="w-full h-full aspect-square hover:scale-125 transition-all duration-200 ease-in-out" />
-			</div> -->
 		</div>
 	</div>
 </template>

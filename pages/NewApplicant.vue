@@ -127,6 +127,8 @@ import { useAppStore } from '@/store/app';
 import { useImageStore } from '@/store/images';
 import { useTitle } from '@vueuse/core';
 
+useTitle('EG Datapoint | Add Applicant')
+
 // state
 const { $gsap } = useNuxtApp()
 const { price } = storeToRefs(useAppStore())
@@ -145,29 +147,35 @@ watch(if_sent, val => {
 	}
 })
 
-onBeforeUnmount(() => {
+
+function reset() {
 	useAplStore().resetAplData()
+	useAplStore().$patch({ if_sent: false })
 	useImageStore().resetFiles()
+
+}
+
+onBeforeMount(() => {
+	reset()
+})
+
+onBeforeUnmount(() => {
+	reset()
 })
 
 watch(if_val_err, (val) => {
 	if (val) {
-		let tween = $gsap.to('#alert', {
+		$gsap.to('#alert', {
 			y: -20,
 			duration: .5,
 			ease: 'out',
 		})
 	} else {
-		let tween = $gsap.to('#alert', {
+		$gsap.to('#alert', {
 			y: 20,
 			duration: .5,
 			ease: 'out',
 		})
 	}
 })
-
-function logger(val: any) {
-	console.log(val);
-}
-useTitle('EG Datapoint | Add Applicant')
 </script>
