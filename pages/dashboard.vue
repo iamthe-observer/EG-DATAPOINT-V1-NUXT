@@ -1,5 +1,6 @@
 <template>
 	<div v-if="!useAppStore().is_mobile" class="__dashboard w-full h-full grid grid-cols-12 gap-1 grid-rows-15">
+		<!-- <div v-if="false" class="__dashboard w-full h-full grid grid-cols-12 gap-1 grid-rows-15"> -->
 		<HeroDash class="dash_item" />
 		<Calendar class="dash_item" />
 		<UsersDash class="dash_item" />
@@ -14,7 +15,7 @@
 
 <script setup lang='ts'>
 import { useTitle } from '@vueuse/core';
-import { useAppStore } from '@/store/app';
+import { useAppStore } from '@/store/app'
 useTitle('EG Datapoint | Dashboard')
 
 const { $gsap } = useNuxtApp()
