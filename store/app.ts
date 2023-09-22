@@ -153,20 +153,25 @@ export const useAppStore = defineStore("app", () => {
         .eq("id", useSupabaseUser().value?.id);
       if (err) throw err;
 
-      let { data, error } = await $SB.from("prices").select("*");
+      let { data, error } = await $SB
+        .from("prices")
+        .select("*")
+        .order("id", { ascending: true })
+        .returns<{ id: number; adult: number; child: number }[]>();
       if (error) throw error;
 
       if (user![0].location == "madina" || user![0].location == "ablekuma") {
         prices.value = data![1];
+        return data![1];
         // console.log(prices.value);
       } else if (user![0].location == "spintex") {
         prices.value = data![2];
+        return data![2];
         // console.log(prices.value);
       } else {
         prices.value = data![0];
+        return data![0];
       }
-
-      return data![0];
     } catch (err: any) {
       console.log(err);
     }
