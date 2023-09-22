@@ -2,7 +2,7 @@
 	<div id="APL_NEW"
 		class="bg-neutral-800 dark:shadow-xl dark:bg-neutral-50 rounded-xl w-full h-full flex flex-col relative">
 		<h1 ref="header_ref"
-			class="w-full bg-neutral-700 dark:bg-primary rounded-xl shadow-xl flex justify-between items-center p-5">
+			class="w-full min-h-fit bg-neutral-700 dark:bg-primary rounded-xl shadow-xl flex justify-between items-center p-5">
 			<span ref="discount_ref"
 				class="flex flex-col gap-1 dark:text-white dark:hover:text-purple-600 hover:text-neutral-600 group">
 				<p class="text-lg flex flex-col">
@@ -41,8 +41,9 @@
 				</dialog>
 			</span>
 
-			<div class="text-md flex gap-2">
-				<button v-if="!apl_sending && if_hover_header" @click="() => {
+			<div class="h-fit justify-center items-center text-md flex gap-2">
+				<!-- <button v-show="!apl_sending && if_hover_header" @click="() => { -->
+				<button @click="() => {
 					useAplStore().resetAplData(); useImageStore().resetFiles(); container!.scrollTo({ top: 0, behavior: 'smooth' })
 				}" class="btn font-normal btn-ghost rounded-xl text-white group hover:bg-base-100 hover:text-white group">
 					Reset
@@ -54,8 +55,7 @@
 					</svg>
 				</button>
 				<button v-if="!apl_sending" @click="async () => {
-					await useAplStore().handleSend()
-					// curr_page = 'prime'
+					await useAplStore().sendApl()
 				}" class="btn btn-outline rounded-xl text-white group hover:bg-accent font-normal hover:text-white group">
 					SUBMIT
 					<SvgsCedis
@@ -67,7 +67,24 @@
 					<span class="loading loading-spinner"></span>
 					loading
 				</button>
+
+				<!-- <div class="min-w-fit">
+					<BlurButton @click="async () => {
+						await useAplStore().handleSend()
+					}" v-if="!apl_sending" class="min-w-[200px]">SUBMIT
+						<SvgsCedis
+							class="w-4 aspect-square stroke-white fill-white transition-all duration-150 ease-linear group-hover:fill-white" />
+						{{
+							price }}.00
+					</BlurButton>
+					<BlurButton v-else class="min-w-[200px]">
+						<span class="loading loading-spinner"></span>
+						loading
+					</BlurButton>
+				</div> -->
 			</div>
+
+
 		</h1>
 
 		<main ref="container" class="flex-1 rounded-xl overflow-y-auto py-2 pb-6 pl-2 flex flex-col" id="style-1">
@@ -79,9 +96,10 @@
 				class="font-bold uppercase text-3xl drop-shadow-lg mx-auto pt-14 pb-5">Secondary Applicant</p>
 			<FieldSetSecApl v-if="applicant.pmarital_status == 'MARRIED'" />
 
-			<p v-if="applicant.children_number > 0" class="font-bold uppercase text-3xl drop-shadow-lg mx-auto pt-14 pb-5">Wards
+			<p v-if="applicant.children_number > 0" class="font-bold uppercase text-3xl drop-shadow-lg mx-auto pt-14 pb-5">
+				Wards
 			</p>
-			<FieldSetWardApl v-for="(ward) in applicant.wards" v-if="applicant.children_number > 0" :idx="ward.index!"
+			<FieldSetWardApl v-for="( ward ) in  applicant.wards " v-if="applicant.children_number > 0" :idx="ward.index!"
 				:key="ward.index!" :ward_info="applicant.wards![ward.index!]" />
 		</main>
 
@@ -106,7 +124,8 @@
 
 		<Teleport to="body">
 			<div :class="['transition-all duration-500 pointer-events-none ease-out absolute bottom-0 left-1/2 -translate-x-1/2 pb-6',
-				if_val_err ? 'opacity-100' : 'opacity-0']">
+				if_val_err ? 'opacity-100' : 'opacity-0']
+				">
 				<div id="alert" class="alert alert-error">
 					<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

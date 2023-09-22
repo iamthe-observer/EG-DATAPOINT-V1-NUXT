@@ -4,7 +4,12 @@ import { v4 as uuidv4 } from "uuid";
 import { defineStore, storeToRefs } from "pinia";
 import { required, numeric } from "@vuelidate/validators";
 import useVuelidate, { Validation } from "@vuelidate/core";
-import { Applicant, Requests, WardsApplicant } from "@/interfaces/interfaces";
+import {
+  Applicant,
+  Prices,
+  Requests,
+  WardsApplicant,
+} from "@/interfaces/interfaces";
 import { useImageStore } from "./images";
 import { useAppStore } from "./app";
 import { useProfileStore } from "./profile";
@@ -247,6 +252,135 @@ export const useAplStore = defineStore(
       return val;
     }
 
+    async function validateApl() {
+      if (applicant_type.value == "spouse only") {
+        if (await validate(spouse_only_rules, applicant.value)) {
+          return true;
+          // await sendApplicant(applicant.value);
+        } else {
+          if_sent.value = false;
+          handleValidationError();
+          return false;
+        }
+      } else if (applicant_type.value == "family") {
+        // getting val for all wards
+        let val: boolean[] = [];
+        for (let idx = 0; idx < applicant.value.wards.length; idx++) {
+          const ward = { ...applicant.value.wards[idx] };
+          val.push(await validate(ward_rules, ward));
+        }
+        if (
+          (await validate(family_rules, applicant.value)) &&
+          val.every((ward) => ward == true)
+        ) {
+          return true;
+          // await sendApplicant(applicant.value);
+        } else {
+          if_sent.value = false;
+          handleValidationError();
+          return false;
+        }
+      } else if (applicant_type.value == "wards only") {
+        // getting val for all wards
+        let val: boolean[] = [];
+        for (let idx = 0; idx < applicant.value.wards.length; idx++) {
+          const ward = { ...applicant.value.wards[idx] };
+          val.push(await validate(ward_rules, ward));
+        }
+        if (
+          (await validate(wards_only_rules, applicant.value)) &&
+          val.every((ward) => ward == true)
+        ) {
+          return true;
+          // await sendApplicant(applicant.value);
+        } else {
+          if_sent.value = false;
+          handleValidationError();
+          return false;
+        }
+      } else if (applicant_type.value == "single") {
+        if (await validate(single_rules, applicant.value)) {
+          return true;
+          // await sendApplicant(applicant.value);
+        } else {
+          if_sent.value = false;
+          handleValidationError();
+          return false;
+        }
+      }
+    }
+
+    async function handleValidationError() {
+      if_val_err.value = true;
+
+      if (applicant_type.value == "single") {
+        let v$ = useVuelidate(single_rules, applicant.value);
+        await v$.value.$validate();
+        vuelidate_err.value = await v$.value.$validate();
+        // console.log(vuelidate_err.value);
+      } else if (applicant_type.value == "family") {
+        let v$ = useVuelidate(family_rules, applicant.value);
+        await v$.value.$validate();
+        vuelidate_err.value = await v$.value.$validate();
+        // console.log(vuelidate_err.value);
+      } else if (applicant_type.value == "spouse only") {
+        let v$ = useVuelidate(spouse_only_rules, applicant.value);
+        await v$.value.$validate();
+        vuelidate_err.value = await v$.value.$validate();
+        // console.log(vuelidate_err.value);
+      } else if (applicant_type.value == "wards only") {
+        let v$ = useVuelidate(wards_only_rules, applicant.value);
+        await v$.value.$validate();
+        // console.log(v$.value.$errors);
+      }
+
+      setTimeout(() => {
+        if_val_err.value = false;
+      }, 4000);
+    }
+
+    async function getAplPrice(apl: Applicant, prices: Prices) {
+      let price: number = 0;
+
+      const if_sp = apl.pmarital_status == "MARRIED";
+      const if_wa = apl.children_number > 0;
+
+      if (prices) {
+        if (!if_sp && if_wa) {
+          price = prices.adult + prices.child * apl.children_number;
+        } else if (if_sp && !if_wa) {
+          price = prices.adult * 2;
+        } else if (if_sp && if_wa) {
+          price = prices.adult * 2 + prices.child * apl.children_number;
+        } else if (!if_sp && !if_wa) {
+          price = prices.adult;
+        }
+      } else {
+        await useAppStore().getPrices();
+        throw new Error("Get Prices First");
+      }
+      return price;
+    }
+
+    async function sendApl(apl: Applicant = applicant.value) {
+      // set id and fullName
+      applicant.value.apl_id = uuidv4();
+      applicant.value.fullName =
+        `${applicant.value.plastName} ${applicant.value.pfirstName} ${applicant.value.potherName}`.trim();
+      // set applicant price
+      const prices = await useAppStore().getPrices();
+      let apl_price = await getAplPrice(apl, prices!);
+      apl.totalPayment = !profile.value?.role ? apl_price : 0;
+      // validate apl
+      let valid_val = await validateApl();
+      console.log(valid_val);
+      // set location
+      apl.location = profile.value?.location;
+      // submiting apl
+      if (valid_val) submitApl(apl);
+      console.log(apl);
+    }
+
     async function submitApl(apl: Applicant) {
       apl_sending.value = true;
       console.log(apl.aplImg_path.wardsPath);
@@ -294,134 +428,120 @@ export const useAplStore = defineStore(
       }
     }
 
-    async function handleValidationError() {
-      if_val_err.value = true;
+    // async function handleSend() {
+    //   applicant.value.apl_id = uuidv4();
+    //   applicant.value.fullName = `${applicant.value.plastName} ${applicant.value.pfirstName} ${applicant.value.potherName}`;
 
-      if (applicant_type.value == "single") {
-        let v$ = useVuelidate(single_rules, applicant.value);
-        await v$.value.$validate();
-        vuelidate_err.value = await v$.value.$validate();
-        console.log(vuelidate_err.value);
-      } else if (applicant_type.value == "family") {
-        let v$ = useVuelidate(family_rules, applicant.value);
-        await v$.value.$validate();
-        vuelidate_err.value = await v$.value.$validate();
-        console.log(vuelidate_err.value);
-      } else if (applicant_type.value == "spouse only") {
-        let v$ = useVuelidate(spouse_only_rules, applicant.value);
-        await v$.value.$validate();
-        vuelidate_err.value = await v$.value.$validate();
-        console.log(vuelidate_err.value);
-      } else if (applicant_type.value == "wards only") {
-        let v$ = useVuelidate(wards_only_rules, applicant.value);
-        await v$.value.$validate();
-        console.log(v$.value.$errors);
-      }
+    //   const pricer = useAppStore().prices;
+    //   let price: number = 0;
 
-      setTimeout(() => {
-        if_val_err.value = false;
-      }, 4000);
-    }
+    //   const if_sp = applicant.value.pmarital_status == "MARRIED";
+    //   const if_wa = applicant.value.children_number > 0;
 
-    async function handleSend() {
-      applicant.value.apl_id = uuidv4();
-      applicant.value.fullName = `${applicant.value.plastName} ${applicant.value.pfirstName} ${applicant.value.potherName}`;
+    //   if (pricer) {
+    //     if (!if_sp && if_wa) {
+    //       price = pricer.adult + pricer.child * applicant.value.children_number;
+    //     } else if (if_sp && !if_wa) {
+    //       price = pricer.adult * 2;
+    //     } else if (if_sp && if_wa) {
+    //       price =
+    //         pricer.adult * 2 + pricer.child * applicant.value.children_number;
+    //     } else if (!if_sp && !if_wa) {
+    //       price = pricer.adult;
+    //     }
+    //   } else {
+    //     await useAppStore().getPrices();
+    //     throw new Error("Get Prices First");
+    //   }
 
-      const pricer = useAppStore().prices;
-      let price: number = 0;
+    //   // console.log(pricer, price);
 
-      const if_sp = applicant.value.pmarital_status == "MARRIED";
-      const if_wa = applicant.value.children_number > 0;
+    //   if (!profile.value?.role) applicant.value.totalPayment = price;
+    //   if (profile.value?.role) applicant.value.totalPayment = 0;
 
-      if (pricer) {
-        if (!if_sp && if_wa) {
-          price = pricer.adult + pricer.child * applicant.value.children_number;
-        } else if (if_sp && !if_wa) {
-          price = pricer.adult * 2;
-        } else if (if_sp && if_wa) {
-          price =
-            pricer.adult * 2 + pricer.child * applicant.value.children_number;
-        } else if (!if_sp && !if_wa) {
-          price = pricer.adult;
-        }
-      } else {
-        throw new Error("Get Prices First");
-      }
+    //   if (applicant_type.value == "spouse only") {
+    //     let if_spouse = await validate(spouse_only_rules, applicant.value);
+    //     console.log(if_spouse);
 
-      // console.log(pricer, price);
+    //     if (await validate(spouse_only_rules, applicant.value)) {
+    //       await sendApplicant(applicant.value);
+    //     } else {
+    //       console.log(applicant_type.value);
 
-      if (!profile.value?.role) applicant.value.totalPayment = price;
-      if (profile.value?.role) applicant.value.totalPayment = 0;
+    //       if_sent.value = false;
+    //       handleValidationError();
+    //     }
+    //   } else if (applicant_type.value == "family") {
+    //     // getting val for all wards
+    //     let val: boolean[] = [];
+    //     for (let idx = 0; idx < applicant.value.wards.length; idx++) {
+    //       const ward = { ...applicant.value.wards[idx] };
+    //       val.push(await validate(ward_rules, ward));
+    //     }
+    //     if (
+    //       (await validate(family_rules, applicant.value)) &&
+    //       val.every((ward) => ward == true)
+    //     ) {
+    //       await sendApplicant(applicant.value);
+    //     } else {
+    //       console.log(applicant_type.value);
 
-      if (applicant_type.value == "spouse only") {
-        let if_spouse = await validate(spouse_only_rules, applicant.value);
-        console.log(if_spouse);
+    //       if_sent.value = false;
+    //       handleValidationError();
+    //     }
+    //   } else if (applicant_type.value == "wards only") {
+    //     // getting val for all wards
+    //     let val: boolean[] = [];
+    //     for (let idx = 0; idx < applicant.value.wards.length; idx++) {
+    //       const ward = { ...applicant.value.wards[idx] };
+    //       val.push(await validate(ward_rules, ward));
+    //     }
+    //     if (
+    //       (await validate(wards_only_rules, applicant.value)) &&
+    //       val.every((ward) => ward == true)
+    //     ) {
+    //       await sendApplicant(applicant.value);
+    //     } else {
+    //       console.log(applicant_type.value);
 
-        if (await validate(spouse_only_rules, applicant.value)) {
-          await sendApplicant(applicant.value);
-        } else {
-          console.log(applicant_type.value);
+    //       if_sent.value = false;
+    //       handleValidationError();
+    //     }
+    //   } else if (applicant_type.value == "single") {
+    //     // let if_spouse = await validate(single_rules, applicant.value);
 
-          if_sent.value = false;
-          handleValidationError();
-        }
-      } else if (applicant_type.value == "family") {
-        // getting val for all wards
-        let val: boolean[] = [];
-        for (let idx = 0; idx < applicant.value.wards.length; idx++) {
-          const ward = { ...applicant.value.wards[idx] };
-          val.push(await validate(ward_rules, ward));
-        }
-        if (
-          (await validate(family_rules, applicant.value)) &&
-          val.every((ward) => ward == true)
-        ) {
-          await sendApplicant(applicant.value);
-        } else {
-          console.log(applicant_type.value);
+    //     if (await validate(single_rules, applicant.value)) {
+    //       await sendApplicant(applicant.value);
+    //     } else {
+    //       console.log(applicant_type.value);
 
-          if_sent.value = false;
-          handleValidationError();
-        }
-      } else if (applicant_type.value == "wards only") {
-        // getting val for all wards
-        let val: boolean[] = [];
-        for (let idx = 0; idx < applicant.value.wards.length; idx++) {
-          const ward = { ...applicant.value.wards[idx] };
-          val.push(await validate(ward_rules, ward));
-        }
-        if (
-          (await validate(wards_only_rules, applicant.value)) &&
-          val.every((ward) => ward == true)
-        ) {
-          await sendApplicant(applicant.value);
-        } else {
-          console.log(applicant_type.value);
+    //       if_sent.value = false;
+    //       handleValidationError();
+    //     }
+    //   }
+    // }
 
-          if_sent.value = false;
-          handleValidationError();
-        }
-      } else if (applicant_type.value == "single") {
-        // let if_spouse = await validate(single_rules, applicant.value);
+    // async function sendApplicant(apl_info: Applicant) {
+    //   apl_info.location = profile.value?.location;
+    //   console.log(apl_info);
+    //   async function sendApl() {
+    //     let prices = await useAppStore().getPrices();
+    //     let price = await getAplPrice(apl_info, prices!);
+    //     console.log(price);
+    //     apl_info.totalPayment = price;
 
-        if (await validate(single_rules, applicant.value)) {
-          await sendApplicant(applicant.value);
-        } else {
-          console.log(applicant_type.value);
+    //     await submitApl(apl_info);
+    //     console.log("done");
+    //   }
 
-          if_sent.value = false;
-          handleValidationError();
-        }
-      }
-    }
+    //   if (apl_info.totalPayment == 0 && useProfileStore().role == false) {
+    //     await useAppStore().getPrices();
 
-    async function sendApplicant(apl_info: any) {
-      apl_info.location = profile.value?.location;
-      console.log(apl_info);
-
-      await submitApl(apl_info);
-      console.log("done");
-    }
+    //     sendApl();
+    //   } else {
+    //     sendApl();
+    //   }
+    // }
 
     function handleFile(evt: any, type: string) {
       let file = evt.target.files[0];
@@ -616,6 +736,7 @@ export const useAplStore = defineStore(
     }
 
     return {
+      sendApl,
       reset_data,
       vuelidate_err,
       empty_ward,
@@ -626,7 +747,7 @@ export const useAplStore = defineStore(
       edit_mode,
       toggleEditMode,
       validate,
-      handleSend,
+      // handleSend,
       if_sent,
       apl_sending,
       handleFile,

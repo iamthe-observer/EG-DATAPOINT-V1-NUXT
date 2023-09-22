@@ -9,6 +9,8 @@ export interface AplData {
   wards: WardsApplicant[] | null;
 }
 
+export type Prices = { id: number; adult: number; child: number };
+
 export interface UserData {
   profile: Profile[];
   apls: PrimeApplicant[];

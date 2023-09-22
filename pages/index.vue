@@ -1,9 +1,11 @@
 <template>
-	<div v-if="!useAppStore().is_mobile" class="w-full h-full flex justify-between p-7 relative">
+	<div v-if="!useAppStore().is_mobile"
+		class="w-full h-full flex justify-between p-7 relative bg-neutral-900 overflow-hidden">
 		<div class="absolute inset-0">
-			<img src="../assets/images/login.jpg" alt="" class="object-cover w-full h-full">
+			<img :style="layer0" ref="img" src="../assets/images/login2.png" alt="" class="object-cover w-full h-full">
+			<!-- <img src="../assets/images/login.jpg" alt="" class="object-cover w-full h-full"> -->
 		</div>
-		<!-- <Planet /> -->
+
 		<AuthLogin @login="loadAppData" class="__login opacity-100 z-10" />
 	</div>
 
@@ -20,6 +22,17 @@ import { useRequestStore } from '@/store/requests';
 import { useTasksStore } from '@/store/tasks';
 
 const { $router, $SB, _route } = useNuxtApp()
+const img = ref()
+const { roll, tilt } = useParallax(img)
+
+const layer0 = computed(() => ({
+	// transform: `translateX(${tilt.value * 10}px) translateY(${roll.value * 10
+	// 	}px) scale(1.33)`,
+	transform: `rotateX(${roll.value * 20}deg) rotateY(${tilt.value * 20
+		}deg) translateX(${tilt.value * 10}px) translateY(${roll.value * 10
+		}px) scale(1.33)`,
+}))
+
 definePageMeta({
 	layout: 'auth',
 	// middleware: 'auth'
