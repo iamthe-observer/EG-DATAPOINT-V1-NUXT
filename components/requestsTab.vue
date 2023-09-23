@@ -192,6 +192,7 @@ import { useRequestStore } from '@/store/requests';
 import { Applicant, Requests } from '@/interfaces/interfaces';
 import { useProfileStore } from '@/store/profile';
 import { useAplStore } from '@/store/apl';
+import { useAppStore } from '@/store/app';
 
 const { $SB } = useNuxtApp()
 defineProps<{
@@ -199,6 +200,7 @@ defineProps<{
 }>()
 const { requests, my_requests, } = storeToRefs(useRequestStore())
 const { role, profiles } = storeToRefs(useProfileStore())
+const { table } = storeToRefs(useAppStore())
 
 const filter_val = ref('pending')
 const curr_filtered_req = computed(() => {
@@ -252,7 +254,7 @@ function getCreatedAtTime(req: Requests) {
 
 async function deleteApplicant(req: Requests) {
 	try {
-		let { data, error } = await useNuxtApp().$SB.from('applicants').delete().eq('apl_id', req.apl_id)
+		let { data, error } = await useNuxtApp().$SB.from(table.value).delete().eq('apl_id', req.apl_id)
 		if (error) throw error
 
 		return await updateRequestType(req, 'approved')
@@ -275,7 +277,7 @@ async function approveDiscount(req: Requests) {
 	req.modified_apl!.totalPayment = Number(req.body)
 
 	try {
-		let { data, error } = await $SB.from('applicants').insert(req.modified_apl).select()
+		let { data, error } = await $SB.from(table.value).insert(req.modified_apl).select()
 		if (error) throw error
 		console.log(data);
 
@@ -289,7 +291,7 @@ async function updateApplicant(req: Requests) {
 	let apl = req.modified_apl
 	try {
 		let { data, error } = await $SB
-			.from('applicants')
+			.from(table.value)
 			.update(apl)
 			.eq('apl_id', req.apl_id)
 			.select()

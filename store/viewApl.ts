@@ -18,6 +18,8 @@ import { useRequestStore } from "@/store/requests";
 import { useAplStore } from "@/store/apl";
 
 export const useViewAplStore = defineStore("view_apl", () => {
+  const app_ = useAppStore();
+  const { table } = storeToRefs(useAppStore());
   const APL_ID = ref(useStorage<string>("apl_id", ""));
   const USER_ID = ref(useStorage<string>("user_id", ""));
 
@@ -309,6 +311,20 @@ export const useViewAplStore = defineStore("view_apl", () => {
     return val;
   }
 
+  async function getApplicant(id: string) {
+    try {
+      const { data, error } = await $SB
+        .from(table.value)
+        .select("*")
+        .eq("apl_id", id)
+        .returns<Applicant[]>();
+      if (error) throw error;
+      return data[0];
+    } catch (err: any) {
+      console.log(err);
+    }
+  }
+
   const submitApl = async (apl: Applicant) => {
     apl_sending.value = true;
     console.log(apl.aplImg_path.wardsPath);
@@ -328,7 +344,7 @@ export const useViewAplStore = defineStore("view_apl", () => {
       }
 
       const { error } = await $SB
-        .from("applicants")
+        .from(table.value)
         .insert([$trimStringProperties(apl)]);
 
       if (error) throw error;
@@ -610,21 +626,6 @@ export const useViewAplStore = defineStore("view_apl", () => {
     useAplStore().toggleEditMode(false);
   }
 
-  function logger(e: any) {
-    console.log(e);
-
-    setTimeout(() => {
-      request.value.apl_id = applicant.value.apl_id!;
-      request.value.modify_type = "edit";
-      request.value.modified_apl = applicant.value;
-      request.value.status = "pending";
-      request.value.fullName = applicant.value.fullName;
-      request.value.user_id = useSupabaseUser().value?.id!;
-      useRequestStore().setRequest(request.value);
-      // emit("request", request.value);
-    }, 10);
-  }
-
   function handleFile(evt: any, type: string, idx?: number) {
     // console.log(evt.target.files[0], type);
     let file = evt.target.files[0];
@@ -672,7 +673,7 @@ export const useViewAplStore = defineStore("view_apl", () => {
             `${applicant.value.apl_id}/prime.jpeg`,
           );
         const { error: err } = await $SB
-          .from("applicants")
+          .from(table.value)
           .delete()
           .eq("apl_id", aplVal.apl_id);
         if (err) {
@@ -680,7 +681,7 @@ export const useViewAplStore = defineStore("view_apl", () => {
           throw err;
         }
         let { data, error } = await $SB
-          .from("applicants")
+          .from(table.value)
           .insert([$trimStringProperties(aplVal)])
           .eq("apl_id", aplVal.apl_id!)
           .select();
@@ -725,7 +726,7 @@ export const useViewAplStore = defineStore("view_apl", () => {
         if (!path)
           aplVal.aplImg_path.secPath.push(`${applicant.value.apl_id}/sec.jpeg`);
         const { error: err } = await $SB
-          .from("applicants")
+          .from(table.value)
           .delete()
           .eq("apl_id", aplVal.apl_id);
         if (err) {
@@ -733,7 +734,7 @@ export const useViewAplStore = defineStore("view_apl", () => {
           throw err;
         }
         let { data, error } = await $SB
-          .from("applicants")
+          .from(table.value)
           .insert([$trimStringProperties(aplVal)])
           .eq("apl_id", aplVal.apl_id!)
           .select();
@@ -787,7 +788,7 @@ export const useViewAplStore = defineStore("view_apl", () => {
             idx
           ] = `${applicant.value.apl_id}/ward${idx}.jpeg`;
         const { error: err } = await $SB
-          .from("applicants")
+          .from(table.value)
           .delete()
           .eq("apl_id", aplVal.apl_id);
         if (err) {
@@ -795,7 +796,7 @@ export const useViewAplStore = defineStore("view_apl", () => {
           throw err;
         }
         let { data, error } = await $SB
-          .from("applicants")
+          .from(table.value)
           .insert([$trimStringProperties(aplVal)])
           .eq("apl_id", aplVal.apl_id!)
           .select();
@@ -851,6 +852,7 @@ export const useViewAplStore = defineStore("view_apl", () => {
     curr_ward_file,
     onLoad,
     handleDate,
+    getApplicant,
     applicant,
     applicant_type,
     empty_ward,

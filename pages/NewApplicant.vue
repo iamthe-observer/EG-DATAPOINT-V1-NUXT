@@ -158,7 +158,6 @@ const discount_ref = ref()
 const header_ref = ref()
 const container = ref<HTMLElement>()
 const if_hover_discount = useElementHover(discount_ref)
-const if_hover_header = useElementHover(header_ref)
 
 watch(if_sent, val => {
 	if (val) {

@@ -8,6 +8,7 @@ export const useAppStore = defineStore("app", () => {
   const { applicant } = storeToRefs(useAplStore());
   const dark_mode = ref(useLocalStorage("dark_mode", false));
   const is_mobile = ref(false);
+  const table = ref("applicants");
   const restricted_user = ref(false);
   const daily_urls = ref<
     | {
@@ -136,9 +137,6 @@ export const useAppStore = defineStore("app", () => {
       if (error) throw error;
       total_apls_ex.value = data!;
 
-      // all_my_apls.value = data!.filter(
-      //   (apl) => apl.user_id == useSupabaseUser().value?.id,
-      // );
       return data;
     } catch (err: any) {
       console.log(err);
@@ -350,6 +348,7 @@ export const useAppStore = defineStore("app", () => {
     .subscribe();
 
   return {
+    table,
     restricted_user,
     locations,
     dark_mode,

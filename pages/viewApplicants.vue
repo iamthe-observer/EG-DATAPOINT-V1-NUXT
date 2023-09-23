@@ -83,7 +83,7 @@
 						<!-- <tr v-for="(apl, i) in all_my_apls" -->
 						<tr v-for="(apl, i) in curr_filtered_apls"
 							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-black transition-all duration-300 ease-out dark:hover:bg-neutral-200"
-							@dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!); }">
+							@dblclick="goToApl(apl.apl_id!)">
 							<!-- <th class="font-normal">
 								{{ i + 1 }}
 							</th> -->
@@ -182,8 +182,7 @@
 
 					<tbody class="">
 						<!-- row -->
-						<tr @dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
-							v-for="(apl, i) in _curr_filtered_apls"
+						<tr @dblclick="goToApl(apl.apl_id!)" v-for="(apl, i) in _curr_filtered_apls"
 							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-black transition-all duration-300 ease-out dark:hover:bg-neutral-200">
 							<!-- <th class="font-normal">
 								{{ i + 1 }}
@@ -411,29 +410,8 @@
 
 					<tbody class="">
 						<!-- row -->
-						<tr
-							@dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!); useViewAplStore().$patch({ if_applicant_ex: true }) }"
-							v-for="(apl, i) in total_apls_ex"
+						<tr @dblclick="goToApl(apl.apl_id!, 'applicants_ex')" v-for="(apl, i) in total_apls_ex"
 							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-black transition-all duration-300 ease-out dark:hover:bg-neutral-200">
-							<!-- <th class="font-normal">
-								{{ i + 1 }}
-							</th> -->
-							<!-- <th>
-								<div class="dropdown dropdown-right">
-									<label tabindex="0"
-										class="btn btn-xs dark:border-none dark:text-neutral-900 dark:bg-white rounded-full m-1 btn-circle"><svg
-											class="w-4 aspect-square" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-											<path fill="#888888"
-												d="M4.957 5a1 1 0 0 0-.821 1.571l2.633 3.784a1.5 1.5 0 0 0 2.462 0l2.633-3.784A1 1 0 0 0 11.043 5H4.957Z" />
-										</svg></label>
-									<ul tabindex="0"
-										class="dropdown-content dark:bg-white dark:border-2 dark:border-neutral-300 dark:font-semibold dark:text-neutral-900 z-[100] menu p-1 shadow bg-base-100 rounded-lg w-52 font-normal">
-										<li @click="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
-											class="hover:bg-accent hover:text-black rounded-lg"><a>View</a></li>
-										<li class="hover:bg-accent hover:text-black rounded-lg"><a>Request Delete</a></li>
-									</ul>
-								</div>
-							</th> -->
 							<td>
 								<div class="flex items-center space-x-3">
 									<div>
@@ -551,7 +529,14 @@ const curr_user = ref('all')
 const scroll_container = ref<HTMLDivElement>()
 const scroll_container_admin = ref<HTMLDivElement>()
 const if_apls_ex = ref(false)
+const { $router } = useNuxtApp()
 
+async function goToApl(id: string, table: string = 'applicants') {
+	$router.push(`/applicant/${id}`)
+	useViewAplStore().setID(id!)
+	if (table == 'applicants_ex') useViewAplStore().$patch({ if_applicant_ex: true })
+	useAppStore().$patch({ table: table })
+}
 
 const loadAplEx = async () => {
 	if (role.value && profile.value?.email == 'topsquad3552@gmail.com') {

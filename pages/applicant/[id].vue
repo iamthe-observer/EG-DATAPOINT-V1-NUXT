@@ -185,7 +185,6 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
-import { useAplStore } from '@/store/apl'
 import { useProfileStore } from '@/store/profile'
 import { useRequestStore } from '@/store/requests'
 import { useViewAplStore } from '@/store/viewApl';

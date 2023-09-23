@@ -39,7 +39,6 @@
 				<InfoCard v-if="apl.pconf_code" heading="Confirmation Code" v-model="apl.pconf_code" />
 				<InformationCard :class="apl.pconf_code ? 'col-span-full' : 'col-span-1'" heading="Payment"
 					v-model="apl.totalPayment" />
-
 			</div>
 		</div>
 
@@ -156,10 +155,13 @@
 
 <script setup lang="ts">
 import { useViewAplStore } from '@/store/viewApl';
+import { useAppStore } from '@/store/app';
 import { storeToRefs } from 'pinia';
 
 
 const viewApl = useViewAplStore()
+const app_ = useAppStore()
+const { table } = storeToRefs(app_)
 const { edit_mode, prime_image, sec_image, p_loading, s_loading, prime_file, sec_file, applicant: apl, curr_ward_file, wards_file, wards_image, w_loading, if_updated } = storeToRefs(viewApl)
 
 onBeforeMount(async () => {
@@ -170,6 +172,7 @@ onBeforeUnmount(() => {
 	viewApl.$patch({
 		prime_image: undefined, sec_image: undefined, wards_image: [], edit_mode: false, if_applicant_ex: false
 	})
+	app_.$patch({ table: 'applicants' })
 })
 </script>
 
