@@ -31,9 +31,10 @@
 				<input :value="modelValue ? modelValue : value" @focusin="$emit('focusin')" @focusout="$emit('focusout')"
 					@input="$emit('update:modelValue', $event.target?.value)" :type="type ? type : 'text'"
 					:placeholder="placeholder ? placeholder : ''"
-					:class="[`input input-bordered w-full border-none font-bold dark:bg-neutral-300 dark:font-semibold bg-${bg} ${icon ? 'rounded-l-xl rounded-r-none bg-neutral-50' : 'rounded-xl bg-neutral-50'} ${classer}`]" />
+					:class="[`input w-full font-bold dark:bg-neutral-300 dark:font-semibold bg-${bg} ${icon ? 'rounded-l-none rounded-r-none border-2 border-black border-r-0 bg-neutral-50' : 'rounded-none border-black border-y-2 bg-neutral-50'} ${classer}`]" />
 				<!-- icon -->
-				<div v-if="icon" :class='`icon grid place-items-center p-2 bg-neutral-50 dark:bg-primary bg-${bg} rounded-e-xl`'>
+				<div v-if="icon"
+					:class='`icon grid place-items-center p-2 bg-neutral-50 dark:bg-primary bg-${bg} rounded-e-none border-e-2 border-black border-y-2`'>
 					<slot name="login" :width_height="w_h">
 						<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">
 							<path fill="#fff"

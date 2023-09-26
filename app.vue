@@ -1,11 +1,13 @@
 <template>
-  <div class="h-screen bg-neutral-900 text-white dark:bg-neutral-200 dark:text-neutral-900">
+  <div class="h-screen bg-neutral-900 text-white dark:bg-neutral-200 dark:text-neutral-900 relative">
     <div v-if="app_loading" class="w-full h-full grid place-items-center bg-neutral-900 dark:bg-neutral-50">
       <Loading />
     </div>
     <NuxtLayout v-else>
       <NuxtPage />
     </NuxtLayout>
+
+    <NotifService />
   </div>
 </template>
 

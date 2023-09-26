@@ -37,8 +37,10 @@ export const useTasksStore = defineStore("tasks", () => {
       if (error) throw error;
       loading_task.value = false;
       done_task.value = true;
+      return true;
     } catch (error) {
       loading_task.value = false;
+      return false;
     } finally {
       loading_task.value = false;
     }

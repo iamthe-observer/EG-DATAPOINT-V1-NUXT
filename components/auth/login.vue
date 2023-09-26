@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="text-black rounded-xl w-[400px] h-full p-4 flex flex-col justify-center bg-neutral-300 bg-opacity-20 shadow-lg backdrop-blur-sm">
+		class="text-black rounded-none border-2 border-black w-[400px] h-full p-4 flex flex-col justify-center bg-neutral-300 bg-opacity-20 shadow-lg backdrop-blur-sm">
 		<!-- <div class="w-full text-right">Not a member Yet? <span @click="$emit('toRegister')"
 				class="cursor-pointer text-amber-600">Register
 				Here</span>

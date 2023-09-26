@@ -12,7 +12,7 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-  app: {
-    pageTransition: { name: "page", mode: "out-in" },
-  },
+  // app: {
+  //   pageTransition: { name: "page", mode: "out-in" },
+  // },
 });

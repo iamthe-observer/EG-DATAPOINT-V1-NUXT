@@ -1,6 +1,6 @@
 <template>
-	<svg ref="svg" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-		<g :stroke="state.stroke" :class="classer" strokeLinecap="round" strokeWidth="2">
+	<svg ref="svg" xmlns="http://www.w3.org/2000/svg" :class="classer" viewBox="0 0 24 24">
+		<g :stroke="state.stroke" strokeLinecap="round" strokeWidth="2">
 			<path fill="none" strokeDasharray="16" strokeDashoffset="16" d="M10.5 13.5L3 21">
 				<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.2s" values="16;0"></animate>
 			</path>
@@ -20,14 +20,15 @@ defineProps<{
 const svg = ref<SVGElement>()
 const isHover = useElementHover(svg)
 const state = computed(() => {
-	if (isHover.value) {
-		// hovered
-		return {
-			fill: '#a020f0',
-			stroke: '#fff',
-		}
-		// !hovered
-	} else return {
+	// if (isHover.value) {
+	// hovered
+	// return {
+	// 	fill: '#a020f0',
+	// 	stroke: '#fff',
+	// }
+	// !hovered
+	// } else
+	return {
 		fill: '#888',
 		stroke: '#888',
 	}

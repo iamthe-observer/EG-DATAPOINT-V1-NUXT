@@ -45,7 +45,7 @@ main:hover>#btn2 {
 	color: white;
 	font-size: 1rem;
 	border: solid 2px black;
-	border-radius: 10px;
+	border-radius: 0px;
 }
 
 #btn1 {
