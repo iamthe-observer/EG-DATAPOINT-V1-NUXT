@@ -37,6 +37,7 @@ export const useAppStore = defineStore("app", () => {
     "kaneshie",
     "ablekuma",
     "spintex",
+    "odorkor",
   ]);
 
   const price = computed(() => {
@@ -160,7 +161,11 @@ export const useAppStore = defineStore("app", () => {
         .returns<{ id: number; adult: number; child: number }[]>();
       if (error) throw error;
 
-      if (user![0].location == "madina" || user![0].location == "ablekuma") {
+      if (
+        user![0].location == "madina" ||
+        user![0].location == "ablekuma" ||
+        user![0].location == "odorkor"
+      ) {
         prices.value = data![1];
         return data![1];
         // console.log(prices.value);
