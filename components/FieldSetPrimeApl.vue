@@ -2,11 +2,12 @@
 	<div class="relative w-full grid grid-cols-12 gap-5 px-5 py-2">
 
 		<div class="col-span-full flex">
-			<div class="col-span-2 translate-x-1 row-span-2 flex flex-col items-center gap-3">
+			<div
+				class="col-span-2 translate-x-1 border-2 border-black p-3 transition-all duration-150 ease-out hover:shadow-neo-box hover:-translate-y-1 row-span-2 flex flex-col items-center gap-3">
 				<avatarSelect :src="primeSRC" class="" />
 
 				<input @change="handleFile" type="file"
-					class="file-input file-input-primary dark:text-neutral-900 dark:bg-white file-input-xs w-[300px]" />
+					class="file-input file-input-primary rounded-none border-2 border-black font-bold bg-white file-input-xs w-[300px]" />
 			</div>
 
 			<div class="flex flex-col flex-1 justify-between gap-4">
@@ -32,22 +33,22 @@
 					<div class="form-control w-full">
 
 						<label class="label">
-							<span class="label-text dark:text-neutral-900 dark:font-semibold">
+							<span class="label-text text-neutral-500 font-semibold">
 								Date Of Birth
 							</span>
 						</label>
 
 						<div class="indicator w-full">
 							<span
-								:class="['transition-all duration-300 ease-in pointer-events-none indicator-item badge-sm badge bg-red-400 border-transparent drop-shadow-xl', vuelidate_err == false && !applicant.pdob ? 'opacity-100' : 'opacity-0']"></span>
+								:class="['transition-all duration-300 ease-in pointer-events-none indicator-item badge-sm badge bg-red-400 rounded-none border-2 border-red-600 drop-shadow-xl', vuelidate_err == false && !applicant.pdob ? 'opacity-100' : 'opacity-0']"></span>
 
 							<div class="flex items-end flex-1 gap-4">
 								<input v-model="dates.pdob.dd" type="number" min="1" max="31" maxlength="2" placeholder="DD"
-									class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+									class="input w-full font-bold max-w-xs bg-white rounded-none border-black border-2 hover:-translate-y-1 focus:-translate-y-1 hover:shadow-neo-box focus:shadow-neo-box transition-all duration-150 ease-out focus:outline-none" />
 								<input v-model="dates.pdob.mm" type="number" min="1" max="12" maxlength="2" placeholder="MM"
-									class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+									class="input w-full font-bold max-w-xs bg-white rounded-none border-black border-2 hover:-translate-y-1 focus:-translate-y-1 hover:shadow-neo-box focus:shadow-neo-box transition-all duration-150 ease-out focus:outline-none" />
 								<input v-model="dates.pdob.yyyy" type="number" maxlength="4" placeholder="YYYY"
-									class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+									class="input w-full font-bold max-w-xs bg-white rounded-none border-black border-2 hover:-translate-y-1 focus:-translate-y-1 hover:shadow-neo-box focus:shadow-neo-box transition-all duration-150 ease-out focus:outline-none" />
 							</div>
 						</div>
 					</div>
@@ -91,18 +92,18 @@
 				<template> -->
 			<div class="form-control w-full">
 				<label class="label">
-					<span class="label-text dark:text-neutral-900 dark:font-semibold">
+					<span class="label-text font-semibold text-neutral-500">
 						Passport Expiration
 					</span>
 				</label>
 
 				<div class="flex items-end flex-1 gap-4">
 					<input v-model="dates.passport_ex.dd" type="number" min="1" max="31" maxlength="2" placeholder="DD"
-						class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+						class="input w-full max-w-xs bg-white font-bold rounded-none border-black border-2 hover:-translate-y-1 focus:-translate-y-1 hover:shadow-neo-box focus:shadow-neo-box transition-all duration-150 ease-out focus:outline-none" />
 					<input v-model="dates.passport_ex.mm" type="number" min="1" max="12" maxlength="2" placeholder="MM"
-						class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+						class="input w-full max-w-xs bg-white font-bold rounded-none border-black border-2 hover:-translate-y-1 focus:-translate-y-1 hover:shadow-neo-box focus:shadow-neo-box transition-all duration-150 ease-out focus:outline-none" />
 					<input v-model="dates.passport_ex.yyyy" type="number" maxlength="4" placeholder="YYYY"
-						class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
+						class="input w-full max-w-xs bg-white font-bold rounded-none border-black border-2 hover:-translate-y-1 focus:-translate-y-1 hover:shadow-neo-box focus:shadow-neo-box transition-all duration-150 ease-out focus:outline-none" />
 				</div>
 			</div>
 			<!-- </template>

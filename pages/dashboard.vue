@@ -11,6 +11,7 @@
 	<div v-else class="__dashboard w-full h-full grid grid-cols-12 gap-1 grid-rows-15">
 	</div> -->
 	<div class="w-full h-full flex flex-col text-black">
+
 		<header class=" pt-1 w-fit text-black flex flex-col">
 			<div class="flex flex-col w-fit">
 				<progress class="progress progress-secondary w-full border-2 border-black rounded-none" :max="12"
@@ -25,16 +26,17 @@
 		</header>
 
 		<section class="flex-1 flex gap-5 pr-5 pb-[10px]">
-			<div class="flex flex-col w-full h-full">
+			<div class="flex flex-col w-full min-h-full">
+
 				<div class="flex w-full pb-2 font-semibold">
 					<section class="w-full text-black">Employee Username: {{ profile?.username }}</section>
 					<section class="w-full text-black">Employee Location: {{ profile?.location?.toUpperCase() }}</section>
 				</div>
 
-				<div class="flex w-full gap-4 h-full">
+				<div class="flex gap-4 flex-1">
 
 					<div
-						class="transition-all duration-100 ease-out hover:shadow-neo-box hover:-translate-y-1 flex-1 bg-white border-2 border-black hover:bg-purple-100 relative flex p-3">
+						class="transition-all duration-100 ease-out hover:shadow-neo-box hover:-translate-y-1 flex-1 bg-white border-2 border-black hover:bg-purple-100 relative flex p-3 min-h-full">
 						<div class="absolute top-4 left-4 border-2 border-black px-2 py-1 bg-white">
 							<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256">
 								<g fill="black">
@@ -117,7 +119,7 @@
 				class="transition-all duration-100 ease-out hover:shadow-neo-box hover:-translate-y-1 w-[400px] h-full border-2 border-black p-2 px-3 flex flex-col gap-2 bg-gold-200 relative">
 				<div class="absolute -top-7 text-sm font-bold uppercase left-0">Account Summary & Analysis</div>
 
-				<div class="bg-white border-2 border-black flex flex-1">
+				<div class="bg-white border-2 border-black flex flex-1 items-center pl-2">
 					<!-- icon -->
 					<div class="h-full aspect-square flex justify-center items-center">
 						<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
@@ -132,7 +134,7 @@
 					</div>
 				</div>
 
-				<div class="bg-white border-2 border-black flex flex-1">
+				<div class="bg-white border-2 border-black flex flex-1 items-center pl-2">
 					<!-- icon -->
 					<div class="h-full aspect-square flex justify-center items-center">
 						<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
@@ -147,7 +149,7 @@
 					</div>
 				</div>
 
-				<div class="bg-white border-2 border-black flex flex-1">
+				<div class="bg-white border-2 border-black flex flex-1 items-center pl-2">
 					<!-- icon -->
 					<div class="h-full aspect-square flex justify-center items-center">
 						<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 48 48">
@@ -184,7 +186,8 @@
 						</select>
 					</div>
 
-					<div class="px-3 items-center flex justify-between w-full border-t-2 border-x-2 bg-white border-black h-full">
+					<div
+						class="px-3 items-center flex justify-between w-full border-t-2 border-x-2 bg-purple-200 border-black h-full">
 						<span class="uppercase font-bold">#</span>
 						<span class="uppercase w-[200px] font-bold">Name</span>
 						<span class="uppercase font-bold">Created At</span>
@@ -196,7 +199,7 @@
 				<div class="bg-white flex-1 border-2 border-black max-h-[150px] flex flex-col overflow-y-auto px-4">
 
 					<div v-if="recent_req.length > 0"
-						:class="['w-full h-10 font-bold border-black flex justify-between items-center', i == 2 ? 'border-b-0' : 'border-b-2']"
+						:class="['w-full h-10 font-bold border-black flex justify-between items-center', i == recent_req.length - 1 ? 'border-b-0' : 'border-b-2']"
 						v-for="(req, i) in recent_req" :key="i">
 						<span class="font-bold">{{ i + 1 }}</span>
 						<p class="truncate w-[200px]">{{ req.fullName }}</p>

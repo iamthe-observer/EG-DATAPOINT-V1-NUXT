@@ -26,8 +26,8 @@
 						</svg>
 					</NuxtLink>
 
-					<NuxtLink :to="{ path: '/viewApplicants' }" class="__icons_container tooltip tooltip-primary z-20 tooltip-right"
-						data-tip="View Applicants">
+					<NuxtLink :to="{ path: '/viewApplicantsV2' }"
+						class="__icons_container tooltip tooltip-primary z-20 tooltip-right" data-tip="View Applicants">
 						<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256">
 							<g fill="currentColor">
 								<path

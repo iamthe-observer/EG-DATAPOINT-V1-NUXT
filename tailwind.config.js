@@ -62,6 +62,9 @@ module.exports = {
       fontFamily: {
         Urbanist: "Urbanist",
         SpaceMono: "Space Mono",
+        KumorOne: "Kumar One Outline",
+        Jura: "Jura",
+        Tourney: "Tourney",
       },
       boxShadow: {
         "neo-box": "8px 8px 0px #000",

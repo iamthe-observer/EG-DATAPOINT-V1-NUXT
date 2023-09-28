@@ -13,12 +13,12 @@
 		<TopBar />
 
 		<div class="flex-1 pt-3 flex justify-end">
-			<div class="bg-white w-full h-full border-2 border-black ml-7 relative ">
+			<div class="bg-white w-full h-full border-2 border-black ml-7 relative">
 				<SideNav />
-				<div class="w-full max-h-full pl-16">
-					<div class="w-full h-full bg-green-200 flex">
-						<slot></slot>
-					</div>
+				<div class="w-full min-h-full pl-16 relative flex">
+					<!-- <div class="w-full h-full flex relative"> -->
+					<slot></slot>
+					<!-- </div> -->
 				</div>
 			</div>
 		</div>
@@ -30,7 +30,7 @@
 		<div class="min-w-fit">
 			<navigation />
 		</div>
-		<div class="w-full h-full overflow-hidden">
+		<div id="def_container" class="w-full h-full overflow-hidden">
 			<slot></slot>
 		</div>
 	</div>

@@ -1,5 +1,3 @@
-import { UUID } from "crypto";
-
 export type FileWithAplType = File & { apl_type: string };
 export type _Null<T> = T | null;
 
