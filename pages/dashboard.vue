@@ -2,7 +2,7 @@
 	<div v-if="!useAppStore().is_mobile" class="__dashboard w-full h-full grid grid-cols-12 gap-1 grid-rows-15">
 		<!-- <div v-if="false" class="__dashboard w-full h-full grid grid-cols-12 gap-1 grid-rows-15"> -->
 		<HeroDash class="dash_item" />
-		<Calendar class="dash_item" />
+		<SideInfo class="dash_item" />
 		<UsersDash class="dash_item" />
 		<AplInfoDash class="dash_item" />
 		<MostRecentApls class="dash_item" />

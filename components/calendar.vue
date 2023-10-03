@@ -1,5 +1,5 @@
 <template>
-	<div class="__calendar col-span-3 row-span-15 px-2 flex flex-col items-center">
+	<div class="col-span-3 row-span-15 px-2 flex flex-col items-center">
 		<div
 			class="bg-neutral-800 dark:bg-neutral-50 w-full h-full rounded-xl flex flex-col items-center justify-between gap-2 px-0 pb-4">
 			<div class="flex flex-col items-center w-full min-h-1/2 px-4">
