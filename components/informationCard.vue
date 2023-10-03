@@ -1,10 +1,9 @@
 <template>
-	<p v-if="!edit_mode" class="flex flex-col text-white w-full h-fit rounded-xl bg-neutral-700 dark:text-neutral-900 dark:font-semibold dark:bg-neutral-200
-	dark:outline
-		dark:outline-2 dark:outline-neutral-400 dark:shadow-lg">
+	<p v-if="!edit_mode"
+		class="flex flex-col text-black rounded-none w-full bg-neutral-100 font-semibold outline outline-2 outline-black">
 		<span :class="[
-			'heading font-normal bg-neutral-900 dark:bg-neutral-400 dark:text-black',
-			edit_mode ? 'dark:text-accent text-secondary dark:bg-neutral-300' : 'text-neutral-400',
+			'heading font-normal bg-neutral-400',
+			edit_mode ? 'text-accent' : 'text-black',
 		]">
 			{{ heading }}
 		</span>
@@ -60,6 +59,6 @@ const value = computed({
 }
 
 .heading {
-	@apply w-full rounded-t-xl px-3 py-1 text-sm;
+	@apply w-full rounded-none border-b-2 border-black px-3 py-1 text-sm;
 }
 </style>

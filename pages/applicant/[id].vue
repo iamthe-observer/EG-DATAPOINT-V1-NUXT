@@ -5,13 +5,15 @@
 			<header
 				class="w-full min-h-fit bg-purple-500 dark:bg-primary pl-16 rounded-none border-b-2 border-black flex justify-between items-center p-5">
 
-				<span v-if="!edit_mode" class="text-3xl">Applicant Information
+				<span v-if="!edit_mode" class="text-3xl font-bold">Applicant Information
 					<br>
-					<span class="text-sm">Created At: {{ $formatDateWords(new Date(applicant.created_at!)) }}</span>
+					<span class="text-sm font-semibold">Created At: {{ $formatDateWords(new Date(applicant.created_at!)) }}</span>
 				</span>
 
-				<span v-if="!edit_mode" class="text-sm font-semibold text-center">{{ applicant.fullName ? applicant.fullName :
-					'Applicant' }}<br />By:
+				<span v-if="!edit_mode" class="text-sm font-bold text-center">
+					<span class="font-bold text-xl">{{ applicant.fullName ? applicant.fullName :
+						'Applicant' }}</span>
+					<br />By:
 					{{
 						creator
 					}}<br />Location:
@@ -26,7 +28,7 @@
 				<div
 					class="join join-vertical rounded-none text-black border-2 border-black hover:-translate-y-1 hover:shadow-neo-box transition- duration-150 ease-out bg-black">
 					<button v-if="edit_mode" onclick="my_modal_1.showModal()"
-						class="btn btn-sm rounded-none border-none text-black hover:text-green-500 dark:hover:text-green-200 join-item">
+						class="btn btn-sm rounded-none border-b-2 bg-green-200 border-black border-x-0 border-t-0 text-black hover:text-green-500 dark:hover:text-green-200 join-item">
 						<svg class="w-6 aspect-square stroke-green-500 dark:stroke-green-300" xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 24 24">
 							<path fill="none" stroke-dasharray="24" stroke-dashoffset="24" stroke-linecap="round"
@@ -37,7 +39,7 @@
 						Request
 					</button>
 					<button v-if="edit_mode" @click="handleClose"
-						class="btn btn-sm rounded-none border-none text-black hover:text-red-500 dark:hover:text-red-300 join-item">
+						class="btn btn-sm rounded-none border-t-1 bg-red-200 border-black border-x-0 border-b-0 text-black hover:text-red-500 dark:hover:text-red-300 join-item">
 						<svg xmlns="http://www.w3.org/2000/svg" class="w-6 aspect-square stroke-red-600 dark:stroke-red-400"
 							viewBox="0 0 24 24">
 							<path fill="none" stroke="" stroke-dasharray="12" stroke-dashoffset="12" stroke-linecap="round"
@@ -49,7 +51,7 @@
 					</button>
 
 					<button v-if="!edit_mode" @click="useViewAplStore().$patch(() => edit_mode = true)"
-						class="btn bg-blue-200 hover:bg-blue-400 border-none btn-sm rounded-none text-blue-400 hover:text-blue-200 join-item relative group flex items-center justify-start">
+						class="btn bg-blue-200 hover:bg-blue-400 border-x-0 border-t-0 border-b-2 border-black btn-sm rounded-none text-blue-400 hover:text-blue-200 join-item relative group flex items-center justify-start">
 						<svg xmlns="http://www.w3.org/2000/svg" class="w-6 aspect-square" viewBox="0 0 24 24">
 							<g fill="none" class="group-hover:stroke-blue-200 stroke-blue-400" stroke-linecap="round"
 								stroke-linejoin="round" stroke-width="2">
@@ -72,8 +74,9 @@
 						</svg>
 						Request Edit
 					</button>
+
 					<button v-if="!edit_mode" onclick="my_modal_2.showModal()"
-						class="btn bg-red-200 hover:bg-red-400 border-none btn-sm rounded-none text-red-400 hover:text-red-200 join-item relative group flex items-center justify-start">
+						class="btn bg-red-200 hover:bg-red-400 border-x-0 border-b-0 border-t-1 btn-sm rounded-none text-red-400 hover:text-red-200 join-item relative group flex items-center justify-start">
 						<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24">
 							<g fill="none" class="group-hover:stroke-red-200 stroke-red-400" stroke-linecap="round" stroke-width="2">
 								<path stroke-dasharray="20" stroke-dashoffset="20"
@@ -101,6 +104,82 @@
 			<div class="w-full h-full overflow-y-auto">
 				<ViewApplicantV2 />
 			</div>
+
+			<dialog id="my_modal_1" class="modal">
+				<form method="dialog" class="modal-box bg-white border-2 border-black rounded-none shadow-xl">
+					<h3 class="font-semibold text-lg text-black flex items-center gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+							<g stroke="#000" stroke-linecap="round" stroke-width="2">
+								<path fill="#dc1010" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
+									d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z">
+									<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0" />
+									<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3" />
+								</path>
+								<path fill="none" stroke-dasharray="8" stroke-dashoffset="8" d="M12 7V13">
+									<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="8;0" />
+								</path>
+							</g>
+							<circle cx="12" cy="17" r="1" fill="#000" fill-opacity="0">
+								<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1" />
+							</circle>
+						</svg>
+						Are you sure you want to send this request?
+					</h3>
+					<textarea v-model="request.body"
+						class="textarea textarea-bordered w-full font-bold focus:outline-none rounded-none bg-neutral-200 text-black border-none mt-3"
+						placeholder="What's your reason for editing?..."></textarea>
+					<p class="text-white font-semibold py-4 text-right text-sm dark:text-red-400">
+						Review and
+						cross-check your request
+						before sending!
+					</p>
+					<div class="modal-action">
+						<!-- if there is a button in form, it will close the modal -->
+						<button v-if="request.body"
+							class="btn btn-primary text-black border-2 border-black hover:border-2 hover:border-black rounded-none hover:shadow-neo-box hover:-translate-y-1 mr-2"
+							@click="handleEditSubmit">Submit</button>
+						<button @click="request.body = ''"
+							class="btn btn-error text-black border-2 border-black hover:border-2 hover:border-black rounded-none hover:shadow-neo-box hover:-translate-y-1">Close</button>
+					</div>
+				</form>
+			</dialog>
+
+			<dialog id="my_modal_2" class="modal">
+				<form method="dialog" class="modal-box bg-red-300 rounded-none border-black border-2 shadow-xl w-5/6 max-w-5xl">
+					<h3 class="text-lg text-black font-bold flex items-center gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+							<g stroke="#000" stroke-linecap="round" stroke-width="2">
+								<path fill="#dc1010" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
+									d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z">
+									<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0" />
+									<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3" />
+								</path>
+								<path fill="none" stroke-dasharray="8" stroke-dashoffset="8" d="M12 7V13">
+									<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="8;0" />
+								</path>
+							</g>
+							<circle cx="12" cy="17" r="1" fill="#000" fill-opacity="0">
+								<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1" />
+							</circle>
+						</svg>
+						Are you sure you want to send this request to delete the Applicant:<br /> <span class="text-bold">{{
+							applicant?.fullName }}</span>
+					</h3>
+					<textarea v-model="request.body"
+						class="textarea textarea-bordered w-full bg-red-400 rounded-none placeholder:text-black font-bold text-black border-none mt-3"
+						placeholder="What's your reason for editing?..."></textarea>
+					<p class="text-black font-bold py-4 text-right text-xs">Review and cross-check your request before sending!</p>
+					<div class="modal-action">
+						<!-- if there is a button in form, it will close the modal -->
+						<button @click="handleDeleteSubmit" v-if="request.body"
+							class="btn btn-primary text-black border-black border-2 hover:border-black hover:border-2 rounded-none mr-2 hover:shadow-neo-box hover:-translate-y-1">Submit</button>
+						<button @click="request.body = ''"
+							class="btn btn-error text-black border-black border-2 hover:border-black hover:border-2 rounded-none hover:shadow-neo-box hover:-translate-y-1">Close</button>
+					</div>
+				</form>
+			</dialog>
+
+
 
 		</div>
 	</div>

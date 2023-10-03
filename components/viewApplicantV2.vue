@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col p-5">
+	<div class="flex flex-col p-5 pl-16">
 		<!-- primary -->
 		<div class="flex gap-4">
 			<!-- image -->
@@ -66,7 +66,7 @@
 			<div class="grid grid-cols-3 gap-2 w-full h-fit">
 				<h2 class="col-span-full py-3 text-2xl font-bold flex justify-between items-center">
 					<span>Spouse Information</span>
-					<span v-if="!edit_mode" class="font-normal">{{
+					<span v-if="!edit_mode" class="font-bold">{{
 						`${apl.slastName} ${apl.sfirstName}
 											${apl.sotherName}`.trimEnd() }}
 					</span>
@@ -119,7 +119,7 @@
 				<div class="flex-1 grid grid-cols-2 gap-2 col-span-full h-fit">
 					<h2 class="col-span-full py-3 text-2xl font-bold flex justify-between items-center w-full">
 						<span>Ward #{{ ward.index! + 1 }}</span>
-						<span v-if="!edit_mode" class="font-normal">{{ `${ward.wlastName} ${ward.wfirstName}
+						<span v-if="!edit_mode" class="font-bold">{{ `${ward.wlastName} ${ward.wfirstName}
 													${ward.wotherName}`.trimEnd() }}
 						</span>
 						<div v-else class="flex gap-3 w-2/3">

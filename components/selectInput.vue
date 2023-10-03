@@ -1,7 +1,7 @@
 <template>
 	<div class="form-control w-full">
 		<label class="label">
-			<span class="label-text font-semibold text-neutral-500">
+			<span class="label-text font-semibold text-black">
 				<slot />
 			</span>
 		</label>
