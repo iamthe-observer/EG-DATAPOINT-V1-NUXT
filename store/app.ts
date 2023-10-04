@@ -40,6 +40,14 @@ export const useAppStore = defineStore("app", () => {
     "odorkor",
   ]);
 
+  const filter_alpha = ref(false);
+  const filter_recent = ref(true);
+  const filter_reverse = ref(false);
+  const filter_family = ref(false);
+  const filter_with_kids = ref(false);
+  const filter_with_spouse = ref(false);
+  const filter_single = ref(false);
+
   const price = computed(() => {
     const pp = prices.value;
     const if_sp = applicant.value.pmarital_status == "MARRIED";
@@ -381,5 +389,12 @@ export const useAppStore = defineStore("app", () => {
     reset,
     getPayments,
     getPayments_admin,
+    filter_alpha,
+    filter_recent,
+    filter_reverse,
+    filter_family,
+    filter_with_kids,
+    filter_with_spouse,
+    filter_single,
   };
 });

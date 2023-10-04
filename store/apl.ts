@@ -615,7 +615,27 @@ export const useAplStore = defineStore(
       request.value = empty_req.value;
     }
 
+    const typeOfApl = (
+      apl: Applicant,
+    ):
+      | "Family"
+      | "With Kids Only"
+      | "With Spouse Only"
+      | "Single"
+      | undefined => {
+      if (apl.pmarital_status == "MARRIED" && apl.children_number > 0) {
+        return "Family";
+      } else if (apl.pmarital_status == "MARRIED" && apl.children_number == 0) {
+        return "With Spouse Only";
+      } else if (apl.pmarital_status != "MARRIED" && apl.children_number > 0) {
+        return "With Kids Only";
+      } else if (apl.pmarital_status != "MARRIED" && apl.children_number == 0) {
+        return "Single";
+      }
+    };
+
     return {
+      typeOfApl,
       reset_data,
       vuelidate_err,
       empty_ward,

@@ -6,6 +6,7 @@
 		<div class="min-h-[80px] w-full"></div>
 		<!-- bottom -->
 
+		<span class="text-center font-semibold text-neutral-500">Found {{ search_results?.length }} results...</span>
 		<div class="flex-1 flex py-10 flex-col items-center gap-5">
 			<!-- results cards -->
 			<SearchResultsCard @recent-search="handleRecentSearch" v-for="(result, i) in search_results" :result="result!" />

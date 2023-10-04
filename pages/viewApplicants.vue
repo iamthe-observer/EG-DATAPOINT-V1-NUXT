@@ -35,6 +35,10 @@
 							filter_alpha = true
 							filter_recent = false
 							filter_reverse = false
+							filter_family = false
+							filter_with_kids = false
+							filter_with_spouse = false
+							filter_single = false
 							page_index = 1
 						}" :checked="filter_alpha" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
 							type="radio" name="options" aria-label="Alphabetic" />
@@ -42,6 +46,10 @@
 							filter_alpha = false
 							filter_recent = true
 							filter_reverse = false
+							filter_family = false
+							filter_with_kids = false
+							filter_with_spouse = false
+							filter_single = false
 							page_index = 1
 						}" :checked="filter_recent" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
 							type="radio" name="options" aria-label="Recency" />
@@ -49,9 +57,57 @@
 							filter_alpha = false
 							filter_recent = false
 							filter_reverse = true
+							filter_family = false
+							filter_with_kids = false
+							filter_with_spouse = false
+							filter_single = false
 							page_index = 1
 						}" :checked="filter_reverse" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
 							type="radio" name="options" aria-label="Reverse" />
+						<input @click="() => {
+							filter_alpha = false
+							filter_recent = false
+							filter_reverse = false
+							filter_family = true
+							filter_with_kids = false
+							filter_with_spouse = false
+							filter_single = false
+							page_index = 1
+						}" :checked="filter_reverse" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+							type="radio" name="options" aria-label="👨‍👩‍👦" />
+						<input @click="() => {
+							filter_alpha = false
+							filter_recent = false
+							filter_reverse = false
+							filter_family = false
+							filter_with_kids = false
+							filter_with_spouse = false
+							filter_single = true
+							page_index = 1
+						}" :checked="filter_reverse" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+							type="radio" name="options" aria-label="🧍🏾" />
+						<input @click="() => {
+							filter_alpha = false
+							filter_recent = false
+							filter_reverse = false
+							filter_family = false
+							filter_with_kids = true
+							filter_with_spouse = false
+							filter_single = false
+							page_index = 1
+						}" :checked="filter_reverse" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+							type="radio" name="options" aria-label="👶🏾" />
+						<input @click="() => {
+							filter_alpha = false
+							filter_recent = false
+							filter_reverse = false
+							filter_family = false
+							filter_with_kids = false
+							filter_with_spouse = true
+							filter_single = false
+							page_index = 1
+						}" :checked="filter_reverse" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+							type="radio" name="options" aria-label="👨‍👩" />
 					</div>
 
 					<select v-model="step"
@@ -543,7 +599,18 @@ import { useViewAplStore } from '@/store/viewApl';
 useTitle('EG Datapoint | View Applicants')
 
 const app_ = useAppStore()
-const { all_my_apls, total_apls, total_apls_ex } = storeToRefs(useAppStore())
+const {
+	all_my_apls,
+	total_apls,
+	total_apls_ex,
+	filter_alpha,
+	filter_recent,
+	filter_reverse,
+	filter_family,
+	filter_with_kids,
+	filter_with_spouse,
+	filter_single,
+} = storeToRefs(useAppStore())
 const { role, profiles, profile } = storeToRefs(useProfileStore())
 const page_index = ref(1)
 const step = ref(50)
@@ -581,19 +648,22 @@ function PrevPage(idx: number) {
 	scroll_container_admin.value!.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
-const filter_alpha = ref(false)
-const filter_recent = ref(true)
-const filter_reverse = ref(false)
-
 const order_alpha_apls = computed(() => sortAplsByName(all_my_apls.value).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
 const order_recency_apls = computed(() => useNuxtApp().$sortByRecency(all_my_apls.value).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
 const order_reverse_apls = computed(() => sortAplsByName(all_my_apls.value).reverse().slice((page_index.value * step.value) - step.value, page_index.value * step.value))
+const order_family_apls = computed(() => sortAplsByName(all_my_apls.value).filter(apl => apl.pmarital_status == 'MARRIED' && apl.wards.length > 0).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
+const order_single_apls = computed(() => sortAplsByName(all_my_apls.value).filter(apl => apl.pmarital_status == 'UNMARRIED' && apl.wards.length == 0).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
+const order_with_kids_apls = computed(() => sortAplsByName(all_my_apls.value).filter(apl => apl.pmarital_status == 'UNMARRIED' && apl.wards.length > 0).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
+const order_with_spouse_apls = computed(() => sortAplsByName(all_my_apls.value).filter(apl => apl.pmarital_status == 'MARRIED' && apl.wards.length == 0).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
 
 const _order_alpha_apls = computed(() => sortAplsByName(user_filtered_apls.value).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
-
 const _order_recency_apls = computed(() => useNuxtApp().$sortByRecency(user_filtered_apls.value).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
-
 const _order_reverse_apls = computed(() => sortAplsByName(user_filtered_apls.value).reverse().slice((page_index.value * step.value) - step.value, page_index.value * step.value))
+const _order_family_apls = computed(() => sortAplsByName(user_filtered_apls.value).filter(apl => apl.pmarital_status == 'MARRIED' && apl.wards.length > 0).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
+const _order_single_apls = computed(() => sortAplsByName(user_filtered_apls.value).filter(apl => apl.pmarital_status == 'UNMARRIED' && apl.wards.length == 0).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
+const _order_with_kids_apls = computed(() => sortAplsByName(user_filtered_apls.value).filter(apl => apl.pmarital_status == 'UNMARRIED' && apl.wards.length > 0).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
+const _order_with_spouse_apls = computed(() => sortAplsByName(user_filtered_apls.value).filter(apl => apl.pmarital_status == 'MARRIED' && apl.wards.length == 0).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
+
 
 const user_filtered_apls = computed(() => {
 	if (curr_user.value == 'all') {
@@ -607,12 +677,20 @@ const curr_filtered_apls = computed(() => {
 	if (filter_alpha.value) return order_alpha_apls.value
 	if (filter_recent.value) return order_recency_apls.value
 	if (filter_reverse.value) return order_reverse_apls.value
+	if (filter_family.value) return order_family_apls.value
+	if (filter_single.value) return order_single_apls.value
+	if (filter_with_kids.value) return order_with_kids_apls.value
+	if (filter_with_spouse.value) return order_with_spouse_apls.value
 })
 
 const _curr_filtered_apls = computed(() => {
 	if (filter_alpha.value) return _order_alpha_apls.value
 	if (filter_recent.value) return _order_recency_apls.value
 	if (filter_reverse.value) return _order_reverse_apls.value
+	if (filter_family.value) return _order_family_apls.value
+	if (filter_single.value) return _order_single_apls.value
+	if (filter_with_kids.value) return _order_with_kids_apls.value
+	if (filter_with_spouse.value) return _order_with_spouse_apls.value
 })
 
 function sortAplsByName(apls: Applicant[]): Applicant[] {
