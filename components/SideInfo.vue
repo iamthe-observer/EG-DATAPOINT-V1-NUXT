@@ -22,7 +22,6 @@
 			<div v-if="incomplete_apl_pics.length" class="w-full flex gap-2 items-center group cursor-pointer"
 				v-for="(_, i) in incomplete_apl_pics" :key="i"
 				@click="() => { $router.push(`/applicant/${_.apl.apl_id}`); useViewAplStore().setID(_.apl.apl_id!) }">
-				<span class="badge badge-accent">{{ i + 1 }}</span>
 				<span class="group-hover:text-neutral-400 w-full truncate">{{ _.apl.fullName }}</span>
 			</div>
 
