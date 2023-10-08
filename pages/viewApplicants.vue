@@ -131,6 +131,7 @@
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Phone Number</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Created</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Type</th>
+							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Registered</th>
 						</tr>
 					</thead>
 
@@ -199,8 +200,14 @@
 								</div>
 							</td>
 							<td>
-								<div class="">
+								<div class="text-center">
 									{{ typeOfApl(apl) }}
+								</div>
+							</td>
+							<td>
+								<div
+									:class="['w-6 aspect-square mx-auto rounded-full', apl.pconf_code ? 'bg-green-500' : 'bg-amber-500']">
+
 								</div>
 							</td>
 						</tr>
@@ -310,6 +317,12 @@
 							<td>
 								<div class="text-right">
 									{{ apl.location ? apl.location![0].toUpperCase() + apl.location?.substring(1) : '' }}
+								</div>
+							</td>
+							<td>
+								<div
+									:class="['w-6 aspect-square mx-auto rounded-full', apl.pconf_code ? 'bg-green-500' : 'bg-amber-500']">
+
 								</div>
 							</td>
 						</tr>
@@ -447,7 +460,7 @@
 				</div>
 			</header>
 
-			<div ref="scroll_container_admin" v-if="role && total_apls_ex?.length! > 0" id="style-1"
+			<div ref="scroll_container_admin" v-if="role && recent_apl_ex?.length! > 0" id="style-1"
 				class="overflow-x-auto overflow-Y-auto pb -3 px-2">
 				<table class="table relative">
 					<!-- head -->
@@ -456,12 +469,13 @@
 							<!-- <th class="font-semibold text-center dark:text-neutral-700 text-sm">Pos.</th> -->
 							<!-- <th class="font-semibold text-center dark:text-neutral-700 text-sm">Action</th> -->
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm" @dblclick="loadAplEx">Name {{ if_apls_ex
-								? total_apls_ex.length : '' }}</th>
+								? recent_apl_ex.length : '' }}</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Bio</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Phone Number</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Created</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Type</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Location</th>
+							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Registered</th>
 						</tr>
 					</thead>
 
@@ -469,7 +483,7 @@
 						<!-- row -->
 						<tr
 							@dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!); useViewAplStore().$patch({ if_applicant_ex: true }) }"
-							v-for="(apl, i) in total_apls_ex"
+							v-for="(apl, i) in recent_apl_ex"
 							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-black transition-all duration-300 ease-out dark:hover:bg-neutral-200">
 							<!-- <th class="font-normal">
 								{{ i + 1 }}
@@ -542,6 +556,11 @@
 									{{ apl.location ? apl.location![0].toUpperCase() + apl.location?.substring(1) : '' }}
 								</div>
 							</td>
+							<td>
+								<div
+									:class="['w-6 aspect-square mx-auto rounded-full', apl.pconf_code ? 'bg-green-500' : 'bg-amber-500']">
+								</div>
+							</td>
 						</tr>
 					</tbody>
 					<!-- foot -->
@@ -558,7 +577,7 @@
 				</table>
 			</div>
 
-			<div v-if="role && total_apls_ex?.length! == 0" class="w-full h-full flex flex-col items-center justify-center">
+			<div v-if="role && recent_apl_ex?.length! == 0" class="w-full h-full flex flex-col items-center justify-center">
 				<svg xmlns="http://www.w3.org/2000/svg" class="w-20 aspect-square" viewBox="0 0 24 24">
 					<g stroke="#888888" stroke-linecap="round" stroke-width="2">
 						<path fill="#888888" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
@@ -618,6 +637,10 @@ const curr_user = ref('all')
 const scroll_container = ref<HTMLDivElement>()
 const scroll_container_admin = ref<HTMLDivElement>()
 const if_apls_ex = ref(false)
+
+const recent_apl_ex = computed(() => {
+	return useNuxtApp().$sortByRecency(total_apls_ex.value)
+})
 
 
 const loadAplEx = async () => {

@@ -168,11 +168,11 @@ const curr_location = ref('all')
 
 // restricted location list for specific admins
 const locationz = computed(() => {
-	// if (profile.value?.location == 'madina' || profile.value?.email == 'topsquad3552@gmail.com') {
-	return locations.value
-	// } else {
-	// 	return locations.value.filter(location => location != 'madina')
-	// }
+	if (profile.value?.location == 'madina' || profile.value?.email == 'topsquad3552@gmail.com') {
+		return locations.value
+	} else {
+		return locations.value.filter(location => location != 'madina')
+	}
 })
 
 onBeforeMount(async () => {
@@ -185,19 +185,19 @@ onBeforeMount(async () => {
 })
 
 const daily_applicants = computed(() => {
-	// if (profile.value?.location == 'madina' || profile.value?.email == 'topsquad3552@gmail.com') {
-	return total_apls.value?.filter(
-		(apl) =>
-			useNuxtApp().$formatDate(new Date(apl.created_at!)) ==
-			useNuxtApp().$formatDate(date.value),
-	);
-	// } else {
-	// 	return total_apls.value?.filter(
-	// 		(apl) =>
-	// 			useNuxtApp().$formatDate(new Date(apl.created_at!)) ==
-	// 			useNuxtApp().$formatDate(date.value),
-	// 	).filter(apl => apl.location != 'madina');
-	// }
+	if (profile.value?.location == 'madina' || profile.value?.email == 'topsquad3552@gmail.com') {
+		return total_apls.value?.filter(
+			(apl) =>
+				useNuxtApp().$formatDate(new Date(apl.created_at!)) ==
+				useNuxtApp().$formatDate(date.value),
+		);
+	} else {
+		return total_apls.value?.filter(
+			(apl) =>
+				useNuxtApp().$formatDate(new Date(apl.created_at!)) ==
+				useNuxtApp().$formatDate(date.value),
+		).filter(apl => apl.location != 'madina');
+	}
 })
 
 const today_sales_admin = computed(() => {
@@ -233,8 +233,39 @@ const today_sales_admin = computed(() => {
 });
 
 const normal_users = computed(() => {
-	// if (profile.value?.location == 'madina' || profile.value?.email == 'topsquad3552@gmail.com') {
+	if (profile.value?.location == 'madina' || profile.value?.email == 'topsquad3552@gmail.com') {
 
+		if (curr_location.value !== 'all') {
+			return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
+				if (a.email < b.email) {
+					return -1;
+				}
+				if (a.email > b.email) {
+					return 1;
+				}
+				return 0;
+			})
+		} else {
+			return profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
+		}
+
+
+	} else {
+		if (curr_location.value !== 'all') {
+			return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
+				if (a.email < b.email) {
+					return -1;
+				}
+				if (a.email > b.email) {
+					return 1;
+				}
+				return 0;
+			})
+		} else {
+			return profiles.value.filter(user => user.location != 'madina').filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
+		}
+
+	}
 	if (curr_location.value !== 'all') {
 		return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
 			if (a.email < b.email) {
@@ -248,37 +279,6 @@ const normal_users = computed(() => {
 	} else {
 		return profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
 	}
-
-
-	// } else {
-	// 	if (curr_location.value !== 'all') {
-	// 		return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
-	// 			if (a.email < b.email) {
-	// 				return -1;
-	// 			}
-	// 			if (a.email > b.email) {
-	// 				return 1;
-	// 			}
-	// 			return 0;
-	// 		})
-	// 	} else {
-	// 		return profiles.value.filter(user => user.location != 'madina').filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
-	// 	}
-
-	// }
-	// if (curr_location.value !== 'all') {
-	// 	return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
-	// 		if (a.email < b.email) {
-	// 			return -1;
-	// 		}
-	// 		if (a.email > b.email) {
-	// 			return 1;
-	// 		}
-	// 		return 0;
-	// 	})
-	// } else {
-	// 	return profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
-	// }
 })
 
 function getUserSalesToday(id: string) {
@@ -406,7 +406,7 @@ function getTotalPaymentByDay(num: number) {
 	const numDaysAgo = new Date(today);
 	numDaysAgo.setDate(today.getDate() - num);
 
-	let totalPayments = total_apls.value.filter(apl => useNuxtApp().$formatDate(new Date(apl.created_at!)) == useNuxtApp().$formatDate(numDaysAgo)).map(apl => apl.totalPayment)
+	let totalPayments = total_apls.value.filter(x => x.location != 'madina').filter(apl => useNuxtApp().$formatDate(new Date(apl.created_at!)) == useNuxtApp().$formatDate(numDaysAgo)).map(apl => apl.totalPayment)
 
 	let sum = 0
 	for (let ii = 0; ii < totalPayments.length; ii++) {
@@ -568,15 +568,15 @@ const lineData = computed<ChartData<'line'>>(() => {
 	}
 })
 
-const pieData = computed<ChartData<'pie'>>(() => {
-	return {
-		labels: userNames.value,
-		datasets: [
-			{
-				data: numberOfAplsByUser.value,
-				backgroundColor: bgClrs.value,
-			},
-		],
-	}
-})
+// const pieData = computed<ChartData<'pie'>>(() => {
+// 	return {
+// 		labels: userNames.value,
+// 		datasets: [
+// 			{
+// 				data: numberOfAplsByUser.value,
+// 				backgroundColor: bgClrs.value,
+// 			},
+// 		],
+// 	}
+// })
 </script>
