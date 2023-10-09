@@ -2,16 +2,18 @@
 	<div class="col-span-3 row-span-15 px-2 flex flex-col items-center gap-5">
 		<!-- registered apls -->
 		<div
-			class="bg-neutral-800 dark:bg-neutral-50 w-full h-fit rounded-xl flex flex-col items-center justify-between gap-2 px-3 py-1 relative">
+			class="bg-neutral-800 dark:bg-neutral-50 w-full h-fit rounded-xl flex flex-col items-center justify-between gap-2 px-3 py-1 relative shadow-lg">
 			<h2 class="text-2xl flex justify-between w-full sticky top-0">
 				<span class="font-semibold text-neutral-500">Registered Apls</span>
-				<span class="font-semibold">{{ registered_apls.length }}/{{ all_my_apls.length }}</span>
+				<span v-if="!role" class="font-semibold">{{ registered_apls.length }}/{{ all_my_apls.length }}</span>
+				<span v-else class="font-semibold">{{ admin_registered_apls.length }}<span class="font-semibold text-neutral-400">
+						out of {{ total_apls.length }}</span></span>
 			</h2>
 		</div>
 
 		<!-- incomplete apls pics -->
 		<div
-			class="bg-neutral-800 dark:bg-neutral-50 w-full h-full rounded-xl flex flex-col items-center gap-4 px-3 py-3 relative overflow-y-auto"
+			class="bg-neutral-800 dark:bg-neutral-50 w-full h-full rounded-xl flex flex-col items-center gap-4 px-3 py-3 relative overflow-y-auto shadow-lg"
 			id="style-2">
 			<h2
 				class="text-2xl flex justify-between w-full sticky top-0 bg-neutral-900 dark:bg-neutral-200 rounded-lg px-2 py-1 shadow-lg">
@@ -45,37 +47,56 @@ import { useAppStore } from '@/store/app';
 import { useAplStore } from '@/store/apl'
 import { Applicant } from '@/interfaces/interfaces';
 import { useViewAplStore } from '@/store/viewApl';
+import { useProfileStore } from '@/store/profile'
 
 interface Paths {
 	[key: string]: string[]; // Or whatever type the values in the `paths` object should be
 }
 
 const appStore = useAppStore();
-const { all_my_apls } = storeToRefs(appStore);
+const { all_my_apls, total_apls } = storeToRefs(appStore);
+const { role } = storeToRefs(useProfileStore());
 
 const registered_apls = computed(() => {
 	return all_my_apls.value.filter((apl) => apl.pconf_code)
+});
+const admin_registered_apls = computed(() => {
+	return total_apls.value.filter((apl) => apl.pconf_code)
 });
 
 const incomplete_apl_pics = computed(() => {
 	const filtered: { apl: Applicant, type: string }[] = []
 
-	for (let ii = 0; ii < all_my_apls.value.length; ii++) {
-		const apl = all_my_apls.value[ii];
-		const type = useAplStore().typeOfApl(apl)
+	if (role.value) {
+		for (let ii = 0; ii < total_apls.value.length; ii++) {
+			const apl = total_apls.value[ii];
+			const type = useAplStore().typeOfApl(apl)
 
-		const val = ifPics(apl, type)
-		if (val) {
-			filtered.push(val)
+			const val = ifPics(apl, type)
+			if (val) {
+				filtered.push(val)
+			}
 		}
+
+		return filtered
+
+	} else {
+		for (let ii = 0; ii < all_my_apls.value.length; ii++) {
+			const apl = all_my_apls.value[ii];
+			const type = useAplStore().typeOfApl(apl)
+
+			const val = ifPics(apl, type)
+			if (val) {
+				filtered.push(val)
+			}
+		}
+
+		return filtered
+		// for (let ii = 0; ii < all_my_apls.value.length; ii++) {
+		// 	const apl = all_my_apls.value[ii];
+		// 	const paths: Paths = apl.aplImg_path
+		// }
 	}
-
-	return filtered
-	// for (let ii = 0; ii < all_my_apls.value.length; ii++) {
-	// 	const apl = all_my_apls.value[ii];
-	// 	const paths: Paths = apl.aplImg_path
-	// }
-
 })
 
 function hasUuid(apl: Applicant) {

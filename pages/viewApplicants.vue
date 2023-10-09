@@ -408,68 +408,31 @@
 				}})</span></h1>
 				<h1 v-else class="flex items-center gap-3 dark:text-neutral-50">
 					<span class="text-2xl whitespace-nowrap">
-						View All Applicants
+						View All Applicants_Ex
 					</span>
-					<span class="text-2xl">({{ total_apls.length }})</span>
-					<select v-model="curr_user"
-						class="select w-full select-sm rounded-full bg-[rgb(13,13,13)] dark:bg-neutral-50 dark:text-black">
-						<option selected value="all">All Users</option>
-						<option v-for="user in profiles" :value="user.id">{{ `${user.fullname || 'User'} (${total_apls.filter(apl =>
-							apl.user_id
-							==
-							user.id).length})` }}</option>
-					</select>
+					<span class="text-2xl">[ <span class="text-2xl text-green-500 dark:text-white">{{ total_apls_ex.filter(apl =>
+						apl.pconf_code).length }}</span> / <span class="text-2xl text-secondary dark:text-white">{{
+		total_apls_ex.length }}</span>
+						]</span>
 				</h1>
-
-				<div v-if="role ? total_apls.length > step : all_my_apls.length > step" class="join">
-					<button class="join-item btn btn-sm rounded-full btn-primary" @click="PrevPage(page_index)">«</button>
-					<button class="join-item btn btn-sm rounded-full btn-primary">Page {{ page_index }}</button>
-					<button class="join-item btn btn-sm rounded-full btn-primary" @click="NextPage()">»</button>
-				</div>
-
-				<div class="flex items-center gap-2">
-					<div class="join">
-						<input @click="() => {
-							filter_alpha = true
-							filter_recent = false
-							filter_reverse = false
-							page_index = 1
-						}" :checked="filter_alpha" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
-							type="radio" name="options" aria-label="Alphabetic" />
-						<input @click="() => {
-							filter_alpha = false
-							filter_recent = true
-							filter_reverse = false
-							page_index = 1
-						}" :checked="filter_recent" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
-							type="radio" name="options" aria-label="Recency" />
-						<input @click="() => {
-							filter_alpha = false
-							filter_recent = false
-							filter_reverse = true
-							page_index = 1
-						}" :checked="filter_reverse" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
-							type="radio" name="options" aria-label="Reverse" />
-					</div>
-
-					<select v-model="step"
-						class="select w-full select-xs rounded-full bg-[rgb(13,13,13)] dark:bg-neutral-50 dark:text-black">
-						<option value="50">50</option>
-						<option value="100">100</option>
-					</select>
-				</div>
 			</header>
 
-			<div ref="scroll_container_admin" v-if="role && recent_apl_ex?.length! > 0" id="style-1"
-				class="overflow-x-auto overflow-Y-auto pb -3 px-2">
-				<table class="table relative">
+			<div ref="scroll_container_admin" id="style-1" class="overflow-x-auto overflow-Y-auto pb-3 px-2">
+
+				<div class="w-full flex justify-center items-center p-2">
+					<input type="text"
+						class="w-full border text-center py-1 text-lg font-bold bg-neutral-900 text-white dark:bg-white dark:text-black shadow-md border-neutral-500 rounded-xl"
+						v-model=search>
+				</div>
+
+				<table v-if="role && sorted_apl_ex?.length! > 0" class="table relative">
 					<!-- head -->
 					<thead class="sticky top-0 backdrop-blur-lg border-none z-50">
 						<tr class="border-none z-50">
 							<!-- <th class="font-semibold text-center dark:text-neutral-700 text-sm">Pos.</th> -->
 							<!-- <th class="font-semibold text-center dark:text-neutral-700 text-sm">Action</th> -->
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm" @dblclick="loadAplEx">Name {{ if_apls_ex
-								? recent_apl_ex.length : '' }}</th>
+								? sorted_apl_ex.length : '' }}</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Bio</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Phone Number</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Created</th>
@@ -483,7 +446,7 @@
 						<!-- row -->
 						<tr
 							@dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!); useViewAplStore().$patch({ if_applicant_ex: true }) }"
-							v-for="(apl, i) in recent_apl_ex"
+							v-for="(apl, i) in sorted_apl_ex"
 							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-black transition-all duration-300 ease-out dark:hover:bg-neutral-200">
 							<!-- <th class="font-normal">
 								{{ i + 1 }}
@@ -577,7 +540,7 @@
 				</table>
 			</div>
 
-			<div v-if="role && recent_apl_ex?.length! == 0" class="w-full h-full flex flex-col items-center justify-center">
+			<div v-if="role && sorted_apl_ex?.length! == 0" class="w-full h-full flex flex-col items-center justify-center">
 				<svg xmlns="http://www.w3.org/2000/svg" class="w-20 aspect-square" viewBox="0 0 24 24">
 					<g stroke="#888888" stroke-linecap="round" stroke-width="2">
 						<path fill="#888888" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
@@ -637,9 +600,11 @@ const curr_user = ref('all')
 const scroll_container = ref<HTMLDivElement>()
 const scroll_container_admin = ref<HTMLDivElement>()
 const if_apls_ex = ref(false)
+const search = ref('')
 
-const recent_apl_ex = computed(() => {
-	return useNuxtApp().$sortByRecency(total_apls_ex.value)
+const sorted_apl_ex = computed(() => {
+	if (!search.value) return useNuxtApp().$sortByRecency(total_apls_ex.value)
+	return useNuxtApp().$sortByRecency(total_apls_ex.value).filter(apl => apl.fullName.includes(search.value.toUpperCase()))
 })
 
 
