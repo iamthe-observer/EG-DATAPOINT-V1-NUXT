@@ -34,26 +34,56 @@
 						<input @click="() => {
 							filter_alpha = true
 							filter_recent = false
-							filter_reverse = false
-							filter_family = false
-							filter_with_kids = false
-							filter_with_spouse = false
-							filter_single = false
+							filter_registered = false
+							filter_unregistered = false
+							// filter_reverse = false
+							// filter_family = false
+							// filter_with_kids = false
+							// filter_with_spouse = false
+							// filter_single = false
 							page_index = 1
 						}" :checked="filter_alpha" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
 							type="radio" name="options" aria-label="Alphabetic" />
 						<input @click="() => {
 							filter_alpha = false
 							filter_recent = true
-							filter_reverse = false
-							filter_family = false
-							filter_with_kids = false
-							filter_with_spouse = false
-							filter_single = false
+							filter_registered = false
+							filter_unregistered = false
+							// filter_reverse = false
+							// filter_family = false
+							// filter_with_kids = false
+							// filter_with_spouse = false
+							// filter_single = false
 							page_index = 1
 						}" :checked="filter_recent" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
 							type="radio" name="options" aria-label="Recency" />
 						<input @click="() => {
+							filter_alpha = false
+							filter_recent = false
+							filter_registered = true
+							filter_unregistered = false
+							// filter_reverse = false
+							// filter_family = false
+							// filter_with_kids = false
+							// filter_with_spouse = false
+							// filter_single = false
+							page_index = 1
+						}" :checked="filter_registered" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+							type="radio" name="options" aria-label="Registered" />
+						<input @click="() => {
+							filter_alpha = false
+							filter_recent = false
+							filter_registered = false
+							filter_unregistered = true
+							// filter_reverse = false
+							// filter_family = false
+							// filter_with_kids = false
+							// filter_with_spouse = false
+							// filter_single = false
+							page_index = 1
+						}" :checked="filter_unregistered" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+							type="radio" name="options" aria-label="Unregistered" />
+						<!-- <input @click="() => {
 							filter_alpha = false
 							filter_recent = false
 							filter_reverse = true
@@ -73,7 +103,7 @@
 							filter_with_spouse = false
 							filter_single = false
 							page_index = 1
-						}" :checked="filter_reverse" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+						}" :checked="filter_family" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
 							type="radio" name="options" aria-label="👨‍👩‍👦" />
 						<input @click="() => {
 							filter_alpha = false
@@ -84,7 +114,7 @@
 							filter_with_spouse = false
 							filter_single = true
 							page_index = 1
-						}" :checked="filter_reverse" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+						}" :checked="filter_single" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
 							type="radio" name="options" aria-label="🧍🏾" />
 						<input @click="() => {
 							filter_alpha = false
@@ -95,7 +125,7 @@
 							filter_with_spouse = false
 							filter_single = false
 							page_index = 1
-						}" :checked="filter_reverse" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+						}" :checked="filter_with_kids" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
 							type="radio" name="options" aria-label="👶🏾" />
 						<input @click="() => {
 							filter_alpha = false
@@ -106,8 +136,8 @@
 							filter_with_spouse = true
 							filter_single = false
 							page_index = 1
-						}" :checked="filter_reverse" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
-							type="radio" name="options" aria-label="👨‍👩" />
+						}" :checked="filter_with_spouse" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+							type="radio" name="options" aria-label="👨‍👩" /> -->
 					</div>
 
 					<select v-model="step"
@@ -592,6 +622,8 @@ const {
 	filter_with_kids,
 	filter_with_spouse,
 	filter_single,
+	filter_unregistered,
+	filter_registered,
 } = storeToRefs(useAppStore())
 const { role, profiles, profile } = storeToRefs(useProfileStore())
 const page_index = ref(1)
@@ -643,6 +675,8 @@ const order_family_apls = computed(() => sortAplsByName(all_my_apls.value).filte
 const order_single_apls = computed(() => sortAplsByName(all_my_apls.value).filter(apl => apl.pmarital_status == 'UNMARRIED' && apl.wards.length == 0).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
 const order_with_kids_apls = computed(() => sortAplsByName(all_my_apls.value).filter(apl => apl.pmarital_status == 'UNMARRIED' && apl.wards.length > 0).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
 const order_with_spouse_apls = computed(() => sortAplsByName(all_my_apls.value).filter(apl => apl.pmarital_status == 'MARRIED' && apl.wards.length == 0).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
+const order_registered_apls = computed(() => useNuxtApp().$sortByRecency(sortAplsByName(all_my_apls.value)).filter(apl => apl.pconf_code).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
+const order_unregistered_apls = computed(() => useNuxtApp().$sortByRecency(sortAplsByName(all_my_apls.value)).filter(apl => !apl.pconf_code).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
 
 const _order_alpha_apls = computed(() => sortAplsByName(user_filtered_apls.value).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
 const _order_recency_apls = computed(() => useNuxtApp().$sortByRecency(user_filtered_apls.value).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
@@ -651,6 +685,9 @@ const _order_family_apls = computed(() => sortAplsByName(user_filtered_apls.valu
 const _order_single_apls = computed(() => sortAplsByName(user_filtered_apls.value).filter(apl => apl.pmarital_status == 'UNMARRIED' && apl.wards.length == 0).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
 const _order_with_kids_apls = computed(() => sortAplsByName(user_filtered_apls.value).filter(apl => apl.pmarital_status == 'UNMARRIED' && apl.wards.length > 0).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
 const _order_with_spouse_apls = computed(() => sortAplsByName(user_filtered_apls.value).filter(apl => apl.pmarital_status == 'MARRIED' && apl.wards.length == 0).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
+const _order_registered_apls = computed(() => useNuxtApp().$sortByRecency(sortAplsByName(user_filtered_apls.value)).filter(apl => apl.pconf_code).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
+const _order_unregistered_apls = computed(() => useNuxtApp().$sortByRecency(sortAplsByName(user_filtered_apls.value)).filter(apl => !apl.pconf_code).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
+
 
 
 const user_filtered_apls = computed(() => {
@@ -662,6 +699,8 @@ const user_filtered_apls = computed(() => {
 })
 
 const curr_filtered_apls = computed(() => {
+	if (filter_registered.value) return order_registered_apls.value
+	if (filter_unregistered.value) return order_unregistered_apls.value
 	if (filter_alpha.value) return order_alpha_apls.value
 	if (filter_recent.value) return order_recency_apls.value
 	if (filter_reverse.value) return order_reverse_apls.value
@@ -672,6 +711,8 @@ const curr_filtered_apls = computed(() => {
 })
 
 const _curr_filtered_apls = computed(() => {
+	if (filter_registered.value) return _order_registered_apls.value
+	if (filter_unregistered.value) return _order_unregistered_apls.value
 	if (filter_alpha.value) return _order_alpha_apls.value
 	if (filter_recent.value) return _order_recency_apls.value
 	if (filter_reverse.value) return _order_reverse_apls.value

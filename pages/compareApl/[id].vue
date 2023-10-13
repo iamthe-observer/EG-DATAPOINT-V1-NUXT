@@ -8,6 +8,8 @@
 					<span class="text-xs text-neutral-400 dark:text-neutral-600">{{ request.body }}</span>
 				</p>
 
+				<span class="">{{ where_conf }}</span>
+
 				<span v-if="loading" class="loading loading-infinity loading-lg"></span>
 
 
@@ -430,6 +432,17 @@ const if_val = (val: string) => {
 	return false
 }
 
+const where_conf = computed(() => {
+	if (request.value.modified_apl?.pconf_code) {
+		return 'req'
+	} else if (apl?.pconf_code) {
+		return 'apl'
+	} else {
+		return 'none'
+	}
+
+})
+
 onMounted(() => {
 	if (!request.value.modified_apl) useNuxtApp().$router.push({ path: '/database' })
 	console.log(request.value.modified_apl?.wards);
@@ -472,12 +485,24 @@ async function approveDiscount(req: Requests) {
 }
 
 async function updateApplicant(req: Requests) {
-	let apl = req.modified_apl
+	let request = req.modified_apl
+	let code: string
+
+	if (request?.pconf_code) {
+		code = request?.pconf_code
+	} else if (apl?.pconf_code) {
+		code = apl?.pconf_code
+	} else {
+		code = ''
+	}
+
+	request!.pconf_code = code
+
 	try {
 		let { data, error } = await $SB
 			.from('applicants')
-			.update(apl)
-			.eq('apl_id', req.apl_id)
+			.update(request)
+			.eq('apl_id', request?.apl_id)
 			.select()
 		if (error) throw error
 		console.log(data);

@@ -47,6 +47,8 @@ export const useAppStore = defineStore("app", () => {
   const filter_with_kids = ref(false);
   const filter_with_spouse = ref(false);
   const filter_single = ref(false);
+  const filter_registered = ref(false);
+  const filter_unregistered = ref(false);
 
   const price = computed(() => {
     const pp = prices.value;
@@ -396,5 +398,7 @@ export const useAppStore = defineStore("app", () => {
     filter_with_kids,
     filter_with_spouse,
     filter_single,
+    filter_unregistered,
+    filter_registered,
   };
 });
