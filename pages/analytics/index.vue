@@ -11,9 +11,11 @@
 
 				<DatePicker dark :color="'purple'" is-dark v-model="date" mode="date">
 					<template #default="{ togglePopover }">
-						<span @click="togglePopover"
-							class="text-2xl font-bold px-2 py-1 dark:hover:bg-neutral-300 hover:text-accent bg-neutral-700 w-full text-center hover:bg-neutral-900 rounded-xl transition-all duration-200 ease-in-out cursor-pointer">{{
-								$formatDateWords(date!) }}</span>
+						<div class="w-full px-10 flex">
+							<span @click="togglePopover"
+								class="text-2xl font-bold px-2 py-1 dark:hover:bg-neutral-300 hover:text-accent bg-neutral-700 min-w-full text-center hover:bg-neutral-900 rounded-xl transition-all mx-auto duration-200 ease-in-out cursor-pointer">{{
+									$formatDateWords(date!) }}</span>
+						</div>
 					</template>
 				</DatePicker>
 
@@ -123,12 +125,11 @@
 					useViewAplStore().setUSER(user.id)
 					$router.push(`/analytics/${user.id}_${user.fullname}`)
 				}" v-for="user in normal_users" :key="user.id"
-					class="col-span-1 bg-neutral-900 dark:bg-neutral-50 dark:hover:bg-neutral-200 cursor-pointer p-3 dark:shadow-xl rounded-xl flex items-center hover:scale-105 transition-all duration-100 ease-out hover:bg-neutral-00">
+					:class="['col-span-1 dark:hover:bg-neutral-200 cursor-pointer p-3 shadow-xl rounded-xl flex items-center transition-all duration-100 ease-out', getUserSalesToday(user.id)[1] > 0 ? 'bg-green-900 dark:bg-green-400' : 'bg-neutral-900 dark:bg-neutral-50']">
 					<div class="avatar">
 						<div class="w-24 mask mask-square">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-								<path fill="#888888"
-									class="group-hover:fill-white transition-all duration-300 ease-out group-hover:drop-shadow-lg"
+								<path fill="#888888" class="dark:fill-neutral-700"
 									d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 16H7v-.24C8.42 17.62 10.16 17 12 17s3.58.62 5 1.76V19zm2-1.14C17.2 16.09 14.73 15 12 15s-5.2 1.09-7 2.86V5h14v12.86zM12 13c1.93 0 3.5-1.57 3.5-3.5S13.93 6 12 6S8.5 7.57 8.5 9.5S10.07 13 12 13zm0-5c.83 0 1.5.67 1.5 1.5S12.83 11 12 11s-1.5-.67-1.5-1.5S11.17 8 12 8z" />
 							</svg>
 						</div>
@@ -136,11 +137,14 @@
 
 					<div class="flex flex-col">
 						<span class="text-lg font-bold">{{ user.fullname }}</span>
-						<span class="text-sm text-neutral-500 dark:text-neutral-700">Sales: GHC {{ getUserSalesToday(user.id)[0]
+						<span class="text-sm text-neutral-200 dark:text-neutral-700 dark:font-bold">Sales: GHC {{
+							getUserSalesToday(user.id)[0]
 						}}</span>
-						<span class="text-sm text-neutral-500 dark:text-neutral-700">Entries: {{ getUserSalesToday(user.id)[1]
+						<span class="text-sm text-neutral-200 dark:text-neutral-700 dark:font-bold">Entries: {{
+							getUserSalesToday(user.id)[1]
 						}}</span>
-						<span class="text-sm text-neutral-500 dark:text-neutral-700">Location: {{ user.location![0].toUpperCase() +
+						<span class="text-sm text-neutral-200 dark:text-neutral-700 dark:font-bold">Location: {{
+							user.location![0].toUpperCase() +
 							user.location?.substring(1) }}</span>
 					</div>
 				</div>
@@ -233,7 +237,7 @@ const today_sales_admin = computed(() => {
 });
 
 const normal_users = computed(() => {
-	if (profile.value?.location == 'madina' || profile.value?.email == 'topsquad3552@gmail.com') {
+	if (profile.value?.email == 'topsquad3552@gmail.com') {
 
 		if (curr_location.value !== 'all') {
 			return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
@@ -249,6 +253,22 @@ const normal_users = computed(() => {
 			return profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
 		}
 
+	}
+	else if (profile.value?.email == 'elizabethlarbi1999@gmail.com') {
+
+		if (curr_location.value !== 'all') {
+			return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
+				if (a.email < b.email) {
+					return -1;
+				}
+				if (a.email > b.email) {
+					return 1;
+				}
+				return 0;
+			})
+		} else {
+			return profiles.value.filter(user => !user.role && user.fullname != null).filter(user => user.email != 'vinocharles419@gmail.com').sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
+		}
 
 	} else {
 		if (curr_location.value !== 'all') {
@@ -262,23 +282,23 @@ const normal_users = computed(() => {
 				return 0;
 			})
 		} else {
-			return profiles.value.filter(user => user.location != 'madina').filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
+			return profiles.value.filter(user => user.location != 'madina').filter(user => user.email != 'vinocharles419@gmail.com').filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
 		}
 
 	}
-	if (curr_location.value !== 'all') {
-		return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
-			if (a.email < b.email) {
-				return -1;
-			}
-			if (a.email > b.email) {
-				return 1;
-			}
-			return 0;
-		})
-	} else {
-		return profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
-	}
+	// if (curr_location.value !== 'all') {
+	// 	return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
+	// 		if (a.email < b.email) {
+	// 			return -1;
+	// 		}
+	// 		if (a.email > b.email) {
+	// 			return 1;
+	// 		}
+	// 		return 0;
+	// 	})
+	// } else {
+	// 	return profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
+	// }
 })
 
 function getUserSalesToday(id: string) {
@@ -335,38 +355,30 @@ const totalSales = computed(() => {
 })
 
 const userNames = computed(() => {
-	return profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; }).map(user => {
-		if (!user.fullname) return 'User'
-		return user.fullname
-	})
-})
-
-const numberOfAplsByUser = computed(() => {
-	// let totals: { x: string, y: number }[] = []
-	let totals: number[] = []
-
-	const PROFILES = profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
-
-	for (let ii = 0; ii < PROFILES.length; ii++) {
-		const user = PROFILES[ii];
-
-		let aplsByDay = total_apls.value.filter(apl => apl.user_id == user.id)
-		// let aplsByDay = total_apls.value.filter(apl => apl.user_id == user.id).filter(apl => FD(new Date(apl.created_at!)) == FD(new Date(date.value!)))
-
-		totals.push(aplsByDay.length)
-		// return totals.push({ x: user.fullname!, y: aplsByDay.length })
+	if (profile.value?.email == 'topsquad3552@gmail.com') {
+		return profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; }).map(user => {
+			if (!user.fullname) return 'User'
+			return user.fullname
+		})
+	} else {
+		return profiles.value.filter(user => !user.role && user.fullname != null).filter(user => user.email != 'vinocharles419@gmail.com').sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; }).map(user => {
+			if (!user.fullname) return 'User'
+			return user.fullname
+		})
 	}
-
-	// console.log(totals);
-
-	return totals
 })
 
 const amountOfAplsByUser = computed(() => {
 	// let totals: { x: string, y: number }[] = []
 	let amount: number[] = []
 
-	const PROFILES = profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
+	const PROFILES = profiles.value.filter(user => !user.role && user.fullname != null).filter(user => {
+		if (profile.value?.email != 'topsquad3552@gmail.com') {
+			return user.email != 'vinocharles419@gmail.com'
+		} else {
+			return user
+		}
+	}).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
 
 	for (let ii = 0; ii < PROFILES.length; ii++) {
 		const user = PROFILES[ii];
@@ -508,41 +520,12 @@ const barOptions = ref<ChartOptions<'bar'>>({
 	},
 });
 
-const pieOptions = ref<ChartOptions<'bar'>>({
-	responsive: true,
-	// onClick: (ctx, el) => {
-	// 	if (el.length > 0) {
-	// 		let index = el[0].index
-	// 		const user = profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })[index]
-
-	// 		console.log(user.id, user.fullname);
-
-	// 		useViewAplStore().setUSER(user.id)
-	// 		useNuxtApp().$router.push(`/analytics/${user.id}_${user.fullname}`)
-	// 	}
-	// },
-	plugins: {
-		legend: {
-			display: false,
-			position: 'bottom'
-		},
-		title: {
-			position: 'top',
-			display: true,
-			text: 'Total Applicants Per User',
-		},
-		tooltip: {
-			enabled: true
-		}
-	},
-});
-
 const barData = computed<ChartData<'bar'>>(() => {
 	return {
 		labels: userNames.value,
 		datasets: [
 			{
-				label: 'Applicants',
+				label: 'Sales',
 				type: 'bar',
 				borderRadius: 10,
 				data: amountOfAplsByUser.value,
@@ -568,15 +551,4 @@ const lineData = computed<ChartData<'line'>>(() => {
 	}
 })
 
-// const pieData = computed<ChartData<'pie'>>(() => {
-// 	return {
-// 		labels: userNames.value,
-// 		datasets: [
-// 			{
-// 				data: numberOfAplsByUser.value,
-// 				backgroundColor: bgClrs.value,
-// 			},
-// 		],
-// 	}
-// })
 </script>

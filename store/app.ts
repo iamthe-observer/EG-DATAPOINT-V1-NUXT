@@ -208,6 +208,14 @@ export const useAppStore = defineStore("app", () => {
     );
   });
 
+  const total_daily_applicants_ex = computed(() => {
+    return total_apls_ex.value?.filter(
+      (apl) =>
+        useNuxtApp().$formatDate(new Date(apl.created_at!)) ==
+        useNuxtApp().$formatDate(new Date()),
+    );
+  });
+
   const today_sales = computed(() => {
     if (total_daily_applicants.value.length > 0) {
       let sum = 0;
@@ -237,6 +245,22 @@ export const useAppStore = defineStore("app", () => {
       return 0;
     }
   });
+
+  const today_sales_ex = computed(() => {
+    if (total_daily_applicants_ex.value.length > 0) {
+      let sum = 0;
+      for (let i = 0; i < total_daily_applicants_ex.value!.length; i++) {
+        const payment = total_daily_applicants_ex.value![i].totalPayment;
+        if (!isNaN(payment)) {
+          sum += payment;
+        }
+      }
+      return sum;
+    } else {
+      return 0;
+    }
+  });
+
   const yesterday_sales = computed(() => {
     let yesterday_apls = all_my_apls.value.filter(
       (apl) =>
@@ -377,6 +401,7 @@ export const useAppStore = defineStore("app", () => {
     prices,
     price,
     today_sales,
+    today_sales_ex,
     today_sales_admin,
     perc_compared_to_yesterday,
     perc_compared_to_yesterday_admin,

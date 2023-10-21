@@ -443,7 +443,8 @@
 					<span class="text-2xl">[ <span class="text-2xl text-green-500 dark:text-white">{{ total_apls_ex.filter(apl =>
 						apl.pconf_code).length }}</span> / <span class="text-2xl text-secondary dark:text-white">{{
 		total_apls_ex.length }}</span>
-						]</span>
+						]</span> ||
+					<span class="text-2xl">GHC {{ today_sales_ex }}</span>
 				</h1>
 			</header>
 
@@ -615,6 +616,7 @@ const {
 	all_my_apls,
 	total_apls,
 	total_apls_ex,
+	today_sales_ex,
 	filter_alpha,
 	filter_recent,
 	filter_reverse,

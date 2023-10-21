@@ -350,8 +350,9 @@ export const useAplStore = defineStore(
 
       // console.log(pricer, price);
 
-      if (!profile.value?.role) applicant.value.totalPayment = price;
-      if (profile.value?.role) applicant.value.totalPayment = 0;
+      applicant.value.totalPayment = price;
+      // if (!profile.value?.role) applicant.value.totalPayment = price;
+      // if (profile.value?.role) applicant.value.totalPayment = 0;
 
       if (applicant_type.value == "spouse only") {
         let if_spouse = await validate(spouse_only_rules, applicant.value);
