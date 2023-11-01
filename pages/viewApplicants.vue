@@ -446,6 +446,29 @@
 						]</span> ||
 					<span class="text-2xl">GHC {{ today_sales_ex }}</span>
 				</h1>
+
+				<div class="flex items-center gap-2">
+					<div class="join">
+						<input @click="() => {
+							_filter_recent = true
+							ex_registered = false
+							_filter_unregistered = false
+						}" :checked="_filter_recent" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+							type="radio" name="options" aria-label="Recency" />
+						<input @click="() => {
+							_filter_recent = false
+							ex_registered = true
+							_filter_unregistered = false
+						}" :checked="ex_registered" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+							type="radio" name="options" aria-label="Registered" />
+						<input @click="() => {
+							_filter_recent = false
+							ex_registered = false
+							_filter_unregistered = true
+						}" :checked="_filter_unregistered" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+							type="radio" name="options" aria-label="Unregistered" />
+					</div>
+				</div>
 			</header>
 
 			<div ref="scroll_container_admin" id="style-1" class="overflow-x-auto overflow-Y-auto pb-3 px-2">
@@ -456,14 +479,14 @@
 						v-model=search>
 				</div>
 
-				<table v-if="role && sorted_apl_ex?.length! > 0" class="table relative">
+				<table v-if="role && apls_ex?.length! > 0" class="table relative">
 					<!-- head -->
 					<thead class="sticky top-0 backdrop-blur-lg border-none z-50">
 						<tr class="border-none z-50">
 							<!-- <th class="font-semibold text-center dark:text-neutral-700 text-sm">Pos.</th> -->
 							<!-- <th class="font-semibold text-center dark:text-neutral-700 text-sm">Action</th> -->
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm" @dblclick="loadAplEx">Name {{ if_apls_ex
-								? sorted_apl_ex.length : '' }}</th>
+								? apls_ex.length : '' }}</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Bio</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Phone Number</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Created</th>
@@ -477,27 +500,8 @@
 						<!-- row -->
 						<tr
 							@dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!); useViewAplStore().$patch({ if_applicant_ex: true }) }"
-							v-for="(apl, i) in sorted_apl_ex"
+							v-for="(apl, i) in apls_ex"
 							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-black transition-all duration-300 ease-out dark:hover:bg-neutral-200">
-							<!-- <th class="font-normal">
-								{{ i + 1 }}
-							</th> -->
-							<!-- <th>
-								<div class="dropdown dropdown-right">
-									<label tabindex="0"
-										class="btn btn-xs dark:border-none dark:text-neutral-900 dark:bg-white rounded-full m-1 btn-circle"><svg
-											class="w-4 aspect-square" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-											<path fill="#888888"
-												d="M4.957 5a1 1 0 0 0-.821 1.571l2.633 3.784a1.5 1.5 0 0 0 2.462 0l2.633-3.784A1 1 0 0 0 11.043 5H4.957Z" />
-										</svg></label>
-									<ul tabindex="0"
-										class="dropdown-content dark:bg-white dark:border-2 dark:border-neutral-300 dark:font-semibold dark:text-neutral-900 z-[100] menu p-1 shadow bg-base-100 rounded-lg w-52 font-normal">
-										<li @click="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
-											class="hover:bg-accent hover:text-black rounded-lg"><a>View</a></li>
-										<li class="hover:bg-accent hover:text-black rounded-lg"><a>Request Delete</a></li>
-									</ul>
-								</div>
-							</th> -->
 							<td>
 								<div class="flex items-center space-x-3">
 									<div>
@@ -569,9 +573,10 @@
 					</tfoot>
 
 				</table>
+
 			</div>
 
-			<div v-if="role && sorted_apl_ex?.length! == 0" class="w-full h-full flex flex-col items-center justify-center">
+			<div v-if="role && apls_ex?.length! == 0" class="w-full h-full flex flex-col items-center justify-center">
 				<svg xmlns="http://www.w3.org/2000/svg" class="w-20 aspect-square" viewBox="0 0 24 24">
 					<g stroke="#888888" stroke-linecap="round" stroke-width="2">
 						<path fill="#888888" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
@@ -618,14 +623,17 @@ const {
 	total_apls_ex,
 	today_sales_ex,
 	filter_alpha,
-	filter_recent,
 	filter_reverse,
 	filter_family,
 	filter_with_kids,
 	filter_with_spouse,
 	filter_single,
+	filter_recent,
 	filter_unregistered,
 	filter_registered,
+	_filter_recent,
+	_filter_unregistered,
+	_filter_registered: ex_registered,
 } = storeToRefs(useAppStore())
 const { role, profiles, profile } = storeToRefs(useProfileStore())
 const page_index = ref(1)
@@ -636,8 +644,23 @@ const scroll_container_admin = ref<HTMLDivElement>()
 const if_apls_ex = ref(false)
 const search = ref('')
 
-const sorted_apl_ex = computed(() => {
-	if (!search.value) return useNuxtApp().$sortByRecency(total_apls_ex.value)
+const apls_ex = computed(() => {
+	if (search.value) return useNuxtApp().$sortByRecency(total_apls_ex.value).filter(apl => apl.fullName.includes(search.value.toUpperCase()))
+	let with_code = useNuxtApp().$sortByRecency(total_apls_ex.value).filter(apl => apl.pconf_code)
+	let no_code = useNuxtApp().$sortByRecency(total_apls_ex.value).filter(apl => !apl.pconf_code)
+	return [...no_code, ...with_code,]
+})
+
+const sorted_apl_ex_rec = computed(() => {
+	if (!search.value) return useNuxtApp().$sortByRecency(total_apls.value)
+	return useNuxtApp().$sortByRecency(total_apls_ex.value).filter(apl => apl.fullName.includes(search.value.toUpperCase()))
+})
+const sorted_apl_ex_reg = computed(() => {
+	if (!search.value) return useNuxtApp().$sortByRecency(total_apls.value).filter(apl => apl.pconf_code)
+	return useNuxtApp().$sortByRecency(total_apls_ex.value).filter(apl => apl.fullName.includes(search.value.toUpperCase()))
+})
+const sorted_apl_ex_unreg = computed(() => {
+	if (!search.value) return useNuxtApp().$sortByRecency(total_apls.value).filter(apl => !apl.pconf_code)
 	return useNuxtApp().$sortByRecency(total_apls_ex.value).filter(apl => apl.fullName.includes(search.value.toUpperCase()))
 })
 
@@ -671,14 +694,24 @@ function PrevPage(idx: number) {
 }
 
 const order_alpha_apls = computed(() => sortAplsByName(all_my_apls.value).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
-const order_recency_apls = computed(() => useNuxtApp().$sortByRecency(all_my_apls.value).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
 const order_reverse_apls = computed(() => sortAplsByName(all_my_apls.value).reverse().slice((page_index.value * step.value) - step.value, page_index.value * step.value))
 const order_family_apls = computed(() => sortAplsByName(all_my_apls.value).filter(apl => apl.pmarital_status == 'MARRIED' && apl.wards.length > 0).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
 const order_single_apls = computed(() => sortAplsByName(all_my_apls.value).filter(apl => apl.pmarital_status == 'UNMARRIED' && apl.wards.length == 0).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
 const order_with_kids_apls = computed(() => sortAplsByName(all_my_apls.value).filter(apl => apl.pmarital_status == 'UNMARRIED' && apl.wards.length > 0).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
 const order_with_spouse_apls = computed(() => sortAplsByName(all_my_apls.value).filter(apl => apl.pmarital_status == 'MARRIED' && apl.wards.length == 0).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
+const order_recency_apls = computed(() => useNuxtApp().$sortByRecency(all_my_apls.value).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
 const order_registered_apls = computed(() => useNuxtApp().$sortByRecency(sortAplsByName(all_my_apls.value)).filter(apl => apl.pconf_code).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
 const order_unregistered_apls = computed(() => useNuxtApp().$sortByRecency(sortAplsByName(all_my_apls.value)).filter(apl => !apl.pconf_code).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
+
+
+
+
+// const ex_order_recency_apls = computed(() => useNuxtApp().$sortByRecency(sorted_apl_ex.value))
+// const ex_order_registered_apls = computed(() => useNuxtApp().$sortByRecency(sorted_apl_ex.value).filter(apl => apl.pconf_code))
+// const ex_order_unregistered_apls = computed(() => useNuxtApp().$sortByRecency(sorted_apl_ex.value).filter(apl => !apl.pconf_code))
+
+
+
 
 const _order_alpha_apls = computed(() => sortAplsByName(user_filtered_apls.value).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
 const _order_recency_apls = computed(() => useNuxtApp().$sortByRecency(user_filtered_apls.value).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
@@ -689,8 +722,6 @@ const _order_with_kids_apls = computed(() => sortAplsByName(user_filtered_apls.v
 const _order_with_spouse_apls = computed(() => sortAplsByName(user_filtered_apls.value).filter(apl => apl.pmarital_status == 'MARRIED' && apl.wards.length == 0).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
 const _order_registered_apls = computed(() => useNuxtApp().$sortByRecency(sortAplsByName(user_filtered_apls.value)).filter(apl => apl.pconf_code).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
 const _order_unregistered_apls = computed(() => useNuxtApp().$sortByRecency(sortAplsByName(user_filtered_apls.value)).filter(apl => !apl.pconf_code).slice((page_index.value * step.value) - step.value, page_index.value * step.value))
-
-
 
 const user_filtered_apls = computed(() => {
 	if (curr_user.value == 'all') {

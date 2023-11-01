@@ -41,14 +41,17 @@ export const useAppStore = defineStore("app", () => {
   ]);
 
   const filter_alpha = ref(false);
-  const filter_recent = ref(true);
   const filter_reverse = ref(false);
   const filter_family = ref(false);
   const filter_with_kids = ref(false);
   const filter_with_spouse = ref(false);
   const filter_single = ref(false);
+  const filter_recent = ref(true);
   const filter_registered = ref(false);
   const filter_unregistered = ref(false);
+  const _filter_recent = ref(true);
+  const _filter_registered = ref(false);
+  const _filter_unregistered = ref(false);
 
   const price = computed(() => {
     const pp = prices.value;
@@ -417,13 +420,16 @@ export const useAppStore = defineStore("app", () => {
     getPayments,
     getPayments_admin,
     filter_alpha,
-    filter_recent,
     filter_reverse,
     filter_family,
     filter_with_kids,
     filter_with_spouse,
     filter_single,
+    filter_recent,
     filter_unregistered,
     filter_registered,
+    _filter_recent,
+    _filter_unregistered,
+    _filter_registered,
   };
 });

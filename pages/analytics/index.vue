@@ -525,7 +525,7 @@ const barData = computed<ChartData<'bar'>>(() => {
 		labels: userNames.value,
 		datasets: [
 			{
-				label: 'Sales',
+				label: 'Sales ',
 				type: 'bar',
 				borderRadius: 10,
 				data: amountOfAplsByUser.value,
