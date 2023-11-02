@@ -16,10 +16,16 @@
 					<select v-model="curr_user"
 						class="select w-full select-sm rounded-full bg-[rgb(13,13,13)] dark:bg-neutral-50 dark:text-black">
 						<option selected value="all">All Users</option>
-						<option v-for="user in profiles" :value="user.id">{{ `${user.fullname || 'User'} (${total_apls.filter(apl =>
+						<option v-for="user in profiles" :value="user.id">{{ `${user.fullname || 'User'} ${total_apls.filter(apl =>
 							apl.user_id
 							==
-							user.id).length})` }}</option>
+							user.id).filter(apl => apl.pconf_code).length} / ${total_apls.filter(apl =>
+								apl.user_id
+								==
+								user.id).length}  => ${total_apls.filter(apl =>
+									apl.user_id
+									==
+									user.id).filter(apl => !apl.pconf_code).length}` }}</option>
 					</select>
 				</h1>
 
