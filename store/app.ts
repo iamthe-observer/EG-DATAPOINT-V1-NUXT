@@ -173,8 +173,15 @@ export const useAppStore = defineStore("app", () => {
         .order("id", { ascending: true })
         .returns<{ id: number; adult: number; child: number }[]>();
       if (error) throw error;
-
-      if (
+      if (user![0].location == "manet" || user![0].location == "accra") {
+        let _p: { id: number; adult: number; child: number } = {
+          id: 99,
+          adult: 35,
+          child: 30,
+        };
+        prices.value = _p;
+        return _p;
+      } else if (
         user![0].location == "madina" ||
         user![0].location == "ablekuma" ||
         user![0].location == "odorkor"
