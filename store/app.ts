@@ -173,14 +173,10 @@ export const useAppStore = defineStore("app", () => {
         .order("id", { ascending: true })
         .returns<{ id: number; adult: number; child: number }[]>();
       if (error) throw error;
-      if (user![0].location == "manet" || user![0].location == "accra") {
-        let _p: { id: number; adult: number; child: number } = {
-          id: 99,
-          adult: 35,
-          child: 30,
-        };
-        prices.value = _p;
-        return _p;
+
+      if (user![0].location == "circle" || user![0].location == "kaneshie") {
+        prices.value = data![0];
+        return data![0];
       } else if (
         user![0].location == "madina" ||
         user![0].location == "ablekuma" ||
@@ -194,8 +190,13 @@ export const useAppStore = defineStore("app", () => {
         return data![2];
         // console.log(prices.value);
       } else {
-        prices.value = data![0];
-        return data![0];
+        let _p: { id: number; adult: number; child: number } = {
+          id: 99,
+          adult: 35,
+          child: 30,
+        };
+        prices.value = _p;
+        return _p;
       }
     } catch (err: any) {
       console.log(err);
