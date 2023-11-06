@@ -36,7 +36,7 @@
 				<InfoCardSelect :options="$marital_status" heading="Marital Status" v-model="apl.pmarital_status" />
 				<InfoCardSelect :num_options="[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" heading="Number of Children"
 					v-model="apl.children_number" />
-				<InfoCard v-if="apl.pconf_code" heading="Confirmation Code" v-model="apl.pconf_code" />
+				<InfoCard heading="Confirmation Code" v-model="apl.pconf_code" />
 				<InformationCard :class="apl.pconf_code ? 'col-span-full' : 'col-span-1'" heading="Payment"
 					v-model="apl.totalPayment" />
 
