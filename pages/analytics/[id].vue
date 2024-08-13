@@ -1,7 +1,6 @@
 <template>
 	<div class="w-full h-full rounded-2xl overflow-y-auto" id="style-2">
-		<div
-			class="w-full min-h-full rounded-s-2xl bg-neutral-800 dark:bg-neutral-50 dark:shadow-xl col-span-full row-span-full p-3 overflow-y-auto text-justify relative flex flex-col gap-5"
+		<div class="w-full min-h-full rounded-s-2xl bg-neutral-800 dark:bg-neutral-50 dark:shadow-xl col-span-full row-span-full p-3 overflow-y-auto text-justify relative flex flex-col gap-5"
 			id="style-1">
 
 
@@ -37,8 +36,7 @@
 
 			<div
 				:class="[ISM ? 'grid-cols-1' : 'grid-cols-3', 'grid gap-3 bg-neutral-900 dark:bg-neutral-100 dark:text-white rounded-xl p-2']">
-				<div
-					class="bg-neutral-700 dark:border-2 dark:border-neutral-400 dark:bg-white dark:hover:bg-neutral-100 hover:bg-neutral-800 dark:shadow-xl p-2 text-white cursor-pointer dark:text-black text-center font-bold rounded-lg flex justify-between px-2"
+				<div class="bg-neutral-700 dark:border-2 dark:border-neutral-400 dark:bg-white dark:hover:bg-neutral-100 hover:bg-neutral-800 dark:shadow-xl p-2 text-white cursor-pointer dark:text-black text-center font-bold rounded-lg flex justify-between px-2"
 					@click="() => {
 						useViewAplStore().setID(apl.apl_id!)
 						$router.push(`/applicant/${apl.apl_id}`)
@@ -48,14 +46,14 @@
 				</div>
 			</div>
 
-			<section class="grid grid-col-2">
-				<div class="col-span-full rounded-xl shadow-xl bg-neutral-900 dark:bg-neutral-50 p-2">
-					<BarChart :chartData="barData" :options="barOptions" />
+			<section class="grid grid-col-2 h-[50vh]">
+				<div class="col-span-full rounded-xl shadow-xl bg-neutral-900 dark:bg-neutral-50 p-2 h-fit">
+					<BarChart :css-classes="'h-fit'" :chartData="barData" :options="barOptions" />
 				</div>
 			</section>
 
 
-			<div :class="['grid gap-3', ISM ? 'grid-cols-1' : 'grid-cols-2']">
+			<div :class="['grid gap-3', ISM ? 'grid-cols-1 pb-40' : 'grid-cols-2']">
 				<div
 					class="flex flex-col justify-center items-center bg-neutral-900 dark:bg-primary dark:text-white rounded-xl py-5">
 					<h1 class="dark:text-purple-400 text-neutral-500">Total Applicants</h1>

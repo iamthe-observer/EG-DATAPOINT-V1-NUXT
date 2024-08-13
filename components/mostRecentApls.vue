@@ -6,7 +6,7 @@
 				<span class="text-lg font-medium">Total Requests</span>
 				<span class="text-lg font-medium">{{ !role ? requests.filter(req => req.user_id ==
 					useSupabaseUser().value?.id).length : requests.length
-				}}</span>
+					}}</span>
 			</h2>
 
 
@@ -17,41 +17,52 @@
 							<path fill="#888888" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
 								d="M5.63604 5.63603C9.15076 2.12131 14.8492 2.12131 18.364 5.63603C21.8787 9.15075 21.8787 14.8492 18.364 18.364C14.8492 21.8787 9.15076 21.8787 5.63604 18.364C2.12132 14.8492 2.12132 9.15075 5.63604 5.63603Z">
 								<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0" />
-								<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.15s" values="0;0.3" />
+								<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.15s"
+									values="0;0.3" />
 							</path>
 							<path fill="none" stroke-dasharray="18" stroke-dashoffset="18" d="M6 6L18 18">
-								<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="18;0" />
+								<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s"
+									values="18;0" />
 							</path>
 						</g>
 					</svg>
 
 					<span class="text-sm">Rejected</span>
-					<span class="text-sm">{{ role ? requests.filter(req => req.status == 'rejected').length : requests.filter(req =>
-						req.status == 'reject').filter(req => req.user_id == useSupabaseUser().value?.id).length }}</span>
+					<span class="text-sm">{{ role ? requests.filter(req => req.status == 'rejected').length :
+						requests.filter(req =>
+							req.status == 'reject').filter(req => req.user_id == useSupabaseUser().value?.id).length
+						}}</span>
 				</div>
 
-				<div class="flex-1 flex flex-col items-center justify-center border-x-2 dark:border-white border-neutral-800">
+				<div
+					class="flex-1 flex flex-col items-center justify-center border-x-2 dark:border-white border-neutral-800">
 					<svg xmlns="http://www.w3.org/2000/svg" class="w-10 aspect-square" viewBox="0 0 24 24">
 						<g fill="none" stroke="#888888" stroke-linecap="round" stroke-width="2">
 							<path stroke-dasharray="2 4" stroke-dashoffset="6"
 								d="M12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3">
-								<animate attributeName="stroke-dashoffset" dur="0.6s" repeatCount="indefinite" values="6;0" />
+								<animate attributeName="stroke-dashoffset" dur="0.6s" repeatCount="indefinite"
+									values="6;0" />
 							</path>
 							<path stroke-dasharray="30" stroke-dashoffset="30"
 								d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21">
-								<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.1s" dur="0.3s" values="30;0" />
+								<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.1s" dur="0.3s"
+									values="30;0" />
 							</path>
 							<path stroke-dasharray="10" stroke-dashoffset="10" d="M12 16v-7.5">
-								<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.5s" dur="0.2s" values="10;0" />
+								<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.5s" dur="0.2s"
+									values="10;0" />
 							</path>
 							<path stroke-dasharray="6" stroke-dashoffset="6" d="M12 8.5l3.5 3.5M12 8.5l-3.5 3.5">
-								<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.7s" dur="0.2s" values="6;0" />
+								<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.7s" dur="0.2s"
+									values="6;0" />
 							</path>
 						</g>
 					</svg>
 					<span class="text-sm">Pending</span>
-					<span class="text-sm">{{ role ? requests.filter(req => req.status == 'pending').length : requests.filter(req =>
-						req.status == 'pending').filter(req => req.user_id == useSupabaseUser().value?.id).length }}</span>
+					<span class="text-sm">{{ role ? requests.filter(req => req.status == 'pending').length :
+						requests.filter(req =>
+							req.status == 'pending').filter(req => req.user_id == useSupabaseUser().value?.id).length
+						}}</span>
 				</div>
 
 				<div class="flex-1 flex flex-col items-center justify-center">
@@ -71,7 +82,7 @@
 					<span class="text-sm">{{ role ? requests.filter(req => req.status == 'approved').length :
 						requests.filter(req => req.status == 'approved').filter(req => req.user_id ==
 							useSupabaseUser().value?.id).length
-					}}</span>
+						}}</span>
 				</div>
 			</div>
 

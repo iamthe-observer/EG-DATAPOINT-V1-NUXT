@@ -1,28 +1,34 @@
 <template>
 	<div class="__people col-span-3 row-span-8 p-2">
+		<span class="absolute -top-[1rem] left-2 text-neutral-300 text-sm uppercase">Most Recent Applicants</span>
 
 		<div class="w-full h-full carousel carousel-vertical dark:shadow-xl rounded-xl carousel-center gap-2">
 
-			<div class="w-full h-full grid place-items-center dark:bg-neutral-100" v-if="!role && recent_apls.length == 0">
+			<div class="w-full h-full grid place-items-center dark:bg-neutral-100"
+				v-if="!role && recent_apls.length == 0">
 				<div class="flex flex-col items-center gap-2">
 					<svg xmlns="http://www.w3.org/2000/svg" class="w-20 aspect-square" viewBox="0 0 24 24">
 						<g stroke="#888888" stroke-linecap="round" stroke-width="2">
 							<path fill="#888888" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
 								d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z">
 								<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0" />
-								<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3" />
+								<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s"
+									values="0;0.3" />
 							</path>
 							<path fill="none" stroke-dasharray="14" stroke-dashoffset="14"
 								d="M8 16C8.5 15 9.79086 14 12 14C14.2091 14 15.5 15 16 16">
-								<animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="14;0" />
+								<animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s"
+									values="14;0" />
 							</path>
 						</g>
 						<g fill="#888888" fill-opacity="0">
 							<ellipse cx="9" cy="9.5" rx="1" ry="1.5">
-								<animate fill="freeze" attributeName="fill-opacity" begin="0.6s" dur="0.2s" values="0;1" />
+								<animate fill="freeze" attributeName="fill-opacity" begin="0.6s" dur="0.2s"
+									values="0;1" />
 							</ellipse>
 							<ellipse cx="15" cy="9.5" rx="1" ry="1.5">
-								<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.2s" values="0;1" />
+								<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.2s"
+									values="0;1" />
 							</ellipse>
 						</g>
 					</svg>
@@ -47,13 +53,15 @@
 
 						<p class="font-normal text-neutral-400 text-xs dark:text-neutral-600">{{ apl.pcontact }}</p>
 
-						<p class="font-normal text-neutral-400 text-xs dark:text-neutral-600">{{ useNuxtApp().$formatDateTime(new
-							Date(apl.created_at!)) }}
+						<p class="font-normal text-neutral-400 text-xs dark:text-neutral-600">{{
+							useNuxtApp().$formatDateTime(new
+								Date(apl.created_at!)) }}
 						</p>
 					</div>
 
 					<div class="flex absolute bottom-1 left-1 justify-center pt-5 gap-1 items-center">
-						<button @click="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
+						<button
+							@click="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
 							class="btn btn-sm btn-primary mr-3 rounded-full">View</button>
 						<span class="flex gap-1 dark:font-semibold">
 							<SvgsCedis class="w-2 fill-white dark:fill-neutral-900" />{{ apl.totalPayment }}.00
@@ -71,19 +79,23 @@
 							<path fill="#888888" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
 								d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z">
 								<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0" />
-								<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3" />
+								<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s"
+									values="0;0.3" />
 							</path>
 							<path fill="none" stroke-dasharray="14" stroke-dashoffset="14"
 								d="M8 16C8.5 15 9.79086 14 12 14C14.2091 14 15.5 15 16 16">
-								<animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="14;0" />
+								<animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s"
+									values="14;0" />
 							</path>
 						</g>
 						<g fill="#888888" fill-opacity="0">
 							<ellipse cx="9" cy="9.5" rx="1" ry="1.5">
-								<animate fill="freeze" attributeName="fill-opacity" begin="0.6s" dur="0.2s" values="0;1" />
+								<animate fill="freeze" attributeName="fill-opacity" begin="0.6s" dur="0.2s"
+									values="0;1" />
 							</ellipse>
 							<ellipse cx="15" cy="9.5" rx="1" ry="1.5">
-								<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.2s" values="0;1" />
+								<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.2s"
+									values="0;1" />
 							</ellipse>
 						</g>
 					</svg>
@@ -108,18 +120,22 @@
 
 						<p class="font-normal text-neutral-400 text-xs dark:text-neutral-600">{{ apl.pcontact }}</p>
 
-						<p class="font-normal text-neutral-400 text-xs dark:text-neutral-600">{{ useNuxtApp().$formatDateTime(new
-							Date(apl.created_at!)) }}
+						<p class="font-normal text-neutral-400 text-xs dark:text-neutral-600">{{
+							useNuxtApp().$formatDateTime(new
+								Date(apl.created_at!)) }}
 						</p>
 
-						<p class="font-normal text-neutral-400 text-xs dark:text-neutral-600">By: {{ profiles.find(user => user.id ==
-							apl.user_id)!.fullname ||
-							'User' }}
+						<p class="font-normal text-neutral-400 text-xs dark:text-neutral-600">By: {{
+							profiles.find(user => user.id ==
+								apl.user_id)!.fullname ||
+							'User'
+						}}
 						</p>
 					</div>
 
 					<div class="flex absolute bottom-1 left-1 justify-center pt-5 gap-1 items-center">
-						<button @click="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
+						<button
+							@click="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
 							class="btn btn-sm btn-primary mr-3 rounded-lg">View</button>
 						<span class="flex gap-1 dark:font-semibold">
 							<SvgsCedis class="w-2 fill-white dark:fill-neutral-900" />{{ apl.totalPayment }}.00

@@ -1,12 +1,12 @@
 <template>
 	<div v-if="role" class="w-full h-full rounded-2xl overflow-y-auto" id="style-2">
-		<div
-			class="w-full min-h-full rounded-s-2xl bg-neutral-800 dark:bg-neutral-50 dark:shadow-xl col-span-full row-span-full p-3 overflow-y-auto text-justify relative flex flex-col gap-5"
+		<div class="w-full min-h-full rounded-s-2xl bg-neutral-800 dark:bg-neutral-50 dark:shadow-xl col-span-full row-span-full p-3 overflow-y-auto text-justify relative flex flex-col gap-5"
 			id="style-1">
 
 			<div :class="['w-full flex items-center justify-between', ISM ? 'flex-col gap-3' : '']">
 				<div class="flex gap-2 items-center">
-					<span @dblclick="shown = !shown" :class="['font-bold', ISM ? 'text-xl' : 'text-3xl']">Overview</span>
+					<span @dblclick="shown = !shown"
+						:class="['font-bold', ISM ? 'text-xl' : 'text-3xl']">Overview</span>
 				</div>
 
 				<DatePicker dark :color="'purple'" is-dark v-model="date" mode="date">
@@ -23,8 +23,9 @@
 				<select v-model="curr_location"
 					:class="['select rounded-full bg-[rgb(13,13,13)] dark:bg-neutral-50 dark:text-black', ISM ? 'select-xs w-32' : 'select-sm w-40']">
 					<option selected value="all">All Locations</option>
-					<option v-for="location in locationz" :value="location">{{ location![0].toUpperCase() + location?.substring(1)
-					}}</option>
+					<option v-for="location in locationz" :value="location">{{ location![0].toUpperCase() +
+						location?.substring(1)
+						}}</option>
 				</select>
 			</div>
 
@@ -44,8 +45,8 @@
 				</div>
 				<div v-if="shown"
 					class="flex justify-center items-center gap-3 p-5 flex-1 bg-neutral-900 dark:bg-fuchsia-200 min-h-[8rem] rounded-xl shadow-xl">
-					<div class="p-3 rounded-full bg-accent bg-opacity-30 w-16 aspect-square"><svg xmlns="http://www.w3.org/2000/svg"
-							class="w-full" viewBox="0 0 24 24">
+					<div class="p-3 rounded-full bg-accent bg-opacity-30 w-16 aspect-square"><svg
+							xmlns="http://www.w3.org/2000/svg" class="w-full" viewBox="0 0 24 24">
 							<g class="fill-accent">
 								<path
 									d="M9.592 3.2a5.727 5.727 0 0 1-.495.399c-.298.2-.633.338-.985.408c-.153.03-.313.043-.632.068c-.801.064-1.202.096-1.536.214a2.713 2.713 0 0 0-1.655 1.655c-.118.334-.15.735-.214 1.536a5.707 5.707 0 0 1-.068.632c-.07.352-.208.687-.408.985c-.087.13-.191.252-.399.495c-.521.612-.782.918-.935 1.238c-.353.74-.353 1.6 0 2.34c.153.32.414.626.935 1.238c.208.243.312.365.399.495c.2.298.338.633.408.985c.03.153.043.313.068.632c.064.801.096 1.202.214 1.536a2.713 2.713 0 0 0 1.655 1.655c.334.118.735.15 1.536.214c.319.025.479.038.632.068c.352.07.687.209.985.408c.13.087.252.191.495.399c.612.521.918.782 1.238.935c.74.353 1.6.353 2.34 0c.32-.153.626-.414 1.238-.935c.243-.208.365-.312.495-.399c.298-.2.633-.338.985-.408c.153-.03.313-.043.632-.068c.801-.064 1.202-.096 1.536-.214a2.713 2.713 0 0 0 1.655-1.655c.118-.334.15-.735.214-1.536c.025-.319.038-.479.068-.632c.07-.352.209-.687.408-.985c.087-.13.191-.252.399-.495c.521-.612.782-.918.935-1.238c.353-.74.353-1.6 0-2.34c-.153-.32-.414-.626-.935-1.238a5.574 5.574 0 0 1-.399-.495a2.713 2.713 0 0 1-.408-.985a5.72 5.72 0 0 1-.068-.632c-.064-.801-.096-1.202-.214-1.536a2.713 2.713 0 0 0-1.655-1.655c-.334-.118-.735-.15-1.536-.214a5.707 5.707 0 0 1-.632-.068a2.713 2.713 0 0 1-.985-.408a5.73 5.73 0 0 1-.495-.399c-.612-.521-.918-.782-1.238-.935a2.713 2.713 0 0 0-2.34 0c-.32.153-.626.414-1.238.935Z"
@@ -80,8 +81,8 @@
 								<path class="dark:stroke-green-900 stroke-green-500" stroke-width="1.5"
 									d="M9.781 3.89c.564-.48.846-.72 1.14-.861a2.5 2.5 0 0 1 2.157 0c.295.14.577.38 1.14.861c.225.192.337.287.457.367a2.5 2.5 0 0 0 .908.376c.141.028.288.04.582.064c.739.058 1.108.088 1.416.197a2.5 2.5 0 0 1 1.525 1.524c.109.309.138.678.197 1.416c.023.294.035.441.063.583c.064.324.192.633.376.907c.08.12.176.232.367.457c.48.564.721.846.862 1.14a2.5 2.5 0 0 1 0 2.157c-.14.294-.381.576-.862 1.14a5.25 5.25 0 0 0-.367.457a2.497 2.497 0 0 0-.376.907c-.028.142-.04.289-.063.583c-.059.738-.088 1.108-.197 1.416a2.5 2.5 0 0 1-1.525 1.524c-.308.11-.677.139-1.416.197c-.294.024-.44.036-.582.064a2.5 2.5 0 0 0-.908.376a5.25 5.25 0 0 0-.456.367c-.564.48-.846.72-1.14.861a2.5 2.5 0 0 1-2.157 0c-.295-.14-.577-.38-1.14-.861a5.263 5.263 0 0 0-.457-.367a2.5 2.5 0 0 0-.908-.376a5.277 5.277 0 0 0-.582-.064c-.739-.058-1.108-.088-1.416-.197a2.5 2.5 0 0 1-1.525-1.524c-.109-.308-.138-.678-.197-1.416a5.186 5.186 0 0 0-.063-.583a2.5 2.5 0 0 0-.376-.907c-.08-.12-.176-.232-.367-.457c-.48-.564-.721-.846-.862-1.14a2.5 2.5 0 0 1 0-2.157c.141-.294.381-.576.862-1.14c.191-.225.287-.337.367-.457a2.5 2.5 0 0 0 .376-.907c.028-.142.04-.289.063-.583c.059-.738.088-1.107.197-1.416A2.5 2.5 0 0 1 6.42 4.894c.308-.109.677-.139 1.416-.197c.294-.024.44-.036.582-.064a2.5 2.5 0 0 0 .908-.376c.12-.08.232-.175.456-.367Z"
 									opacity=".5" />
-								<path class="dark:stroke-green-900 stroke-green-700" stroke-linecap="round" stroke-width="1.5"
-									d="m9 15l6-6" />
+								<path class="dark:stroke-green-900 stroke-green-700" stroke-linecap="round"
+									stroke-width="1.5" d="m9 15l6-6" />
 								<path class="dark:fill-green-900 fill-green-700"
 									d="M15.5 14.5a1 1 0 1 1-2 0a1 1 0 0 1 2 0Zm-5-5a1 1 0 1 1-2 0a1 1 0 0 1 2 0Z" />
 							</g>
@@ -93,7 +94,8 @@
 				</div>
 			</section>
 
-			<section class="grid grid-cols-4 w-full h-full gap-5">
+			<!-- graphs -->
+			<section class="grid grid-cols-4 w-full gap-5 mb-3">
 				<div
 					:class="['rounded-xl shadow-xl bg-neutral-900 dark:bg-neutral-50 p-2', ISM ? 'col-span-4' : 'col-span-full']">
 					<LineChart :chartData="lineData" :options="lineOptions" />
@@ -110,7 +112,7 @@
 				</div> -->
 			</section>
 
-			<section class="grid grid-cols-4 w-full h-full gap-5">
+			<section class="grid grid-cols-4 w-full gap-5 mb-5">
 				<div class="col-span-full rounded-xl shadow-xl bg-neutral-900 dark:bg-neutral-50 p-2">
 					<BarChart :chartData="barData" :options="barOptions" />
 				</div>
@@ -120,7 +122,7 @@
 			<h1 class="col-span-full w-full font-bold text-2xl text-center">EG-Datapoint Users</h1>
 			<h2 class="col-span-full w-full font-bold text-sm text-center text-neutral-500">Today</h2>
 
-			<section :class="['grid w-full min-h-full gap-5', ISM ? 'grid-cols-1' : 'grid-cols-2']">
+			<section :class="['grid w-full min-h-full gap-5', ISM ? 'grid-cols-1 pb-40' : 'grid-cols-2']">
 				<div @click="() => {
 					useViewAplStore().setUSER(user.id)
 					$router.push(`/analytics/${user.id}_${user.fullname}`)
@@ -161,11 +163,11 @@ import { useProfileStore } from '@/store/profile'
 import { useViewAplStore } from '@/store/viewApl';
 import { BarChart, LineChart } from 'vue-chart-3';
 import { ChartData, ChartOptions } from 'chart.js';
+import Chart from 'chart.js/auto'
 
 const { is_mobile: ISM, total_apls, dark_mode, locations
 } = storeToRefs(useAppStore())
 const { profiles, role, profile } = storeToRefs(useProfileStore())
-const view = ref(false)
 const date = ref<Date>(new Date())
 const shown = ref(false)
 const curr_location = ref('all')
@@ -525,7 +527,7 @@ const barData = computed<ChartData<'bar'>>(() => {
 		labels: userNames.value,
 		datasets: [
 			{
-				label: 'Sales ',
+				label: '₵',
 				type: 'bar',
 				borderRadius: 10,
 				data: amountOfAplsByUser.value,
