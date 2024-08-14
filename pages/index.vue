@@ -1,6 +1,6 @@
 <template>
 	<div v-if="!useAppStore().is_mobile"
-		class="w-full h-full flex justify-between p-7 relative bg-neutral-900 overflow-hidden">
+		class="w-full h-full flex justify-between p-7 relative bg-neutral-90 overflow-hidden">
 		<div class="absolute inset-0">
 			<img :style="layer0" ref="img" src="../assets/images/login2.png" alt="" class="object-cover w-full h-full">
 			<!-- <img src="../assets/images/login.jpg" alt="" class="object-cover w-full h-full"> -->

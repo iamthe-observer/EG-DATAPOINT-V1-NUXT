@@ -193,7 +193,7 @@ export const useAppStore = defineStore("app", () => {
         let _p: { id: number; adult: number; child: number } = {
           id: 99,
           adult: 40,
-          child: 30,
+          child: 20,
         };
         prices.value = _p;
         return _p;
