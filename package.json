@@ -30,7 +30,7 @@
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.3",
     "animate.css": "^4.1.1",
-    "chart.js": "^3.9.1",
+    "chart.js": "^4.4.3",
     "gsap": "^3.12.2",
     "pinia": "^2.1.4",
     "pinia-plugin-persistedstate": "^3.2.0",

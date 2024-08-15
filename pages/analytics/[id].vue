@@ -47,8 +47,8 @@
 			</div>
 
 			<section class="grid grid-col-2">
-				<div class="col-span-full rounded-xl shadow-xl bg-neutral-900 dark:bg-neutral-50 p-2 h-fit">
-					<BarChart :class="[ISM ? 'h-fit' : 'h-[500px]']" :chartData="barData" :options="barOptions" />
+				<div class="col-span-full rounded-xl shadow-xl bg-neutral-900 dark:bg-neutral-50 p-2">
+					<BarChart :chartData="barData" :options="barOptions" />
 				</div>
 			</section>
 

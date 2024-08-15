@@ -152,6 +152,7 @@ import { useProfileStore } from '@/store/profile'
 import { useViewAplStore } from '@/store/viewApl';
 import { BarChart, LineChart } from 'vue-chart-3';
 import { ChartData, ChartOptions } from 'chart.js';
+import Chart from 'chart.js/auto'
 
 const { is_mobile: ISM, total_apls, dark_mode, locations
 } = storeToRefs(useAppStore())
