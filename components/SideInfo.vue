@@ -6,14 +6,14 @@
 			<h2 class="text-2xl flex justify-between w-full sticky top-0">
 				<span class="font-semibold text-neutral-500">Registered Apls</span>
 				<span v-if="!role" class="font-semibold">{{ registered_apls.length }}/{{ all_my_apls.length }}</span>
-				<span v-else class="font-semibold">{{ admin_registered_apls.length }}<span class="font-semibold text-neutral-400">
+				<span v-else class="font-semibold">{{ admin_registered_apls.length }}<span
+						class="font-semibold text-neutral-400">
 						out of {{ total_apls.length }}</span></span>
 			</h2>
 		</div>
 
 		<!-- incomplete apls pics -->
-		<div
-			class="bg-neutral-800 dark:bg-neutral-50 w-full h-full rounded-xl flex flex-col items-center gap-4 px-3 py-3 relative overflow-y-auto shadow-lg"
+		<div class="bg-neutral-800 dark:bg-neutral-50 w-full h-full rounded-xl flex flex-col items-center gap-4 px-3 py-3 relative overflow-y-auto shadow-lg"
 			id="style-2">
 			<h2
 				class="text-2xl flex justify-between w-full sticky top-0 bg-neutral-900 dark:bg-neutral-200 rounded-lg px-2 py-1 shadow-lg">
@@ -22,12 +22,15 @@
 			</h2>
 
 			<div v-if="incomplete_apl_pics.length" class="w-full flex gap-2 items-center group cursor-pointer"
-				v-for="(_, i) in incomplete_apl_pics" :key="i"
-				@click="() => { $router.push(`/applicant/${_.apl.apl_id}`); useViewAplStore().setID(_.apl.apl_id!) }">
-				<span class="group-hover:text-neutral-400 w-full truncate">{{ _.apl.fullName }}</span>
+				v-for="(apl_pics, i) in incomplete_apl_pics" :key="i"
+				@click="() => { $router.push(`/applicant/${apl_pics.apl.apl_id}`); useViewAplStore().setID(apl_pics.apl.apl_id!) }">
+				<span class="group-hover:text-neutral-400 w-full truncate">{{ apl_pics.apl.fullName }}</span> <span
+					v-if="role" class="pl-3">{{
+						getUserForApl(apl_pics.apl.user_id) }}</span>
 			</div>
 
-			<div v-else class="w-full h-full flex flex-col items-center justify-center text-center font-bold text-neutral-500">
+			<div v-else
+				class="w-full h-full flex flex-col items-center justify-center text-center font-bold text-neutral-500">
 				<svg xmlns="http://www.w3.org/2000/svg" class="w-20 aspect-square" viewBox="0 0 256 256">
 					<g fill="#888">
 						<path d="M224 128a96 96 0 1 1-96-96a96 96 0 0 1 96 96Z" opacity=".2" />
@@ -55,7 +58,7 @@ interface Paths {
 
 const appStore = useAppStore();
 const { all_my_apls, total_apls } = storeToRefs(appStore);
-const { role } = storeToRefs(useProfileStore());
+const { role, profiles } = storeToRefs(useProfileStore());
 
 const registered_apls = computed(() => {
 	return all_my_apls.value.filter((apl) => apl.pconf_code)
@@ -63,6 +66,11 @@ const registered_apls = computed(() => {
 const admin_registered_apls = computed(() => {
 	return total_apls.value.filter((apl) => apl.pconf_code)
 });
+
+const getUserForApl = (user_id: string) => {
+	const profile = profiles.value.find(x => x.id == user_id)
+	return profile?.username
+}
 
 const incomplete_apl_pics = computed(() => {
 	const filtered: { apl: Applicant, type: string }[] = []

@@ -98,25 +98,14 @@
 			<section class="grid grid-cols-4 w-full gap-5 mb-3">
 				<div
 					:class="['rounded-xl shadow-xl bg-neutral-900 dark:bg-neutral-50 p-2', ISM ? 'col-span-4' : 'col-span-full']">
-					<LineChart :chartData="lineData" :options="lineOptions" />
+					<LineChart :class="[ISM ? 'h-fit' : 'h-[500px]']" :chartData="lineData" :options="lineOptions" />
 				</div>
-
-				<!-- <div v-if="!ISM"
-					class="bg-neutral-900 dark:bg-neutral-50 min-h-[8rem] rounded-xl shadow-xl flex flex-col items-center justify-between p-2">
-					<h1 class="mx-auto">Total Amount By Users</h1>
-
-					<PieChart :chartData="pieData" :options="pieOptions">
-					</PieChart>
-
-					<span class="btn btn-primary w-full" @click="$router.push('/viewApplicants')">View All Applicants</span>
-				</div> -->
 			</section>
 
 			<section class="grid grid-cols-4 w-full gap-5 mb-5">
 				<div class="col-span-full rounded-xl shadow-xl bg-neutral-900 dark:bg-neutral-50 p-2">
-					<BarChart :chartData="barData" :options="barOptions" />
+					<BarChart :class="[ISM ? 'h-fit' : 'h-[500px]']" :chartData="barData" :options="barOptions" />
 				</div>
-
 			</section>
 
 			<h1 class="col-span-full w-full font-bold text-2xl text-center">EG-Datapoint Users</h1>
@@ -163,7 +152,6 @@ import { useProfileStore } from '@/store/profile'
 import { useViewAplStore } from '@/store/viewApl';
 import { BarChart, LineChart } from 'vue-chart-3';
 import { ChartData, ChartOptions } from 'chart.js';
-import Chart from 'chart.js/auto'
 
 const { is_mobile: ISM, total_apls, dark_mode, locations
 } = storeToRefs(useAppStore())
