@@ -38,6 +38,7 @@ export const useAppStore = defineStore("app", () => {
     "ablekuma",
     "spintex",
     "odorkor",
+    "kwashieman",
   ]);
 
   const filter_alpha = ref(false);

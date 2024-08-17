@@ -52,9 +52,9 @@ import { Applicant } from '@/interfaces/interfaces';
 import { useViewAplStore } from '@/store/viewApl';
 import { useProfileStore } from '@/store/profile'
 
-interface Paths {
-	[key: string]: string[]; // Or whatever type the values in the `paths` object should be
-}
+// interface Paths {
+// 	[key: string]: string[]; // Or whatever type the values in the `paths` object should be
+// }
 
 const appStore = useAppStore();
 const { all_my_apls, total_apls } = storeToRefs(appStore);

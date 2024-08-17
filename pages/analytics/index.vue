@@ -22,7 +22,7 @@
 
 				<select v-model="curr_location"
 					:class="['select rounded-full bg-[rgb(13,13,13)] dark:bg-neutral-50 dark:text-black', ISM ? 'select-xs w-32' : 'select-sm w-40']">
-					<option selected value="all">All Locations</option>
+					<option v-if="admin_admin" selected value="all">All Locations</option>
 					<option v-for="location in locationz" :value="location">{{ location![0].toUpperCase() +
 						location?.substring(1)
 						}}</option>
@@ -152,7 +152,6 @@ import { useProfileStore } from '@/store/profile'
 import { useViewAplStore } from '@/store/viewApl';
 import { BarChart, LineChart } from 'vue-chart-3';
 import { ChartData, ChartOptions } from 'chart.js';
-import Chart from 'chart.js/auto'
 
 const { is_mobile: ISM, total_apls, dark_mode, locations
 } = storeToRefs(useAppStore())
@@ -162,11 +161,30 @@ const shown = ref(false)
 const curr_location = ref('all')
 
 // restricted location list for specific admins
-const locationz = computed(() => {
-	if (profile.value?.location == 'madina' || profile.value?.email == 'topsquad3552@gmail.com') {
-		return locations.value
+// const locationz = computed(() => {
+// 	if (profile.value?.location == 'madina' || profile.value?.email == 'topsquad3552@gmail.com') {
+// 		return locations.value
+// 	} else {
+// 		return locations.value.filter(location => location != 'madina')
+// 	}
+// })
+
+const admin_admin = computed(() => {
+	if (profile.value?.email == 'topsquad3552@gmail.com' || profile.value?.email == 'ebbysgold@gmail.com') {
+		return true
 	} else {
-		return locations.value.filter(location => location != 'madina')
+		return false
+	}
+})
+
+
+const locationz = computed(() => {
+	if (profile.value?.email == 'elizabethlarbi1999@gmail.com') {
+		return locations.value.filter(location => location == 'madina' || location == 'kwashieman')
+	} else if (profile.value?.email == 'asorlarbi@gmail.com') {
+		return locations.value.filter(location => location == 'spintex' || location == 'ashaiman')
+	} else {
+		return locations.value
 	}
 })
 
@@ -247,7 +265,7 @@ const normal_users = computed(() => {
 	}
 	else if (profile.value?.email == 'elizabethlarbi1999@gmail.com') {
 
-		if (curr_location.value !== 'all') {
+		if (curr_location.value !== 'all' && ['madina', 'kwashiman'].includes(curr_location.value)) {
 			return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
 				if (a.email < b.email) {
 					return -1;
@@ -258,7 +276,23 @@ const normal_users = computed(() => {
 				return 0;
 			})
 		} else {
-			return profiles.value.filter(user => !user.role && user.fullname != null).filter(user => user.email != 'vinocharles419@gmail.com').sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
+			return []
+		}
+
+	} else if (profile.value?.email == 'asorlarbi@gmail.com') {
+
+		if (curr_location.value !== 'all' && ['spintex', 'manet'].includes(curr_location.value)) {
+			return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
+				if (a.email < b.email) {
+					return -1;
+				}
+				if (a.email > b.email) {
+					return 1;
+				}
+				return 0;
+			})
+		} else {
+			return []
 		}
 
 	} else {
@@ -277,19 +311,6 @@ const normal_users = computed(() => {
 		}
 
 	}
-	// if (curr_location.value !== 'all') {
-	// 	return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
-	// 		if (a.email < b.email) {
-	// 			return -1;
-	// 		}
-	// 		if (a.email > b.email) {
-	// 			return 1;
-	// 		}
-	// 		return 0;
-	// 	})
-	// } else {
-	// 	return profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
-	// }
 })
 
 function getUserSalesToday(id: string) {
@@ -346,11 +367,24 @@ const totalSales = computed(() => {
 })
 
 const userNames = computed(() => {
-	if (profile.value?.email == 'topsquad3552@gmail.com') {
-		return profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; }).map(user => {
-			if (!user.fullname) return 'User'
-			return user.fullname
-		})
+	if (admin_admin.value) {
+		return profiles.value
+			.filter(user => !user.role && user.fullname != null)
+			.filter(user => {
+				if (curr_location.value == 'all') {
+					return true
+				} else {
+					return user.location == curr_location.value
+				}
+			})
+			.sort(function (a, b) {
+				if (a.email < b.email) { return -1; }
+				if (a.email > b.email) { return 1; } return 0;
+			})
+			.map(user => {
+				if (!user.fullname) return 'User'
+				return user.fullname
+			})
 	} else {
 		return profiles.value.filter(user => !user.role && user.fullname != null).filter(user => user.email != 'vinocharles419@gmail.com').sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; }).map(user => {
 			if (!user.fullname) return 'User'
@@ -409,7 +443,14 @@ function getTotalPaymentByDay(num: number) {
 	const numDaysAgo = new Date(today);
 	numDaysAgo.setDate(today.getDate() - num);
 
-	let totalPayments = total_apls.value.filter(x => x.location != 'madina').filter(apl => useNuxtApp().$formatDate(new Date(apl.created_at!)) == useNuxtApp().$formatDate(numDaysAgo)).map(apl => apl.totalPayment)
+	let totalPayments = total_apls.value.filter(x => {
+		if (curr_location.value == 'all') {
+			return true
+		} else {
+			return x.location == curr_location.value
+		}
+	}).filter(apl => useNuxtApp().$formatDate(new Date(apl.created_at!)) == useNuxtApp().$formatDate(numDaysAgo)).map(apl => apl.totalPayment)
+	// let totalPayments = total_apls.value.filter(x => x.location != 'madina').filter(apl => useNuxtApp().$formatDate(new Date(apl.created_at!)) == useNuxtApp().$formatDate(numDaysAgo)).map(apl => apl.totalPayment)
 
 	let sum = 0
 	for (let ii = 0; ii < totalPayments.length; ii++) {
@@ -511,22 +552,6 @@ const barOptions = ref<ChartOptions<'bar'>>({
 	},
 });
 
-const barData = computed<ChartData<'bar'>>(() => {
-	return {
-		labels: userNames.value,
-		datasets: [
-			{
-				label: '₵',
-				type: 'bar',
-				borderRadius: 10,
-				data: amountOfAplsByUser.value,
-				// data: [{ x: 'Sales', y: 20 }, { x: 'Revenue', y: 10 }],
-				backgroundColor: bgClrs.value,
-			},
-		],
-	}
-})
-
 const lineData = computed<ChartData<'line'>>(() => {
 	return {
 		labels: getDaysArrayWithTodayAtEnd(),
@@ -542,4 +567,19 @@ const lineData = computed<ChartData<'line'>>(() => {
 	}
 })
 
+const barData = computed<ChartData<'bar'>>(() => {
+	return {
+		labels: userNames.value,
+		datasets: [
+			{
+				label: '₵',
+				type: 'bar',
+				borderRadius: 10,
+				data: amountOfAplsByUser.value,
+				// data: [{ x: 'Sales', y: 20 }, { x: 'Revenue', y: 10 }],
+				backgroundColor: bgClrs.value,
+			},
+		],
+	}
+})
 </script>
