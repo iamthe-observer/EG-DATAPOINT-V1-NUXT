@@ -16,22 +16,26 @@
 				<div class="join">
 					<label @click="handleApprove(request)" class="join-item btn btn-success btn-sm">Approve</label>
 					<label @click="handleReject(request)" class="join-item btn btn-error btn-sm">Reject</label>
-					<label @click="() => { $router.push(`/applicant/${request.apl_id}`); useViewAplStore().setID(request.apl_id!) }"
+					<label
+						@click="() => { $router.push(`/applicant/${request.apl_id}`); useViewAplStore().setID(request.apl_id!) }"
 						class="join-item btn btn-primary btn-sm">Open</label>
 					<label class="join-item btn btn-sm">Close</label>
 				</div>
 			</h1>
 
 			<div id="style-2" class="flex flex-col overflow-y-auto rounded-xl">
-				<section class="flex flex-col gap-2 rounded-s-xl rounded-bl-none relative bg-neutral-800 dark:bg-neutral-50 p-2">
+				<section
+					class="flex flex-col gap-2 rounded-s-xl rounded-bl-none relative bg-neutral-800 dark:bg-neutral-50 p-2">
 					<p class="flex justify-evenly sticky top-0">
 					<div class="flex w-full h-fit items-center group">
-						<div class="flex-1 grid h-12 flex-grow place-items-center text-xl uppercase badge font-bold badge-secondary">
+						<div
+							class="flex-1 grid h-12 flex-grow place-items-center text-xl uppercase badge font-bold badge-secondary">
 							Old
 						</div>
 						<div class="divider divider-horizontal text-center">
 						</div>
-						<div class="flex-1 grid h-12 flex-grow place-items-center text-xl uppercase font-bold badge badge-accent">
+						<div
+							class="flex-1 grid h-12 flex-grow place-items-center text-xl uppercase font-bold badge badge-accent">
 							New
 						</div>
 					</div>
@@ -141,12 +145,14 @@
 					</Divider>
 					<Divider v-if="if_val('passport_ex')" class="">
 						<template #modified_apl="props">
-							{{ props.original?.passport_ex ? useNuxtApp().$formatDateWords(new Date(props.original?.passport_ex!)) : ''
+							{{ props.original?.passport_ex ? useNuxtApp().$formatDateWords(new
+								Date(props.original?.passport_ex!)) : ''
 							}}
 						</template>
 						Passort Expiration <br /> Date
 						<template #apl="props">
-							{{ props.edited?.passport_ex ? useNuxtApp().$formatDateWords(new Date(props.edited?.passport_ex!)) : '' }}
+							{{ props.edited?.passport_ex ? useNuxtApp().$formatDateWords(new
+								Date(props.edited?.passport_ex!)) : '' }}
 						</template>
 					</Divider>
 					<Divider v-if="if_val('pcountry_live_today')" class="">
@@ -312,7 +318,8 @@
 
 				</section>
 
-				<section v-for="(ward, idx) in request.modified_apl?.wards" v-if="request.modified_apl?.wards.length! > 0"
+				<section v-for="(ward, idx) in request.modified_apl?.wards"
+					v-if="request.modified_apl?.wards.length! > 0"
 					class="flex flex-col gap-2 rounded-s-xl rounded-tl-none bg-neutral-800 dark:bg-neutral-50 p-2">
 					<h2 class="mx-auto mt-10 mb-5 text-3xl font-bold">Ward Applicant {{ idx + 1 }}</h2>
 					<Divider v-if="if_val(`wards.${idx}.wlastName`)">
@@ -392,7 +399,8 @@
 				<h3 class="text-lg font-bold">SUCCESS</h3>
 				<p class="py-4">Request Approved!</p>
 			</div>
-			<label @click="$router.push('/database')" class="modal-backdrop" for="approved">Close</label>
+			<label @click="is_mobile ? $router.push('/requests') : $router.push('/database')" class="modal-backdrop"
+				for="approved">Close</label>
 		</div>
 
 		<input type="checkbox" id="rejected" :checked="if_rej" class="modal-toggle" />
@@ -402,7 +410,8 @@
 				<h3 class="text-lg font-bold">SUCCESS</h3>
 				<p class="py-4 text-red-500 dark:text-neutral-800">Request Rejected!</p>
 			</div>
-			<label @click="$router.push('/database')" class="modal-backdrop" for="rejected">Close</label>
+			<label @click="is_mobile ? $router.push('/requests') : $router.push('/database')" class="modal-backdrop"
+				for="rejected">Close</label>
 		</div>
 
 	</div>
@@ -410,7 +419,7 @@
 
 <script setup lang="ts">
 import { useAplStore } from '@/store/apl';
-import { Applicant, Requests } from '@/interfaces/interfaces';
+import { Requests } from '@/interfaces/interfaces';
 import { storeToRefs } from 'pinia';
 import { useAppStore } from '@/store/app';
 import { useViewAplStore } from '@/store/viewApl';
@@ -418,7 +427,7 @@ import { useViewAplStore } from '@/store/viewApl';
 const apl_ = useAplStore()
 const app_ = useAppStore()
 const { curr_compared_request: request } = storeToRefs(apl_)
-const { total_apls } = storeToRefs(app_)
+const { total_apls, is_mobile } = storeToRefs(app_)
 const { $SB, $deepCompareObjects } = useNuxtApp()
 const if_rej = ref(false)
 const if_ap = ref(false)

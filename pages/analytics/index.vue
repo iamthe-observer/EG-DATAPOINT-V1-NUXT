@@ -198,19 +198,42 @@ onBeforeMount(async () => {
 })
 
 const daily_applicants = computed(() => {
-	if (profile.value?.location == 'madina' || profile.value?.email == 'topsquad3552@gmail.com') {
+	if (admin_admin.value) {
 		return total_apls.value?.filter(
 			(apl) =>
 				useNuxtApp().$formatDate(new Date(apl.created_at!)) ==
-				useNuxtApp().$formatDate(date.value),
-		);
+				useNuxtApp().$formatDate(date.value)
+		)
+			.filter(apl => {
+				if (curr_location.value == 'all') {
+					return true
+				} else {
+					return apl.location == curr_location.value
+				}
+			});
 	} else {
 		return total_apls.value?.filter(
 			(apl) =>
 				useNuxtApp().$formatDate(new Date(apl.created_at!)) ==
-				useNuxtApp().$formatDate(date.value),
-		).filter(apl => apl.location != 'madina');
+				useNuxtApp().$formatDate(date.value)
+		)
+			.filter(apl => apl.location == curr_location.value)
 	}
+
+	// old code
+	// else if (profile.value?.email == 'elizabethlarbi1999@gmail.com' || profile.value?.email == 'asorlarbi@gmail.com') {
+	// 	return total_apls.value?.filter(
+	// 		(apl) =>
+	// 			useNuxtApp().$formatDate(new Date(apl.created_at!)) ==
+	// 			useNuxtApp().$formatDate(date.value),
+	// 	).filter(apl => apl.location == 'madina' || apl.location == 'kwashieman');
+	// } else {
+	// 	return total_apls.value?.filter(
+	// 		(apl) =>
+	// 			useNuxtApp().$formatDate(new Date(apl.created_at!)) ==
+	// 			useNuxtApp().$formatDate(date.value),
+	// 	).filter(apl => apl.location == curr_location.value);
+	// }
 })
 
 const today_sales_admin = computed(() => {
@@ -246,7 +269,7 @@ const today_sales_admin = computed(() => {
 });
 
 const normal_users = computed(() => {
-	if (profile.value?.email == 'topsquad3552@gmail.com') {
+	if (admin_admin.value) {
 
 		if (curr_location.value !== 'all') {
 			return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
@@ -265,7 +288,7 @@ const normal_users = computed(() => {
 	}
 	else if (profile.value?.email == 'elizabethlarbi1999@gmail.com') {
 
-		if (curr_location.value !== 'all' && ['madina', 'kwashiman'].includes(curr_location.value)) {
+		if (curr_location.value !== 'all' && ['madina', 'kwashieman'].includes(curr_location.value)) {
 			return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
 				if (a.email < b.email) {
 					return -1;
@@ -386,10 +409,17 @@ const userNames = computed(() => {
 				return user.fullname
 			})
 	} else {
-		return profiles.value.filter(user => !user.role && user.fullname != null).filter(user => user.email != 'vinocharles419@gmail.com').sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; }).map(user => {
-			if (!user.fullname) return 'User'
-			return user.fullname
-		})
+		return profiles.value
+			.filter(user => !user.role && user.fullname != null)
+			.filter(user => user.location == curr_location.value)
+			.sort(function (a, b) {
+				if (a.email < b.email) { return -1; }
+				if (a.email > b.email) { return 1; } return 0;
+			})
+			.map(user => {
+				if (!user.fullname) return 'User'
+				return user.fullname
+			})
 	}
 })
 
@@ -397,13 +427,24 @@ const amountOfAplsByUser = computed(() => {
 	// let totals: { x: string, y: number }[] = []
 	let amount: number[] = []
 
-	const PROFILES = profiles.value.filter(user => !user.role && user.fullname != null).filter(user => {
-		if (profile.value?.email != 'topsquad3552@gmail.com') {
-			return user.email != 'vinocharles419@gmail.com'
-		} else {
-			return user
-		}
-	}).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
+	// .filter(user => {
+	// 	if (profile.value?.email != 'topsquad3552@gmail.com') {
+	// 		return user.email != 'vinocharles419@gmail.com'
+	// 	} else {
+	// 		return user
+	// 	}
+	// })
+
+	const PROFILES = profiles.value
+		.filter(user => !user.role && user.fullname != null)
+		.filter(user => {
+			if (curr_location.value == 'all') {
+				return true
+			} else {
+				return user.location == curr_location.value
+			}
+		})
+		.sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
 
 	for (let ii = 0; ii < PROFILES.length; ii++) {
 		const user = PROFILES[ii];
