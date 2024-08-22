@@ -112,7 +112,7 @@
 		</div>
 
 		<!-- mobile view -->
-		<div class="h-full bg-neutral-800 rounded-xl overflow-y-auto" v-else>
+		<div class="h-full bg-neutral-800 rounded-xl overflow-y-auto pb-20" v-else>
 
 			<ViewApplicantV2 v-if="!loading" />
 
