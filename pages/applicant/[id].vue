@@ -1,6 +1,6 @@
 <template>
 	<div :key="num" class="w-full h-full flex flex-col rounded-2xl">
-		<div id="style-1"
+		<div id="style-1" v-if="!is_mobile"
 			class="w-full h-full rounded-2xl bg-neutral-800 dark:bg-neutral-50 col-span-full row-span-full pb-2 overflow-y-auto text-justify px-0 relative">
 			<h1
 				:class="['px-5 py-5 rounded-2xl bg-neutral-700 dark:bg-primary dark:text-white text-2xl w-full flex justify-between items-center mb-2 sticky top-0 shadow-lg z-10 transition-all duration-200 ease-in-out', edit_mode ? 'dark:bg-blue-400' : 'dark:bg-primary']">
@@ -12,8 +12,8 @@
 				<div class="join join-vertical lg:join-horizontal">
 					<button v-if="edit_mode" onclick="my_modal_1.showModal()"
 						class="btn btn-outline btn-sm rounded-xl text-white hover:text-green-500 dark:hover:text-green-200 join-item bg-none hover:btn-ghost">
-						<svg class="w-6 aspect-square stroke-green-500 dark:stroke-green-300" xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 24 24">
+						<svg class="w-6 aspect-square stroke-green-500 dark:stroke-green-300"
+							xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 							<path fill="none" stroke-dasharray="24" stroke-dashoffset="24" stroke-linecap="round"
 								stroke-linejoin="round" stroke-width="2" d="M5 11L11 17L21 7">
 								<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="24;0" />
@@ -23,10 +23,11 @@
 					</button>
 					<button v-if="edit_mode" @click="handleClose"
 						class="btn btn-outline btn-sm rounded-xl text-white hover:text-red-500 dark:hover:text-red-300 join-item bg-none hover:btn-ghost">
-						<svg xmlns="http://www.w3.org/2000/svg" class="w-6 aspect-square stroke-red-600 dark:stroke-red-400"
-							viewBox="0 0 24 24">
-							<path fill="none" stroke="" stroke-dasharray="12" stroke-dashoffset="12" stroke-linecap="round"
-								stroke-width="2" d="M12 12L19 19M12 12L5 5M12 12L5 19M12 12L19 5">
+						<svg xmlns="http://www.w3.org/2000/svg"
+							class="w-6 aspect-square stroke-red-600 dark:stroke-red-400" viewBox="0 0 24 24">
+							<path fill="none" stroke="" stroke-dasharray="12" stroke-dashoffset="12"
+								stroke-linecap="round" stroke-width="2"
+								d="M12 12L19 19M12 12L5 5M12 12L5 19M12 12L19 5">
 								<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="12;0" />
 							</path>
 						</svg>
@@ -36,22 +37,26 @@
 					<button v-if="!edit_mode" @click="useViewAplStore().$patch(() => edit_mode = true)"
 						class="btn btn-outline btn-sm rounded-xl text-white hover:text-blue-500 dark:hover:text-blue-300 join-item bg-none hover:btn-ghost relative">
 						<svg xmlns="http://www.w3.org/2000/svg" class="w-6 aspect-square" viewBox="0 0 24 24">
-							<g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+							<g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"
+								stroke-width="2">
 								<path stroke-dasharray="56" stroke-dashoffset="56"
 									d="M3 21L4.99998 15L16 4C17 3 19 3 20 4C21 5 21 7 20 8L8.99998 19L3 21">
 									<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.6s" values="56;0" />
 								</path>
 								<g stroke-dasharray="6" stroke-dashoffset="6">
 									<path d="M15 5L19 9">
-										<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0" />
+										<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s"
+											values="6;0" />
 									</path>
 									<path stroke-width="1" d="M6 15L9 18">
-										<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0" />
+										<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s"
+											values="6;0" />
 									</path>
 								</g>
 							</g>
 							<path fill="#888888" fill-opacity="0" d="M9 18L18 9L15 6L6 15L9 18Z">
-								<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.15s" values="0;0.3" />
+								<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.15s"
+									values="0;0.3" />
 							</path>
 						</svg>
 						Request Edit
@@ -66,13 +71,16 @@
 								</path>
 								<path stroke-dasharray="20" stroke-dashoffset="20"
 									d="M9 13C7.34315 13 6 11.6569 6 10C6 8.34315 7.34315 7 9 7C10.6569 7 12 8.34315 12 10C12 11.6569 10.6569 13 9 13Z">
-									<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.5s" dur="0.4s" values="20;0" />
+									<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.5s" dur="0.4s"
+										values="20;0" />
 								</path>
 								<path stroke-dasharray="10" stroke-dashoffset="10" d="M15 3L21 9">
-									<animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="10;0" />
+									<animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s"
+										values="10;0" />
 								</path>
 								<path stroke-dasharray="10" stroke-dashoffset="10" d="M21 3L15 9">
-									<animate fill="freeze" attributeName="stroke-dashoffset" begin="1.2s" dur="0.2s" values="10;0" />
+									<animate fill="freeze" attributeName="stroke-dashoffset" begin="1.2s" dur="0.2s"
+										values="10;0" />
 								</path>
 							</g>
 						</svg>
@@ -80,7 +88,8 @@
 					</button>
 				</div>
 
-				<span v-if="!edit_mode" class="text-sm font-semibold text-right">{{ applicant.fullName ? applicant.fullName :
+				<span v-if="!edit_mode" class="text-sm font-semibold text-right">{{ applicant.fullName ?
+					applicant.fullName :
 					'Applicant' }}<br />By:
 					{{
 						creator
@@ -101,6 +110,18 @@
 			</div>
 
 		</div>
+
+		<!-- mobile view -->
+		<div class="h-full bg-neutral-800 rounded-xl overflow-y-auto" v-else>
+
+			<ViewApplicantV2 v-if="!loading" />
+
+			<div v-else class="w-full h-full flex items-end">
+				<Loading class="bg-transparent" />
+			</div>
+
+		</div>
+
 		<dialog id="my_modal_1" class="modal">
 			<form method="dialog" class="modal-box bg-neutral-900 dark:bg-neutral-50">
 				<h3 class="font-semibold text-lg text-white dark:text-black flex items-center gap-3">
@@ -109,10 +130,12 @@
 							<path fill="#dc1010" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
 								d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z">
 								<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0" />
-								<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3" />
+								<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s"
+									values="0;0.3" />
 							</path>
 							<path fill="none" stroke-dasharray="8" stroke-dashoffset="8" d="M12 7V13">
-								<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="8;0" />
+								<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s"
+									values="8;0" />
 							</path>
 						</g>
 						<circle cx="12" cy="17" r="1" fill="#888888" fill-opacity="0">
@@ -130,7 +153,8 @@
 				</p>
 				<div class="modal-action">
 					<!-- if there is a button in form, it will close the modal -->
-					<button v-if="request.body" class="btn btn-primary text-white" @click="handleEditSubmit">Submit</button>
+					<button v-if="request.body" class="btn btn-primary text-white"
+						@click="handleEditSubmit">Submit</button>
 					<button @click="request.body = ''" class="btn btn-error text-white">Close</button>
 				</div>
 			</form>
@@ -144,10 +168,12 @@
 							<path fill="#dc1010" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
 								d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z">
 								<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0" />
-								<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3" />
+								<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s"
+									values="0;0.3" />
 							</path>
 							<path fill="none" stroke-dasharray="8" stroke-dashoffset="8" d="M12 7V13">
-								<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="8;0" />
+								<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s"
+									values="8;0" />
 							</path>
 						</g>
 						<circle cx="12" cy="17" r="1" fill="#888888" fill-opacity="0">
@@ -157,12 +183,14 @@
 					Are you sure you want to send this request to delete the Applicant:<br /> <span class="text-bold">{{
 						applicant?.fullName }}</span>
 				</h3>
-				<textarea v-model="request.body" class="textarea textarea-bordered w-full bg-red-900 border-none text-white mt-3"
+				<textarea v-model="request.body"
+					class="textarea textarea-bordered w-full bg-red-900 border-none text-white mt-3"
 					placeholder="What's your reason for editing?..."></textarea>
 				<p class="text-white py-4 text-right text-xs">Review and cross-check your request before sending!</p>
 				<div class="modal-action">
 					<!-- if there is a button in form, it will close the modal -->
-					<button @click="handleDeleteSubmit" v-if="request.body" class="btn btn-primary text-white">Submit</button>
+					<button @click="handleDeleteSubmit" v-if="request.body"
+						class="btn btn-primary text-white">Submit</button>
 					<button @click="request.body = ''" class="btn btn-error text-white">Close</button>
 				</div>
 			</form>
@@ -185,7 +213,6 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
-import { useAplStore } from '@/store/apl'
 import { useProfileStore } from '@/store/profile'
 import { useRequestStore } from '@/store/requests'
 import { useViewAplStore } from '@/store/viewApl';
@@ -194,6 +221,7 @@ import { useAppStore } from '@/store/app';
 
 let num = ref(0)
 const { applicant, edit_mode, request, if_applicant_ex } = storeToRefs(useViewAplStore())
+const { is_mobile } = storeToRefs(useAppStore())
 
 let loading = ref(false)
 const if_sent = ref(false)

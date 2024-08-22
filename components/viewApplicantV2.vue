@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col p-5">
+	<div v-if="!is_mobile" class="flex flex-col p-5">
 		<!-- primary -->
 		<div class="flex gap-4">
 			<!-- image -->
@@ -10,7 +10,8 @@
 					<AvatarSelect :classer="`w-[300px] h-[300px]`" :src="prime_image" />
 				</div>
 				<div class="flex w-full gap-2 items-end">
-					<button v-if="edit_mode && prime_file" @click="viewApl.handlePrimeUpdate" class="btn btn-xs btn-success">
+					<button v-if="edit_mode && prime_file" @click="viewApl.handlePrimeUpdate"
+						class="btn btn-xs btn-success">
 						<span v-if="p_loading" class="loading loading-ring loading-sm text-white"></span>
 						<span v-else>Update</span>
 					</button>
@@ -31,7 +32,8 @@
 				<InfoCard heading="Passport Number" v-model="apl.ppassport_number" />
 				<InfoCardDate heading="Passport Expiration Date" v-model="apl.passport_ex" />
 				<InfoCard heading="Residential Address" v-model="apl.ppostal" />
-				<InfoCardSelect :options="$countries" heading="Country You Live in Today" v-model="apl.pcountry_live_today" />
+				<InfoCardSelect :options="$countries" heading="Country You Live in Today"
+					v-model="apl.pcountry_live_today" />
 				<InfoCardSelect :options="$highest_level_ed" heading="Education Level" v-model="apl.peducation_level" />
 				<InfoCardSelect :options="$marital_status" heading="Marital Status" v-model="apl.pmarital_status" />
 				<InfoCardSelect :num_options="[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" heading="Number of Children"
@@ -54,7 +56,8 @@
 					<AvatarSelect :classer="`w-[300px] h-[300px]`" :src="sec_image" />
 				</div>
 				<div class="flex w-full gap-2 items-end">
-					<button v-if="edit_mode && sec_file" @click="viewApl.handleSecUpdate" class="btn btn-xs btn-success">
+					<button v-if="edit_mode && sec_file" @click="viewApl.handleSecUpdate"
+						class="btn btn-xs btn-success">
 						<span v-if="s_loading" class="loading loading-ring loading-sm text-white"></span>
 						<span v-else>Update</span>
 					</button>
@@ -69,7 +72,7 @@
 					<span>Spouse Information</span>
 					<span v-if="!edit_mode" class="font-normal">{{
 						`${apl.slastName} ${apl.sfirstName}
-											${apl.sotherName}`.trimEnd() }}
+						${apl.sotherName}`.trimEnd() }}
 					</span>
 					<div v-else class="flex gap-3 w-fit">
 						<TextInput classer="input-sm" v-model="apl.slastName">Last
@@ -92,7 +95,7 @@
 			</div>
 		</div>
 
-
+		<!-- wards -->
 		<div v-if="apl.children_number > 0" class="flex flex-col gap-10 pt-32">
 			<div v-for="(ward, i) in apl.wards" :key="i" class="flex gap-5">
 				<!-- image -->
@@ -100,7 +103,7 @@
 					<div class="indicator">
 						<span :class="['indicator-item indicator-top indicator-center badge',
 							!edit_mode ? 'badge-primary' : 'badge-primary']">Ward Applicant {{ i + 1
-	}}</span>
+							}}</span>
 						<AvatarSelect :classer="`w-[300px] h-[300px]`" :src="wards_image[ward.index!]" />
 					</div>
 					<div class="flex w-full gap-2 items-end">
@@ -121,7 +124,7 @@
 					<h2 class="col-span-full py-3 text-2xl font-bold flex justify-between items-center w-full">
 						<span>Ward #{{ ward.index! + 1 }}</span>
 						<span v-if="!edit_mode" class="font-normal">{{ `${ward.wlastName} ${ward.wfirstName}
-													${ward.wotherName}`.trimEnd() }}
+							${ward.wotherName}`.trimEnd() }}
 						</span>
 						<div v-else class="flex gap-3 w-2/3">
 							<TextInput classer="input-sm font-normal" v-model="ward.wlastName">Last Name
@@ -152,13 +155,89 @@
 		</div>
 
 	</div>
+
+	<div v-else class="flex flex-col p-2">
+
+		<h1 class="mx-auto font-bold text-3xl pt-6 pb-3 uppercase">Primary Applicant</h1>
+
+		<!-- primary apl -->
+
+		<div class="flex flex-col gap-1 mb-8">
+			<!-- image -->
+			<AvatarSelect class="" :classer="`w-[100%] apsect-square`" :src="prime_image" />
+			<InfoCard heading="Last Name" v-model="apl.plastName" />
+			<InfoCard heading="First Name" v-model="apl.pfirstName" />
+			<InfoCard heading="Other Name" v-model="apl.potherName" />
+			<InfoCardDate heading="Date of Birth" v-model="apl.pdob" />
+			<InfoCard heading="City of Birth" v-model="apl.pcity_ob" />
+			<InfoCardSelect :options="$countries" heading="Country of Birth" v-model="apl.pcountry_ob" />
+			<InfoCardSelect :options="['MALE', 'FEMALE']" heading="Gender" v-model="apl.pgender" />
+			<InfoCard heading="Contact" v-model="apl.pcontact" />
+			<InfoCard heading="Next of Kin Contact" v-model="apl.pother_contact" />
+			<InfoCard heading="Email" v-model="apl.pemail" />
+			<InfoCard heading="Passport Number" v-model="apl.ppassport_number" />
+			<InfoCardDate heading="Passport Expiration Date" v-model="apl.passport_ex" />
+			<InfoCard heading="Residential Address" v-model="apl.ppostal" />
+			<InfoCardSelect :options="$countries" heading="Country You Live in Today"
+				v-model="apl.pcountry_live_today" />
+			<InfoCardSelect :options="$highest_level_ed" heading="Education Level" v-model="apl.peducation_level" />
+			<InfoCardSelect :options="$marital_status" heading="Marital Status" v-model="apl.pmarital_status" />
+			<InfoCardSelect :num_options="[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" heading="Number of Children"
+				v-model="apl.children_number" />
+			<InfoCard heading="Confirmation Code" v-model="apl.pconf_code" />
+			<InformationCard :class="apl.pconf_code ? 'col-span-full' : 'col-span-1'" heading="Payment"
+				v-model="apl.totalPayment" />
+
+		</div>
+
+		<!-- secondary apl -->
+		<div v-if="apl.pmarital_status == 'MARRIED'" class="flex flex-col gap-1 mb-8">
+
+			<h1 class="mx-auto font-bold text-3xl pt-6 pb-3 uppercase">Secondary Applicant</h1>
+
+			<!-- image -->
+			<AvatarSelect class="" :classer="`w-[100%] aspect-square`" :src="sec_image" />
+
+			<InfoCard heading="Last Name" v-model="apl.slastName" />
+			<InfoCard heading="First Name" v-model="apl.sfirstName" />
+			<InfoCard heading="Other Name" v-model="apl.sotherName" />
+			<InfoCardDate heading="Date of Birth" v-model="apl.sdob" />
+			<InfoCardSelect :options="['MALE', 'FEMALE']" heading="Gender" v-model="apl.sgender" />
+			<InfoCard heading="City of Birth" v-model="apl.scity_ob" />
+			<InfoCardSelect :options="$countries" heading="Country of Birth" v-model="apl.scountry_ob" />
+			<InfoCard heading="Contact" v-model="apl.scontact" />
+
+		</div>
+
+		<div v-if="apl.children_number > 0" class="flex flex-col">
+			<div v-for="(ward, i) in apl.wards" :key="i" class="flex flex-col gap-1">
+
+				<h1 class="mx-auto font-bold text-3xl pt-6 pb-3 uppercase">Ward Applicant {{ i + 1 }}</h1>
+
+				<AvatarSelect :classer="`w-[100%] aspect-square`" :src="wards_image[ward.index!]" />
+
+				<InfoCard heading="Last Name" v-model="ward.wlastName" />
+				<InfoCard heading="First Name" v-model="ward.wfirstName" />
+				<InfoCard heading="Other Name" v-model="ward.wotherName" />
+				<InfoCardDate v-model="ward.wdob" :heading="'Date of Birth'" />
+				<InfoCardSelect :options="['MALE', 'FEMALE']" v-model="ward.wgender" :heading="'Gender'" />
+				<InfoCard v-model="ward.wcity_ob" :heading="'City of Birth'" />
+				<InfoCardSelect :options="$countries" v-model="ward.wcountry_ob" :heading="'Country of Birth'" />
+
+			</div>
+
+
+		</div>
+	</div>
 </template>
 
 <script setup lang="ts">
 import { useViewAplStore } from '@/store/viewApl';
+import { useAppStore } from '@/store/app'
 import { storeToRefs } from 'pinia';
 
 
+const { is_mobile } = storeToRefs(useAppStore())
 const viewApl = useViewAplStore()
 const { edit_mode, prime_image, sec_image, p_loading, s_loading, prime_file, sec_file, applicant: apl, curr_ward_file, wards_file, wards_image, w_loading, if_updated } = storeToRefs(viewApl)
 
