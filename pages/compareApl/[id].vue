@@ -25,8 +25,8 @@
 
 			<div id="style-2" class="flex flex-col overflow-y-auto rounded-xl">
 				<section
-					class="flex flex-col gap-2 rounded-s-xl rounded-bl-none relative bg-neutral-800 dark:bg-neutral-50 p-2">
-					<p class="flex justify-evenly sticky top-0">
+					class="flex flex-col gap-2 rounded-s-xl rounded-bl-none relative bg-neutral-800 dark:bg-neutral-50 p-2 ">
+					<!-- <p class="flex justify-evenly sticky top-0">
 					<div class="flex w-full h-fit items-center group">
 						<div
 							class="flex-1 grid h-12 flex-grow place-items-center text-xl uppercase badge font-bold badge-secondary">
@@ -39,7 +39,11 @@
 							New
 						</div>
 					</div>
-					</p>
+					</p> -->
+
+					<div class="w-[200px] z-20 sticky top-2">
+						<AvatarSelect :src="request.modified_apl?.aplImg_path.primePath[0]" />
+					</div>
 
 					<h2 class="mx-auto mt-3 mb-5 text-3xl font-bold">Primary Applicant</h2>
 
@@ -149,7 +153,7 @@
 								Date(props.original?.passport_ex!)) : ''
 							}}
 						</template>
-						Passort Expiration <br /> Date
+						Passort Expiration Date
 						<template #apl="props">
 							{{ props.edited?.passport_ex ? useNuxtApp().$formatDateWords(new
 								Date(props.edited?.passport_ex!)) : '' }}
@@ -168,7 +172,7 @@
 						<template #modified_apl="props">
 							{{ props.original?.ppostal }}
 						</template>
-						Residential<br />Address
+						Residential Address
 						<template #apl="props">
 							{{ props.edited?.ppostal }}
 						</template>
@@ -213,7 +217,7 @@
 						<template #modified_apl="props">
 							{{ props.original?.peducation_level }}
 						</template>
-						Highest Level <br />of Education
+						Highest Level of Education
 						<template #apl="props">
 							{{ props.edited?.peducation_level }}
 						</template>
@@ -242,6 +246,11 @@
 
 				<section v-if="request.modified_apl?.slastName"
 					class="flex flex-col gap-2 rounded-s-xl rounded-tl-none bg-neutral-800 dark:bg-neutral-50 p-2">
+
+					<div class="w-[200px] z-20 sticky top-20">
+						<AvatarSelect />
+					</div>
+
 					<h2 class="mx-auto mt-10 mb-5 text-3xl font-bold">Secondary Applicant</h2>
 					<Divider v-if="if_val('slastName')">
 						<template #modified_apl="props">
@@ -321,6 +330,11 @@
 				<section v-for="(ward, idx) in request.modified_apl?.wards"
 					v-if="request.modified_apl?.wards.length! > 0"
 					class="flex flex-col gap-2 rounded-s-xl rounded-tl-none bg-neutral-800 dark:bg-neutral-50 p-2">
+
+					<div class="w-[200px] z-20 sticky top-2">
+						<AvatarSelect />
+					</div>
+
 					<h2 class="mx-auto mt-10 mb-5 text-3xl font-bold">Ward Applicant {{ idx + 1 }}</h2>
 					<Divider v-if="if_val(`wards.${idx}.wlastName`)">
 						<template #modified_apl="props">
