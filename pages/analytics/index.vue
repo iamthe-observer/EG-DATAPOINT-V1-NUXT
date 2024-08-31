@@ -288,7 +288,7 @@ const normal_users = computed(() => {
 	}
 	else if (profile.value?.email == 'elizabethlarbi1999@gmail.com') {
 
-		if (curr_location.value !== 'all' && ['madina', 'kwashieman'].includes(curr_location.value)) {
+		if (curr_location.value !== 'all' && ['madina', 'kwashieman', 'manet'].includes(curr_location.value)) {
 			return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
 				if (a.email < b.email) {
 					return -1;
@@ -304,7 +304,7 @@ const normal_users = computed(() => {
 
 	} else if (profile.value?.email == 'asorlarbi@gmail.com') {
 
-		if (curr_location.value !== 'all' && ['spintex', 'manet'].includes(curr_location.value)) {
+		if (curr_location.value !== 'all' && ['spintex', 'ashaiman'].includes(curr_location.value)) {
 			return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
 				if (a.email < b.email) {
 					return -1;
