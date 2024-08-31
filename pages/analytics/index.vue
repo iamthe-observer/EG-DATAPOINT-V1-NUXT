@@ -180,9 +180,11 @@ const admin_admin = computed(() => {
 
 const locationz = computed(() => {
 	if (profile.value?.email == 'elizabethlarbi1999@gmail.com') {
-		return locations.value.filter(location => location == 'madina' || location == 'kwashieman')
+		// return locations.value.filter(location => location == 'madina' || location == 'kwashieman'|| location == 'manet')
+		return locations.value.filter(location => ['madina', 'kwashieman', 'manet'].includes(location))
 	} else if (profile.value?.email == 'asorlarbi@gmail.com') {
-		return locations.value.filter(location => location == 'spintex' || location == 'ashaiman')
+		// return locations.value.filter(location => location == 'spintex' || location == 'ashaiman')
+		return locations.value.filter(location => ['spintex', 'ashaiman'].includes(location))
 	} else {
 		return locations.value
 	}
