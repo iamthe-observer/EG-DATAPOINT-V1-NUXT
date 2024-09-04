@@ -22,7 +22,7 @@
 
 				<select v-model="curr_location"
 					:class="['select rounded-full bg-[rgb(13,13,13)] dark:bg-neutral-50 dark:text-black', ISM ? 'select-xs w-32' : 'select-sm w-40']">
-					<option v-if="admin_admin" selected value="all">All Locations</option>
+					<option v-if="admin" selected value="all">All Locations</option>
 					<option v-for="location in locationz" :value="location">{{ location![0].toUpperCase() +
 						location?.substring(1)
 						}}</option>
@@ -158,34 +158,35 @@ const { is_mobile: ISM, total_apls, dark_mode, locations
 const { profiles, role, profile } = storeToRefs(useProfileStore())
 const date = ref<Date>(new Date())
 const shown = ref(false)
-const curr_location = ref('all')
+const curr_location = ref('circle')
 
-// restricted location list for specific admins
-// const locationz = computed(() => {
-// 	if (profile.value?.location == 'madina' || profile.value?.email == 'topsquad3552@gmail.com') {
-// 		return locations.value
-// 	} else {
-// 		return locations.value.filter(location => location != 'madina')
-// 	}
-// })
-
-const admin_admin = computed(() => {
-	if (profile.value?.email == 'topsquad3552@gmail.com' || profile.value?.email == 'ebbysgold@gmail.com') {
+const admin = computed(() => {
+	if (profile.value?.email == 'topsquad3552@gmail.com') {
 		return true
 	} else {
 		return false
 	}
 })
 
+const lizzy_locations = computed(() => {
+	return locations.value.filter(loc => ['madina', 'kwashieman', 'manet'].includes(loc))
+})
+const asor_locations = computed(() => {
+	return locations.value.filter(loc => ['spintex', 'ashaiman'].includes(loc))
+})
+const nana_locations = computed(() => {
+	return locations.value.filter(loc => ['circle'].includes(loc))
+})
 
 const locationz = computed(() => {
 	if (profile.value?.email == 'elizabethlarbi1999@gmail.com') {
-		// return locations.value.filter(location => location == 'madina' || location == 'kwashieman'|| location == 'manet')
-		return locations.value.filter(location => ['madina', 'kwashieman', 'manet'].includes(location))
+		return lizzy_locations.value
 	} else if (profile.value?.email == 'asorlarbi@gmail.com') {
-		// return locations.value.filter(location => location == 'spintex' || location == 'ashaiman')
-		return locations.value.filter(location => ['spintex', 'ashaiman'].includes(location))
-	} else {
+		return asor_locations.value
+	} else if (profile.value?.email == 'ebbysgold@gmail.com') {
+		return nana_locations.value
+	}
+	else {
 		return locations.value
 	}
 })
@@ -200,7 +201,7 @@ onBeforeMount(async () => {
 })
 
 const daily_applicants = computed(() => {
-	if (admin_admin.value) {
+	if (admin.value) {
 		return total_apls.value?.filter(
 			(apl) =>
 				useNuxtApp().$formatDate(new Date(apl.created_at!)) ==
@@ -271,7 +272,7 @@ const today_sales_admin = computed(() => {
 });
 
 const normal_users = computed(() => {
-	if (admin_admin.value) {
+	if (admin.value) {
 
 		if (curr_location.value !== 'all') {
 			return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
@@ -288,39 +289,40 @@ const normal_users = computed(() => {
 		}
 
 	}
-	else if (profile.value?.email == 'elizabethlarbi1999@gmail.com') {
+	// else if (profile.value?.email == 'elizabethlarbi1999@gmail.com') {
 
-		if (curr_location.value !== 'all' && ['madina', 'kwashieman', 'manet'].includes(curr_location.value)) {
-			return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
-				if (a.email < b.email) {
-					return -1;
-				}
-				if (a.email > b.email) {
-					return 1;
-				}
-				return 0;
-			})
-		} else {
-			return []
-		}
+	// 	if (curr_location.value !== 'all' && ['madina', 'kwashieman', 'manet'].includes(curr_location.value)) {
+	// 		return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
+	// 			if (a.email < b.email) {
+	// 				return -1;
+	// 			}
+	// 			if (a.email > b.email) {
+	// 				return 1;
+	// 			}
+	// 			return 0;
+	// 		})
+	// 	} else {
+	// 		return []
+	// 	}
 
-	} else if (profile.value?.email == 'asorlarbi@gmail.com') {
+	// } else if (profile.value?.email == 'asorlarbi@gmail.com') {
 
-		if (curr_location.value !== 'all' && ['spintex', 'ashaiman'].includes(curr_location.value)) {
-			return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
-				if (a.email < b.email) {
-					return -1;
-				}
-				if (a.email > b.email) {
-					return 1;
-				}
-				return 0;
-			})
-		} else {
-			return []
-		}
+	// 	if (curr_location.value !== 'all' && ['spintex', 'ashaiman'].includes(curr_location.value)) {
+	// 		return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
+	// 			if (a.email < b.email) {
+	// 				return -1;
+	// 			}
+	// 			if (a.email > b.email) {
+	// 				return 1;
+	// 			}
+	// 			return 0;
+	// 		})
+	// 	} else {
+	// 		return []
+	// 	}
 
-	} else {
+	// }
+	else {
 		if (curr_location.value !== 'all') {
 			return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
 				if (a.email < b.email) {
@@ -332,7 +334,8 @@ const normal_users = computed(() => {
 				return 0;
 			})
 		} else {
-			return profiles.value.filter(user => user.location != 'madina').filter(user => user.email != 'vinocharles419@gmail.com').filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
+			return profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
+			// return profiles.value.filter(user => user.location != 'madina').filter(user => user.email != 'vinocharles419@gmail.com').filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
 		}
 
 	}
@@ -392,7 +395,7 @@ const totalSales = computed(() => {
 })
 
 const userNames = computed(() => {
-	if (admin_admin.value) {
+	if (admin.value) {
 		return profiles.value
 			.filter(user => !user.role && user.fullname != null)
 			.filter(user => {
