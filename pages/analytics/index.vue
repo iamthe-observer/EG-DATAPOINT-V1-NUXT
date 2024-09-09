@@ -168,6 +168,14 @@ const admin = computed(() => {
 	}
 })
 
+onMounted(() => {
+	if (profile.value?.email == 'topsquad3552@gmail.com') {
+		curr_location.value = 'circle'
+	} else {
+		curr_location.value = profile.value?.location!
+	}
+})
+
 const lizzy_locations = computed(() => {
 	return locations.value.filter(loc => ['madina', 'kwashieman', 'manet'].includes(loc))
 })
