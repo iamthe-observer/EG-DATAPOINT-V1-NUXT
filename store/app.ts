@@ -161,6 +161,49 @@ export const useAppStore = defineStore("app", () => {
     }
   }
 
+  // async function getPrices() {
+  //   try {
+  //     let { data: user, error: err } = await $SB
+  //       .from("profiles")
+  //       .select("location")
+  //       .eq("id", useSupabaseUser().value?.id);
+  //     if (err) throw err;
+
+  //     let { data, error } = await $SB
+  //       .from("prices")
+  //       .select("*")
+  //       .order("id", { ascending: true })
+  //       .returns<{ id: number; adult: number; child: number }[]>();
+  //     if (error) throw error;
+
+  //     if (user![0].location == "circle" || user![0].location == "kaneshie") {
+  //       prices.value = data![0];
+  //       return data![0];
+  //     } else if (
+  //       user![0].location == "madina" ||
+  //       user![0].location == "ablekuma" ||
+  //       user![0].location == "odorkor"
+  //     ) {
+  //       prices.value = data![1];
+  //       return data![1];
+  //       // console.log(prices.value);
+  //     } else if (user![0].location == "spintex") {
+  //       prices.value = data![2];
+  //       return data![2];
+  //       // console.log(prices.value);
+  //     } else {
+  //       let _p: { id: number; adult: number; child: number } = {
+  //         id: 99,
+  //         adult: 40,
+  //         child: 20,
+  //       };
+  //       prices.value = _p;
+  //       return _p;
+  //     }
+  //   } catch (err: any) {
+  //     console.log(err);
+  //   }
+  // }
   async function getPrices() {
     try {
       let { data: user, error: err } = await $SB
@@ -173,33 +216,16 @@ export const useAppStore = defineStore("app", () => {
         .from("prices")
         .select("*")
         .order("id", { ascending: true })
-        .returns<{ id: number; adult: number; child: number }[]>();
+        .returns<
+          { id: number; adult: number; child: number; location: string }[]
+        >();
       if (error) throw error;
 
-      if (user![0].location == "circle" || user![0].location == "kaneshie") {
-        prices.value = data![0];
-        return data![0];
-      } else if (
-        user![0].location == "madina" ||
-        user![0].location == "ablekuma" ||
-        user![0].location == "odorkor"
-      ) {
-        prices.value = data![1];
-        return data![1];
-        // console.log(prices.value);
-      } else if (user![0].location == "spintex") {
-        prices.value = data![2];
-        return data![2];
-        // console.log(prices.value);
-      } else {
-        let _p: { id: number; adult: number; child: number } = {
-          id: 99,
-          adult: 40,
-          child: 20,
-        };
-        prices.value = _p;
-        return _p;
-      }
+      const PP = data?.find(
+        (location_price) => location_price.location == user![0].location,
+      );
+      prices.value = PP!;
+      return PP!;
     } catch (err: any) {
       console.log(err);
     }
