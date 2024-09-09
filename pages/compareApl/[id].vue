@@ -8,7 +8,9 @@
 					<span class="text-xs text-neutral-400 dark:text-neutral-600">{{ request.body }}</span>
 				</p>
 
-				<span class="">{{ where_conf }}</span>
+				<!-- <span class="">{{ where_conf }}</span> -->
+				<span class="">{{ profiles.find(user => user.id == request.modified_apl?.user_id)?.username
+					}}</span>
 
 				<span v-if="loading" class="loading loading-infinity loading-lg"></span>
 
@@ -437,9 +439,11 @@ import { Requests } from '@/interfaces/interfaces';
 import { storeToRefs } from 'pinia';
 import { useAppStore } from '@/store/app';
 import { useViewAplStore } from '@/store/viewApl';
+import { useProfileStore } from '@/store/profile';
 
 const apl_ = useAplStore()
 const app_ = useAppStore()
+const { profiles } = storeToRefs(useProfileStore())
 const { curr_compared_request: request } = storeToRefs(apl_)
 const { total_apls, is_mobile } = storeToRefs(app_)
 const { $SB, $deepCompareObjects } = useNuxtApp()
