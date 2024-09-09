@@ -324,6 +324,7 @@ export const useAplStore = defineStore(
     }
 
     async function handleSend() {
+      await useAppStore().getPrices();
       applicant.value.apl_id = uuidv4();
       applicant.value.fullName = `${applicant.value.plastName} ${applicant.value.pfirstName} ${applicant.value.potherName}`;
 
