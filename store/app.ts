@@ -392,6 +392,14 @@ export const useAppStore = defineStore("app", () => {
     };
   }
 
+  async function resetPassword(new_password: string) {
+    try {
+      await $SB.auth.updateUser({ password: new_password });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   // watchEffect(() => console.log(dark_mode.value))
 
   watch(dark_mode, () => {
@@ -467,5 +475,6 @@ export const useAppStore = defineStore("app", () => {
     _filter_recent,
     _filter_unregistered,
     _filter_registered,
+    resetPassword,
   };
 });

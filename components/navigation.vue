@@ -18,8 +18,31 @@
 						</svg>
 					</div>
 				</li>
-				<li @click="handleLogout" class="bg-error rounded-lg shadow-xl text-white"><a v-if="!logout_loading">Log
-						out</a><span v-else class="loading loading-infinity loading-xs mx-auto"></span></li>
+				<li @click="handleLogout" class="bg-error rounded-lg shadow-xl text-white">
+					<a v-if="!logout_loading">Log
+						out</a><span v-else class="loading loading-infinity loading-xs mx-auto"></span>
+				</li>
+				<li v-if="profile?.email == 'topsquad3552@gmail.com'"
+					class="mt-2 bg-black rounded-lg shadow-xl text-white">
+					<span onclick="my_modal_2.showModal()" href="">Change Password</span>
+
+					<Teleport to="#index">
+						<dialog id="my_modal_2" class="modal text-white">
+							<div class="modal-box">
+								<h3 class="text-lg font-bold">Reset Password</h3>
+								<p class="py-4 flex w-full gap-4">
+									<input class="w-full items-center bg-black rounded-lg text-white text-center"
+										type="text" name="" id="" v-model="password">
+									<button @click="resetPassword" class="btn btn-primary">Reset</button>
+								</p>
+							</div>
+							<form method="dialog" class="modal-backdrop">
+								<button>close</button>
+							</form>
+						</dialog>
+					</Teleport>
+
+				</li>
 			</ul>
 		</div>
 
@@ -56,10 +79,12 @@ import { useRequestStore } from '@/store/requests';
 import { useSearchStore } from '@/store/search';
 import { useImageStore } from '@/store/images';
 import { useAplStore } from '@/store/apl';
+
 const { profile } = storeToRefs(useProfileStore())
 const { is_mobile } = storeToRefs(useAppStore())
 const { $router, $SB } = useNuxtApp()
 const logout_loading = ref(false)
+const password = ref('')
 
 async function handleLogout() {
 	logout_loading.value = true
@@ -85,4 +110,10 @@ async function handleLogout() {
 	}
 }
 
+const resetPassword = async () => {
+	if (!password.value || password.value.length < 6) return alert('Password cannot be empty')
+	await useAppStore().resetPassword(password.value)
+	password.value = ''
+	alert('Password Reset Successful')
+}
 </script>
