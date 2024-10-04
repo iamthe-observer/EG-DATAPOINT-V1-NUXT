@@ -60,6 +60,10 @@ const appStore = useAppStore();
 const { all_my_apls, total_apls } = storeToRefs(appStore);
 const { role, profiles } = storeToRefs(useProfileStore());
 
+function sortApplicantsByUserId(applicants: Applicant[]): Applicant[] {
+	return applicants.sort((a, b) => a.user_id.localeCompare(b.user_id));
+}
+
 const registered_apls = computed(() => {
 	return all_my_apls.value.filter((apl) => apl.pconf_code)
 });
@@ -86,7 +90,8 @@ const incomplete_apl_pics = computed(() => {
 			}
 		}
 
-		return filtered
+		return filtered.sort((a, b) => a.apl.user_id.localeCompare(b.apl.user_id))
+		// return sortApplicantsByUserId(filtered.map(x => x.apl))
 
 	} else {
 		for (let ii = 0; ii < all_my_apls.value.length; ii++) {
