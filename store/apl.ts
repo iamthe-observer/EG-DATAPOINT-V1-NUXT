@@ -18,6 +18,7 @@ export const useAplStore = defineStore(
     const user = useSupabaseUser();
     const edit_mode = ref(false);
     const if_sent = ref<boolean>(false);
+    const if_receipt = ref(false);
     const if_req_sent = ref<boolean>(false);
     const apl_sending = ref(false);
     const if_val_err = ref(false);
@@ -44,6 +45,7 @@ export const useAplStore = defineStore(
         ...empty_req.value,
       }),
     );
+    const receiptData = ref<Applicant>();
     const applicant = ref<Applicant>({
       // created_at: new Date(),
       plastName: "",
@@ -419,7 +421,8 @@ export const useAplStore = defineStore(
 
     async function sendApplicant(apl_info: any) {
       apl_info.location = profile.value?.location;
-      console.log(apl_info);
+      receiptData.value = { ...apl_info };
+      console.log(receiptData.value, "receiptData");
 
       await submitApl(apl_info);
       console.log("done");
@@ -637,11 +640,13 @@ export const useAplStore = defineStore(
     };
 
     return {
+      receiptData,
       typeOfApl,
       reset_data,
       vuelidate_err,
       empty_ward,
       if_val_err,
+      if_receipt,
       applicant,
       applicant_type,
       resetAplData,
