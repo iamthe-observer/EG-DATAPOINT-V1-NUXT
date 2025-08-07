@@ -108,7 +108,7 @@
 							<div class="w-full text-center py-10 border-t-4 border-black border-double font-bold">
 								EBBYSGOLD GROUP
 
-								<span class="block text-center w-full ">
+								<span class="block text-center w-full font-normal text-sm">
 									{{ receipt?.location?.toUpperCase() }} BRANCH
 								</span>
 							</div>
@@ -117,11 +117,11 @@
 							<div class="flex flex-col gap-2 text-center border-y-2 border-black border-dashed py-6">
 								<div class="flex px-5 justify-between">
 									<span class="">DATE</span>
-									<span class="">{{ currDate }}</span>
+									<span class="font-bold">{{ currDate }}</span>
 								</div>
 								<div class="flex px-5 justify-between">
 									<span class="">CLERK </span>
-									<span class="">{{ profile?.username }} </span>
+									<span class="font-bold">{{ profile?.username }} </span>
 								</div>
 							</div>
 
@@ -129,15 +129,15 @@
 							<div class="flex flex-col gap-2 text-center border-b-4 border-black border-double py-6">
 								<div class="flex px-5 justify-between">
 									<span class="">NAME</span>
-									<span class="">{{ receipt?.fullName }}</span>
+									<span class="font-bold">{{ receipt?.fullName }}</span>
 								</div>
 								<div class="flex px-5 justify-between">
 									<span class="">ITEM</span>
-									<span class="">REGISTRATION</span>
+									<span class="font-bold">REGISTRATION</span>
 								</div>
 								<div class="flex px-5 justify-between">
 									<span class="">TOTAL</span>
-									<span class="">GHC {{ receipt?.totalPayment }}.00</span>
+									<span class="font-bold">GHC {{ receipt?.totalPayment }}.00</span>
 								</div>
 							</div>
 
@@ -151,7 +151,8 @@
 
 								<span class="font-bold text-xs italic">THANK YOU AND ALL THE BEST!</span>
 								<span class="flex justify-center">
-									<img :src="'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + receipt?.apl_id"
+									<img ref="image"
+										:src="'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + receipt?.apl_id"
 										alt="qr-code" class="w-24 aspect-square" />
 								</span>
 							</div>
@@ -220,6 +221,27 @@ import { useTitle } from '@vueuse/core';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
+const imageUrl = ref('');
+const image = ref<HTMLImageElement | null>(null);
+// const loading = ref(true);
+
+const fetchImage = async (url: string) => {
+	try {
+		const response = await fetch(url);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		const blob = await response.blob();
+		imageUrl.value = URL.createObjectURL(blob);
+	} catch (error) {
+		console.error('Error fetching image:', error);
+		// Optionally set a placeholder image on error
+		imageUrl.value = '';
+	} finally {
+		// loading.value = false;
+	}
+};
+
 interface DownloadPdfOptions {
 	elementId: string;
 	filename?: string;
@@ -229,19 +251,26 @@ async function downloadDivAsPdf(
 	elementId: string,
 	filename: string = 'receipt.pdf'
 ): Promise<void> {
+
+	await fetchImage('https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + receipt.value?.apl_id);
+
 	const element: HTMLElement | null = document.getElementById(elementId);
 	if (!element) {
 		console.error('Element not found:', elementId);
 		return;
 	}
 
-	const canvas: HTMLCanvasElement = await html2canvas(element);
-	const imgData: string = canvas.toDataURL('image/png');
-	const pdf: jsPDF = new jsPDF();
-	const imgWidth: number = 210; // A4 width in mm
-	const pageHeight: number = (canvas.height * imgWidth) / canvas.width;
-	pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, pageHeight);
-	pdf.save(filename);
+	if (image.value) image.value.src = imageUrl.value
+
+	setTimeout(async () => {
+		const canvas: HTMLCanvasElement = await html2canvas(element);
+		const imgData: string = canvas.toDataURL('image/png');
+		const pdf: jsPDF = new jsPDF();
+		const imgWidth: number = 210; // A4 width in mm
+		const pageHeight: number = (canvas.height * imgWidth) / canvas.width;
+		pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, pageHeight);
+		pdf.save(filename);
+	}, 1000)
 }
 
 useTitle('EG Datapoint | Add Applicant')
