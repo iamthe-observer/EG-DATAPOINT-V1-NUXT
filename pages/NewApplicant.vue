@@ -95,7 +95,8 @@
 		<!-- RECEIPT -->
 		<input :checked="if_receipt" type="checkbox" id="receipt-modal" class="modal-toggle" />
 		<div class="modal">
-			<div class="modal-box dark:bg-white dark:outline dark:outline-4 dark:outline-success">
+			<div
+				class="modal-box dark:bg-white dark:outline dark:outline-4 dark:outline-success flex flex-col justify-center">
 				<p class="py-4 text-center text-4xl dark:text-success dark:font-semibold">
 					Receipt Generated!</p>
 
@@ -163,7 +164,7 @@
 					</div>
 				</div>
 
-				<button @click="downloadDivAsPdf('receipt')" class="btn btn-primary mx-auto">DOWNLOAD</button>
+				<button @click="downloadDivAsPdf('receipt')" class="btn btn-primary mx-auto mt-2">DOWNLOAD</button>
 			</div>
 
 
@@ -282,6 +283,7 @@ const { applicant, if_sent, if_req_sent, apl_sending, request, if_val_err, recei
 const { profile } = storeToRefs(useProfileStore());
 
 const currDate = ref();
+const dateTries = ref(0);
 
 async function fetchCurrentDate() {
 	try {
@@ -292,7 +294,16 @@ async function fetchCurrentDate() {
 		console.log('Current Date:', currDate.value);
 
 	} catch (e) {
-		currDate.value = new Date().toLocaleDateString('en-GB');
+		// currDate.value = new Date().toLocaleDateString('en-GB');
+		if (dateTries.value < 3) {
+			dateTries.value++;
+			console.error('Error fetching date, retrying...', e);
+			await fetchCurrentDate();
+		} else {
+			dateTries.value = 0;
+			currDate.value = new Date().toLocaleDateString('en-GB'); // fallback to local date
+			console.error('Failed to fetch date after multiple attempts, using local date:', currDate.value);
+		}
 	}
 }
 

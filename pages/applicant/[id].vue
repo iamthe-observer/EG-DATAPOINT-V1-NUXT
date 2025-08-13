@@ -86,6 +86,18 @@
 						</svg>
 						Request Delete
 					</button>
+					<button v-if="!edit_mode" onclick="receiptModal.showModal()"
+						class="btn btn-outline btn-sm rounded-xl text-white hover:text-green-500 dark:hover:text-green-300 join-item bg-none hover:btn-ghost">
+						<svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+							viewBox="0 0 24 24"><!-- Icon from Tabler Icons by Paweł Kuna - https://github.com/tabler/tabler-icons/blob/master/LICENSE -->
+							<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+								stroke-width="2">
+								<path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-3-2l-2 2l-2-2l-2 2l-2-2z" />
+								<path
+									d="M14.8 8A2 2 0 0 0 13 7h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1-1.8-1M12 6v10" />
+							</g>
+						</svg> Generate Receipt
+					</button>
 				</div>
 
 				<span v-if="!edit_mode" class="text-sm font-semibold text-right">{{ applicant.fullName ?
@@ -121,6 +133,103 @@
 			</div>
 
 		</div>
+
+		<!-- generate receipt -->
+		<dialog id="receiptModal" class="modal">
+			<form method="dialog" class="modal-box bg-neutral-900 dark:bg-neutral-50">
+				<h3 class="font-semibold text-lg text-white dark:text-black flex items-center gap-3">
+					<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+						<g stroke="#888888" stroke-linecap="round" stroke-width="2">
+							<path fill="#10dc7e" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
+								d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z">
+								<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0" />
+								<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s"
+									values="0;0.3" />
+							</path>
+							<path fill="none" stroke-dasharray="8" stroke-dashoffset="8" d="M12 7V13">
+								<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s"
+									values="8;0" />
+							</path>
+						</g>
+						<circle cx="12" cy="17" r="1" fill="#888888" fill-opacity="0">
+							<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1" />
+						</circle>
+					</svg>
+					Receipt Generated
+				</h3>
+
+				<div class="rounded-lg overflow-hidden">
+					<div class="flex flex-col items-center gap-4 h-[500px] overflow-y-auto text-black">
+
+						<div id="receipt" class="w-full bg-white py-10 px-10">
+
+							<!-- header -->
+							<div class="w-full text-center py-10 border-t-4 border-black border-double font-bold">
+								EBBYSGOLD GROUP
+
+								<span class="block text-center w-full font-normal text-sm">
+									{{ applicant?.location?.toUpperCase() }} BRANCH
+								</span>
+							</div>
+
+							<!-- body -->
+							<div class="flex flex-col gap-2 text-center border-y-2 border-black border-dashed py-6">
+								<div class="flex px-5 justify-between">
+									<span class="">DATE</span>
+									<span class="font-bold">{{ $formatDate(new Date(applicant?.created_at!)) }}</span>
+								</div>
+								<div class="flex px-5 justify-between">
+									<span class="">CLERK </span>
+									<span class="font-bold">{{profiles?.find(user => user.id ==
+										applicant.user_id)?.username}} </span>
+								</div>
+							</div>
+
+							<!-- data -->
+							<div class="flex flex-col gap-2 text-center border-b-4 border-black border-double py-6">
+								<div class="flex px-5 justify-between">
+									<span class="">NAME</span>
+									<span class="font-bold">{{ applicant?.fullName }}</span>
+								</div>
+								<div class="flex px-5 justify-between">
+									<span class="">ITEM</span>
+									<span class="font-bold">REGISTRATION</span>
+								</div>
+								<div class="flex px-5 justify-between">
+									<span class="">TOTAL</span>
+									<span class="font-bold">GHC {{ applicant?.totalPayment }}.00</span>
+								</div>
+							</div>
+
+							<!-- footer -->
+							<div class="flex flex-col gap-10 text-center py-6 pt-2">
+
+								<div class="w-full flex px-5 justify-between">
+									<span class="text-[.65rem]">RECEIPT NO.</span>
+									<span class="text-[.65rem]">{{ applicant?.apl_id }}</span>
+								</div>
+
+								<span class="font-bold text-xs italic">THANK YOU AND ALL THE BEST!</span>
+								<span class="flex justify-center">
+									<img ref="image"
+										:src="'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + applicant?.apl_id"
+										alt="qr-code" class="w-24 aspect-square" />
+								</span>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+
+				<div class="modal-action">
+					<!-- if there is a button in form, it will close the modal -->
+					<button class="btn btn-primary text-white" @click="downloadDivAsPdf('receipt')">Download</button>
+					<button @click="request.body = ''" class="btn btn-error text-white">Close</button>
+				</div>
+			</form>
+		</dialog>
+
 
 		<dialog id="my_modal_1" class="modal">
 			<form method="dialog" class="modal-box bg-neutral-900 dark:bg-neutral-50">
@@ -218,10 +327,66 @@ import { useRequestStore } from '@/store/requests'
 import { useViewAplStore } from '@/store/viewApl';
 import { Applicant, Requests } from '@/interfaces/interfaces';
 import { useAppStore } from '@/store/app';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+
+const imageUrl = ref('');
+const image = ref<HTMLImageElement | null>(null);
+// const loading = ref(true);
+
+const fetchImage = async (url: string) => {
+	try {
+		const response = await fetch(url);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		const blob = await response.blob();
+		imageUrl.value = URL.createObjectURL(blob);
+	} catch (error) {
+		console.error('Error fetching image:', error);
+		// Optionally set a placeholder image on error
+		imageUrl.value = '';
+	} finally {
+		// loading.value = false;
+	}
+};
+
+interface DownloadPdfOptions {
+	elementId: string;
+	filename?: string;
+}
+
+async function downloadDivAsPdf(
+	elementId: string,
+	filename: string = 'receipt.pdf'
+): Promise<void> {
+
+	await fetchImage('https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + applicant.value?.apl_id);
+
+	const element: HTMLElement | null = document.getElementById(elementId);
+	if (!element) {
+		console.error('Element not found:', elementId);
+		return;
+	}
+
+	if (image.value) image.value.src = imageUrl.value
+
+	setTimeout(async () => {
+		const canvas: HTMLCanvasElement = await html2canvas(element);
+		const imgData: string = canvas.toDataURL('image/png');
+		const pdf: jsPDF = new jsPDF();
+		const imgWidth: number = 210; // A4 width in mm
+		const pageHeight: number = (canvas.height * imgWidth) / canvas.width;
+		pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, pageHeight);
+		pdf.save(filename);
+	}, 1000)
+}
+
 
 let num = ref(0)
 const { applicant, edit_mode, request, if_applicant_ex } = storeToRefs(useViewAplStore())
 const { is_mobile } = storeToRefs(useAppStore())
+const { profiles } = storeToRefs(useProfileStore())
 
 let loading = ref(false)
 const if_sent = ref(false)
