@@ -126,7 +126,7 @@
 		<div v-else class="flex w-full h-full gap-5">
 			<!-- total daily applicants -->
 			<div ref="info_container"
-				class="containers total_applicants flex items-center justify-center flex-1 h-full">
+				class="containers total_applicants flex items-center justify-center flex-1 h-full w-1/2">
 				<p v-if="!is_hover" class="flex flex-col gap-2 items-start">
 					<span class="w-min mx-auto text-sm text-neutral-500 text-center">Today's Applicants</span>
 					<span class="w-min mx-auto font-medium text-2xl">{{ total_daily_applicants_admin?.length }}</span>
@@ -142,7 +142,7 @@
 			</div>
 
 			<!-- total applicants -->
-			<div class="containers total_applicants px-4 flex gap-2 items-center justify-between w-[70%] h-full">
+			<!-- <div class="containers total_applicants px-4 flex gap-2 items-center justify-between w-[70%] h-full">
 				<p class="flex flex-col gap-2">
 					<span class="text-sm text-neutral-500">All Applicants</span>
 					<span class="text-4xl font-medium">{{ total_apls?.length }}</span>
@@ -159,7 +159,35 @@
 							}}</span>
 					</div>
 				</div>
+			</div> -->
+
+			<div onclick="viewtodayapls.showModal()"
+				class="containers total_applicants px-4 flex items-center justify-between w-2/3 h-full hover:cursor-pointer dark:hover:bg-red-50  hover:bg-neutral-700 transition-all duration-200 ease-out">
+
+				<dialog id="viewtodayapls" class="modal">
+					<form method="dialog"
+						class="modal-box dark:bg-neutral-50 dark:text-black bg-neutral-800 text-white text-center max-w-full h-5/6">
+						<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+
+						<ViewTodayApplicants />
+
+					</form>
+				</dialog>
+
+				<p class="flex flex-col gap-2">
+					<span class="text-sm text-neutral-500">Today's Applicants</span>
+					<span class="font-medium text-2xl">{{ total_daily_applicants?.length }}</span>
+					<span
+						:class="`text-xs ${total_daily_inc >= 100 ? 'text-green-500' : 'text-red-500'} font-medium w-full`">{{
+							total_daily_inc >= 100 ? Math.floor(total_daily_inc - 100) : total_daily_inc.toFixed(1) }}% {{
+							total_daily_inc >= 100 ? 'more than yesterday.' : 'of yesterday.'
+						}}</span>
+				</p>
+				<radial-progress :textclr="`secondary`" :amount="Number(total_daily_inc!.toFixed(1))" />
 			</div>
+
+
+			<!--  -->
 		</div>
 
 	</div>
