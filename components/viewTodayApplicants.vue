@@ -1,5 +1,5 @@
 <template>
-	<h1 class="w-full text-left font-bold text-3xl pb-8">Total Daily Applicants</h1>
+	<h1 class="w-full text-left font-bold text-3xl pb-8">Total Daily Applicants === GHC {{ totalPaymentSum }}.00</h1>
 	<div class="grid grid-cols-3 gap-4 rounded-xl w-full overflow-y-auto" id="style-1">
 
 		<div @click="() => {
@@ -31,6 +31,12 @@ import { storeToRefs } from 'pinia'
 import { useViewAplStore } from '@/store/viewApl';
 
 const { total_daily_applicants, daily_urls } = storeToRefs(useAppStore())
+
+import { computed } from 'vue'
+
+const totalPaymentSum = computed(() =>
+	total_daily_applicants.value.reduce((sum, apl) => sum + (apl.totalPayment || 0), 0)
+)
 </script>
 
 <style scoped></style>
