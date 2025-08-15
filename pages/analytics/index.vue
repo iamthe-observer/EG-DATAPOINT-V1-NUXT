@@ -25,7 +25,7 @@
 					<option v-if="admin" selected value="all">All Locations</option>
 					<option v-for="location in locationz" :value="location">{{ location![0].toUpperCase() +
 						location?.substring(1)
-						}}</option>
+					}}</option>
 				</select>
 			</div>
 
@@ -38,8 +38,8 @@
 								d="M12 22.575q-.2 0-.375-.062T11.3 22.3L9 20H5q-.825 0-1.413-.588T3 18V4q0-.825.588-1.413T5 2h14q.825 0 1.413.588T21 4v14q0 .825-.588 1.413T19 20h-4l-2.3 2.3q-.15.15-.325.213t-.375.062ZM12 12q1.45 0 2.475-1.025T15.5 8.5q0-1.45-1.025-2.475T12 5q-1.45 0-2.475 1.025T8.5 8.5q0 1.45 1.025 2.475T12 12Zm0 8.2l2.2-2.2H19v-1.15q-1.35-1.325-3.138-2.087T12 14q-2.075 0-3.863.763T5 16.85V18h4.8l2.2 2.2Z" />
 						</svg></div>
 					<p class="flex flex-col">
-						<span class="text-xl font-bold">{{ curr_location == 'all' ? total_apls.length :
-							total_apls.filter(apl => apl.location == curr_location).length }}</span>
+						<span class="text-xl font-bold">{{curr_location == 'all' ? total_apls.length :
+							total_apls.filter(apl => apl.location == curr_location).length}}</span>
 						<span class="text-sm text-neutral-500 dark:text-neutral-800">Total Applicants</span>
 					</p>
 				</div>
@@ -68,8 +68,8 @@
 								d="M12 22.575q-.2 0-.375-.062T11.3 22.3L9 20H5q-.825 0-1.413-.588T3 18V4q0-.825.588-1.413T5 2h14q.825 0 1.413.588T21 4v14q0 .825-.588 1.413T19 20h-4l-2.3 2.3q-.15.15-.325.213t-.375.062ZM5 16.85q1.35-1.325 3.138-2.087T12 14q2.075 0 3.863.763T19 16.85V4H5v12.85ZM12 12q1.45 0 2.475-1.025T15.5 8.5q0-1.45-1.025-2.475T12 5q-1.45 0-2.475 1.025T8.5 8.5q0 1.45 1.025 2.475T12 12Zm0-2q-.625 0-1.063-.438T10.5 8.5q0-.625.438-1.063T12 7q.625 0 1.063.438T13.5 8.5q0 .625-.438 1.063T12 10Zm0 10.2l2.2-2.2H17v-.25q-1.05-.875-2.325-1.312T12 16q-1.4 0-2.675.438T7 17.75V18h2.8l2.2 2.2Zm0-9.775Z" />
 						</svg></div>
 					<p class="flex flex-col">
-						<span class="text-xl font-bold">{{ curr_location == 'all' ? daily_applicants.length :
-							daily_applicants.filter(apl => apl.location == curr_location).length }}</span>
+						<span class="text-xl font-bold">{{curr_location == 'all' ? daily_applicants.length :
+							daily_applicants.filter(apl => apl.location == curr_location).length}}</span>
 						<span class="text-sm text-neutral-500 dark:text-neutral-800">Daily Applicants</span>
 					</p>
 				</div>
@@ -231,20 +231,6 @@ const daily_applicants = computed(() => {
 			.filter(apl => apl.location == curr_location.value)
 	}
 
-	// old code
-	// else if (profile.value?.email == 'elizabethlarbi1999@gmail.com' || profile.value?.email == 'asorlarbi@gmail.com') {
-	// 	return total_apls.value?.filter(
-	// 		(apl) =>
-	// 			useNuxtApp().$formatDate(new Date(apl.created_at!)) ==
-	// 			useNuxtApp().$formatDate(date.value),
-	// 	).filter(apl => apl.location == 'madina' || apl.location == 'kwashieman');
-	// } else {
-	// 	return total_apls.value?.filter(
-	// 		(apl) =>
-	// 			useNuxtApp().$formatDate(new Date(apl.created_at!)) ==
-	// 			useNuxtApp().$formatDate(date.value),
-	// 	).filter(apl => apl.location == curr_location.value);
-	// }
 })
 
 const today_sales_admin = computed(() => {
@@ -280,74 +266,17 @@ const today_sales_admin = computed(() => {
 });
 
 const normal_users = computed(() => {
-	if (admin.value) {
+	const filterFn = (user: any) =>
+		(
+			(!user.role && user.fullname != null) ||
+			(user.email === 'gertrude16h@gmail.com')
+		) &&
+		(curr_location.value === 'all' || user.location == curr_location.value);
 
-		if (curr_location.value !== 'all') {
-			return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
-				if (a.email < b.email) {
-					return -1;
-				}
-				if (a.email > b.email) {
-					return 1;
-				}
-				return 0;
-			})
-		} else {
-			return profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
-		}
-
-	}
-	// else if (profile.value?.email == 'elizabethlarbi1999@gmail.com') {
-
-	// 	if (curr_location.value !== 'all' && ['madina', 'kwashieman', 'manet'].includes(curr_location.value)) {
-	// 		return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
-	// 			if (a.email < b.email) {
-	// 				return -1;
-	// 			}
-	// 			if (a.email > b.email) {
-	// 				return 1;
-	// 			}
-	// 			return 0;
-	// 		})
-	// 	} else {
-	// 		return []
-	// 	}
-
-	// } else if (profile.value?.email == 'asorlarbi@gmail.com') {
-
-	// 	if (curr_location.value !== 'all' && ['spintex', 'ashaiman'].includes(curr_location.value)) {
-	// 		return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
-	// 			if (a.email < b.email) {
-	// 				return -1;
-	// 			}
-	// 			if (a.email > b.email) {
-	// 				return 1;
-	// 			}
-	// 			return 0;
-	// 		})
-	// 	} else {
-	// 		return []
-	// 	}
-
-	// }
-	else {
-		if (curr_location.value !== 'all') {
-			return profiles.value.filter(user => !user.role && user.fullname != null && user.location == curr_location.value).sort(function (a, b) {
-				if (a.email < b.email) {
-					return -1;
-				}
-				if (a.email > b.email) {
-					return 1;
-				}
-				return 0;
-			})
-		} else {
-			return profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
-			// return profiles.value.filter(user => user.location != 'madina').filter(user => user.email != 'vinocharles419@gmail.com').filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
-		}
-
-	}
-})
+	return profiles.value
+		.filter(filterFn)
+		.sort((a, b) => a.email.localeCompare(b.email));
+});
 
 function getUserSalesToday(id: string) {
 	let amount = 0
@@ -386,20 +315,6 @@ const totalSales = computed(() => {
 
 	return amount
 
-	// 				for (let i = 0; i < aplsByDay!.length; i++) {
-	// 				const payment = aplsByDay![i].totalPayment;
-	// 				if (!isNaN(payment)) {
-	// 					sum += payment;
-	// 				}
-	// 			}
-
-	// 			amount.push(sum)
-	// 			// return sum;
-	// 		} else {
-	// 			amount.push(0)
-	// 			// return 0;
-	// 		}
-	// }
 })
 
 const userNames = computed(() => {
@@ -437,82 +352,27 @@ const userNames = computed(() => {
 })
 
 const amountOfAplsByUser = computed(() => {
-	// let totals: { x: string, y: number }[] = []
-	let amount: number[] = []
+	const filteredProfiles = profiles.value
+		.filter(user => !user.role && user.fullname || user.email === 'gertrude16h@gmail.com')
+		.filter(user => curr_location.value === 'all' || user.location === curr_location.value)
+		.sort((a, b) => a.email.localeCompare(b.email));
 
-	// .filter(user => {
-	// 	if (profile.value?.email != 'topsquad3552@gmail.com') {
-	// 		return user.email != 'vinocharles419@gmail.com'
-	// 	} else {
-	// 		return user
-	// 	}
-	// })
-
-	const PROFILES = profiles.value
-		.filter(user => !user.role && user.fullname != null)
-		.filter(user => {
-			if (curr_location.value == 'all') {
-				return true
-			} else {
-				return user.location == curr_location.value
-			}
-		})
-		.sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })
-
-	for (let ii = 0; ii < PROFILES.length; ii++) {
-		const user = PROFILES[ii];
-
-		let aplsByDay = total_apls.value.filter(apl => apl.user_id == user.id)
-		// let aplsByDay = total_apls.value.filter(apl => apl.user_id == user.id).filter(apl => FD(new Date(apl.created_at!)) == FD(new Date(date.value!)))
-
-		if (aplsByDay.length > 0) {
-			let sum = 0;
-			for (let i = 0; i < aplsByDay!.length; i++) {
-				const payment = aplsByDay![i].totalPayment;
-				if (!isNaN(payment)) {
-					sum += payment;
-				}
-			}
-
-			amount.push(sum)
-			// return sum;
-		} else {
-			amount.push(0)
-			// return 0;
-		}
-
-
-
-		// amount.push(aplsByDay.length)
-		// return totals.push({ x: user.fullname!, y: aplsByDay.length })
-	}
-
-	// console.log(totals);
-
-	return amount
-})
+	return filteredProfiles.map(user => {
+		const userApls = total_apls.value.filter(apl => apl.user_id === user.id);
+		return userApls.reduce((sum, apl) => sum + (isNaN(apl.totalPayment) ? 0 : apl.totalPayment), 0);
+	});
+});
 
 function getTotalPaymentByDay(num: number) {
-	const today = new Date();
-	const numDaysAgo = new Date(today);
-	numDaysAgo.setDate(today.getDate() - num);
+	const targetDate = new Date();
+	targetDate.setDate(targetDate.getDate() - num);
 
-	let totalPayments = total_apls.value.filter(x => {
-		if (curr_location.value == 'all') {
-			return true
-		} else {
-			return x.location == curr_location.value
-		}
-	}).filter(apl => useNuxtApp().$formatDate(new Date(apl.created_at!)) == useNuxtApp().$formatDate(numDaysAgo)).map(apl => apl.totalPayment)
-	// let totalPayments = total_apls.value.filter(x => x.location != 'madina').filter(apl => useNuxtApp().$formatDate(new Date(apl.created_at!)) == useNuxtApp().$formatDate(numDaysAgo)).map(apl => apl.totalPayment)
+	const payments = total_apls.value
+		.filter(apl => curr_location.value === 'all' || apl.location === curr_location.value)
+		.filter(apl => useNuxtApp().$formatDate(new Date(apl.created_at!)) === useNuxtApp().$formatDate(targetDate))
+		.map(apl => isNaN(apl.totalPayment) ? 0 : apl.totalPayment);
 
-	let sum = 0
-	for (let ii = 0; ii < totalPayments.length; ii++) {
-		const payment = totalPayments[ii];
-		if (!isNaN(payment)) sum += payment
-	}
-
-	return sum
+	return payments.reduce((sum, payment) => sum + payment, 0);
 }
 
 const sales_by_day = computed(() => {
@@ -580,17 +440,6 @@ const lineOptions = computed<ChartOptions<'bar'>>(() => {
 
 const barOptions = ref<ChartOptions<'bar'>>({
 	responsive: true,
-	// onClick: (ctx, el) => {
-	// 	if (el.length > 0) {
-	// 		let index = el[0].index
-	// 		const user = profiles.value.filter(user => !user.role && user.fullname != null).sort(function (a, b) { if (a.email < b.email) { return -1; } if (a.email > b.email) { return 1; } return 0; })[index]
-
-	// 		console.log(user.id, user.fullname);
-
-	// 		useViewAplStore().setUSER(user.id)
-	// 		useNuxtApp().$router.push(`/analytics/${user.id}_${user.fullname}`)
-	// 	}
-	// },
 	plugins: {
 		legend: {
 			display: false,
@@ -614,7 +463,6 @@ const lineData = computed<ChartData<'line'>>(() => {
 				label: 'Sales',
 				borderRadius: 10,
 				data: sales_by_day.value,
-				// data: [{ x: 'Sales', y: 20 }, { x: 'Revenue', y: 10 }],
 				backgroundColor: bgClrs.value,
 			},
 		],
@@ -630,7 +478,6 @@ const barData = computed<ChartData<'bar'>>(() => {
 				type: 'bar',
 				borderRadius: 10,
 				data: amountOfAplsByUser.value,
-				// data: [{ x: 'Sales', y: 20 }, { x: 'Revenue', y: 10 }],
 				backgroundColor: bgClrs.value,
 			},
 		],
