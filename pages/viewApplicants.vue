@@ -16,21 +16,23 @@
 					<select v-model="curr_user"
 						class="select w-full select-sm rounded-full bg-[rgb(13,13,13)] dark:bg-neutral-50 dark:text-black">
 						<option selected value="all">All Users</option>
-						<option v-for="user in profiles" :value="user.id">{{ `${user.fullname || 'User'} ${total_apls.filter(apl =>
+						<option v-for="user in profiles" :value="user.id">{{`${user.fullname || 'User'}
+							${total_apls.filter(apl =>
 							apl.user_id
 							==
 							user.id).filter(apl => apl.pconf_code).length} / ${total_apls.filter(apl =>
 								apl.user_id
 								==
-								user.id).length}  => ${total_apls.filter(apl =>
+								user.id).length} => ${total_apls.filter(apl =>
 									apl.user_id
 									==
-									user.id).filter(apl => !apl.pconf_code).length}` }}</option>
+									user.id).filter(apl => !apl.pconf_code).length}`}}</option>
 					</select>
 				</h1>
 
 				<div v-if="role ? total_apls.length > step : all_my_apls.length > step" class="join">
-					<button class="join-item btn btn-sm rounded-full btn-primary" @click="PrevPage(page_index)">«</button>
+					<button class="join-item btn btn-sm rounded-full btn-primary"
+						@click="PrevPage(page_index)">«</button>
 					<button class="join-item btn btn-sm rounded-full btn-primary">Page {{ page_index }}</button>
 					<button class="join-item btn btn-sm rounded-full btn-primary" @click="NextPage()">»</button>
 				</div>
@@ -200,8 +202,9 @@
 								<div class="flex items-center space-x-3">
 									<div>
 										<div class="font-semibold">{{ apl.fullName }}</div>
-										<div class="text-sm text-neutral-400 z-0">{{ apl.pconf_code ? apl.pconf_code : 'No Confirmation Code'
-										}}
+										<div class="text-sm text-neutral-400 z-0">{{ apl.pconf_code ? apl.pconf_code :
+											'No Confirmation Code'
+											}}
 										</div>
 									</div>
 								</div>
@@ -229,10 +232,11 @@
 								<div class="flex flex-col items-end justify-center text-xs">
 									<span class="text-neutral-300 dark:text-neutral-700">{{ useNuxtApp().$formatDate(new
 										Date(apl.created_at!)) }}</span>
-									<span class="text-neutral-300 dark:text-neutral-700">{{ new Date(apl.created_at!).toLocaleTimeString([],
-										{
-											hour: '2-digit', minute: '2-digit', hour12: true
-										}) }}</span>
+									<span class="text-neutral-300 dark:text-neutral-700">{{ new
+										Date(apl.created_at!).toLocaleTimeString([],
+											{
+												hour: '2-digit', minute: '2-digit', hour12: true
+											}) }}</span>
 								</div>
 							</td>
 							<td>
@@ -263,14 +267,15 @@
 			</div>
 
 			<div ref="scroll_container_admin" v-if="role && _curr_filtered_apls?.length! > 0" id="style-1"
-				class="overflow-x-auto overflow-Y-auto pb -3 px-2">
+				class="overflow-x-auto overflow-y-auto pb -3 px-2">
 				<table class="table relative">
 					<!-- head -->
 					<thead class="sticky top-0 backdrop-blur-lg border-none z-50">
 						<tr class="border-none z-50">
 							<!-- <th class="font-semibold text-center dark:text-neutral-700 text-sm">Pos.</th> -->
 							<!-- <th class="font-semibold text-center dark:text-neutral-700 text-sm">Action</th> -->
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm" @dblclick="loadAplEx">Name</th>
+							<th class="font-semibold text-center dark:text-neutral-700 text-sm" @dblclick="loadAplEx">
+								Name</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Bio</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Phone Number</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Created</th>
@@ -307,8 +312,9 @@
 								<div class="flex items-center space-x-3">
 									<div>
 										<div class="font-semibold">{{ apl.fullName }}</div>
-										<div class="text-sm text-neutral-400 z-0">{{ apl.pconf_code ? apl.pconf_code : 'No Confirmation Code'
-										}}
+										<div class="text-sm text-neutral-400 z-0">{{ apl.pconf_code ? apl.pconf_code :
+											'No Confirmation Code'
+											}}
 										</div>
 									</div>
 								</div>
@@ -333,16 +339,18 @@
 							</td>
 							<td class="">
 								<div class="flex flex-col items-end justify-center text-xs">
-									<span class="text-right dark:font-semibold">By: {{ profiles.filter(user => user.id ==
+									<span class="text-right dark:font-semibold">By: {{profiles.filter(user => user.id
+										==
 										apl.user_id)[0].fullname ||
 										'User'
-									}}</span>
+										}}</span>
 									<span class="text-neutral-300 dark:text-neutral-700">{{ useNuxtApp().$formatDate(new
 										Date(apl.created_at!)) }}</span>
-									<span class="text-neutral-300 dark:text-neutral-700">{{ new Date(apl.created_at!).toLocaleTimeString([],
-										{
-											hour: '2-digit', minute: '2-digit', hour12: true
-										}) }}</span>
+									<span class="text-neutral-300 dark:text-neutral-700">{{ new
+										Date(apl.created_at!).toLocaleTimeString([],
+											{
+												hour: '2-digit', minute: '2-digit', hour12: true
+											}) }}</span>
 								</div>
 							</td>
 							<td>
@@ -352,7 +360,8 @@
 							</td>
 							<td>
 								<div class="text-right">
-									{{ apl.location ? apl.location![0].toUpperCase() + apl.location?.substring(1) : '' }}
+									{{ apl.location ? apl.location![0].toUpperCase() + apl.location?.substring(1) : ''
+									}}
 								</div>
 							</td>
 							<td>
@@ -384,11 +393,13 @@
 						<path fill="#888888" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
 							d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z">
 							<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0" />
-							<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3" />
+							<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s"
+								values="0;0.3" />
 						</path>
 						<path fill="none" stroke-dasharray="14" stroke-dashoffset="14"
 							d="M8 16C8.5 15 9.79086 14 12 14C14.2091 14 15.5 15 16 16">
-							<animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="14;0" />
+							<animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s"
+								values="14;0" />
 						</path>
 					</g>
 					<g fill="#888888" fill-opacity="0">
@@ -411,11 +422,13 @@
 						<path fill="#888888" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
 							d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z">
 							<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0" />
-							<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3" />
+							<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s"
+								values="0;0.3" />
 						</path>
 						<path fill="none" stroke-dasharray="14" stroke-dashoffset="14"
 							d="M8 16C8.5 15 9.79086 14 12 14C14.2091 14 15.5 15 16 16">
-							<animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="14;0" />
+							<animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s"
+								values="14;0" />
 						</path>
 					</g>
 					<g fill="#888888" fill-opacity="0">
@@ -446,9 +459,10 @@
 					<span class="text-2xl whitespace-nowrap">
 						View All Applicants_Ex
 					</span>
-					<span class="text-2xl">[ <span class="text-2xl text-green-500 dark:text-white">{{ total_apls_ex.filter(apl =>
-						apl.pconf_code).length }}</span> / <span class="text-2xl text-secondary dark:text-white">{{
-		total_apls_ex.length }}</span>
+					<span class="text-2xl">[ <span class="text-2xl text-green-500 dark:text-white">{{
+						total_apls_ex.filter(apl =>
+							apl.pconf_code).length }}</span> / <span class="text-2xl text-secondary dark:text-white">{{
+								total_apls_ex.length }}</span>
 						]</span> ||
 					<span class="text-2xl">GHC {{ today_sales_ex }}</span>
 				</h1>
@@ -491,8 +505,9 @@
 						<tr class="border-none z-50">
 							<!-- <th class="font-semibold text-center dark:text-neutral-700 text-sm">Pos.</th> -->
 							<!-- <th class="font-semibold text-center dark:text-neutral-700 text-sm">Action</th> -->
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm" @dblclick="loadAplEx">Name {{ if_apls_ex
-								? apls_ex.length : '' }}</th>
+							<th class="font-semibold text-center dark:text-neutral-700 text-sm" @dblclick="loadAplEx">
+								Name {{ if_apls_ex
+									? apls_ex.length : '' }}</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Bio</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Phone Number</th>
 							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Created</th>
@@ -504,16 +519,16 @@
 
 					<tbody class="">
 						<!-- row -->
-						<tr
-							@dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!); useViewAplStore().$patch({ if_applicant_ex: true }) }"
+						<tr @dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!); useViewAplStore().$patch({ if_applicant_ex: true }) }"
 							v-for="(apl, i) in apls_ex"
 							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-black transition-all duration-300 ease-out dark:hover:bg-neutral-200">
 							<td>
 								<div class="flex items-center space-x-3">
 									<div>
 										<div class="font-semibold">{{ apl.fullName }}</div>
-										<div class="text-sm text-neutral-400 z-0">{{ apl.pconf_code ? apl.pconf_code : 'No Confirmation Code'
-										}}
+										<div class="text-sm text-neutral-400 z-0">{{ apl.pconf_code ? apl.pconf_code :
+											'No Confirmation Code'
+											}}
 										</div>
 									</div>
 								</div>
@@ -538,16 +553,18 @@
 							</td>
 							<td class="">
 								<div class="flex flex-col items-end justify-center text-xs">
-									<span class="text-right dark:font-semibold">By: {{ profiles.filter(user => user.id ==
+									<span class="text-right dark:font-semibold">By: {{profiles.filter(user => user.id
+										==
 										apl.user_id)[0].fullname ||
 										'User'
-									}}</span>
+										}}</span>
 									<span class="text-neutral-300 dark:text-neutral-700">{{ useNuxtApp().$formatDate(new
 										Date(apl.created_at!)) }}</span>
-									<span class="text-neutral-300 dark:text-neutral-700">{{ new Date(apl.created_at!).toLocaleTimeString([],
-										{
-											hour: '2-digit', minute: '2-digit', hour12: true
-										}) }}</span>
+									<span class="text-neutral-300 dark:text-neutral-700">{{ new
+										Date(apl.created_at!).toLocaleTimeString([],
+											{
+												hour: '2-digit', minute: '2-digit', hour12: true
+											}) }}</span>
 								</div>
 							</td>
 							<td>
@@ -557,7 +574,8 @@
 							</td>
 							<td>
 								<div class="text-right">
-									{{ apl.location ? apl.location![0].toUpperCase() + apl.location?.substring(1) : '' }}
+									{{ apl.location ? apl.location![0].toUpperCase() + apl.location?.substring(1) : ''
+									}}
 								</div>
 							</td>
 							<td>
@@ -588,11 +606,13 @@
 						<path fill="#888888" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
 							d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z">
 							<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0" />
-							<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3" />
+							<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s"
+								values="0;0.3" />
 						</path>
 						<path fill="none" stroke-dasharray="14" stroke-dashoffset="14"
 							d="M8 16C8.5 15 9.79086 14 12 14C14.2091 14 15.5 15 16 16">
-							<animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="14;0" />
+							<animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s"
+								values="14;0" />
 						</path>
 					</g>
 					<g fill="#888888" fill-opacity="0">

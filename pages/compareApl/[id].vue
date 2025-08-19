@@ -2,407 +2,468 @@
 	<div class="w-full h-full overflow-hidden flex rounded-xl">
 		<div class="w-full h-full rounded-xl flex flex-col gap-2">
 			<h1
-				class="flex justify-between items-center w-full bg-neutral-700 dark:bg-neutral-100 min-h-[50px] rounded-xl dark:shadow-xl p-2">
+				:class="is_mobile ? 'flex justify-between w-full bg-neutral-700 dark:bg-neutral-100 min-h-fit rounded-xl dark:shadow-xl p-2 flex-col gap-1' : 'flex justify-between items-center w-full bg-neutral-700 dark:bg-neutral-100 min-h-[50px] rounded-xl dark:shadow-xl p-2 flex-row'">
 				<p class="flex flex-col">
 					<span class="text-lg font-bold">{{ request.modified_apl?.fullName }}</span>
 					<span class="text-xs text-neutral-400 dark:text-neutral-600">{{ request.body }}</span>
 				</p>
 
-				<!-- <span class="">{{ where_conf }}</span> -->
-				<span class="">{{ profiles.find(user => user.id == request.modified_apl?.user_id)?.username
-					}}</span>
+				<span class="">{{ is_mobile ? 'Modified by: ' : '' }}{{profiles.find(user => user.id ==
+					request.modified_apl?.user_id)?.username
+				}}</span>
 
 				<span v-if="loading" class="loading loading-infinity loading-lg"></span>
 
-
-				<div class="join">
-					<label @click="handleApprove(request)" class="join-item btn btn-success btn-sm">Approve</label>
-					<label @click="handleReject(request)" class="join-item btn btn-error btn-sm">Reject</label>
+				<div class="flex justify-between pt-2">
 					<label
 						@click="() => { $router.push(`/applicant/${request.apl_id}`); useViewAplStore().setID(request.apl_id!) }"
 						class="join-item btn btn-primary btn-sm">Open</label>
-					<label class="join-item btn btn-sm">Close</label>
+
+					<div class="join">
+						<label @click="handleApprove(request)" class="join-item btn btn-success btn-sm">Approve</label>
+						<label @click="handleReject(request)" class="join-item btn btn-error btn-sm">Reject</label>
+					</div>
 				</div>
 			</h1>
 
-			<div id="style-2" class="flex flex-col overflow-y-auto rounded-xl">
-				<section
-					class="flex flex-col gap-2 rounded-s-xl rounded-bl-none relative bg-neutral-800 dark:bg-neutral-50 p-2 ">
-					<!-- <p class="flex justify-evenly sticky top-0">
-					<div class="flex w-full h-fit items-center group">
-						<div
-							class="flex-1 grid h-12 flex-grow place-items-center text-xl uppercase badge font-bold badge-secondary">
-							Old
+			<div id="style-2"
+				:class="'flex h-full overflow-y-auto rounded-xl gap-2 ' + (is_mobile ? 'flex-col' : 'flex-row')">
+
+
+				<!-- OLD -->
+				<div class="w-full h-full rounded-xl bg-neutral-900 dark:bg-neutral-50">
+					<!-- PRIMARY -->
+					<section class="flex flex-col justify-between items-center p-4 h-full">
+						<h1 class="font-bold text-xl text-red-500 pb-5">OLD EDIT</h1>
+						<!-- CONTENT -->
+						<div class="bg-neutral-800 rounded-lg w-full h-full overflow-y-auto p-4 flex flex-col gap-2"
+							id="style-1">
+							<div v-for="[key, value] in Object.entries(unchanged)" :key="key"
+								class="bg-black p-2 px-3 rounded-xl flex flex-col">
+
+								<span class="font-bold text-neutral-600 uppercase">{{ key }}:</span>
+								<span v-if="key != 'wards'" class="">
+									{{ value ? value : 'N/A' }}
+								</span>
+
+								<div class="pb-2" v-else v-for="(wardValue, idx) in value as Array<any>" :key="idx">
+									<span class="font-bold text-neutral-600">Ward {{ idx + 1 }}:</span>
+									<span class="block">{{ wardValue ? wardValue.wlastName : 'N/A' }}</span>
+									<span class="block">{{ wardValue ? wardValue.wfirstName : 'N/A' }}</span>
+									<span class="block">{{ wardValue ? wardValue.wotherName : 'N/A' }}</span>
+									<span class="block">{{ wardValue ? wardValue.wcity_ob : 'N/A' }}</span>
+									<span class="block">{{ wardValue ? wardValue.wcountry_ob : 'N/A' }}</span>
+									<span class="block">{{ wardValue ? wardValue.wgender : 'N/A' }}</span>
+									<span class="block">{{ wardValue ? $formatDate(new Date(wardValue.wdob!)) : 'N/A'
+									}}</span>
+								</div>
+							</div>
 						</div>
-						<div class="divider divider-horizontal text-center">
+
+					</section>
+				</div>
+
+				<!-- NEW -->
+				<div class="w-full h-full rounded-xl bg-neutral-900 dark:bg-neutral-50">
+					<!-- PRIMARY -->
+					<section class="flex flex-col justify-between items-center p-4 h-full">
+						<h1 class="font-bold text-xl text-blue-500 pb-5">NEW EDIT</h1>
+						<!-- CONTENT -->
+						<div class="bg-neutral-800 rounded-lg w-full h-full overflow-y-auto p-4 flex flex-col gap-2"
+							id="style-1">
+							<div v-for="[key, value] in Object.entries(changed)" :key="key"
+								class="bg-black p-2 px-3 rounded-xl flex flex-col">
+
+								<span class="font-bold text-neutral-600 uppercase">{{ key }}:</span>
+								<span v-if="key != 'wards'" class="">
+									{{ value ? value : 'N/A' }}
+								</span>
+
+								<div class="pb-2" v-else v-for="(wardValue, idx) in value as Array<any>" :key="idx">
+									<span class="font-bold text-neutral-600">Ward {{ idx + 1 }}:</span>
+									<span class="block">{{ wardValue ? wardValue.wlastName : 'N/A' }}</span>
+									<span class="block">{{ wardValue ? wardValue.wfirstName : 'N/A' }}</span>
+									<span class="block">{{ wardValue ? wardValue.wotherName : 'N/A' }}</span>
+									<span class="block">{{ wardValue ? wardValue.wcity_ob : 'N/A' }}</span>
+									<span class="block">{{ wardValue ? wardValue.wcountry_ob : 'N/A' }}</span>
+									<span class="block">{{ wardValue ? wardValue.wgender : 'N/A' }}</span>
+									<span class="block">{{ wardValue ? $formatDate(new Date(wardValue.wdob!)) : 'N/A'
+									}}</span>
+								</div>
+							</div>
 						</div>
-						<div
-							class="flex-1 grid h-12 flex-grow place-items-center text-xl uppercase font-bold badge badge-accent">
-							New
+
+					</section>
+				</div>
+
+
+
+				<div class="" v-if="false">
+
+					<section class="flex flex-col gap-2 rounded-s-xl rounded-bl-none relative p-2">
+
+						<div class="w-[200px] z-20 sticky top-2">
+							<AvatarSelect :src="request.modified_apl?.aplImg_path.primePath[0]" />
 						</div>
-					</div>
-					</p> -->
 
-					<div class="w-[200px] z-20 sticky top-2">
-						<AvatarSelect :src="request.modified_apl?.aplImg_path.primePath[0]" />
-					</div>
+						<h2 class="mx-auto mt-3 mb-5 text-3xl font-bold">Primary Applicant</h2>
 
-					<h2 class="mx-auto mt-3 mb-5 text-3xl font-bold">Primary Applicant</h2>
+						<Divider v-if="if_val('plastName')">
+							<template #modified_apl="props">
+								{{ props.original?.plastName }}
+							</template>
+							Last Name
+							<template #apl="props">
+								{{ props.edited?.plastName }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('pfirstName')">
+							<template #modified_apl="props">
+								{{ props.original?.pfirstName }}
+							</template>
+							First Name
+							<template #apl="props">
+								{{ props.edited?.pfirstName }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('potherName')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.potherName }}
+							</template>
+							Other Name
+							<template #apl="props">
+								{{ props.edited?.potherName }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('pdob')" class="">
+							<template #modified_apl="props">
+								{{ useNuxtApp().$formatDateWords(new Date(props.original?.pdob!)) }}
+							</template>
+							Date of Birth
+							<template #apl="props">
+								{{ useNuxtApp().$formatDateWords(new Date(props.edited?.pdob!)) }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('pgender')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.pgender }}
+							</template>
+							Gender
+							<template #apl="props">
+								{{ props.edited?.pgender }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('pcity_ob')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.pcity_ob }}
+							</template>
+							City Of Birth
+							<template #apl="props">
+								{{ props.edited?.pcity_ob }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('pcountry_ob')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.pcountry_ob }}
+							</template>
+							Country Of Birth
+							<template #apl="props">
+								{{ props.edited?.pcountry_ob }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('pcontact')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.pcontact }}
+							</template>
+							Phone Number
+							<template #apl="props">
+								{{ props.edited?.pcontact }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('pother_contact')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.pother_contact }}
+							</template>
+							Next of Kin Contact
+							<template #apl="props">
+								{{ props.edited?.pother_contact }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('pemail')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.pemail }}
+							</template>
+							Email
+							<template #apl="props">
+								{{ props.edited?.pemail }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('ppassport_number')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.ppassport_number }}
+							</template>
+							Passport Number
+							<template #apl="props">
+								{{ props.edited?.ppassport_number }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('passport_ex')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.passport_ex ? useNuxtApp().$formatDateWords(new
+									Date(props.original?.passport_ex!)) : ''
+								}}
+							</template>
+							Passort Expiration Date
+							<template #apl="props">
+								{{ props.edited?.passport_ex ? useNuxtApp().$formatDateWords(new
+									Date(props.edited?.passport_ex!)) : '' }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('pcountry_live_today')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.pcountry_live_today }}
+							</template>
+							Location
+							<template #apl="props">
+								{{ props.edited?.pcountry_live_today }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('ppostal')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.ppostal }}
+							</template>
+							Residential Address
+							<template #apl="props">
+								{{ props.edited?.ppostal }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('psocial_media.facebook')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.psocial_media.facebook }}
+							</template>
+							Facebook
+							<template #apl="props">
+								{{ props.edited?.psocial_media.facebook }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('psocial_media.instagram')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.psocial_media.instagram }}
+							</template>
+							Instagram
+							<template #apl="props">
+								{{ props.edited?.psocial_media.instagram }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('psocial_media.twitter')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.psocial_media.twitter }}
+							</template>
+							Twitter
+							<template #apl="props">
+								{{ props.edited?.psocial_media.twitter }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('pmarital_status')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.pmarital_status }}
+							</template>
+							Marital Status
+							<template #apl="props">
+								{{ props.edited?.pmarital_status }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('peducation_level')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.peducation_level }}
+							</template>
+							Highest Level of Education
+							<template #apl="props">
+								{{ props.edited?.peducation_level }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('children_number')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.children_number }}
+							</template>
+							Number of Children
+							<template #apl="props">
+								{{ props.edited?.children_number }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('pconf_code')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.pconf_code }}
+							</template>
+							Confirmation Code
+							<template #apl="props">
+								{{ props.edited?.pconf_code }}
+							</template>
+						</Divider>
+					</section>
+
+					<!-- secondary applicant -->
+					<section v-if="request.modified_apl?.slastName"
+						class="flex flex-col gap-2 rounded-s-xl rounded-tl-none bg-neutral-800 dark:bg-neutral-50 p-2">
+
+						<div class="w-[200px] z-20 sticky top-20">
+							<AvatarSelect />
+						</div>
+
+						<h2 class="mx-auto mt-10 mb-5 text-3xl font-bold">Secondary Applicant</h2>
+						<Divider v-if="if_val('slastName')">
+							<template #modified_apl="props">
+								{{ props.original?.slastName }}
+							</template>
+							Last Name
+							<template #apl="props">
+								{{ props.edited?.slastName }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('sfirstName')">
+							<template #modified_apl="props">
+								{{ props.original?.sfirstName }}
+							</template>
+							First Name
+							<template #apl="props">
+								{{ props.edited?.sfirstName }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('sotherName')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.sotherName }}
+							</template>
+							Other Name
+							<template #apl="props">
+								{{ props.edited?.sotherName }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('sdob')" class="">
+							<template #modified_apl="props">
+								{{ useNuxtApp().$formatDateWords(new Date(props.original?.sdob!)) }}
+							</template>
+							Date of Birth
+							<template #apl="props">
+								{{ useNuxtApp().$formatDateWords(new Date(props.edited?.sdob!)) }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('sgender')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.sgender }}
+							</template>
+							Gender
+							<template #apl="props">
+								{{ props.edited?.sgender }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('scity_ob')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.scity_ob }}
+							</template>
+							City Of Birth
+							<template #apl="props">
+								{{ props.edited?.scity_ob }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('scountry_ob')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.scountry_ob }}
+							</template>
+							Country Of Birth
+							<template #apl="props">
+								{{ props.edited?.scountry_ob }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val('scontact')" class="">
+							<template #modified_apl="props">
+								{{ props.original?.scontact }}
+							</template>
+							Phone Number
+							<template #apl="props">
+								{{ props.edited?.scontact }}
+							</template>
+						</Divider>
+
+					</section>
+
+					<section v-for="(ward, idx) in request.modified_apl?.wards"
+						v-if="request.modified_apl?.wards.length! > 0"
+						class="flex flex-col gap-2 rounded-s-xl rounded-tl-none bg-neutral-800 dark:bg-neutral-50 p-2">
+
+						<div class="w-[200px] z-20 sticky top-2">
+							<AvatarSelect />
+						</div>
+
+						<h2 class="mx-auto mt-10 mb-5 text-3xl font-bold">Ward Applicant {{ idx + 1 }}</h2>
+						<Divider v-if="if_val(`wards.${idx}.wlastName`)">
+							<template #modified_apl="props">
+								{{ props.original?.wards[idx].wlastName }}
+							</template>
+							Last Name
+							<template #apl="props">
+								{{ props.edited?.wards[idx].wlastName }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val(`wards.${idx}.wfirstName`)">
+							<template #modified_apl="props">
+								{{ props.original?.wards[idx].wfirstName }}
+							</template>
+							First Name
+							<template #apl="props">
+								{{ props.edited?.wards[idx].wfirstName }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val(`wards.${idx}.wotherName`)" class="">
+							<template #modified_apl="props">
+								{{ props.original?.wards[idx].wotherName }}
+							</template>
+							Other Name
+							<template #apl="props">
+								{{ props.edited?.wards[idx].wotherName }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val(`wards.${idx}.wdob`)" class="">
+							<template #modified_apl="props">
+								{{ useNuxtApp().$formatDateWords(new Date(props.original?.wards[idx].wdob!)) }}
+							</template>
+							Date of Birth
+							<template #apl="props">
+								{{ useNuxtApp().$formatDateWords(new Date(props.edited?.wards[idx].wdob!)) }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val(`wards.${idx}.wgender`)" class="">
+							<template #modified_apl="props">
+								{{ props.original?.wards[idx].wgender }}
+							</template>
+							Gender
+							<template #apl="props">
+								{{ props.edited?.wards[idx].wgender }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val(`wards.${idx}.wcity_ob`)" class="">
+							<template #modified_apl="props">
+								{{ props.original?.wards[idx].wcity_ob }}
+							</template>
+							City Of Birth
+							<template #apl="props">
+								{{ props.edited?.wards[idx].wcity_ob }}
+							</template>
+						</Divider>
+						<Divider v-if="if_val(`wards.${idx}.wcountry_ob`)" class="">
+							<template #modified_apl="props">
+								{{ props.original?.wards[idx].wcountry_ob }}
+							</template>
+							Country Of Birth
+							<template #apl="props">
+								{{ props.edited?.wards[idx].wcountry_ob }}
+							</template>
+						</Divider>
+
+					</section>
+
+				</div>
 
 
-					<Divider v-if="if_val('plastName')">
-						<template #modified_apl="props">
-							{{ props.original?.plastName }}
-						</template>
-						Last Name
-						<template #apl="props">
-							{{ props.edited?.plastName }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('pfirstName')">
-						<template #modified_apl="props">
-							{{ props.original?.pfirstName }}
-						</template>
-						First Name
-						<template #apl="props">
-							{{ props.edited?.pfirstName }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('potherName')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.potherName }}
-						</template>
-						Other Name
-						<template #apl="props">
-							{{ props.edited?.potherName }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('pdob')" class="">
-						<template #modified_apl="props">
-							{{ useNuxtApp().$formatDateWords(new Date(props.original?.pdob!)) }}
-						</template>
-						Date of Birth
-						<template #apl="props">
-							{{ useNuxtApp().$formatDateWords(new Date(props.edited?.pdob!)) }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('pgender')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.pgender }}
-						</template>
-						Gender
-						<template #apl="props">
-							{{ props.edited?.pgender }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('pcity_ob')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.pcity_ob }}
-						</template>
-						City Of Birth
-						<template #apl="props">
-							{{ props.edited?.pcity_ob }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('pcountry_ob')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.pcountry_ob }}
-						</template>
-						Country Of Birth
-						<template #apl="props">
-							{{ props.edited?.pcountry_ob }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('pcontact')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.pcontact }}
-						</template>
-						Phone Number
-						<template #apl="props">
-							{{ props.edited?.pcontact }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('pother_contact')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.pother_contact }}
-						</template>
-						Next of Kin Contact
-						<template #apl="props">
-							{{ props.edited?.pother_contact }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('pemail')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.pemail }}
-						</template>
-						Email
-						<template #apl="props">
-							{{ props.edited?.pemail }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('ppassport_number')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.ppassport_number }}
-						</template>
-						Passport Number
-						<template #apl="props">
-							{{ props.edited?.ppassport_number }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('passport_ex')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.passport_ex ? useNuxtApp().$formatDateWords(new
-								Date(props.original?.passport_ex!)) : ''
-							}}
-						</template>
-						Passort Expiration Date
-						<template #apl="props">
-							{{ props.edited?.passport_ex ? useNuxtApp().$formatDateWords(new
-								Date(props.edited?.passport_ex!)) : '' }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('pcountry_live_today')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.pcountry_live_today }}
-						</template>
-						Location
-						<template #apl="props">
-							{{ props.edited?.pcountry_live_today }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('ppostal')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.ppostal }}
-						</template>
-						Residential Address
-						<template #apl="props">
-							{{ props.edited?.ppostal }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('psocial_media.facebook')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.psocial_media.facebook }}
-						</template>
-						Facebook
-						<template #apl="props">
-							{{ props.edited?.psocial_media.facebook }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('psocial_media.instagram')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.psocial_media.instagram }}
-						</template>
-						Instagram
-						<template #apl="props">
-							{{ props.edited?.psocial_media.instagram }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('psocial_media.twitter')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.psocial_media.twitter }}
-						</template>
-						Twitter
-						<template #apl="props">
-							{{ props.edited?.psocial_media.twitter }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('pmarital_status')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.pmarital_status }}
-						</template>
-						Marital Status
-						<template #apl="props">
-							{{ props.edited?.pmarital_status }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('peducation_level')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.peducation_level }}
-						</template>
-						Highest Level of Education
-						<template #apl="props">
-							{{ props.edited?.peducation_level }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('children_number')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.children_number }}
-						</template>
-						Number of Children
-						<template #apl="props">
-							{{ props.edited?.children_number }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('pconf_code')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.pconf_code }}
-						</template>
-						Confirmation Code
-						<template #apl="props">
-							{{ props.edited?.pconf_code }}
-						</template>
-					</Divider>
-
-
-				</section>
-
-				<section v-if="request.modified_apl?.slastName"
-					class="flex flex-col gap-2 rounded-s-xl rounded-tl-none bg-neutral-800 dark:bg-neutral-50 p-2">
-
-					<div class="w-[200px] z-20 sticky top-20">
-						<AvatarSelect />
-					</div>
-
-					<h2 class="mx-auto mt-10 mb-5 text-3xl font-bold">Secondary Applicant</h2>
-					<Divider v-if="if_val('slastName')">
-						<template #modified_apl="props">
-							{{ props.original?.slastName }}
-						</template>
-						Last Name
-						<template #apl="props">
-							{{ props.edited?.slastName }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('sfirstName')">
-						<template #modified_apl="props">
-							{{ props.original?.sfirstName }}
-						</template>
-						First Name
-						<template #apl="props">
-							{{ props.edited?.sfirstName }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('sotherName')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.sotherName }}
-						</template>
-						Other Name
-						<template #apl="props">
-							{{ props.edited?.sotherName }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('sdob')" class="">
-						<template #modified_apl="props">
-							{{ useNuxtApp().$formatDateWords(new Date(props.original?.sdob!)) }}
-						</template>
-						Date of Birth
-						<template #apl="props">
-							{{ useNuxtApp().$formatDateWords(new Date(props.edited?.sdob!)) }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('sgender')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.sgender }}
-						</template>
-						Gender
-						<template #apl="props">
-							{{ props.edited?.sgender }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('scity_ob')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.scity_ob }}
-						</template>
-						City Of Birth
-						<template #apl="props">
-							{{ props.edited?.scity_ob }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('scountry_ob')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.scountry_ob }}
-						</template>
-						Country Of Birth
-						<template #apl="props">
-							{{ props.edited?.scountry_ob }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val('scontact')" class="">
-						<template #modified_apl="props">
-							{{ props.original?.scontact }}
-						</template>
-						Phone Number
-						<template #apl="props">
-							{{ props.edited?.scontact }}
-						</template>
-					</Divider>
-
-				</section>
-
-				<section v-for="(ward, idx) in request.modified_apl?.wards"
-					v-if="request.modified_apl?.wards.length! > 0"
-					class="flex flex-col gap-2 rounded-s-xl rounded-tl-none bg-neutral-800 dark:bg-neutral-50 p-2">
-
-					<div class="w-[200px] z-20 sticky top-2">
-						<AvatarSelect />
-					</div>
-
-					<h2 class="mx-auto mt-10 mb-5 text-3xl font-bold">Ward Applicant {{ idx + 1 }}</h2>
-					<Divider v-if="if_val(`wards.${idx}.wlastName`)">
-						<template #modified_apl="props">
-							{{ props.original?.wards[idx].wlastName }}
-						</template>
-						Last Name
-						<template #apl="props">
-							{{ props.edited?.wards[idx].wlastName }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val(`wards.${idx}.wfirstName`)">
-						<template #modified_apl="props">
-							{{ props.original?.wards[idx].wfirstName }}
-						</template>
-						First Name
-						<template #apl="props">
-							{{ props.edited?.wards[idx].wfirstName }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val(`wards.${idx}.wotherName`)" class="">
-						<template #modified_apl="props">
-							{{ props.original?.wards[idx].wotherName }}
-						</template>
-						Other Name
-						<template #apl="props">
-							{{ props.edited?.wards[idx].wotherName }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val(`wards.${idx}.wdob`)" class="">
-						<template #modified_apl="props">
-							{{ useNuxtApp().$formatDateWords(new Date(props.original?.wards[idx].wdob!)) }}
-						</template>
-						Date of Birth
-						<template #apl="props">
-							{{ useNuxtApp().$formatDateWords(new Date(props.edited?.wards[idx].wdob!)) }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val(`wards.${idx}.wgender`)" class="">
-						<template #modified_apl="props">
-							{{ props.original?.wards[idx].wgender }}
-						</template>
-						Gender
-						<template #apl="props">
-							{{ props.edited?.wards[idx].wgender }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val(`wards.${idx}.wcity_ob`)" class="">
-						<template #modified_apl="props">
-							{{ props.original?.wards[idx].wcity_ob }}
-						</template>
-						City Of Birth
-						<template #apl="props">
-							{{ props.edited?.wards[idx].wcity_ob }}
-						</template>
-					</Divider>
-					<Divider v-if="if_val(`wards.${idx}.wcountry_ob`)" class="">
-						<template #modified_apl="props">
-							{{ props.original?.wards[idx].wcountry_ob }}
-						</template>
-						Country Of Birth
-						<template #apl="props">
-							{{ props.edited?.wards[idx].wcountry_ob }}
-						</template>
-					</Divider>
-
-				</section>
 			</div>
 
 		</div>
@@ -451,8 +512,31 @@ const if_rej = ref(false)
 const if_ap = ref(false)
 let apl = total_apls.value.find(apl => apl.apl_id == request.value.apl_id)
 
+console.log(is_mobile.value, 'is_mobile');
+
 const difference = $deepCompareObjects(apl!, request.value.modified_apl!)
 console.log(difference);
+
+function getChangedAndUnchanged(original: any, edited: any) {
+	const changed: Record<string, any> = {};
+	const unchanged: Record<string, any> = {};
+
+	for (const key in edited) {
+		if (Object.prototype.hasOwnProperty.call(edited, key)) {
+			if (original[key] !== undefined && edited[key] !== original[key]) {
+				changed[key] = edited[key];
+				unchanged[key] = original[key];
+			}
+		}
+	}
+
+	return { changed, unchanged };
+}
+
+const { changed, unchanged } = getChangedAndUnchanged(apl!, request.value.modified_apl!);
+
+console.log('Changed:', changed);
+console.log('Unchanged:', unchanged);
 
 const if_val = (val: string) => {
 	if (difference.find(value => value.key == val)) return true

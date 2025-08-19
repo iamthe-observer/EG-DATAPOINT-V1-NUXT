@@ -1,5 +1,5 @@
 <template>
-	<p class="flex flex-col text-white w-full h-fit rounded-xl bg-neutral-700 dark:text-neutral-900 dark:font-semibold dark:bg-neutral-200
+	<p class="flex flex-col text-white w-full h-full rounded-xl bg-neutral-700 dark:text-neutral-900 dark:font-semibold dark:bg-neutral-200
 	dark:outline
 		dark:outline-2 dark:outline-neutral-400 dark:shadow-lg">
 		<span :class="[
