@@ -187,7 +187,7 @@ const nana_locations = computed(() => {
 })
 
 const locationz = computed(() => {
-	if (profile.value?.email == 'elizabethlarbi1999@gmail.com') {
+	if (profile.value?.email == 'lizzymadina@gmail.com') {
 		return lizzy_locations.value
 	} else if (profile.value?.email == 'asorlarbi@gmail.com') {
 		return asor_locations.value
