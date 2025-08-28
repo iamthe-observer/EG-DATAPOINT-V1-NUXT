@@ -1,6 +1,6 @@
 <template>
 	<div
-		:class="[useAppStore().is_mobile ? 'flex-row w-full h-fit justify-between px-6' : 'flex-col w-full h-full justify-between', 'dark:bg-neutral-50 dark:shadow-2xl bg-neutral-800 p-0 rounded-xl gap-5 flex']">
+		:class="[useAppStore().is_mobile ? 'flex-row w-full h-fit justify-between px-6' : 'flex-col w-full h-full justify-between', 'dark:bg-none bg-none p-0 rounded-xl gap-5 flex']">
 		<div :class="['dropdown', useAppStore().is_mobile ? 'w-full dropdown-bottom' : 'dropdown-right']">
 
 			<label tabindex="0" class="">

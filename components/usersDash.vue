@@ -1,8 +1,10 @@
 <template>
 	<div class="__people col-span-3 row-span-8 p-2">
-		<span class="absolute -top-[1rem] left-2 text-neutral-300 text-sm uppercase">Most Recent Applicants</span>
+		<span class="absolute -top-[1rem] left-2 dark:text-neutral-900 text-neutral-100 text-sm uppercase">Most Recent
+			Applicants</span>
 
-		<div class="w-full h-full carousel carousel-vertical dark:shadow-xl rounded-xl carousel-center gap-2">
+		<div
+			class="w-full h-full carousel carousel-vertical boxy rounded-none border-2 border-black carousel-center gap-2">
 
 			<div class="w-full h-full grid place-items-center dark:bg-neutral-100"
 				v-if="!role && recent_apls.length == 0">
@@ -106,12 +108,14 @@
 			<div v-if="role && recent_apls_admin.length != 0" v-for="(apl, idx) in recent_apls_admin"
 				class="carousel-container bg-neutral-800 dark:bg-neutral-50 grid place-items-center">
 				<div class="relative w-full h-full">
-					<span class="badge badge-secondary dark:badge-accent absolute top-1 right-1">#{{ idx + 1 }}</span>
+					<span class="badge badge-secondary rounded-none dark:badge-accent absolute top-1 right-1">#{{
+						idx +
+						1 }}</span>
 
 					<div class="flex flex-col justify-center items-center pt-5">
 
 						<div class="avatar pt-5 justify-start">
-							<div class="w-32 rounded-full justify-center">
+							<div class="w-32 rounded-none border-2 border-black boxy justify-center">
 								<img loading="lazy" v-if="URLs?.length! > 0" class=""
 									:src="URLs![idx].signedUrl !== null ? URLs![idx].signedUrl : '/svg/image.svg'" />
 							</div>
@@ -133,10 +137,10 @@
 						</p>
 					</div>
 
-					<div class="flex absolute bottom-1 left-1 justify-center pt-5 gap-1 items-center">
+					<div class="flex absolute bottom-4 left-4 justify-center pt-5 gap-1 items-center">
 						<button
 							@click="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
-							class="btn btn-sm btn-primary mr-3 rounded-lg">View</button>
+							class="btn btn-sm btn-primary mr-3 rounded-none border-2 border-black boxy text-white hover:border-2 hover:border-black">View</button>
 						<span class="flex gap-1 dark:font-semibold">
 							<SvgsCedis class="w-2 fill-white dark:fill-neutral-900" />{{ apl.totalPayment }}.00
 						</span>
@@ -247,6 +251,6 @@ const recent_apls_admin = computed(() => {
 
 <style scoped>
 .carousel-container {
-	@apply carousel-item w-[100%] h-full rounded-xl;
+	@apply carousel-item w-[100%] h-full rounded-none;
 }
 </style>

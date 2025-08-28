@@ -1,16 +1,17 @@
 <template>
 	<div class="__most_recent_apls col-span-3 row-span-7 p-2">
-		<div class="dark:bg-neutral-50 dark:shadow-xl bg-neutral-800 w-full h-full rounded-xl p-2 flex flex-col gap-2">
+		<div
+			class="dark:bg-white boxy bg-neutral-800 w-full h-full rounded-none border-2 border-black p-2 flex flex-col gap-2">
 			<h2 class="flex-1 flex items-center justify-between cursor-pointer hover:text-accent"
 				@click="$router.push('/database')">
 				<span class="text-lg font-medium">Total Requests</span>
-				<span class="text-lg font-medium">{{ !role ? requests.filter(req => req.user_id ==
+				<span class="text-lg font-medium">{{!role ? requests.filter(req => req.user_id ==
 					useSupabaseUser().value?.id).length : requests.length
-					}}</span>
+				}}</span>
 			</h2>
 
 
-			<div class="flex justify-evenly gap-2 dark:bg-neutral-300 bg-neutral-900 rounded-lg w-full h-3/4">
+			<div class="flex justify-evenly gap-2 dark:bg-neutral-300 bg-neutral-900 rounded-none w-full h-3/4">
 				<div class="flex-1 flex flex-col items-center justify-center">
 					<svg xmlns="http://www.w3.org/2000/svg" class="w-10 aspect-square" viewBox="0 0 24 24">
 						<g stroke="#888888" stroke-linecap="round" stroke-width="2">
@@ -28,10 +29,10 @@
 					</svg>
 
 					<span class="text-sm">Rejected</span>
-					<span class="text-sm">{{ role ? requests.filter(req => req.status == 'rejected').length :
+					<span class="text-sm">{{role ? requests.filter(req => req.status == 'rejected').length :
 						requests.filter(req =>
 							req.status == 'reject').filter(req => req.user_id == useSupabaseUser().value?.id).length
-						}}</span>
+					}}</span>
 				</div>
 
 				<div
@@ -59,10 +60,10 @@
 						</g>
 					</svg>
 					<span class="text-sm">Pending</span>
-					<span class="text-sm">{{ role ? requests.filter(req => req.status == 'pending').length :
+					<span class="text-sm">{{role ? requests.filter(req => req.status == 'pending').length :
 						requests.filter(req =>
 							req.status == 'pending').filter(req => req.user_id == useSupabaseUser().value?.id).length
-						}}</span>
+					}}</span>
 				</div>
 
 				<div class="flex-1 flex flex-col items-center justify-center">
@@ -79,10 +80,10 @@
 						</g>
 					</svg>
 					<span class="text-sm">Approved</span>
-					<span class="text-sm">{{ role ? requests.filter(req => req.status == 'approved').length :
+					<span class="text-sm">{{role ? requests.filter(req => req.status == 'approved').length :
 						requests.filter(req => req.status == 'approved').filter(req => req.user_id ==
 							useSupabaseUser().value?.id).length
-						}}</span>
+					}}</span>
 				</div>
 			</div>
 

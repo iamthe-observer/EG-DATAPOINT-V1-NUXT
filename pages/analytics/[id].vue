@@ -5,7 +5,7 @@
 
 
 			<h1 v-if="!ISM" class="w-full flex justify-between items-center">
-				<span class="font-bold text-3xl">Overview: {{ profiles.find(user => user.id == id)?.fullname }} ({{
+				<span class="font-bold text-3xl">Overview: {{profiles.find(user => user.id == id)?.fullname}} ({{
 					total_daily_applicants.length }})</span>
 
 				<DatePicker dark :color="'purple'" is-dark v-model="date" mode="date">
@@ -20,7 +20,7 @@
 			</h1>
 
 			<h1 v-else class="w-full flex justify-between items-center">
-				<span class="font-bold text-md">Overview: {{ profiles.find(user => user.id == id)?.fullname }} ({{
+				<span class="font-bold text-md">Overview: {{profiles.find(user => user.id == id)?.fullname}} ({{
 					total_daily_applicants.length }})</span>
 
 				<DatePicker dark :color="'purple'" is-dark v-model="date" mode="date">
@@ -53,7 +53,7 @@
 			</section>
 
 
-			<div :class="['grid gap-3', ISM ? 'grid-cols-1 pb-40' : 'grid-cols-2']">
+			<section :class="['grid gap-3 ', ISM ? 'grid-cols-1 pb-40' : 'grid-cols-2']">
 				<div
 					class="flex flex-col justify-center items-center bg-neutral-900 dark:bg-primary dark:text-white rounded-xl py-5">
 					<h1 class="dark:text-purple-400 text-neutral-500">Total Applicants</h1>
@@ -64,7 +64,7 @@
 					<h1 class="dark:text-purple-400 text-neutral-500">Total Sales</h1>
 					<span class="text-4xl font-bold">GHC {{ total_sales }}.00</span>
 				</div>
-			</div>
+			</section>
 
 		</div>
 	</div>

@@ -15,7 +15,8 @@
 					:placeholder="placeholder ? placeholder : ''"
 					:class="[`input input-bordered w-full border-none dark:bg-neutral-300 dark:font-semibold bg-${bg} ${icon ? 'rounded-l-xl rounded-r-none bg-neutral-600' : 'rounded-xl bg-neutral-600'} ${classer}`]" />
 
-				<div v-if="icon" :class='`icon grid place-items-center p-2 bg-neutral-700 dark:bg-primary bg-${bg} rounded-e-xl`'>
+				<div v-if="icon"
+					:class='`icon grid place-items-center p-2 bg-neutral-700 dark:bg-primary bg-${bg} rounded-e-xl`'>
 					<slot name="normal">
 						<svg xmlns="http://www.w3.org/2000/svg" :width="w_h" :height="w_h" viewBox="0 0 24 24">
 							<path fill="#fff"
@@ -28,12 +29,13 @@
 			</div>
 
 			<div v-else class="flex w-full">
-				<input :value="modelValue ? modelValue : value" @focusin="$emit('focusin')" @focusout="$emit('focusout')"
-					@input="$emit('update:modelValue', $event.target?.value)" :type="type ? type : 'text'"
-					:placeholder="placeholder ? placeholder : ''"
-					:class="[`input input-bordered w-full border-none font-bold dark:bg-neutral-300 dark:font-semibold bg-${bg} ${icon ? 'rounded-l-xl rounded-r-none bg-neutral-50' : 'rounded-xl bg-neutral-50'} ${classer}`]" />
+				<input :value="modelValue ? modelValue : value" @focusin="$emit('focusin')"
+					@focusout="$emit('focusout')" @input="$emit('update:modelValue', $event.target?.value)"
+					:type="type ? type : 'text'" :placeholder="placeholder ? placeholder : ''"
+					:class="[`input text-black rounded-none w-full border-2 border-black font-bold dark:bg-neutral-300 dark:font-semibold bg-${bg} ${icon ? 'rounded-none bg-black' : 'rounded-xl bg-black'} ${classer}`]" />
 				<!-- icon -->
-				<div v-if="icon" :class='`icon grid place-items-center p-2 bg-neutral-50 dark:bg-primary bg-${bg} rounded-e-xl`'>
+				<div v-if="icon"
+					:class='`icon grid place-items-center p-2 bg-neutral-50 dark:bg-primary bg-${bg} rounded-none border-y-2 border-r-2 border-black`'>
 					<slot name="login" :width_height="w_h">
 						<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">
 							<path fill="#fff"

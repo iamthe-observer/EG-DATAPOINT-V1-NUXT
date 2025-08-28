@@ -1,17 +1,13 @@
 <template>
 	<div
-		class="text-black rounded-xl w-[400px] h-full p-4 flex flex-col justify-center bg-black bg-opacity-60 backdrop-blur-sm">
-		<!-- <div class="w-full text-right">Not a member Yet? <span @click="$emit('toRegister')"
-				class="cursor-pointer text-amber-600">Register
-				Here</span>
-		</div> -->
+		class="text-black boxy w-[400px] h-full p-4 flex flex-col justify-center bg-white border-2 border-black  backdrop-blur-md bg-opacity-60">
 		<form action="" class="flex flex-col">
 			<div class="flex flex-col w-full h-full justify-center px-12">
-				<p class="w-full text-center text-2xl font-bold text-white">Hello!</p>
-				<p class="w-full text-center mb-5 text-primary text-sm font-semibold">Welcome back to<br />
+				<img src="../../assets/images/logo1.png" alt="" class="w-32 h-32 object-contain mx-auto mb-4">
+				<p class="w-full text-center text-2xl font-bold text-black">Hello!</p>
+				<p class="w-full text-center mb-5 text-blue-500 text-sm font-semibold">Welcome back to<br />
 					Ebbysgold Datapoint!</p>
-				<textInput :no_uppercase="true" :bg="'neutral-50'" v-model="email_"
-					:placeholder="'Enter username / email'" :icon="true">
+				<textInput :no_uppercase="true" :bg="'white'" v-model="email_" :placeholder="'Email'" :icon="true">
 					<template #login>
 						<svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
 							<path fill="currentColor"
@@ -21,7 +17,7 @@
 				</textInput>
 
 				<textInput :type="seen ? 'text' : 'password'" @focusin="() => { seen = false }" :no_uppercase="true"
-					:bg="'neutral-50'" v-model="password" :placeholder="'Password'" :icon="true" class="mb-2">
+					:bg="'white'" v-model="password" :placeholder="'Password'" :icon="true" class="mb-2">
 					<template #login>
 						<svg v-if="!seen" @click="seen = !seen" xmlns="http://www.w3.org/2000/svg" width="1.5em"
 							height="1.5em" viewBox="0 0 24 24">
@@ -38,10 +34,10 @@
 				</textInput>
 
 				<span onclick="my_modal_23.showModal()"
-					class="hover:cursor-pointer text-white hover:text-amber-600 w-full text-right mb-6">Recover
+					class="hover:cursor-pointer text-purple-600 hover:text-black w-full text-right mb-6">Recover
 					Password</span>
 				<button @click.prevent="loginUser"
-					class="btn mb-9 bg-primary hover:bg-purple-500 text-black border-none">
+					class="btn border-2 text-white mb-9 bg-blue-700 hover:bg-blue-500 rounded-none">
 					<span v-if="loading" class="loading loading-ring loading-sm text-white"></span>
 					<span v-else>Sign In</span>
 				</button>

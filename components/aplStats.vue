@@ -35,7 +35,7 @@
 
 		<!-- admin -->
 		<div v-if="role"
-			class="stats dark:bg-neutral-50 dark:border-none bg-neutral-800 w-full h-full overflow-x-hidden dark shadow-xl">
+			class="stats dark:bg-white border-2 border-black bg-neutral-800 w-full h-full overflow-x-hidden dark boxy rounded-none">
 			<div class="stat">
 				<div :class="['stat-figure', dark_mode ? 'text-accent' : 'text-secondary']">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -44,14 +44,14 @@
 							d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
 					</svg>
 				</div>
-				<div :class="['stat-title font-semibold', dark_mode ? 'text-neutral-500' : 'text-neutral-700']">Today's
+				<div :class="['stat-title font-semibold', dark_mode ? 'text-neutral-800' : 'text-neutral-700']">Today's
 					Sales
 				</div>
 				<div
 					:class="[dark_mode ? 'text-neutral-500' : 'text-neutral-400', 'stat-value flex items-center gap-1']">
 					<SvgsCedis :classer="`w-5 fill-neutral-500`" />
 					<span @dblclick="showPrice" v-if="show_price" class="text-3xl">{{ today_sales_admin
-						}}.00</span>
+					}}.00</span>
 					<span @dblclick="showPrice" v-else class="flex">
 						<svg v-for="i in 4" xmlns="http://www.w3.org/2000/svg" width="32" height="32"
 							viewBox="0 0 24 24">

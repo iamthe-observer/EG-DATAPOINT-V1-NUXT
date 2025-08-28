@@ -26,6 +26,15 @@
   .containers {
     @apply rounded-xl bg-neutral-800 dark:bg-neutral-50 dark:shadow-xl;
   }
+  .boxy:hover {
+    box-shadow: 0.5rem 0.5rem 0px 0px rgba(0, 0, 0, 1);
+    -webkit-box-shadow: 0.5rem 0.5rem 0px 0px rgba(0, 0, 0, 1);
+    -moz-box-shadow: 0.5rem 0.5rem 0px 0px rgba(0, 0, 0, 1);
+  }
+
+  .boxy {
+    transition: all 0.2s ease-in-out;
+  }
 }
 
 * {
