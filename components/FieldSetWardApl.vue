@@ -17,15 +17,6 @@
 		</div>
 
 		<div class="flex gap-4 col-span-10 pl-6 justify-center">
-			<!-- <DatePicker dark :color="'purple'" is-dark v-model="applicant.wards[idx].wdob" mode="date">
-				<template #default="{ togglePopover }">
-					<TextInput :val_err="vuelidate_err == false && !applicant.wards[idx].wdob" :icon="true"
-						:value="applicant.wards[idx].wdob ? $formatDate(new Date(applicant.wards[idx].wdob!)) : ''"
-						@click="togglePopover">Date
-						of Birth
-					</TextInput>
-				</template>
-			</DatePicker> -->
 
 			<div class="form-control w-full">
 
@@ -39,15 +30,27 @@
 					<span
 						:class="['transition-all duration-300 ease-in pointer-events-none indicator-item badge-sm badge bg-red-400 border-transparent drop-shadow-xl', vuelidate_err == false && !applicant.wards[idx].wdob ? 'opacity-100' : 'opacity-0']"></span>
 
-
 					<div class="flex items-end flex-1 gap-4">
+						<DatePicker dark :color="'purple'" is-dark v-model="applicant.wards[idx].wdob" mode="date">
+							<template #default="{ togglePopover }">
+								<span @click="togglePopover"
+									class="input flex items-center w-full border-none dark:bg-neutral-300 dark:font-semibold rounded-xl font-semibold bg-neutral-600">{{
+										applicant.wards[idx].wdob ?
+											$formatDateWords(new Date(applicant.wards[idx].wdob!)) :
+											''
+									}}</span>
+							</template>
+						</DatePicker>
+					</div>
+
+					<!-- <div class="flex items-end flex-1 gap-4">
 						<input v-model="dates.wdob.dd" type="number" min="1" max="31" maxlength="2" placeholder="DD"
 							class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
 						<input v-model="dates.wdob.mm" type="number" min="1" max="12" maxlength="2" placeholder="MM"
 							class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
 						<input v-model="dates.wdob.yyyy" type="number" maxlength="4" placeholder="YYYY"
 							class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
-					</div>
+					</div> -->
 				</div>
 			</div>
 
@@ -56,8 +59,8 @@
 			</SelectInput>
 			<TextInput :val_err="vuelidate_err == false && applicant.wards[idx].wcity_ob.length == 0"
 				v-model="applicant.wards[idx].wcity_ob">City of Birth</TextInput>
-			<SelectInput :val_err="vuelidate_err == false && applicant.wards[idx].wcountry_ob.length == 0" :options="$countries"
-				v-model="applicant.wards[idx].wcountry_ob">
+			<SelectInput :val_err="vuelidate_err == false && applicant.wards[idx].wcountry_ob.length == 0"
+				:options="$countries" v-model="applicant.wards[idx].wcountry_ob">
 				Country of Birth
 			</SelectInput>
 		</div>

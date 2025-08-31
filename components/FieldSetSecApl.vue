@@ -11,20 +11,16 @@
 			<div class="col-span-10 w-full h-full flex flex-col justify-between">
 				<!-- name -->
 				<div class="flex gap-4 col-span-10 pl-6 justify-center">
-					<TextInput :val_err="vuelidate_err == false && applicant.slastName.length == 0" v-model="applicant.slastName">
+					<TextInput :val_err="vuelidate_err == false && applicant.slastName.length == 0"
+						v-model="applicant.slastName">
 						Last Name</TextInput>
-					<TextInput :val_err="vuelidate_err == false && applicant.sfirstName.length == 0" v-model="applicant.sfirstName">
+					<TextInput :val_err="vuelidate_err == false && applicant.sfirstName.length == 0"
+						v-model="applicant.sfirstName">
 						First Name</TextInput>
 					<TextInput v-model="applicant.sotherName">Other Name</TextInput>
 				</div>
 
 				<div class="flex gap-4 col-span-10 pl-6 justify-center">
-					<!-- <DatePicker dark :color="'purple'" is-dark v-model="applicant.sdob" mode="date">
-						<template #default="{ togglePopover }"> -->
-					<!-- <TextInput :val_err="vuelidate_err == false && !applicant.sdob" :icon="true"
-								:value="applicant.sdob ? $formatDate(new Date(applicant.sdob!)) : ''" @click="togglePopover">
-								Date of Birth
-							</TextInput> -->
 
 					<div class="form-control w-full">
 
@@ -38,33 +34,47 @@
 							<span
 								:class="['transition-all duration-300 ease-in pointer-events-none indicator-item badge-sm badge bg-red-400 border-transparent drop-shadow-xl', vuelidate_err == false && !applicant.sdob ? 'opacity-100' : 'opacity-0']"></span>
 
-
 							<div class="flex items-end flex-1 gap-4">
+								<DatePicker dark :color="'purple'" is-dark v-model="applicant.sdob" mode="date">
+									<template #default="{ togglePopover }">
+										<span @click="togglePopover"
+											class="input flex items-center w-full border-none dark:bg-neutral-300 dark:font-semibold rounded-xl font-semibold bg-neutral-600">{{
+												applicant.sdob ?
+													$formatDateWords(new Date(applicant.sdob!)) :
+													''
+											}}</span>
+									</template>
+								</DatePicker>
+							</div>
+
+							<!-- <div class="flex items-end flex-1 gap-4">
 								<input v-model="dates.sdob.dd" type="number" min="1" max="31" maxlength="2" placeholder="DD"
 									class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
 								<input v-model="dates.sdob.mm" type="number" min="1" max="12" maxlength="2" placeholder="MM"
 									class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
 								<input v-model="dates.sdob.yyyy" type="number" maxlength="4" placeholder="YYYY"
 									class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
-							</div>
+							</div> -->
 						</div>
 					</div>
 
 					<!-- </template>
 					</DatePicker> -->
-					<SelectInput :val_err="vuelidate_err == false && applicant.sgender.length == 0" :options="['MALE', 'FEMALE']"
-						v-model="applicant.sgender">Gender
+					<SelectInput :val_err="vuelidate_err == false && applicant.sgender.length == 0"
+						:options="['MALE', 'FEMALE']" v-model="applicant.sgender">Gender
 					</SelectInput>
-					<TextInput :val_err="vuelidate_err == false && applicant.scity_ob.length == 0" v-model="applicant.scity_ob">City
+					<TextInput :val_err="vuelidate_err == false && applicant.scity_ob.length == 0"
+						v-model="applicant.scity_ob">City
 						of Birth</TextInput>
 				</div>
 
 				<div class="flex gap-4 col-span-12 pl-6 justify-center">
-					<SelectInput :val_err="vuelidate_err == false && applicant.scountry_ob.length == 0" :options="$countries"
-						v-model="applicant.scountry_ob">Country of
+					<SelectInput :val_err="vuelidate_err == false && applicant.scountry_ob.length == 0"
+						:options="$countries" v-model="applicant.scountry_ob">Country of
 						Birth
 					</SelectInput>
-					<TextInput :val_err="vuelidate_err == false && applicant.scontact.length == 0" v-model="applicant.scontact">
+					<TextInput :val_err="vuelidate_err == false && applicant.scontact.length == 0"
+						v-model="applicant.scontact">
 						Phone Number</TextInput>
 				</div>
 			</div>
