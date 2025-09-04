@@ -15,13 +15,13 @@ const state = computed(() => {
 	if (isHover.value) {
 		// hovered
 		return {
-			fill: '#a020f03f',
-			stroke: '#a020f0',
+			fill: '#a020f0',
+			stroke: '#fff',
 		}
 		// !hovered
 	} else return {
 		fill: 'none',
-		stroke: '#222',
+		stroke: '#fff',
 	}
 })
 </script>

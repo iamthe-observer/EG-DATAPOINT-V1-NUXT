@@ -7,7 +7,8 @@
 			</path>
 			<path :fill="state.fill2"
 				d="M12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7C16 9.20914 14.2091 11 12 11Z">
-				<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.5s" dur="0.4s" values="28;0"></animate>
+				<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.5s" dur="0.4s" values="28;0">
+				</animate>
 			</path>
 		</g>
 	</svg>
@@ -20,15 +21,15 @@ const state = computed(() => {
 	if (isHover.value) {
 		// hovered
 		return {
-			fill1: '#a020f03f',
-			fill2: '#a020f03f',
-			stroke: '#a020f0',
+			fill1: '#a020f0',
+			fill2: '#a020f0',
+			stroke: '#fff',
 		}
 		// !hovered
 	} else return {
 		fill1: 'none',
 		fill2: 'none',
-		stroke: '#222',
+		stroke: '#fff',
 	}
 })
 </script>

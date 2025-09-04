@@ -7,13 +7,13 @@
 				<Avatar :username="profile?.username!" :role="profile?.role!" :url="profile?.avatar_url" />
 			</label>
 			<ul tabindex="0"
-				class="dropdown-content menu p-2 shadow bg-base-100 border-2 border-neutral-900 dark:bg-neutral-50 dark:border-none dark:shadow-2xl rounded-box w-52 z-[500]">
+				class="dropdown-content menu p-2 shadow bg-base-100 dark:bg-neutral-300/30 backdrop-blur-xl drop-shadow-xl rounded-box w-52 z-[500]">
 				<li class="">
-					<div class="cursor-text flex justify-between items-center">
+					<div class="cursor-text flex justify-between items-center text-white drop-shadow-lg">
 						{{ profile?.username || 'User' }}
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
-							<circle cx="26" cy="16" r="4" fill="#009900" />
-							<path fill="#888888"
+							<circle cx="26" cy="16" r="4" fill="#009942" />
+							<path fill="#fff"
 								d="M22 30h-2v-5a5 5 0 0 0-5-5H9a5 5 0 0 0-5 5v5H2v-5a7 7 0 0 1 7-7h6a7 7 0 0 1 7 7zM12 4a5 5 0 1 1-5 5a5 5 0 0 1 5-5m0-2a7 7 0 1 0 7 7a7 7 0 0 0-7-7z" />
 						</svg>
 					</div>

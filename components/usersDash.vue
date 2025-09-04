@@ -1,17 +1,19 @@
 <template>
-	<div class="__people col-span-3 row-span-8 p-2">
-		<span class="absolute -top-[1rem] left-2 dark:text-neutral-900 text-neutral-100 text-sm uppercase">Most Recent
+	<div class="__people col-span-3 row-span-8 p-2 dark:text-neutral-900">
+		<span
+			class="absolute -top-[1rem] left-2 dark:text-neutral-50 drop-shadow-xl text-neutral-100 text-sm uppercase">Most
+			Recent
 			Applicants</span>
 
 		<div
-			class="w-full h-full carousel carousel-vertical boxy rounded-none border-2 border-black carousel-center gap-2">
+			class="w-full h-full carousel carousel-vertical rounded-xl outline outline-4 outline-neutral-100/20 hover:outline-neutral-100/50 transition-all duration-200 ease-in-out carousel-center gap-2">
 
-			<div class="w-full h-full grid place-items-center dark:bg-neutral-100"
-				v-if="!role && recent_apls.length == 0">
+			<div class="w-full h-full grid place-items-center backdrop-blur" v-if="!role && recent_apls.length == 0">
 				<div class="flex flex-col items-center gap-2">
-					<svg xmlns="http://www.w3.org/2000/svg" class="w-20 aspect-square" viewBox="0 0 24 24">
-						<g stroke="#888888" stroke-linecap="round" stroke-width="2">
-							<path fill="#888888" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
+					<svg xmlns="http://www.w3.org/2000/svg" class="w-20 aspect-square drop-shadow-lg"
+						viewBox="0 0 24 24">
+						<g stroke="#ffff" stroke-linecap="round" stroke-width="2">
+							<path fill="#fff" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
 								d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z">
 								<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0" />
 								<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s"
@@ -23,7 +25,7 @@
 									values="14;0" />
 							</path>
 						</g>
-						<g fill="#888888" fill-opacity="0">
+						<g fill="#fff" fill-opacity="0">
 							<ellipse cx="9" cy="9.5" rx="1" ry="1.5">
 								<animate fill="freeze" attributeName="fill-opacity" begin="0.6s" dur="0.2s"
 									values="0;1" />
@@ -34,14 +36,15 @@
 							</ellipse>
 						</g>
 					</svg>
-					<span class="text-center">No recent <br />Applicants</span>
+					<span class="text-center text-white font-bold drop-shadow-lg">No recent <br />Applicants</span>
 				</div>
 			</div>
 
 			<div v-if="!role && recent_apls.length != 0" v-for="(apl, idx) in recent_apls"
-				class="carousel-container dark:bg-neutral-50 bg-neutral-800 grid place-items-center">
+				class="carousel-container backdrop-blur dark:bg-white/30 bg-neutral-900/40 grid place-items-center">
 				<div class="relative w-full h-full flex flex-col items-center">
-					<span class="badge badge-secondary dark:badge-accent absolute top-1 right-1">#{{ idx + 1 }}</span>
+					<span class="badge badge-secondary dark:badge-warning absolute top-1 right-1 rounded-xl">#{{ idx +
+						1 }}</span>
 
 					<div class="flex flex-col justify-center items-center pt-5">
 
@@ -51,11 +54,11 @@
 									:src="URLs![idx].signedUrl !== null ? URLs![idx].signedUrl : '/svg/image.svg'" />
 							</div>
 						</div>
-						<p class="font-bold pt-4 text-sm text-center justify-end">{{ apl.fullName }}</p>
+						<p class="font-bold pt-4 text-md text-center justify-end text-neutral-50">{{ apl.fullName }}</p>
 
-						<p class="font-normal text-neutral-400 text-xs dark:text-neutral-600">{{ apl.pcontact }}</p>
+						<p class="font-bold text-neutral-400 text-sm dark:text-neutral-50">{{ apl.pcontact }}</p>
 
-						<p class="font-normal text-neutral-400 text-xs dark:text-neutral-600">{{
+						<p class="font-bold text-neutral-400 text-sm dark:text-neutral-50">{{
 							useNuxtApp().$formatDateTime(new
 								Date(apl.created_at!)) }}
 						</p>
@@ -64,9 +67,10 @@
 					<div class="flex absolute bottom-1 left-1 justify-center pt-5 gap-1 items-center">
 						<button
 							@click="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
-							class="btn btn-sm btn-primary mr-3 rounded-full">View</button>
-						<span class="flex gap-1 dark:font-semibold">
-							<SvgsCedis class="w-2 fill-white dark:fill-neutral-900" />{{ apl.totalPayment }}.00
+							class="btn btn-sm bg-yellow-300 text-yellow-600 hover:bg-yellow-400 hover:text-white border-none  mr-1 rounded-xl">View</button>
+						<span
+							class="flex gap-1 dark:font-semibold bg-neutral-900/30 text-neutral-50 rounded-xl py-1 px-2">
+							<SvgsCedis class="w-2 fill-white dark:fill-green-300" />{{ apl.totalPayment }}.00
 						</span>
 					</div>
 				</div>
@@ -140,7 +144,7 @@
 					<div class="flex absolute bottom-4 left-4 justify-center pt-5 gap-1 items-center">
 						<button
 							@click="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
-							class="btn btn-sm btn-primary mr-3 rounded-none border-2 border-black boxy text-white hover:border-2 hover:border-black">View</button>
+							class="btn btn-sm btn-primary mr-3 btn-square rounded-none border-2 border-black boxy text-white hover:border-2 hover:border-black">View</button>
 						<span class="flex gap-1 dark:font-semibold">
 							<SvgsCedis class="w-2 fill-white dark:fill-neutral-900" />{{ apl.totalPayment }}.00
 						</span>

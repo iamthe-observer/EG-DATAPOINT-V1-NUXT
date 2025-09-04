@@ -1,7 +1,7 @@
 <template>
 	<div class="form-control w-full">
 		<label class="label">
-			<span class="label-text dark:text-neutral-900 dark:font-semibold">
+			<span class="label-text dark:text-neutral-50 dark:font-semibold">
 				<slot name="default" />
 			</span>
 		</label>
@@ -13,7 +13,7 @@
 				<input oninput="this.value = this.value.toUpperCase()" :value="modelValue ? modelValue : value"
 					@input="$emit('update:modelValue', $event.target?.value)" :type="type ? type : 'text'"
 					:placeholder="placeholder ? placeholder : ''"
-					:class="[`input input-bordered w-full border-none dark:bg-neutral-300 dark:font-semibold bg-${bg} ${icon ? 'rounded-l-xl rounded-r-none bg-neutral-600' : 'rounded-xl bg-neutral-600'} ${classer}`]" />
+					:class="[`input input-bordered w-full border-none dark:bg-neutral-900/50 backdrop-blur-md text-white dark:font-semibold bg-${bg} ${icon ? 'rounded-l-xl rounded-r-none bg-neutral-600' : 'rounded-xl bg-neutral-600'} ${classer}`]" />
 
 				<div v-if="icon"
 					:class='`icon grid place-items-center p-2 bg-neutral-700 dark:bg-primary bg-${bg} rounded-e-xl`'>

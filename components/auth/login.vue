@@ -1,10 +1,10 @@
 <template>
 	<div
-		class="text-black boxy w-[400px] h-full p-4 flex flex-col justify-center bg-white border-2 border-black  backdrop-blur-md bg-opacity-60">
+		class="text-white w-[400px] h-full p-4 flex flex-col justify-center bg-black/60   backdrop-blur-md rounded-xl outline outline-4 outline-neutral-100/20">
 		<form action="" class="flex flex-col">
 			<div class="flex flex-col w-full h-full justify-center px-12">
-				<img src="../../assets/images/logo1.png" alt="" class="w-32 h-32 object-contain mx-auto mb-4">
-				<p class="w-full text-center text-2xl font-bold text-black">Hello!</p>
+				<img src="../../assets/images/whiteeglogo.png" alt="" class="w-52 h-32 object-cover mx-auto mb-4">
+				<p class="w-full text-center text-2xl font-bold text-white">Hello!</p>
 				<p class="w-full text-center mb-5 text-blue-500 text-sm font-semibold">Welcome back to<br />
 					Ebbysgold Datapoint!</p>
 				<textInput :no_uppercase="true" :bg="'white'" v-model="email_" :placeholder="'Email'" :icon="true">

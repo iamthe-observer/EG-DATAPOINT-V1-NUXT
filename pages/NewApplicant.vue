@@ -1,8 +1,7 @@
 <template>
-	<div id="APL_NEW"
-		class="bg-neutral-800 dark:shadow-xl dark:bg-neutral-50 rounded-xl w-full h-full flex flex-col relative">
+	<div id="APL_NEW" class="bg-neutral-900/40 dark:bg-transparent rounded-xl w-full h-full flex flex-col relative">
 		<h1 ref="header_ref"
-			class="w-full bg-neutral-700 dark:bg-primary rounded-xl shadow-xl flex justify-between items-center p-5">
+			class="w-full bg-neutral-700 dark:bg-neutral-50/30 outline outline-4 outline-neutral-50/60 mb-4 backdrop-blur rounded-xl shadow-xl flex justify-between items-center p-5">
 			<span ref="discount_ref"
 				class="flex flex-col gap-1 dark:text-white dark:hover:text-purple-600 hover:text-neutral-600 group">
 				<p class="text-lg flex flex-col">
@@ -77,7 +76,7 @@
 
 		<main ref="container" class="flex-1 rounded-xl overflow-y-auto py-2 pb-6 pl-2 flex flex-col" id="style-1">
 
-			<p class="font-bold uppercase text-3xl drop-shadow-lg mx-auto pt-10 pb-5">Primary Applicant</p>
+			<p class="font-bold uppercase text-3xl drop-shadow-lg mx-auto pt-10 pb-5 text-white">Primary Applicant</p>
 			<FieldSetPrimeApl />
 
 			<p v-if="applicant.pmarital_status == 'MARRIED'"

@@ -1,5 +1,9 @@
 <template>
-  <div class="h-screen bg-neutral-900 text-white dark:bg-neutral-200 dark:text-neutral-900" id="index">
+  <div class="h-screen text-white dark:text-neutral-900 relative" id="index">
+    <div class="absolute w-full h-full backdrop-blur-xl">
+      <img v-if="dark_mode" src="./assets/images/bg.png" class="w-full h-full bg-cover brightness-50" alt="">
+      <img v-else src="./assets/images/bgdark.png" class="w-full h-full bg-cover brightness-50" alt="">
+    </div>
     <div v-if="app_loading" class="w-full h-full grid place-items-center bg-neutral-900 dark:bg-neutral-50">
       <Loading />
     </div>
@@ -17,6 +21,8 @@ import { useProfileStore } from '@/store/profile';
 import { useRequestStore } from '@/store/requests';
 import { useTasksStore } from '@/store/tasks';
 import { storeToRefs } from 'pinia';
+
+const { dark_mode } = storeToRefs(useAppStore())
 
 useServerSeoMeta({
   title: 'Ebbysgold Group Datapoint',

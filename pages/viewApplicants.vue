@@ -1,7 +1,7 @@
 <template>
 	<div class="w-full h-full flex flex-col rounded-2xl">
 		<div v-if="!if_apls_ex"
-			class="w-full h-full rounded-2xl dark:bg-neutral-50 dark:shadow-xl bg-neutral-800 col-span-full row-span-full text-justify relative flex flex-col">
+			class="w-full h-full rounded-2xl dark:bg-neutral-200 dark:shadow-xl bg-neutral-800 col-span-full row-span-full text-justify relative flex flex-col">
 
 			<header
 				class="w-full min-h-[4rem] dark:bg-primary bg-neutral-700 rounded-2xl flex items-center justify-between px-4">
@@ -179,32 +179,13 @@
 						<tr v-for="(apl, i) in curr_filtered_apls"
 							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-black transition-all duration-300 ease-out dark:hover:bg-neutral-200"
 							@dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!); }">
-							<!-- <th class="font-normal">
-								{{ i + 1 }}
-							</th> -->
-							<!-- <th>
-								<div class="dropdown dropdown-right">
-									<label tabindex="0"
-										class="btn btn-xs dark:border-none dark:text-neutral-900 dark:bg-white rounded-full m-1 btn-circle"><svg
-											class="w-4 aspect-square" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-											<path fill="#888888"
-												d="M4.957 5a1 1 0 0 0-.821 1.571l2.633 3.784a1.5 1.5 0 0 0 2.462 0l2.633-3.784A1 1 0 0 0 11.043 5H4.957Z" />
-										</svg></label>
-									<ul tabindex="0"
-										class="dropdown-content dark:bg-white dark:border-2 dark:border-neutral-300 dark:font-semibold dark:text-neutral-900 z-[100] menu p-1 shadow bg-base-100 rounded-lg w-52 font-normal">
-										<li @click="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!) }"
-											class="hover:bg-accent hover:text-black rounded-lg"><a>View</a></li>
-										<li class="hover:bg-accent hover:text-black rounded-lg"><a>Request Delete</a></li>
-									</ul>
-								</div>
-							</th> -->
 							<td>
 								<div class="flex items-center space-x-3">
 									<div>
 										<div class="font-semibold">{{ apl.fullName }}</div>
 										<div class="text-sm text-neutral-400 z-0">{{ apl.pconf_code ? apl.pconf_code :
 											'No Confirmation Code'
-											}}
+										}}
 										</div>
 									</div>
 								</div>
@@ -255,13 +236,10 @@
 					<!-- foot -->
 					<tfoot>
 						<tr>
-							<th></th>
-							<th>Name</th>
-							<th>Job</th>
-							<th>Favorite Color</th>
-							<th></th>
 						</tr>
 					</tfoot>
+
+					<folderDiv class="my-10"></folderDiv>
 
 				</table>
 			</div>
@@ -314,7 +292,7 @@
 										<div class="font-semibold">{{ apl.fullName }}</div>
 										<div class="text-sm text-neutral-400 z-0">{{ apl.pconf_code ? apl.pconf_code :
 											'No Confirmation Code'
-											}}
+										}}
 										</div>
 									</div>
 								</div>
@@ -343,7 +321,7 @@
 										==
 										apl.user_id)[0].fullname ||
 										'User'
-										}}</span>
+									}}</span>
 									<span class="text-neutral-300 dark:text-neutral-700">{{ useNuxtApp().$formatDate(new
 										Date(apl.created_at!)) }}</span>
 									<span class="text-neutral-300 dark:text-neutral-700">{{ new
@@ -461,7 +439,7 @@
 					</span>
 					<span class="text-2xl">[ <span class="text-2xl text-green-500 dark:text-white">{{
 						total_apls_ex.filter(apl =>
-							apl.pconf_code).length }}</span> / <span class="text-2xl text-secondary dark:text-white">{{
+							apl.pconf_code).length}}</span> / <span class="text-2xl text-secondary dark:text-white">{{
 								total_apls_ex.length }}</span>
 						]</span> ||
 					<span class="text-2xl">GHC {{ today_sales_ex }}</span>
@@ -528,7 +506,7 @@
 										<div class="font-semibold">{{ apl.fullName }}</div>
 										<div class="text-sm text-neutral-400 z-0">{{ apl.pconf_code ? apl.pconf_code :
 											'No Confirmation Code'
-											}}
+										}}
 										</div>
 									</div>
 								</div>
@@ -557,7 +535,7 @@
 										==
 										apl.user_id)[0].fullname ||
 										'User'
-										}}</span>
+									}}</span>
 									<span class="text-neutral-300 dark:text-neutral-700">{{ useNuxtApp().$formatDate(new
 										Date(apl.created_at!)) }}</span>
 									<span class="text-neutral-300 dark:text-neutral-700">{{ new

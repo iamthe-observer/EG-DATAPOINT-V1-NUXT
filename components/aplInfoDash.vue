@@ -2,31 +2,33 @@
 	<div class="__apl_info col-span-6 row-span-8 flex flex-col gap-5 p-2">
 		<div v-if="!role" class="flex w-full h-full gap-5">
 			<!-- tasks -->
-			<div class="containers total_applicants flex items-center px-3 justify-between w-full h-full gap-4">
-				<p class="flex flex-col gap-2 h-full w-full justify-center">
+			<div
+				class="backdrop-blur dark:bg-white/30 bg-neutral-900/40 rounded-xl outline outline-4 outline-neutral-100/20 hover:outline-neutral-100/50 transition-all duration-200 ease-in-out total_applicants flex items-center px-3 justify-between w-full h-full gap-4">
+				<p class="flex flex-col gap-2 h-full w-full justify-center pb-3 pt-2">
+					<span class="text-xl font-bold text-neutral-50 drop-shadow-lg">Create a new Task</span>
 					<textarea v-model="new_task"
-						class="textarea outline outline-4 outline-neutral-700 text-sm h-[80%] w-full dark:bg-neutral-300 bg-neutral-900 dark:outline-neutral-200"
-						placeholder="Create a new Task..."></textarea>
+						class="textarea rounded-xl text-lg text-neutral-50 h-full w-full dark:bg-neutral-900/50 bg-neutral-900/75 dark:outline-neutral-200 font-bold"
+						placeholder="Remember to..."></textarea>
 				</p>
 
 				<div v-if="!new_task" class="flex flex-col items-center gap-2 w-fit">
 					<span
-						class="hover:text-accent cursor-pointer hover:scale-110 transition-all duration-200 ease-in-out text-xs whitespace-nowrap dark:font-semibold">Tasks
+						class="hover:text-accent cursor-pointer hover:scale-110 transition-all duration-200 ease-in-out text-lg font-bold whitespace-nowrap dark:font-semibold text-neutral-50 drop-shadow-lg">All
+						Tasks
 					</span>
-					<radial-progress :textclr="`accent`"
-						:amount="Number(((done_tasks.length / _tasks.length) * 100).toFixed(1)) || 0">
+					<radial-progress :amount="Number(((done_tasks.length / _tasks.length) * 100).toFixed(1)) || 0">
 						{{ `${done_tasks.length} / ${_tasks.length}` }}
 					</radial-progress>
 				</div>
 
-				<div v-else class="join join-vertical">
+				<div v-else class="join rounded-lg bg-black/50 join-vertical">
 					<button @click="handleTask"
-						class="btn join-item btn-md btn-success dark:bg-green-400 dark:border-none dark:text-white ">
-						<span v-if="!loading_task" class="">Save</span>
+						class="btn join-item btn-md bg-transparent dark:border-none dark:text-white">
+						<span v-if="!loading_task" class="text-green-400">Save</span>
 						<span v-else class="loading loading-ring loading-md"></span>
 					</button>
 					<button @click="new_task = ''"
-						class="dark:border-none dark:text-white dark:bg-red-400 btn join-item btn-md btn-error">Cancel</button>
+						class="dark:border-none btn join-item bg-transparent btn-md text-yellow-400">Cancel</button>
 				</div>
 				<input type="checkbox" :checked="done_task" class="modal-toggle" />
 				<div class="modal">
@@ -85,24 +87,26 @@
 
 		<div v-if="!role" class="flex w-full h-full gap-5">
 			<!-- total applicants -->
-			<div class="containers total_applicants px-4 flex gap-2 items-center justify-between w-full h-full">
+			<div
+				class="backdrop-blur dark:bg-white/30 bg-neutral-900/40 rounded-xl outline outline-4 outline-neutral-100/20 hover:outline-neutral-100/50 transition-all duration-200 ease-in-out total_applicants px-4 flex gap-2 items-center justify-between w-full h-full">
 				<p class="flex flex-col gap-2">
-					<span class="text-sm text-neutral-500">All Applicants</span>
-					<span class="text-2xl font-medium">{{ all_my_apls?.length }}</span>
-					<span :class="`text-xs ${total_perc_inc >= 50 ? 'text-green-500' : 'text-red-500'} font-medium`">+{{
+					<span class="text-lg text-neutral-50 drop-shadow-lg font-bold">All Applicants</span>
+					<span class="text-2xl font-medium text-neutral-50 drop-shadow-lg">{{ all_my_apls?.length }}</span>
+					<span :class="`text-xs drop-shadow-lg text-yellow-300 font-medium`">+{{
 						total_perc_inc.toFixed(1) }}% coverage.</span>
 				</p>
-				<radial-progress :textclr="'primary'" :amount="Number(total_apl_perc.toFixed(1))" />
+				<radial-progress class="drop-shadow-lg" :textclr="'primary'"
+					:amount="Number(total_apl_perc.toFixed(1))" />
 			</div>
 
 			<!-- total daily applicants -->
 			<div onclick="viewtodayapls.showModal()"
-				class="containers total_applicants px-4 flex items-center justify-between w-full h-full hover:cursor-pointer dark:hover:bg-red-50  hover:bg-neutral-700 transition-all duration-200 ease-out">
+				class="backdrop-blur dark:bg-white/30 bg-neutral-900/40 rounded-xl outline outline-4 outline-neutral-100/20 hover:outline-neutral-100/50 transition-all duration-200 ease-in-out total_applicants px-4 flex items-center justify-between w-full h-full hover:cursor-pointer dark:hover:bg-neutral-800/50  hover:bg-neutral-900/75">
 
 				<dialog id="viewtodayapls" class="modal">
 					<form method="dialog"
-						class="modal-box dark:bg-neutral-50 dark:text-black bg-neutral-800 text-white text-center max-w-full h-5/6">
-						<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+						class="modal-box dark:bg-neutral-500/50 drop-shadow-xl backdrop-blur-lg outline outline-4 outline-neutral-600 dark:text-white bg-neutral-800 text-white text-center max-w-full h-5/6">
+						<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-white">✕</button>
 
 						<ViewTodayApplicants />
 
@@ -110,15 +114,16 @@
 				</dialog>
 
 				<p class="flex flex-col gap-2">
-					<span class="text-sm text-neutral-500">Today's Applicants</span>
-					<span class="font-medium text-2xl">{{ total_daily_applicants?.length }}</span>
-					<span
-						:class="`text-xs ${total_daily_inc >= 100 ? 'text-green-500' : 'text-red-500'} font-medium w-full`">{{
-							total_daily_inc >= 100 ? Math.floor(total_daily_inc - 100) : total_daily_inc.toFixed(1) }}% {{
+					<span class="text-lg text-neutral-50 drop-shadow-lg font-bold">Today's Applicants</span>
+					<span class="font-medium text-2xl drop-shadow-lg text-white">{{ total_daily_applicants?.length
+					}}</span>
+					<span :class="`text-xs drop-shadow-lg text-yellow-500 font-medium w-full`">{{
+						total_daily_inc >= 100 ? Math.floor(total_daily_inc - 100) : total_daily_inc.toFixed(1) }}% {{
 							total_daily_inc >= 100 ? 'more than yesterday.' : 'of yesterday.'
 						}}</span>
 				</p>
-				<radial-progress :textclr="`secondary`" :amount="Number(total_daily_inc!.toFixed(1))" />
+				<radial-progress class="drop-shadow-lg" :textclr="`secondary`"
+					:amount="Number(total_daily_inc!.toFixed(1))" />
 			</div>
 		</div>
 
@@ -141,33 +146,13 @@
 				<radial-progress v-else :textclr="`secondary`" :amount="Number(total_daily_inc_admin!.toFixed(1))" />
 			</div>
 
-			<!-- total applicants -->
-			<!-- <div class="containers total_applicants px-4 flex gap-2 items-center justify-between w-[70%] h-full">
-				<p class="flex flex-col gap-2">
-					<span class="text-sm text-neutral-500">All Applicants</span>
-					<span class="text-4xl font-medium">{{ total_apls?.length }}</span>
-				</p>
-				<div class="flex flex-col gap- w-3/5 h-full items-center justify-center">
-					<span class="text-neutral-500 text-sm">Recent Daily Applicants</span>
-					<div v-for="i in [5, 4, 3, 2, 1]" class="flex gap-2 w-full items-center">
-						<progress class="progress progress-secondary dark:progress-accent bg-neutral-700 dark:bg-white"
-							:value="getAplNumByDay(i)" :max="getMaxDay.maxCount"></progress>
-						<span
-							:class="i == 0 ? 'w-6 text-md text-secondary tooltip tooltip-secondary tooltip-right' : 'w-6 text-sm tooltip tooltip-secondary tooltip-right'"
-							:data-tip="i == 0 ? `Today / GHC${getTotalPaymentByDay(i)}.00` : `${i} days ago / GHC${getTotalPaymentByDay(i)}.00`">{{
-								getAplNumByDay(i)
-							}}</span>
-					</div>
-				</div>
-			</div> -->
-
 			<div onclick="viewtodayapls.showModal()"
 				class="containers total_applicants px-4 flex items-center justify-between w-2/3 h-full hover:cursor-pointer dark:hover:bg-red-50  hover:bg-neutral-700 transition-all duration-200 ease-out">
 
 				<dialog id="viewtodayapls" class="modal">
 					<form method="dialog"
-						class="modal-box dark:bg-neutral-50 dark:text-black bg-neutral-800 text-white text-center max-w-full h-5/6">
-						<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+						class="modal-box dark:bg-neutral-50 dark:text-black bg-neutral-800 text-white text-center max-w-full h-5/6 rounded-none">
+						<button class="btn btn-sm btn-square btn-ghost absolute right-2 top-2">✕</button>
 
 						<ViewTodayApplicants />
 
@@ -177,13 +162,12 @@
 				<p class="flex flex-col gap-2">
 					<span class="text-sm text-neutral-500">Today's Applicants</span>
 					<span class="font-medium text-2xl">{{ total_daily_applicants?.length }}</span>
-					<span
-						:class="`text-xs ${total_daily_inc >= 100 ? 'text-green-500' : 'text-red-500'} font-medium w-full`">{{
-							total_daily_inc >= 100 ? Math.floor(total_daily_inc - 100) : total_daily_inc.toFixed(1) }}% {{
+					<span :class="`text-xs text-yellow-300 font-medium w-full`">{{
+						total_daily_inc >= 100 ? Math.floor(total_daily_inc - 100) : total_daily_inc.toFixed(1) }}% {{
 							total_daily_inc >= 100 ? 'more than yesterday.' : 'of yesterday.'
 						}}</span>
 				</p>
-				<radial-progress :textclr="`secondary`" :amount="Number(total_daily_inc!.toFixed(1))" />
+				<radial-progress :amount="Number(total_daily_inc!.toFixed(1))" />
 			</div>
 
 
@@ -332,7 +316,7 @@ const undone_tasks = computed(() => {
 </script>
 
 <style scoped>
-/* .containers {
-	@apply rounded-xl bg-neutral-800;
-} */
+.containers {
+	@apply rounded-xl outline outline-4 outline-neutral-100/20 hover:outline-neutral-100/50 transition-all duration-200 ease-in-out;
+}
 </style>

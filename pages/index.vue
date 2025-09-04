@@ -4,11 +4,6 @@
 
 		<AuthLogin @login="loadAppData" class="__login opacity-100 z-10" />
 
-		<div class="w-2/3 h-full grid place-items-center">
-			<img src="../assets/images/logo.png" alt="" class="object-contain">
-			<!-- <img src="../assets/images/login.jpg" alt="" class="object-cover w-full h-full"> -->
-		</div>
-
 	</div>
 
 	<div class="w-full h-full flex justify-center items-center p-7 relative" v-else>

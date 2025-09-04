@@ -12,9 +12,11 @@
 			<div class="flex flex-col flex-1 justify-between gap-4">
 				<!-- name -->
 				<div class="flex gap-4 col-span-10 pl-6 justify-center">
-					<TextInput :val_err="vuelidate_err == false && applicant.plastName.length == 0" v-model="applicant.plastName">
+					<TextInput :val_err="vuelidate_err == false && applicant.plastName.length == 0"
+						v-model="applicant.plastName">
 						Last Name</TextInput>
-					<TextInput :val_err="vuelidate_err == false && applicant.pfirstName.length == 0" v-model="applicant.pfirstName">
+					<TextInput :val_err="vuelidate_err == false && applicant.pfirstName.length == 0"
+						v-model="applicant.pfirstName">
 						First Name
 					</TextInput>
 					<TextInput v-model="applicant.potherName">Other Name
@@ -22,29 +24,25 @@
 				</div>
 
 				<div class="grid grid-cols-3 gap-4 col-span-10 pl-6 justify-center">
-					<!-- <DatePicker dark :color="'purple'" is-dark v-model="applicant.pdob" mode="date">
-						<template #default="{ togglePopover }"> -->
-					<!-- <TextInput :val_err="vuelidate_err == false && !applicant.pdob" :icon="true"
-								:value="applicant.pdob ? $formatDate(new Date(applicant.pdob!)) : ''" @click="togglePopover">Date of
-								Birth
-							</TextInput> -->
 
 					<div class="form-control w-full">
 
 						<label class="label">
-							<span class="label-text dark:text-neutral-900 dark:font-semibold">
+							<span class="label-text dark:text-neutral-50 dark:font-semibold">
 								Date Of Birth
 							</span>
 						</label>
 
 						<div class="indicator w-full">
 							<span
-								:class="['transition-all duration-300 ease-in pointer-events-none indicator-item badge-sm badge bg-red-400 border-transparent drop-shadow-xl', vuelidate_err == false && !applicant.pdob ? 'opacity-100' : 'opacity-0']"></span>
+								:class="['transition-all duration-300 ease-in pointer-events-none indicator-item badge-sm badge bg-red-600 border-transparent drop-shadow-xl', vuelidate_err == false && !applicant.pdob ? 'opacity-100' : 'opacity-0']"></span>
 
 							<div class="flex items-end flex-1 gap-4">
-								<input v-model="dates.pdob.dd" type="number" min="1" max="31" maxlength="2" placeholder="DD"
+								<input v-model="dates.pdob.dd" type="number" min="1" max="31" maxlength="2"
+									placeholder="DD"
 									class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
-								<input v-model="dates.pdob.mm" type="number" min="1" max="12" maxlength="2" placeholder="MM"
+								<input v-model="dates.pdob.mm" type="number" min="1" max="12" maxlength="2"
+									placeholder="MM"
 									class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
 								<input v-model="dates.pdob.yyyy" type="number" maxlength="4" placeholder="YYYY"
 									class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
@@ -52,23 +50,23 @@
 						</div>
 					</div>
 
-					<!-- </template>
-					</DatePicker> -->
-					<SelectInput :val_err="vuelidate_err == false && applicant.pgender.length == 0" :options="['male', 'female']"
-						v-model="applicant.pgender">
+					<SelectInput :val_err="vuelidate_err == false && applicant.pgender.length == 0"
+						:options="['male', 'female']" v-model="applicant.pgender">
 						Gender
 					</SelectInput>
-					<TextInput :val_err="vuelidate_err == false && applicant.pcity_ob.length == 0" v-model="applicant.pcity_ob">City
+					<TextInput :val_err="vuelidate_err == false && applicant.pcity_ob.length == 0"
+						v-model="applicant.pcity_ob">City
 						of Birth</TextInput>
 				</div>
 
 				<div class="flex gap-4 col-span-10 pl-6 justify-center">
-					<SelectInput :val_err="vuelidate_err == false && applicant.pcountry_ob.length == 0" :options="$countries"
-						v-model="applicant.pcountry_ob">
+					<SelectInput :val_err="vuelidate_err == false && applicant.pcountry_ob.length == 0"
+						:options="$countries" v-model="applicant.pcountry_ob">
 						Country of
 						Birth
 					</SelectInput>
-					<TextInput :val_err="vuelidate_err == false && applicant.pcontact.length == 0" v-model="applicant.pcontact">
+					<TextInput :val_err="vuelidate_err == false && applicant.pcontact.length == 0"
+						v-model="applicant.pcontact">
 						Phone Number</TextInput>
 					<TextInput :val_err="vuelidate_err == false && applicant.pother_contact.length == 0"
 						v-model="applicant.pother_contact">Next of Kin's Phone Number
@@ -106,14 +104,14 @@
 				</div>
 			</div>
 			<!-- </template>
-			</DatePicker> -->
+</DatePicker> -->
 		</div>
 
 		<div class="flex gap-4 col-span-12 justify-center">
 			<TextInput :val_err="vuelidate_err == false && applicant.ppostal.length == 0" v-model="applicant.ppostal">
 				Residential Address</TextInput>
-			<SelectInput :val_err="vuelidate_err == false && applicant.pcountry_live_today.length == 0" :options="$countries"
-				v-model="applicant.pcountry_live_today">
+			<SelectInput :val_err="vuelidate_err == false && applicant.pcountry_live_today.length == 0"
+				:options="$countries" v-model="applicant.pcountry_live_today">
 				Country
 				where you live today
 			</SelectInput>

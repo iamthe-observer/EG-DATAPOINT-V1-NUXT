@@ -1,5 +1,5 @@
 <template>
-	<h1 class="w-full text-left font-bold text-3xl pb-8">Total Daily Applicants === GHC {{ totalPaymentSum }}.00</h1>
+	<h1 class="w-full text-center font-bold text-3xl pb-8">Total Daily Applicants === GHC {{ totalPaymentSum }}.00</h1>
 	<div class="grid grid-cols-3 gap-4 rounded-xl w-full overflow-y-auto" id="style-1">
 
 		<div @click="() => {
