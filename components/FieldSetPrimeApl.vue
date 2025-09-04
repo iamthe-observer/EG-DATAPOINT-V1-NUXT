@@ -37,6 +37,7 @@
 							<span
 								:class="['transition-all duration-300 ease-in pointer-events-none indicator-item badge-sm badge bg-red-600 border-transparent drop-shadow-xl', vuelidate_err == false && !applicant.pdob ? 'opacity-100' : 'opacity-0']"></span>
 
+
 							<div class="flex items-end flex-1 gap-4">
 								<input v-model="dates.pdob.dd" type="number" min="1" max="31" maxlength="2"
 									placeholder="DD"
@@ -46,10 +47,12 @@
 									class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
 								<input v-model="dates.pdob.yyyy" type="number" maxlength="4" placeholder="YYYY"
 									class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
-							</div>
+							</div> -->
 						</div>
 					</div>
 
+					<!-- </template>
+</DatePicker> -->
 					<SelectInput :val_err="vuelidate_err == false && applicant.pgender.length == 0"
 						:options="['male', 'female']" v-model="applicant.pgender">
 						Gender
@@ -76,17 +79,12 @@
 			</div>
 		</div>
 
-		<!-- <div class="flex gap-4 col-span-12 justify-center">
-			<TextInput v-model="">Confirmation Code</TextInput>
-		</div> -->
 		<div class="flex gap-4 col-span-12 justify-center">
 			<TextInput v-model="applicant.pemail">Email</TextInput>
 		</div>
 
 		<div class="flex gap-4 col-span-12 justify-center">
 			<TextInput v-model="applicant.ppassport_number">Passport Number</TextInput>
-			<!-- <DatePicker dark :color="'purple'" is-dark v-model="applicant.passport_ex" mode="date">
-				<template> -->
 			<div class="form-control w-full">
 				<label class="label">
 					<span class="label-text dark:text-neutral-900 dark:font-semibold">
@@ -95,13 +93,27 @@
 				</label>
 
 				<div class="flex items-end flex-1 gap-4">
+					<DatePicker dark :color="'purple'" is-dark v-model="applicant.passport_ex" mode="date">
+						<template #default="{ togglePopover }">
+							<span @click="togglePopover"
+								class="input flex items-center w-full border-none dark:bg-neutral-300 dark:font-semibold rounded-xl font-semibold bg-neutral-600">{{
+									applicant.passport_ex ?
+								$formatDateWords(new Date(applicant.passport_ex!)) :
+								''
+								}}</span>
+						</template>
+					</DatePicker>
+				</div>
+
+
+				<!-- <div class="flex items-end flex-1 gap-4">
 					<input v-model="dates.passport_ex.dd" type="number" min="1" max="31" maxlength="2" placeholder="DD"
 						class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
 					<input v-model="dates.passport_ex.mm" type="number" min="1" max="12" maxlength="2" placeholder="MM"
 						class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
 					<input v-model="dates.passport_ex.yyyy" type="number" maxlength="4" placeholder="YYYY"
 						class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
-				</div>
+				</div> -->
 			</div>
 			<!-- </template>
 </DatePicker> -->
@@ -151,17 +163,15 @@ const primeSRC = computed(() => {
 	if (primeIMG.value) return URL.createObjectURL(primeIMG.value) || ''
 })
 
+type TDate = {
+	yyyy: number | null,
+	mm: number | null,
+	dd: number | null
+}
+
 const dates = reactive<{
-	pdob: {
-		dd: number | null,
-		mm: number | null,
-		yyyy: number | null
-	},
-	passport_ex: {
-		dd: number | null,
-		mm: number | null,
-		yyyy: number | null
-	}
+	pdob: TDate,
+	passport_ex: TDate
 }>({
 	pdob: {
 		dd: null,
@@ -181,6 +191,7 @@ const date_of_birth = computed(() => {
 	if (pdob.value.yyyy !== null && pdob.value.mm !== null && pdob.value.dd !== null) return new Date(pdob.value.yyyy!, pdob.value.mm! - 1, pdob.value.dd!)
 	return null
 })
+
 const passport_expiration = computed(() => {
 	if (passport_ex.value.yyyy !== null && passport_ex.value.mm !== null && passport_ex.value.dd !== null) return new Date(passport_ex.value.yyyy!, passport_ex.value.mm! - 1, passport_ex.value.dd!)
 	return null
