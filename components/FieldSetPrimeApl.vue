@@ -6,7 +6,7 @@
 				<avatarSelect :src="primeSRC" class="" />
 
 				<input @change="handleFile" type="file"
-					class="file-input file-input-primary dark:text-neutral-900 dark:bg-white file-input-xs w-[300px]" />
+					class="file-input dark:text-white file-input-warning backdrop-blur-xl bg-transparent outline outline-4 outline-neutral-900/60 dark:outline-neutral-100/20 file-input-xs w-[300px]" />
 			</div>
 
 			<div class="flex flex-col flex-1 justify-between gap-4">
@@ -28,26 +28,29 @@
 					<div class="form-control w-full">
 
 						<label class="label">
-							<span class="label-text dark:text-neutral-50 dark:font-semibold">
+							<span class="label-text dark:text-neutral-50 font-semibold">
 								Date Of Birth
 							</span>
 						</label>
 
 						<div class="indicator w-full">
 							<span
-								:class="['transition-all duration-300 ease-in pointer-events-none indicator-item badge-sm badge bg-red-600 border-transparent drop-shadow-xl', vuelidate_err == false && !applicant.pdob ? 'opacity-100' : 'opacity-0']"></span>
+								:class="['transition-all duration-300 ease-in pointer-events-none indicator-item badge-sm badge outline outline-2 outline-red-50 bg-red-600 border-transparent drop-shadow-xl', vuelidate_err == false && !applicant.pdob ? 'opacity-100' : 'opacity-0']"></span>
 
 
 							<div class="flex items-end flex-1 gap-4">
-								<input v-model="dates.pdob.dd" type="number" min="1" max="31" maxlength="2"
-									placeholder="DD"
-									class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
-								<input v-model="dates.pdob.mm" type="number" min="1" max="12" maxlength="2"
-									placeholder="MM"
-									class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
-								<input v-model="dates.pdob.yyyy" type="number" maxlength="4" placeholder="YYYY"
-									class="input w-full max-w-xs bg-neutral-600 dark:bg-neutral-300 rounded-xl" />
-							</div> -->
+								<DatePicker dark :color="'purple'" is-dark v-model="applicant.pdob" mode="date">
+									<template #default="{ togglePopover }">
+										<span @click="togglePopover"
+											class="input flex items-center w-full border-none dark:bg-neutral-900/50 backdrop-blur-md text-white uppercase dark:font-semibold rounded-xl font-semibold bg-neutral-900/50">{{
+												applicant.pdob ?
+													$formatDateWords(new Date(applicant.pdob!)) :
+													''
+											}}</span>
+									</template>
+								</DatePicker>
+							</div>
+
 						</div>
 					</div>
 
@@ -87,7 +90,7 @@
 			<TextInput v-model="applicant.ppassport_number">Passport Number</TextInput>
 			<div class="form-control w-full">
 				<label class="label">
-					<span class="label-text dark:text-neutral-900 dark:font-semibold">
+					<span class="label-text dark:text-neutral-50 font-semibold">
 						Passport Expiration
 					</span>
 				</label>
@@ -96,10 +99,10 @@
 					<DatePicker dark :color="'purple'" is-dark v-model="applicant.passport_ex" mode="date">
 						<template #default="{ togglePopover }">
 							<span @click="togglePopover"
-								class="input flex items-center w-full border-none dark:bg-neutral-300 dark:font-semibold rounded-xl font-semibold bg-neutral-600">{{
+								class="input flex items-center w-full border-none dark:bg-neutral-900/50 backdrop-blur-md text-white uppercase dark:font-semibold rounded-xl font-semibold bg-neutral-900/50">{{
 									applicant.passport_ex ?
-								$formatDateWords(new Date(applicant.passport_ex!)) :
-								''
+										$formatDateWords(new Date(applicant.passport_ex!)) :
+										''
 								}}</span>
 						</template>
 					</DatePicker>

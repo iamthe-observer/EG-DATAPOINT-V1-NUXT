@@ -1,15 +1,14 @@
 <template>
-	<div
-		class="w-full h-full flex flex-col self-end bg-gradient-to-b to-[rgba(0,0,0,0.5)] from-black dark:from-white from-[50%] overflow-y-auto"
-		id="style-1">
+	<div class="w-full h-full flex flex-col self-end bg-transparent overflow-y-auto" id="style-1">
 		<!-- top -->
 		<div class="min-h-[80px] w-full"></div>
 		<!-- bottom -->
 
-		<span class="text-center font-semibold text-neutral-500">Found {{ search_results?.length }} results...</span>
+		<span class="text-center font-semibold text-neutral-50/50">Found {{ search_results?.length }} results...</span>
 		<div class="flex-1 flex py-10 flex-col items-center gap-5">
 			<!-- results cards -->
-			<SearchResultsCard @recent-search="handleRecentSearch" v-for="(result, i) in search_results" :result="result!" />
+			<SearchResultsCard @recent-search="handleRecentSearch" v-for="(result, i) in search_results"
+				:result="result!" />
 		</div>
 	</div>
 </template>

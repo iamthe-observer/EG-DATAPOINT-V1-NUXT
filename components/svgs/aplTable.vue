@@ -22,8 +22,8 @@ const state = computed(() => {
 		}
 		// !hovered
 	} else return {
-		fill1: '#888',
-		fill2: '#888',
+		fill1: '#fff',
+		fill2: '#fff',
 		stroke: 'none',
 	}
 })

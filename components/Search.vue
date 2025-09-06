@@ -1,17 +1,18 @@
 <template>
 	<div v-if="visible" class="absolute flex w-full h-full inset-0">
-		<div class="relative h-full flex-1 bg-gradient-to-b to-[rgba(0,0,0,0.5)] from-black dark:from-white from-[50%] z-50">
+		<div class="relative h-full flex-1 bg-transparent z-50 backdrop-blur-lg">
 			<!-- SearchBar -->
 			<form @submit.prevent="startSearch" ref="search_bar"
-				class="flex justify-end rounded-xl w-[400px] search_bar dark:bg-neutral-300 bg-neutral-900 absolute z-10 top-5 right-1/2 translate-x-[47.9%] shadow-2xl transition-all duration-300 ease-out">
-				<input v-model="search" ref="search_bar_input" type="text" class="flex-1 bg-transparent px-2">
+				class="flex justify-end rounded-xl w-[400px] search_bar text-white bg-neutral-900/20 drop-shadow-lg absolute z-10 top-5 right-1/2 translate-x-[47.9%] shadow-2xl transition-all duration-300 ease-out">
+				<input v-model="search" ref="search_bar_input" type="text"
+					class="flex-1 bg-black/90 drop-shadow rounded-lg backdrop-blur-lg px-2">
 				<div @click.prevent="startSearch" class="w-10 p-2 cursor-pointer">
 					<SvgsSearch class=" w-full h-full aspect-square" />
 				</div>
 
 				<div @click="useSearchStore().setIfSearch(false)" class="w-10 p-2 cursor-pointer">
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-						<path fill="#888888"
+						<path fill="#fff"
 							d="m8.4 17l3.6-3.6l3.6 3.6l1.4-1.4l-3.6-3.6L17 8.4L15.6 7L12 10.6L8.4 7L7 8.4l3.6 3.6L7 15.6L8.4 17Zm3.6 5q-2.075 0-3.9-.788t-3.175-2.137q-1.35-1.35-2.137-3.175T2 12q0-2.075.788-3.9t2.137-3.175q1.35-1.35 3.175-2.137T12 2q2.075 0 3.9.788t3.175 2.137q1.35 1.35 2.138 3.175T22 12q0 2.075-.788 3.9t-2.137 3.175q-1.35 1.35-3.175 2.138T12 22Z" />
 					</svg>
 				</div>
@@ -21,20 +22,23 @@
 			<!-- background -->
 			<div class="w-full h-full scrollbar-hidden relative flex justify-center items-center">
 				<!-- if no Input -->
-				<div v-if="search_results.length == 0" class="flex flex-col gap-2 w-fit">
+				<div v-if="search_results.length == 0" class="flex flex-col gap-2 w-fit text-white">
 					<span v-if="!if_first && !search_loading" class="text-center text-2xl drop-shadow-lg">Search For
 						<br />Applicants over
 						<br />here!</span>
-					<span v-if="if_first && !search_loading" class="text-center text-2xl drop-shadow-lg">No Applicants Found
+					<span v-if="if_first && !search_loading" class="text-center text-2xl drop-shadow-lg">No Applicants
+						Found
 						<br />Check the spelling!</span>
 
 					<span v-if="search_loading" class="loading loading-infinity loading-xs scale-[400%]"></span>
 
-					<div class=" absolute bottom-16 left-1/2 -translate-x-1/2 z-20 flex flex-col gap-2 text-sm justify-self-end">
+					<div
+						class=" absolute bottom-16 left-1/2 -translate-x-1/2 z-20 flex flex-col gap-2 text-sm justify-self-end">
 						<span v-if="recent_search!.length > 0"
 							class="text-sm font-bold justify-self-end mt-2 mx-auto px-3 bg-white text-black w-fit rounded-full">Recent
 							Searches</span>
-						<span class="cursor-pointer hover:text-purple-700 text-center text-xs" v-for="recent in recent_search" @click="() => { $router.push(`/applicant/${recent.apl_id}`); useViewAplStore().setID(recent.apl_id!) }
+						<span class="cursor-pointer hover:text-purple-700 text-center text-xs"
+							v-for="recent in recent_search" @click="() => { $router.push(`/applicant/${recent.apl_id}`); useViewAplStore().setID(recent.apl_id!) }
 							">{{ recent.fullName }}</span>
 					</div>
 					<div v-show="!if_first" class="h-40 mx-auto aspect-square absolute right-[420px] -rotate-45 top-24">

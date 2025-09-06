@@ -1,24 +1,26 @@
 <template>
 	<section v-if="!is_mobile" ref="svg" class="__navs w-full flex-1 flex flex-col gap-8 items-center justify-center">
-		<NuxtLink to="/dashboard" class="__icons_container tooltip tooltip-primary z-20 tooltip-right" data-tip="Dashboard">
+		<NuxtLink to="/dashboard" class="__icons_container tooltip tooltip-warning z-20 tooltip-right"
+			data-tip="Dashboard">
 			<SvgsHome v-if="!dark_mode" class="__icons" />
 			<SvgsHomeDark v-else class="__icons" />
 		</NuxtLink>
-		<NuxtLink to="/newApplicant" class="__icons_container tooltip tooltip-primary z-20 tooltip-right"
+		<NuxtLink to="/newApplicant" class="__icons_container tooltip tooltip-warning z-20 tooltip-right"
 			data-tip="Add Applicant">
 			<SvgsContact v-if="!dark_mode" class="__icons" />
 			<SvgsContactDark v-else class="__icons" />
 		</NuxtLink>
-		<NuxtLink :to="{ path: '/viewApplicants' }" class="__icons_container tooltip tooltip-primary z-20 tooltip-right"
+		<NuxtLink :to="{ path: '/viewApplicants' }" class="__icons_container tooltip tooltip-warning z-20 tooltip-right"
 			data-tip="View Applicants">
 			<SvgsAplTable v-if="!dark_mode" class="__icons" />
 			<SvgsAplTableDark v-else class="__icons" />
 		</NuxtLink>
-		<NuxtLink to="/database" class="__icons_container tooltip tooltip-primary z-20 tooltip-right" data-tip="Database">
+		<NuxtLink to="/database" class="__icons_container tooltip tooltip-warning z-20 tooltip-right"
+			data-tip="Database">
 			<SvgsDatabase v-if="!dark_mode" class="__icons" />
 			<SvgsDatabaseDark v-else class="__icons" />
 		</NuxtLink>
-		<NuxtLink v-if="role" to="/analytics" class="__icons_container tooltip tooltip-primary z-20 tooltip-right"
+		<NuxtLink v-if="role" to="/analytics" class="__icons_container tooltip tooltip-warning z-20 tooltip-right"
 			data-tip="Analytics">
 			<SvgsAnalytics v-if="!dark_mode" class="__icons" />
 			<SvgsAnalyticsDark v-else class="__icons" />

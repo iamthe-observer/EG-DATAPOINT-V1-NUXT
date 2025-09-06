@@ -1,13 +1,14 @@
 <template>
 	<div class="w-full h-full flex flex-col rounded-2xl">
 		<div v-if="!if_apls_ex"
-			class="w-full h-full rounded-2xl dark:bg-neutral-200 dark:shadow-xl bg-neutral-800 col-span-full row-span-full text-justify relative flex flex-col">
+			class="w-full h-full rounded-2xl backdrop-blur-md border-4 border-neutral-900/30 drop-shadow-xl dark:border-neutral-50/60 col-span-full row-span-full text-justify relative flex flex-col">
 
 			<header
-				class="w-full min-h-[4rem] dark:bg-primary bg-neutral-700 rounded-2xl flex items-center justify-between px-4">
-				<h1 v-if="!role" class="text-2xl dark:text-neutral-50">View All Applicants <span class="text-2xl">({{
-					all_my_apls.length
-				}})</span></h1>
+				class="w-full min-h-[4rem] bg-neutral-900/70 dark:bg-neutral-50/30 outline outline-4 outline-neutral-900/30 dark:outline-neutral-50/60  backdrop-blur rounded-xl shadow-xl mb-4 flex items-center justify-between px-4">
+				<h1 v-if="!role" class="text-2xl dark:text-neutral-50 drop-shadow-lg">View All Applicants <span
+						class="text-2xl">({{
+							all_my_apls.length
+						}})</span></h1>
 				<h1 v-else class="flex items-center gap-3 dark:text-neutral-50">
 					<span class="text-2xl whitespace-nowrap">
 						View All Applicants
@@ -37,119 +38,48 @@
 					<button class="join-item btn btn-sm rounded-full btn-primary" @click="NextPage()">»</button>
 				</div>
 
-				<div class="flex items-center gap-2">
+				<div class="flex items-center gap-2 drop-shadow-lg">
 					<div class="join">
 						<input @click="() => {
 							filter_alpha = true
 							filter_recent = false
 							filter_registered = false
 							filter_unregistered = false
-							// filter_reverse = false
-							// filter_family = false
-							// filter_with_kids = false
-							// filter_with_spouse = false
-							// filter_single = false
 							page_index = 1
-						}" :checked="filter_alpha" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+						}" :checked="filter_alpha"
+							class="join-item btn btn-xs rounded-full dark:bg-neutral-50/20 text-white dark:border-none"
 							type="radio" name="options" aria-label="Alphabetic" />
 						<input @click="() => {
 							filter_alpha = false
 							filter_recent = true
 							filter_registered = false
 							filter_unregistered = false
-							// filter_reverse = false
-							// filter_family = false
-							// filter_with_kids = false
-							// filter_with_spouse = false
-							// filter_single = false
 							page_index = 1
-						}" :checked="filter_recent" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+						}" :checked="filter_recent"
+							class="join-item btn btn-xs rounded-full dark:bg-neutral-50/20 text-white dark:border-none"
 							type="radio" name="options" aria-label="Recency" />
 						<input @click="() => {
 							filter_alpha = false
 							filter_recent = false
 							filter_registered = true
 							filter_unregistered = false
-							// filter_reverse = false
-							// filter_family = false
-							// filter_with_kids = false
-							// filter_with_spouse = false
-							// filter_single = false
 							page_index = 1
-						}" :checked="filter_registered" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+						}" :checked="filter_registered"
+							class="join-item btn btn-xs rounded-full dark:bg-neutral-50/20 text-white dark:border-none"
 							type="radio" name="options" aria-label="Registered" />
 						<input @click="() => {
 							filter_alpha = false
 							filter_recent = false
 							filter_registered = false
 							filter_unregistered = true
-							// filter_reverse = false
-							// filter_family = false
-							// filter_with_kids = false
-							// filter_with_spouse = false
-							// filter_single = false
 							page_index = 1
-						}" :checked="filter_unregistered" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
+						}" :checked="filter_unregistered"
+							class="join-item btn btn-xs rounded-full dark:bg-neutral-50/20 text-white dark:border-none"
 							type="radio" name="options" aria-label="Unregistered" />
-						<!-- <input @click="() => {
-							filter_alpha = false
-							filter_recent = false
-							filter_reverse = true
-							filter_family = false
-							filter_with_kids = false
-							filter_with_spouse = false
-							filter_single = false
-							page_index = 1
-						}" :checked="filter_reverse" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
-							type="radio" name="options" aria-label="Reverse" />
-						<input @click="() => {
-							filter_alpha = false
-							filter_recent = false
-							filter_reverse = false
-							filter_family = true
-							filter_with_kids = false
-							filter_with_spouse = false
-							filter_single = false
-							page_index = 1
-						}" :checked="filter_family" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
-							type="radio" name="options" aria-label="👨‍👩‍👦" />
-						<input @click="() => {
-							filter_alpha = false
-							filter_recent = false
-							filter_reverse = false
-							filter_family = false
-							filter_with_kids = false
-							filter_with_spouse = false
-							filter_single = true
-							page_index = 1
-						}" :checked="filter_single" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
-							type="radio" name="options" aria-label="🧍🏾" />
-						<input @click="() => {
-							filter_alpha = false
-							filter_recent = false
-							filter_reverse = false
-							filter_family = false
-							filter_with_kids = true
-							filter_with_spouse = false
-							filter_single = false
-							page_index = 1
-						}" :checked="filter_with_kids" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
-							type="radio" name="options" aria-label="👶🏾" />
-						<input @click="() => {
-							filter_alpha = false
-							filter_recent = false
-							filter_reverse = false
-							filter_family = false
-							filter_with_kids = false
-							filter_with_spouse = true
-							filter_single = false
-							page_index = 1
-						}" :checked="filter_with_spouse" class="join-item btn btn-xs rounded-full dark:bg-purple-500 dark:border-none"
-							type="radio" name="options" aria-label="👨‍👩" /> -->
 					</div>
 
 					<select v-model="step"
-						class="select w-full select-xs rounded-full bg-[rgb(13,13,13)] dark:bg-neutral-50 dark:text-black">
+						class="select w-full select-xs rounded-full bg-[rgb(13,13,13)] dark:bg-neutral-50/20 text-white drop-shadow-lg">
 						<option value="50">50</option>
 						<option value="100">100</option>
 					</select>
@@ -162,14 +92,16 @@
 					<!-- head -->
 					<thead class="sticky top-0 backdrop-blur-lg border-none z-50">
 						<tr class="border-none z-50">
-							<!-- <th class="font-semibold text-center dark:text-neutral-700 text-sm">Pos.</th> -->
-							<!-- <th class="font-semibold text-center dark:text-neutral-700 text-sm">Action</th> -->
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Name</th>
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Bio</th>
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Phone Number</th>
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Created</th>
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Type</th>
-							<th class="font-semibold text-center dark:text-neutral-700 text-sm">Registered</th>
+							<th class="font-semibold text-center text-white/30 text-sm">Name</th>
+							<th class="font-semibold text-center text-white/30 text-sm">Bio</th>
+							<th class="font-semibold text-center text-white/30 text-sm">Phone
+								Number
+							</th>
+							<th class="font-semibold text-center text-white/30 text-sm">Created
+							</th>
+							<th class="font-semibold text-center text-white/30 text-sm">Type</th>
+							<th class="font-semibold text-center text-white/30 text-sm">Registered
+							</th>
 						</tr>
 					</thead>
 
@@ -177,7 +109,7 @@
 						<!-- row -->
 						<!-- <tr v-for="(apl, i) in all_my_apls" -->
 						<tr v-for="(apl, i) in curr_filtered_apls"
-							class="border-b-neutral-700 dark:border-b-neutral-200 hover:bg-black transition-all duration-300 ease-out dark:hover:bg-neutral-200"
+							class="border-b-neutral-800/30 cursor-pointer dark:border-b-neutral-200/20 hover:bg-neutral-900/30 transition-all duration-300 ease-out text-white dark:hover:bg-neutral-200/20"
 							@dblclick="() => { $router.push(`/applicant/${apl.apl_id}`); useViewAplStore().setID(apl.apl_id!); }">
 							<td>
 								<div class="flex items-center space-x-3">
@@ -194,10 +126,11 @@
 								{{ useNuxtApp().$formatDateWords(new Date(apl.pdob!)) }}
 								<br />
 								<span
-									class="badge badge-ghost badge-sm dark:badge-accent mr-1 truncate- truncate max-w-[100px] text-ellipsis">{{
+									class="badge badge-sm badge-warning mr-1 truncate- truncate max-w-[100px] text-ellipsis">{{
 										apl.pcity_ob
 									}}</span>
-								<span class="badge badge-ghost badge-sm dark:badge-accent">{{ apl.pcountry_ob }}</span>
+								<span class="badge badge-sm badge-warning">{{ apl.pcountry_ob
+								}}</span>
 							</td>
 							<td>
 								<div class="flex flex-col items-end">
@@ -211,9 +144,9 @@
 							</td>
 							<td class="">
 								<div class="flex flex-col items-end justify-center text-xs">
-									<span class="text-neutral-300 dark:text-neutral-700">{{ useNuxtApp().$formatDate(new
+									<span class="text-neutral-300 dark:text-neutral-50">{{ useNuxtApp().$formatDate(new
 										Date(apl.created_at!)) }}</span>
-									<span class="text-neutral-300 dark:text-neutral-700">{{ new
+									<span class="text-neutral-300 dark:text-neutral-50">{{ new
 										Date(apl.created_at!).toLocaleTimeString([],
 											{
 												hour: '2-digit', minute: '2-digit', hour12: true
@@ -238,9 +171,6 @@
 						<tr>
 						</tr>
 					</tfoot>
-
-					<folderDiv class="my-10"></folderDiv>
-
 				</table>
 			</div>
 

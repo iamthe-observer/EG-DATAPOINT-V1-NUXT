@@ -34,6 +34,21 @@
   }
 }
 
+.top-box::after {
+  @apply border-black/20 bg-transparent;
+  content: "";
+  right: 0;
+  bottom: 0;
+  width: 10px;
+  aspect-ratio: 1;
+  position: absolute;
+  background-image: radial-gradient(
+    circle at 0% 0%,
+    transparent 10px,
+    #00000050 10px
+  );
+}
+
 * {
   box-sizing: border-box;
   font-family: Urbanist;
@@ -51,26 +66,23 @@
 }
 
 #style-1::-webkit-scrollbar-track {
-  @apply blur-lg dark:bg-white/0;
+  @apply bg-transparent blur-lg dark:bg-white/0;
   /* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); */
   border-radius: 10px;
-  background-color: rgb(38 38 38);
 }
 
 #style-1::-webkit-scrollbar {
-  @apply blur-lg dark:bg-white/0;
+  @apply bg-transparent blur-lg dark:bg-white/0;
   border-radius: 10px;
   width: 22px;
-  background-color: rgb(38 38 38);
 }
 
 #style-1::-webkit-scrollbar-thumb {
-  @apply blur-lg dark:bg-neutral-100/50;
+  @apply bg-black/60 shadow-inner blur-lg drop-shadow-xl backdrop-blur dark:bg-neutral-100/50;
   border: 5px solid transparent;
   background-clip: content-box;
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: #555;
 }
 
 /* style 2 */

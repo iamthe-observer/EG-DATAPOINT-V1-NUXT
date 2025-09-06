@@ -1,9 +1,9 @@
 <template>
 	<div v-if="curr_page == 'requests' || curr_page == ''"
 		class="w-full h-full rounded-xl p-1 overflow-y-hidden flex flex-col">
-		<h1 class="py-1 px-1 text-xl font-semibold flex justify-between items-center">
+		<h1 class="py-1 px-1 text-xl font-semibold flex justify-between">
 			<span
-				:class="['transition-all duration-300 ease-out', curr_page == 'requests' ? 'text-4xl' : '']">Requests</span>
+				:class="['transition-all duration-300 ease-out mb-5 text-white', curr_page == 'requests' ? 'text-4xl' : '']">Requests</span>
 
 			<select v-model="filter_val" class="select select-xs w-fit max-w-xs dark:bg-neutral-50">
 				<option disabled selected>Filter</option>
@@ -16,14 +16,14 @@
 				<option value="delete">Delete</option>
 			</select>
 
-			<span class="">{{ curr_filtered_req.length }}</span>
+			<span class="font-semibold text-white text-xl">{{ curr_filtered_req.length }}</span>
 		</h1>
 		<!-- if no requests -->
 		<div v-if="curr_filtered_req!.length == 0" class="w-full h-full grid place-items-center">
 			<div class="flex flex-col items-center gap-2">
 				<svg xmlns="http://www.w3.org/2000/svg" class="w-20 aspect-square" viewBox="0 0 24 24">
-					<g stroke="#888888" stroke-linecap="round" stroke-width="2">
-						<path fill="#888888" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
+					<g stroke="#fff" stroke-linecap="round" stroke-width="2">
+						<path fill="#fff" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
 							d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z">
 							<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0" />
 							<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s"
@@ -35,7 +35,7 @@
 								values="14;0" />
 						</path>
 					</g>
-					<g fill="#888888" fill-opacity="0">
+					<g fill="#fff" fill-opacity="0">
 						<ellipse cx="9" cy="9.5" rx="1" ry="1.5">
 							<animate fill="freeze" attributeName="fill-opacity" begin="0.6s" dur="0.2s" values="0;1" />
 						</ellipse>
@@ -44,29 +44,28 @@
 						</ellipse>
 					</g>
 				</svg>
-				<span class="text-center">No Requests</span>
+				<span class="text-center text-white">No Requests</span>
 			</div>
 		</div>
 
 		<!-- contains all requests -->
 		<div v-else id="style-1"
-			class="bg-neutral-800 dark:bg-neutral-100 flex flex-col gap-3 rounded-xl overflow-y-auto">
-			<label :for="`my_modal_${i}`"
-				class="w-full flex gap-2 justify-between p-2 dark:hover:bg-neutral-200 hover:bg-neutral-700 rounded-xl"
+			class="bg-neutral-900/40 text-white dark:bg-neutral-200/30 flex flex-col gap-3 rounded-xl overflow-y-auto">
+			<label :for="`my_modal_${i}`" class="w-full flex gap-2 justify-between p-2 rounded-xl"
 				v-for="(req, i) in curr_filtered_req.sort((a, b) => new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime())"
 				:key="i">
 
-				<input type="checkbox" :id="`my_modal_${i}`" class="modal-toggle" />
+				<input type="checkbox" :id="`my_modal_${i}`" class="modal-toggle dark:text-white" />
 				<div class="modal">
 					<div :class="[req.status == 'rejected' ? 'modal-box relative outline outline-4 outline-red-600 pt-10' : 'modal-box relative outline outline-4 outline-neutral-700 dark:outline-neutral-200 pt-10',
 					req.status == 'approved' ? 'modal-box relative outline outline-4 outline-success pt-10' : 'modal-box relative outline outline-4 outline-neutral-700 dark:outline-neutral-200 pt-10',
-						'dark:bg-neutral-50'
+						'dark:bg-neutral-50/30 backdrop-blur-lg bg-neutral-800/50 text-white'
 					]">
 						<h3 class="font-semibold text-lg uppercase flex gap-2 items-center">
 							<svg v-if="req.status == 'pending'" xmlns="http://www.w3.org/2000/svg"
 								class="w-7 aspect-square" viewBox="0 0 24 24">
-								<g stroke="#888888" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-									<circle cx="12" cy="12" r="9" fill="#888888" fill-opacity="0">
+								<g stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+									<circle cx="12" cy="12" r="9" fill="#fff" fill-opacity="0">
 										<animate fill="freeze" attributeName="fill-opacity" begin="0.2s" dur="0.15s"
 											values="0;0.3" />
 									</circle>
@@ -161,6 +160,8 @@
 
 						<div class="modal-action flex justify-between items-center">
 
+
+							<!-- modal -->
 							<label :for="`my_modal_${i}`" v-if="req.modify_type !== 'discount' && role"
 								@click="handleOpen(req)" class="join-item btn btn-primary btn-sm">Open</label>
 
@@ -191,7 +192,7 @@
 						:class="req.modify_type == 'delete' ? 'badge badge-accent badge-xs' : 'badge badge-primary badge-xs'">{{
 							req.modify_type }}</span>
 				</span>
-				<div class="flex flex-col text-xs text-right text-neutral-400">
+				<div class="flex flex-col text-xs text-right text-neutral-50">
 					<span class="">
 						{{ getCreatedAtDate(req) }}
 					</span>

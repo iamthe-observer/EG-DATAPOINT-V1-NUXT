@@ -5,7 +5,7 @@
 				<avatarSelect :src="secSRC" class="" />
 
 				<input @change="handleFile" type="file"
-					class="file-input file-input-primary dark:text-neutral-900 dark:bg-white file-input-xs w-[300px]" />
+					class="file-input dark:text-white file-input-warning backdrop-blur-xl bg-transparent outline outline-4 outline-neutral-900/60  dark:outline-neutral-100/20 file-input-xs w-[300px]" />
 			</div>
 
 			<div class="col-span-10 w-full h-full flex flex-col justify-between">
@@ -25,20 +25,20 @@
 					<div class="form-control w-full">
 
 						<label class="label">
-							<span class="label-text dark:text-neutral-900 dark:font-semibold">
+							<span class="label-text dark:text-neutral-50 font-semibold">
 								Date Of Birth
 							</span>
 						</label>
 
 						<div class="indicator w-full">
 							<span
-								:class="['transition-all duration-300 ease-in pointer-events-none indicator-item badge-sm badge bg-red-400 border-transparent drop-shadow-xl', vuelidate_err == false && !applicant.sdob ? 'opacity-100' : 'opacity-0']"></span>
+								:class="['transition-all duration-300 ease-in pointer-events-none indicator-item badge-sm badge outline outline-2 outline-red-50 bg-red-600 border-transparent drop-shadow-xl', vuelidate_err == false && !applicant.sdob ? 'opacity-100' : 'opacity-0']"></span>
 
 							<div class="flex items-end flex-1 gap-4">
 								<DatePicker dark :color="'purple'" is-dark v-model="applicant.sdob" mode="date">
 									<template #default="{ togglePopover }">
 										<span @click="togglePopover"
-											class="input flex items-center w-full border-none dark:bg-neutral-300 dark:font-semibold rounded-xl font-semibold bg-neutral-600">{{
+											class="input flex items-center w-full border-none dark:bg-neutral-900/50 backdrop-blur-md text-white uppercase dark:font-semibold rounded-xl font-semibold bg-neutral-900/50">{{
 												applicant.sdob ?
 													$formatDateWords(new Date(applicant.sdob!)) :
 													''

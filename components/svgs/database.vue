@@ -21,7 +21,7 @@ const state = computed(() => {
 		// !hovered
 	} else return {
 		fill: 'none',
-		stroke: '#888',
+		stroke: '#fff',
 	}
 })
 </script>

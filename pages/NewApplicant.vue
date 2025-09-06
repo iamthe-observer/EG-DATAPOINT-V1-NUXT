@@ -1,7 +1,7 @@
 <template>
-	<div id="APL_NEW" class="bg-neutral-900/40 dark:bg-transparent rounded-xl w-full h-full flex flex-col relative">
+	<div id="APL_NEW" class="bg-transparent rounded-xl w-full h-full flex flex-col relative">
 		<h1 ref="header_ref"
-			class="w-full bg-neutral-700 dark:bg-neutral-50/30 outline outline-4 outline-neutral-50/60 mb-4 backdrop-blur rounded-xl shadow-xl flex justify-between items-center p-5">
+			class="w-full bg-neutral-900/70 dark:bg-neutral-50/30 outline outline-4 outline-neutral-900/30 dark:outline-neutral-50/60 mb-4 backdrop-blur rounded-xl shadow-xl flex justify-between items-center p-5 transition-all duration-500 ease-out">
 			<span ref="discount_ref"
 				class="flex flex-col gap-1 dark:text-white dark:hover:text-purple-600 hover:text-neutral-600 group">
 				<p class="text-lg flex flex-col">
@@ -47,7 +47,7 @@
 			<div class="text-md flex gap-2">
 				<button v-if="!apl_sending && if_hover_header" @click="() => {
 					useAplStore().resetAplData(); useImageStore().resetFiles(); container!.scrollTo({ top: 0, behavior: 'smooth' })
-				}" class="btn font-normal btn-ghost rounded-xl text-white group hover:bg-base-100 hover:text-white group">
+				}" class="btn font-normal btn-ghost rounded-xl text-white group hover:bg-neutral-900/40 hover:text-white group">
 					Reset
 					<svg xmlns="http://www.w3.org/2000/svg" class="w-4 aspect-square stroke-red-500"
 						viewBox="0 0 24 24">
@@ -60,12 +60,12 @@
 				<button v-if="!apl_sending" @click="async () => {
 					await useAplStore().handleSend()
 					// curr_page = 'prime'
-				}" class="btn btn-outline rounded-xl text-white group hover:bg-accent font-normal hover:text-white group">
+				}" class="btn bg-neutral-800 dark:bg-neutral-900/30 rounded-xl text-yellow-200 outline outline-4 border-none dark:outline-neutral-600 outline-neutral-700/30 group dark:hover:bg-yellow-400 hover:bg-yellow-400 italic hover:text-yellow-800 group font-black">
 					SUBMIT
 					<SvgsCedis
-						class="w-4 aspect-square stroke-white fill-white transition-all duration-150 ease-linear group-hover:fill-white" />
-					{{
-						price }}.00
+						class="w-4 aspect-square stroke-white fill-white transition-all duration-150 ease-linear group-hover:fill-black" />
+					<span class="text-2xl"> {{
+						price }}.00</span>
 				</button>
 				<button v-else class="btn btn-ghost rounded-xl text-white">
 					<span class="loading loading-spinner"></span>
@@ -80,11 +80,12 @@
 			<FieldSetPrimeApl />
 
 			<p v-if="applicant.pmarital_status == 'MARRIED'"
-				class="font-bold uppercase text-3xl drop-shadow-lg mx-auto pt-14 pb-5">Secondary Applicant</p>
+				class="font-bold uppercase text-3xl drop-shadow-lg mx-auto pt-14 pb-5 text-white">Secondary Applicant
+			</p>
 			<FieldSetSecApl v-if="applicant.pmarital_status == 'MARRIED'" />
 
 			<p v-if="applicant.children_number > 0"
-				class="font-bold uppercase text-3xl drop-shadow-lg mx-auto pt-14 pb-5">Wards
+				class="font-bold uppercase text-3xl drop-shadow-lg mx-auto pt-14 pb-5 text-white">Wards
 			</p>
 			<FieldSetWardApl v-for="(ward) in applicant.wards" v-if="applicant.children_number > 0" :idx="ward.index!"
 				:key="ward.index!" :ward_info="applicant.wards![ward.index!]" />
@@ -95,8 +96,8 @@
 		<input :checked="if_receipt" type="checkbox" id="receipt-modal" class="modal-toggle" />
 		<div class="modal">
 			<div
-				class="modal-box dark:bg-white dark:outline dark:outline-4 dark:outline-success flex flex-col justify-center">
-				<p class="py-4 text-center text-4xl dark:text-success dark:font-semibold">
+				class="modal-box dark:bg-neutral-50/30 backdrop-blur-lg bg-neutral-900/50 flex flex-col justify-center">
+				<p class="py-4 text-center text-4xl text-white font-semibold">
 					Receipt Generated!</p>
 
 				<div class="rounded-lg overflow-hidden">
@@ -163,7 +164,8 @@
 					</div>
 				</div>
 
-				<button @click="downloadDivAsPdf('receipt')" class="btn btn-primary mx-auto mt-2">DOWNLOAD</button>
+				<button @click="downloadDivAsPdf('receipt')"
+					class="btn btn-ghost text-blue-400 mx-auto mt-2">DOWNLOAD</button>
 			</div>
 
 
@@ -175,8 +177,8 @@
 		<!-- Put this part before </body> tag -->
 		<input :checked="if_sent" type="checkbox" id="my_modal_7" class="modal-toggle" />
 		<div class="modal">
-			<div class="modal-box dark:bg-white dark:outline dark:outline-4 dark:outline-success">
-				<p class="py-4 text-center text-4xl dark:text-success dark:font-semibold">
+			<div class="modal-box dark:bg-neutral-50/30 backdrop-blur-lg bg-neutral-900/50">
+				<p class="py-4 text-center text-4xl text-white font-semibold">
 					Applicant Saved!</p>
 			</div>
 			<label @click="

@@ -1,14 +1,27 @@
 <template>
-	<p v-if="!edit_mode" class="flex flex-col text-white w-full h-fit rounded-xl bg-neutral-700 dark:text-neutral-900 dark:font-semibold dark:bg-neutral-200
-	dark:outline
-		dark:outline-2 dark:outline-neutral-400 dark:shadow-lg">
-		<span :class="[
-			'heading font-normal bg-neutral-900 dark:bg-neutral-400 dark:text-black',
-			edit_mode ? 'dark:text-accent text-secondary dark:bg-neutral-300' : 'text-neutral-400',
+	<p v-if="!edit_mode" class="relative w-full h-full rounded-xl dark:font-semibold flex flex-col">
+	<div class="flex w-full">
+		<div :class="[
+			'top-box dark:after:bg-[radial-gradient(circle_at_0%_0%,_transparent_10px,_#ffffff50_10px)] relative whitespace-nowrap w-fit min-h-[20px] bg-black/0 font-normal flex p-1 rounded-br-lg',
+			edit_mode ? 'dark:text-warning text-secondary' : 'text-white/70',
 		]">
-			{{ heading }}
-		</span>
+
+			<span
+				class="w-full h-full dark:bg-white/20 bg-black/50 px-2 py-0 text-xs rounded-md dark:outline-none outline outline-2 outline-black/60">
+				{{ heading }}
+			</span>
+		</div>
+
+		<span class="w-full rounded-t-xl dark:bg-white/30 bg-black/30"></span>
+	</div>
+
+	<div
+		class="w-full h-full dark:bg-white/30 bg-black/30 text-white dark:text-white rounded-b-xl rounded-tl-xl flex items-center">
+
 		<span class="info truncate">{{ modelValue }}</span>
+
+	</div>
+
 
 	</p>
 </template>

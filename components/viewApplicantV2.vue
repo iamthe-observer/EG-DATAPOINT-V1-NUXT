@@ -5,18 +5,18 @@
 			<!-- image -->
 			<div class="flex flex-col gap-2">
 				<div class="indicator">
-					<span :class="['indicator-item indicator-top indicator-center badge',
-						!edit_mode ? 'badge-primary' : 'badge-primary']">Primary Applicant</span>
+					<span :class="['indicator-item indicator-top indicator-center badge drop-shadow-xl',
+						!edit_mode ? 'badge-warning' : 'badge-warning']">Primary Applicant</span>
 					<AvatarSelect :classer="`w-[300px] h-[300px]`" :src="prime_image" />
 				</div>
 				<div class="flex w-full gap-2 items-end">
 					<button v-if="edit_mode && prime_file" @click="viewApl.handlePrimeUpdate"
-						class="btn btn-xs btn-success">
+						class="btn btn-xs bg-black/50 hover:bg-black hover:text-green-500 text-white">
 						<span v-if="p_loading" class="loading loading-ring loading-sm text-white"></span>
 						<span v-else>Update</span>
 					</button>
 					<input v-if="edit_mode" @change="e => viewApl.handleFile(e, 'prime')" type="file"
-						class="file-input file-input-xs file-input-primary w-full mt-2" />
+						class="file-input dark:text-white file-input-warning backdrop-blur-xl bg-transparent outline outline-4 outline-neutral-900/60 dark:outline-neutral-100/20 file-input-xs w-full max-w-xs mt-1" />
 				</div>
 			</div>
 
@@ -39,7 +39,7 @@
 				<InfoCardSelect :num_options="[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" heading="Number of Children"
 					v-model="apl.children_number" />
 				<InfoCard heading="Confirmation Code" v-model="apl.pconf_code" />
-				<InformationCard :class="apl.pconf_code ? 'col-span-full' : 'col-span-1'" heading="Payment"
+				<InformationCard :class="apl.pconf_code ? 'col-span-full' : 'col-span-1'" heading="Paid Amount"
 					v-model="apl.totalPayment" />
 
 			</div>
@@ -51,26 +51,26 @@
 			<!-- image -->
 			<div class="flex flex-col gap-2">
 				<div class="indicator">
-					<span :class="['indicator-item indicator-top indicator-center badge',
-						!edit_mode ? 'badge-primary' : 'badge-primary']">Secondary Applicant</span>
+					<span :class="['indicator-item indicator-top indicator-center badge drop-shadow-xl',
+						!edit_mode ? 'badge-warning' : 'badge-warning']">Secondary Applicant</span>
 					<AvatarSelect :classer="`w-[300px] h-[300px]`" :src="sec_image" />
 				</div>
 				<div class="flex w-full gap-2 items-end">
 					<button v-if="edit_mode && sec_file" @click="viewApl.handleSecUpdate"
-						class="btn btn-xs btn-success">
+						class="btn btn-xs bg-black/50 hover:bg-black hover:text-green-500 text-white">
 						<span v-if="s_loading" class="loading loading-ring loading-sm text-white"></span>
 						<span v-else>Update</span>
 					</button>
 					<input v-if="edit_mode" @change="e => viewApl.handleFile(e, 'sec')" type="file"
-						class="file-input file-input-xs file-input-primary w-full mt-2" />
+						class="file-input dark:text-white file-input-warning backdrop-blur-xl bg-transparent outline outline-4 outline-neutral-900/60 dark:outline-neutral-100/20 file-input-xs w-full max-w-xs mt-1" />
 				</div>
 			</div>
 
 			<!-- info -->
 			<div class="grid grid-cols-3 gap-2 w-full h-fit">
 				<h2 class="col-span-full py-3 text-2xl font-bold flex justify-between items-center">
-					<span>Spouse Information</span>
-					<span v-if="!edit_mode" class="font-normal">{{
+					<!-- <span>Spouse Information</span> -->
+					<span v-if="!edit_mode" class="font-normal text-xl text-white">{{
 						`${apl.slastName} ${apl.sfirstName}
 						${apl.sotherName}`.trimEnd() }}
 					</span>
@@ -101,31 +101,33 @@
 				<!-- image -->
 				<div class="flex flex-col gap-2">
 					<div class="indicator">
-						<span :class="['indicator-item indicator-top indicator-center badge',
-							!edit_mode ? 'badge-primary' : 'badge-primary']">Ward Applicant {{ i + 1
+						<span :class="['indicator-item indicator-top indicator-center badge drop-shadow-xl',
+							!edit_mode ? 'badge-warning' : 'badge-warning']">Ward Applicant {{ i + 1
 							}}</span>
 						<AvatarSelect :classer="`w-[300px] h-[300px]`" :src="wards_image[ward.index!]" />
 					</div>
 					<div class="flex w-full gap-2 items-end">
 						<button v-if="edit_mode && wards_file[0] && curr_ward_file!.apl_type.includes(`ward${i}`)"
-							@click="viewApl.handleWardUpdate(i)" class="btn btn-xs btn-success">
+							@click="viewApl.handleWardUpdate(i)"
+							class="btn btn-xs bg-black/50 hover:bg-black hover:text-green-500 text-white">
 							<span v-if="w_loading && wards_file[0] && curr_ward_file!.apl_type.includes(`ward${i}`)"
 								class="loading loading-ring loading-sm text-white"></span>
 							<span v-else>Update</span>
 						</button>
 						<input v-if="edit_mode" @change="e => viewApl.handleFile(e, `ward${i}`, i)" type="file"
-							class="file-input file-input-xs file-input-primary w-full mt-2" />
+							class="file-input dark:text-white file-input-warning backdrop-blur-xl bg-transparent outline outline-4 outline-neutral-900/60 dark:outline-neutral-100/20 file-input-xs w-full max-w-xs mt-1" />
 					</div>
 				</div>
 
 
 				<!-- wards -->
 				<div class="flex-1 grid grid-cols-2 gap-2 col-span-full h-fit">
-					<h2 class="col-span-full py-3 text-2xl font-bold flex justify-between items-center w-full">
-						<span>Ward #{{ ward.index! + 1 }}</span>
-						<span v-if="!edit_mode" class="font-normal">{{ `${ward.wlastName} ${ward.wfirstName}
+					<h2
+						class="col-span-full py-3 text-2xl font-bold flex justify-between items-center w-full text-white">
+						<span v-if="!edit_mode" class="font-normal text-xl">{{ `${ward.wlastName} ${ward.wfirstName}
 							${ward.wotherName}`.trimEnd() }}
 						</span>
+						<!-- <span>Ward #{{ ward.index! + 1 }}</span> -->
 						<div v-else class="flex gap-3 w-2/3">
 							<TextInput classer="input-sm font-normal" v-model="ward.wlastName">Last Name
 							</TextInput>
@@ -147,10 +149,10 @@
 
 		<input :checked="if_updated" type="checkbox" id="my_modal_7" class="modal-toggle" />
 		<div class="modal">
-			<div class="modal-box">
+			<div class="modal-box bg-black/50 dark:bg-neutral-50/20 backdrop-blur-xl  text-white">
 				<p class="py-4 text-center text-2xl">Image Updated!</p>
 			</div>
-			<label @click="viewApl.$patch({ if_updated: false })" class="modal-backdrop bg-[rgb(0,0,0,.7)]"
+			<label @click="viewApl.$patch({ if_updated: false })" class="modal-backdrop bg-[rgb(0,0,0,.0)]"
 				for="my_modal_7">Close</label>
 		</div>
 

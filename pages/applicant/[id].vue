@@ -1,12 +1,13 @@
 <template>
 	<div :key="num" class="w-full h-full flex flex-col rounded-2xl">
 		<div id="style-1" v-if="!is_mobile"
-			class="w-full h-full rounded-2xl bg-neutral-800 dark:bg-neutral-50 col-span-full row-span-full pb-2 overflow-y-auto text-justify px-0 relative">
+			class="w-full h-full rounded-2xl backdrop-blur-md drop-shadow-xl dark:bg-neutral-50/10 col-span-full row-span-full pb-2 overflow-y-auto text-justify px-0 relative">
 			<h1
-				:class="['px-5 py-5 rounded-2xl bg-neutral-700 dark:bg-primary dark:text-white text-2xl w-full flex justify-between items-center mb-2 sticky top-0 shadow-lg z-10 transition-all duration-200 ease-in-out', edit_mode ? 'dark:bg-blue-400' : 'dark:bg-primary']">
+				:class="['px-5 py-5 bg-neutral-900/70 border-4 border-neutral-900/30 dark:border-neutral-50/60  backdrop-blur-lg rounded-xl shadow-xl dark:text-white text-2xl w-full flex justify-between items-center mb-2 sticky top-0 z-10 transition-all duration-200 ease-in-out', edit_mode ? 'dark:bg-neutral-600/20' : 'dark:bg-neutral-50/20']">
 				<span v-if="!edit_mode" class="text-3xl">Applicant Information
 					<br>
-					<span class="text-sm">Created At: {{ $formatDateWords(new Date(applicant.created_at!)) }}</span>
+					<span class="text-sm text-neutral-400 dark:text-neutral-300">Created At: {{ $formatDateWords(new
+						Date(applicant.created_at!)) }}</span>
 				</span>
 
 				<div class="join join-vertical lg:join-horizontal">
@@ -100,9 +101,13 @@
 					</button>
 				</div>
 
-				<span v-if="!edit_mode" class="text-sm font-semibold text-right">{{ applicant.fullName ?
-					applicant.fullName :
-					'Applicant' }}<br />By:
+				<span v-if="!edit_mode" class="text-sm font-semibold text-right text-neutral-400 dark:text-neutral-300">
+					<span class="text-xl text-white">
+						{{ applicant.fullName ?
+							applicant.fullName :
+							'Applicant' }}
+					</span>
+					<br />By:
 					{{
 						creator
 					}}<br />Location:
@@ -136,10 +141,10 @@
 
 		<!-- generate receipt -->
 		<dialog id="receiptModal" class="modal">
-			<form method="dialog" class="modal-box bg-neutral-900 dark:bg-neutral-50">
-				<h3 class="font-semibold text-lg text-white dark:text-black flex items-center gap-3">
+			<form method="dialog" class="modal-box backdrop-blur-xl bg-neutral-900/50 dark:bg-neutral-50/30">
+				<h3 class="font-semibold text-lg text-white dark:text-black flex items-center gap-3 mb-2">
 					<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-						<g stroke="#888888" stroke-linecap="round" stroke-width="2">
+						<g stroke="#fff" stroke-linecap="round" stroke-width="2">
 							<path fill="#10dc7e" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
 								d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z">
 								<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0" />
@@ -151,7 +156,7 @@
 									values="8;0" />
 							</path>
 						</g>
-						<circle cx="12" cy="17" r="1" fill="#888888" fill-opacity="0">
+						<circle cx="12" cy="17" r="1" fill="#fff" fill-opacity="0">
 							<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1" />
 						</circle>
 					</svg>
@@ -224,19 +229,19 @@
 
 				<div class="modal-action">
 					<!-- if there is a button in form, it will close the modal -->
-					<button class="btn btn-primary text-white" @click="downloadDivAsPdf('receipt')">Download</button>
-					<button @click="request.body = ''" class="btn btn-error text-white">Close</button>
+					<button class="btn btn-ghost text-blue-300" @click="downloadDivAsPdf('receipt')">Download</button>
+					<button class="btn btn-ghost text-red-400 dark:text-red-300">Close</button>
 				</div>
 			</form>
 		</dialog>
 
 
 		<dialog id="my_modal_1" class="modal">
-			<form method="dialog" class="modal-box bg-neutral-900 dark:bg-neutral-50">
-				<h3 class="font-semibold text-lg text-white dark:text-black flex items-center gap-3">
+			<form method="dialog" class="modal-box bg-neutral-900/80 dark:bg-neutral-50/30 backdrop-blur-md">
+				<h3 class="font-semibold text-lg text-white flex items-center gap-3">
 					<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-						<g stroke="#888888" stroke-linecap="round" stroke-width="2">
-							<path fill="#dc1010" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
+						<g stroke="#fff" stroke-linecap="round" stroke-width="2">
+							<path fill="##93c5fd" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
 								d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z">
 								<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0" />
 								<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s"
@@ -247,7 +252,7 @@
 									values="8;0" />
 							</path>
 						</g>
-						<circle cx="12" cy="17" r="1" fill="#888888" fill-opacity="0">
+						<circle cx="12" cy="17" r="1" fill="#fff" fill-opacity="0">
 							<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1" />
 						</circle>
 					</svg>
@@ -256,24 +261,25 @@
 				<textarea v-model="request.body"
 					class="textarea textarea-bordered w-full bg-black dark:bg-neutral-200 dark:text-black dark:border-none text-white mt-3"
 					placeholder="What's your reason for editing?..."></textarea>
-				<p class="text-white font-semibold py-4 text-right text-sm dark:text-red-400">Review and
+				<p class="text-white font-semibold py-4 text-right text-sm dark:text-red-200">Review and
 					cross-check your request
 					before sending!
 				</p>
 				<div class="modal-action">
 					<!-- if there is a button in form, it will close the modal -->
-					<button v-if="request.body" class="btn btn-primary text-white"
+					<button v-if="request.body" class="btn btn-ghost text-blue-300"
 						@click="handleEditSubmit">Submit</button>
-					<button @click="request.body = ''" class="btn btn-error text-white">Close</button>
+					<button @click="request.body = ''"
+						class="btn btn-ghost text-red-400 dark:text-red-300">Close</button>
 				</div>
 			</form>
 		</dialog>
 
 		<dialog id="my_modal_2" class="modal">
-			<form method="dialog" class="modal-box bg-red-950 dark:bg-red-700 w-5/6 max-w-5xl">
+			<form method="dialog" class="modal-box bg-red-950/50 backdrop-blur-md dark:bg-red-700/50 w-5/6 max-w-5xl">
 				<h3 class="text-lg text-white flex items-center gap-3">
 					<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-						<g stroke="#888888" stroke-linecap="round" stroke-width="2">
+						<g stroke="#fff" stroke-linecap="round" stroke-width="2">
 							<path fill="#dc1010" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
 								d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z">
 								<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0" />
@@ -285,7 +291,7 @@
 									values="8;0" />
 							</path>
 						</g>
-						<circle cx="12" cy="17" r="1" fill="#888888" fill-opacity="0">
+						<circle cx="12" cy="17" r="1" fill="#fff" fill-opacity="0">
 							<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1" />
 						</circle>
 					</svg>
@@ -295,11 +301,11 @@
 				<textarea v-model="request.body"
 					class="textarea textarea-bordered w-full bg-red-900 border-none text-white mt-3"
 					placeholder="What's your reason for editing?..."></textarea>
-				<p class="text-white py-4 text-right text-xs">Review and cross-check your request before sending!</p>
+				<p class="text-white py-4 text-right text-xs">There is no reversal of this process, beware...</p>
 				<div class="modal-action">
 					<!-- if there is a button in form, it will close the modal -->
 					<button @click="handleDeleteSubmit" v-if="request.body"
-						class="btn btn-primary text-white">Submit</button>
+						class="btn btn-ghost text-white">Submit</button>
 					<button @click="request.body = ''" class="btn btn-error text-white">Close</button>
 				</div>
 			</form>
@@ -307,10 +313,10 @@
 
 		<input :checked="if_sent" type="checkbox" id="my_modal_09" class="modal-toggle" />
 		<div class="modal">
-			<div class="modal-box">
-				<p class="py-4 text-center text-2xl">Request Sent!</p>
+			<div class="modal-box backdrop-blur-lg bg-neutral-900/50 dark:bg-neutral-50/30">
+				<p class="py-4 text-center text-2xl text-white">Request Sent!</p>
 				<div class="modal-action">
-					<label class="btn btn-sm btn-ghost" for="my_modal_09">Close</label>
+					<label class="btn btn-sm btn-ghost text-red-300" for="my_modal_09">Close</label>
 				</div>
 			</div>
 		</div>

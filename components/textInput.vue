@@ -1,19 +1,19 @@
 <template>
 	<div class="form-control w-full">
 		<label class="label">
-			<span class="label-text dark:text-neutral-50 dark:font-semibold">
+			<span class="label-text dark:text-neutral-50 font-semibold">
 				<slot name="default" />
 			</span>
 		</label>
 		<div class="flex w-full">
 			<div v-if="!no_uppercase" class="indicator w-full">
 				<span
-					:class="['transition-all duration-300 ease-in pointer-events-none indicator-item badge-sm badge bg-red-400 border-transparent drop-shadow-xl', val_err ? 'opacity-100' : 'opacity-0']"></span>
+					:class="['transition-all duration-300 ease-in pointer-events-none indicator-item badge-sm badge outline outline-2 outline-red-50 bg-red-600 border-transparent drop-shadow-xl', val_err ? 'opacity-100' : 'opacity-0']"></span>
 
 				<input oninput="this.value = this.value.toUpperCase()" :value="modelValue ? modelValue : value"
 					@input="$emit('update:modelValue', $event.target?.value)" :type="type ? type : 'text'"
 					:placeholder="placeholder ? placeholder : ''"
-					:class="[`input input-bordered w-full border-none dark:bg-neutral-900/50 backdrop-blur-md text-white dark:font-semibold bg-${bg} ${icon ? 'rounded-l-xl rounded-r-none bg-neutral-600' : 'rounded-xl bg-neutral-600'} ${classer}`]" />
+					:class="[`input input-bordered w-full border-none dark:bg-neutral-900/50 bg-neutral-900/50 backdrop-blur-md text-white dark:font-semibold bg-${bg} ${icon ? 'rounded-l-xl rounded-r-none bg-neutral-600' : 'rounded-xl bg-neutral-600'} ${classer}`]" />
 
 				<div v-if="icon"
 					:class='`icon grid place-items-center p-2 bg-neutral-700 dark:bg-primary bg-${bg} rounded-e-xl`'>

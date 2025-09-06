@@ -30,12 +30,13 @@
 					<button @click="new_task = ''"
 						class="dark:border-none btn join-item bg-transparent btn-md text-yellow-400">Cancel</button>
 				</div>
+
 				<input type="checkbox" :checked="done_task" class="modal-toggle" />
 				<div class="modal">
-					<div class="modal-box w-fit">
+					<div class="modal-box w-fit backdrop-blur-lg bg-neutral-900/50 dark:bg-neutral-50/30 text-white">
 						<h3 class="font-semibold text-lg">Task has been saved!</h3>
 						<div class="modal-action">
-							<label @click="useTasksStore().setDoneTask(false)" class="btn">Close!</label>
+							<label @click="useTasksStore().setDoneTask(false)" class="btn btn-ghost">Close!</label>
 						</div>
 					</div>
 				</div>
@@ -105,7 +106,7 @@
 
 				<dialog id="viewtodayapls" class="modal">
 					<form method="dialog"
-						class="modal-box dark:bg-neutral-500/50 drop-shadow-xl backdrop-blur-lg outline outline-4 outline-neutral-600 dark:text-white bg-neutral-800 text-white text-center max-w-full h-5/6">
+						class="modal-box dark:bg-neutral-500/50 drop-shadow-xl backdrop-blur-lg outline outline-4 outline-neutral-600 dark:text-white bg-neutral-800/50 text-white text-center max-w-full h-5/6">
 						<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-white">✕</button>
 
 						<ViewTodayApplicants />
@@ -151,7 +152,7 @@
 
 				<dialog id="viewtodayapls" class="modal">
 					<form method="dialog"
-						class="modal-box dark:bg-neutral-50 dark:text-black bg-neutral-800 text-white text-center max-w-full h-5/6 rounded-none">
+						class="modal-box dark:bg-neutral-50/50 dark:text-black bg-neutral-800/50 text-white text-center max-w-full h-5/6 rounded-none">
 						<button class="btn btn-sm btn-square btn-ghost absolute right-2 top-2">✕</button>
 
 						<ViewTodayApplicants />

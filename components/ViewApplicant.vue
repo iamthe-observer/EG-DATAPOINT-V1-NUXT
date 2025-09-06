@@ -20,30 +20,34 @@
 			</div>
 
 			<div class="grid grid-cols-3 gap-2 w-full">
-				<AplInfoCardDate :heading="`Date of Birth`" :date="new Date(apl.pdob!)" @date="handleDate" :name_type="'pdob'" />
+				<AplInfoCardDate :heading="`Date of Birth`" :date="new Date(apl.pdob!)" @date="handleDate"
+					:name_type="'pdob'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.pcity_ob" :heading="'City Of Birth'" />
 				<AplInfoCard @update:model-value="logger" :select="true" :options="$countries" v-model="apl.pcountry_ob"
 					:heading="'Country of Birth'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.pcontact" :heading="'Contact'" />
-				<AplInfoCard @update:model-value="logger" v-model="apl.pother_contact" :heading="'Next of Kin Contact'" />
+				<AplInfoCard @update:model-value="logger" v-model="apl.pother_contact"
+					:heading="'Next of Kin Contact'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.pcountry_live_today"
 					:heading="'Country You Live in Today'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.ppassport_number" :heading="'Passport Number'" />
-				<AplInfoCardDate @update:model-value="logger" :date="apl.passport_ex ? new Date(apl.passport_ex!) : undefined"
-					@date="handleDate" :name_type="'passport_ex'" :heading="'Passport Expiry Date'" />
+				<AplInfoCardDate @update:model-value="logger"
+					:date="apl.passport_ex ? new Date(apl.passport_ex!) : undefined" @date="handleDate"
+					:name_type="'passport_ex'" :heading="'Passport Expiry Date'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.pemail" :heading="'Email'" />
-				<AplInfoCard @update:model-value="logger" :select="true" :options="['MALE', 'FEMALE']" v-model="apl.pgender"
-					:heading="'Gender'" />
-				<AplInfoCard @update:model-value="logger" :select="true" :options="$marital_status" v-model="apl.pmarital_status"
-					:heading="'Marital Status'" />
+				<AplInfoCard @update:model-value="logger" :select="true" :options="['MALE', 'FEMALE']"
+					v-model="apl.pgender" :heading="'Gender'" />
+				<AplInfoCard @update:model-value="logger" :select="true" :options="$marital_status"
+					v-model="apl.pmarital_status" :heading="'Marital Status'" />
 				<AplInfoCard @update:model-value="logger" :select="true" :options="$highest_level_ed"
 					v-model="apl.peducation_level" :heading="'Education Level'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.ppostal" :heading="'Residential Address'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.pconf_code" :heading="'Confirmation Code'" />
-				<AplInfoCard @update:model-value="logger" :select="true" :num_options="[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
-					v-model="apl.children_number" :heading="'Number of Children'" />
-				<AplInfoCard class="col-span-full mx-auto w-fit" v-if="!edit_mode" :disabled="true" @update:model-value="logger"
-					v-model="apl.totalPayment" :heading="'Paid Amount'" />
+				<AplInfoCard @update:model-value="logger" :select="true"
+					:num_options="[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" v-model="apl.children_number"
+					:heading="'Number of Children'" />
+				<AplInfoCard class="col-span-full mx-auto w-fit" v-if="!edit_mode" :disabled="true"
+					@update:model-value="logger" v-model="apl.totalPayment" :heading="'Paid Amount'" />
 			</div>
 		</div>
 
@@ -74,7 +78,7 @@
 					<span>Spouse Information</span>
 					<span v-if="!edit_mode" class="font-normal">{{
 						`${apl.slastName} ${apl.sfirstName}
-											${apl.sotherName}`.trimEnd() }}
+						${apl.sotherName}`.trimEnd() }}
 					</span>
 					<div v-else class="flex gap-3 w-fit">
 						<TextInput @update:model-value="logger" classer="input-sm" v-model="apl.slastName">Last
@@ -89,8 +93,8 @@
 					</div>
 
 				</h2>
-				<AplInfoCardDate @update:model-value="logger" :date="new Date(apl.sdob!)" @date="handleDate" :name_type="'sdob'"
-					:heading="'Date of Birth'" />
+				<AplInfoCardDate @update:model-value="logger" :date="new Date(apl.sdob!)" @date="handleDate"
+					:name_type="'sdob'" :heading="'Date of Birth'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.sgender" :heading="'Gender'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.scontact" :heading="'Contact'" />
 				<AplInfoCard @update:model-value="logger" v-model="apl.scity_ob" :heading="'City of Birth'" />
@@ -108,7 +112,7 @@
 					<div class="indicator">
 						<span :class="['indicator-item indicator-top indicator-center badge',
 							!edit_mode ? 'badge-primary' : 'badge-primary']">Ward Applicant {{ i + 1
-	}}</span>
+							}}</span>
 						<AvatarSelect :classer="`w-[300px] h-[300px]`" :src="wards_image[ward.index!]" />
 					</div>
 					<div class="flex w-full gap-2 items-end">
@@ -129,14 +133,17 @@
 					<h2 class="col-span-full py-3 text-2xl font-bold flex justify-between items-center w-full">
 						<span>Ward #{{ ward.index! + 1 }}</span>
 						<span v-if="!edit_mode" class="font-normal">{{ `${ward.wlastName} ${ward.wfirstName}
-													${ward.wotherName}`.trimEnd() }}
+							${ward.wotherName}`.trimEnd() }}
 						</span>
 						<div v-else class="flex gap-3 w-2/3">
-							<TextInput @update:model-value="logger" classer="input-sm font-normal" v-model="ward.wlastName">Last Name
+							<TextInput @update:model-value="logger" classer="input-sm font-normal"
+								v-model="ward.wlastName">Last Name
 							</TextInput>
-							<TextInput @update:model-value="logger" classer="input-sm font-normal" v-model="ward.wfirstName">First Name
+							<TextInput @update:model-value="logger" classer="input-sm font-normal"
+								v-model="ward.wfirstName">First Name
 							</TextInput>
-							<TextInput @update:model-value="logger" classer="input-sm font-normal" v-model="ward.wotherName">Other Name
+							<TextInput @update:model-value="logger" classer="input-sm font-normal"
+								v-model="ward.wotherName">Other Name
 							</TextInput>
 						</div>
 					</h2>
@@ -145,7 +152,8 @@
 						@date="handleDate" :name_type="'wdob'" :idx="ward.index!" :heading="'Date of Birth'" />
 					<AplInfoCard @update:model-value="logger" v-model="ward.wgender" :heading="'Gender'" />
 					<AplInfoCard @update:model-value="logger" v-model="ward.wcity_ob" :heading="'City of Birth'" />
-					<AplInfoCard @update:model-value="logger" v-model="ward.wcountry_ob" :heading="'Country of Birth'" />
+					<AplInfoCard @update:model-value="logger" v-model="ward.wcountry_ob"
+						:heading="'Country of Birth'" />
 				</div>
 			</div>
 
