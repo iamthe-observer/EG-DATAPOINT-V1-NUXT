@@ -3,6 +3,17 @@ import { UUID } from "crypto";
 export type FileWithAplType = File & { apl_type: string };
 export type _Null<T> = T | null;
 
+export interface Transactions {
+  id?: string;
+  created_at?: string;
+  type: string;
+  balance_before: number;
+  balance_after: number;
+  user_id: string;
+  apl_id: string;
+  requestID?: string;
+}
+
 export interface AplData {
   prime: PrimeApplicant | null;
   sec: SecApplicant | null;

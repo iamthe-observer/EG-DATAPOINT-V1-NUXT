@@ -19,7 +19,6 @@
 					</template>
 				</DatePicker>
 
-
 				<select v-model="curr_location"
 					:class="['select rounded-full bg-[rgb(13,13,13)] dark:bg-neutral-50 dark:text-black', ISM ? 'select-xs w-32' : 'select-sm w-40']">
 					<option v-if="admin" selected value="all">All Locations</option>
@@ -29,70 +28,146 @@
 				</select>
 			</div>
 
-			<section :class="['grid w-full gap-5', ISM ? 'grid-cols-1' : 'grid-cols-4']">
-				<div
-					class="flex justify-center items-center gap-3 p-5 flex-1 bg-neutral-900 dark:bg-purple-200 min-h-[8rem] rounded-xl shadow-xl">
-					<div class="p-3 rounded-full bg-purple-600 bg-opacity-30 w-16 aspect-square"><svg
-							xmlns="http://www.w3.org/2000/svg" class="w-full" viewBox="0 0 24 24">
-							<path class="fill-purple-700"
-								d="M12 22.575q-.2 0-.375-.062T11.3 22.3L9 20H5q-.825 0-1.413-.588T3 18V4q0-.825.588-1.413T5 2h14q.825 0 1.413.588T21 4v14q0 .825-.588 1.413T19 20h-4l-2.3 2.3q-.15.15-.325.213t-.375.062ZM12 12q1.45 0 2.475-1.025T15.5 8.5q0-1.45-1.025-2.475T12 5q-1.45 0-2.475 1.025T8.5 8.5q0 1.45 1.025 2.475T12 12Zm0 8.2l2.2-2.2H19v-1.15q-1.35-1.325-3.138-2.087T12 14q-2.075 0-3.863.763T5 16.85V18h4.8l2.2 2.2Z" />
-						</svg></div>
-					<p class="flex flex-col">
-						<span class="text-xl font-bold">{{curr_location == 'all' ? total_apls.length :
-							total_apls.filter(apl => apl.location == curr_location).length}}</span>
-						<span class="text-sm text-neutral-500 dark:text-neutral-800">Total Applicants</span>
-					</p>
+
+			<section class="flex gap-3 w-full max-h-[400px]">
+				<!-- transactions -->
+				<div class="w-1/3 bg-neutral-900 shadow-xl rounded-xl p-3 flex flex-col gap-2">
+					<h1 class="text-2xl font-bold flex justify-between items-center">Transactions [{{
+						todays_transactions.length }}]
+
+						<span class="text-sm text-neutral-500">{{ transactions_total }}</span>
+					</h1>
+
+					<div class="flex flex-col gap-2 w-full h-full bg-neutral-800 p-2 rounded-lg overflow-y-auto"
+						id="style-2">
+
+
+						<!-- containers -->
+						<p v-for="transaction in todays_transactions"
+							class="group relative w-full rounded-xl dark:font-semibold flex flex-col">
+						<div class="flex w-full">
+							<div :class="[
+								'top-box after:w-[15px] dark:after:bg-[radial-gradient(circle_at_0%_0%,_transparent_15px,_#ffffff50_15px)] after:bg-[radial-gradient(circle_at_0%_0%,_transparent_15px,_#00000050_15px)] relative whitespace-nowrap w-fit min-h-[40px] bg-black/0 font-normal flex p-1 rounded-br-lg',
+								transaction.balance_after > transaction.balance_before ? 'text-green-600' : 'text-red-600'
+							]">
+								<span v-if="transaction.type == 'entry' || transaction.type == 'discount'"
+									class="h-[40px] dark:bg-white/20 bg-black/50 px-2 py-0 rounded-xl dark:outline-none outline font-bold text-2xl italic outline-2 outline-black/60 grid place-items-center drop-shadow-xl  text-green-600 relative -translate-y-[3px] -translate-x-[3px] font-['Doto']">+GHC
+									{{ transaction?.balance_after }}.00 </span>
+
+								<span v-else
+									:class="['h-[40px] dark:bg-white/20 bg-black/50 px-2 py-0 rounded-xl dark:outline-none outline font-bold text-2xl italic outline-2 outline-black/60 grid place-items-center drop-shadow-xl relative -translate-y-[3px] -translate-x-[3px] font-Doto', transaction.balance_after > transaction.balance_before ? 'text-green-600' : 'text-red-600']">
+									{{ (transaction?.balance_after - transaction?.balance_before) > 0 ? '+' : '-'
+									}}GHC
+									{{
+										Math.abs((transaction?.balance_after - transaction?.balance_before) > 0 ?
+											transaction?.balance_after - transaction?.balance_before : 0) }}.00
+								</span>
+
+							</div>
+							<span class="flex justify-end p-2 w-full rounded-t-xl dark:bg-white/30 bg-black/30">
+								<span
+									class="text-purple-300 bg-black/40 shadow-lg px-4 grid place-items-center rounded-lg">{{
+										transaction?.type
+									}}</span>
+							</span>
+						</div>
+						<!-- content -->
+						<div
+							class="w-full h-fit dark:bg-white/30 bg-black/30 text-white dark:text-white rounded-b-xl rounded-tl-xl flex flex-col p-3">
+							<span
+								class="font-bold text-xl w-full truncate transition-all duration-200 ease-in-out hover:text-purple-600 group cursor-pointer group-hover:drop-shadow-lg"
+								@click="() => { $router.push(`/applicant/${transaction.apl_id}`); useViewAplStore().setID(transaction.apl_id!) }">
+								{{total_apls.find(x => x.apl_id ==
+									transaction?.apl_id)?.fullName!}}
+							</span>
+							<span v-if="transaction.type == 'edit' || transaction.type == 'delete'"
+								class="font-bold text-md w-full truncate transition-all duration-200 ease-in-out hover:text-purple-600 group-hover:h-6 h-0">
+								{{requests.find(x => x.id == transaction.requestID)?.body}}
+							</span>
+							<div
+								class="font-semibold text-neutral-500 flex justify-between w-full transition-all duration-200 ease-in-out group-hover:text-neutral-100">
+								<span class="text-xs">
+									{{$formatDateTime(new Date(total_apls.find(x => x.apl_id ==
+										transaction?.apl_id)?.created_at!))
+									}}
+								</span>
+								<span class="text-xs">BY:
+									{{profiles.find(x => x.id == transaction?.user_id)?.username}}
+								</span>
+							</div>
+						</div>
+						</p>
+
+					</div>
 				</div>
-				<div v-if="shown"
-					class="flex justify-center items-center gap-3 p-5 flex-1 bg-neutral-900 dark:bg-fuchsia-200 min-h-[8rem] rounded-xl shadow-xl">
-					<div class="p-3 rounded-full bg-accent bg-opacity-30 w-16 aspect-square"><svg
-							xmlns="http://www.w3.org/2000/svg" class="w-full" viewBox="0 0 24 24">
-							<g class="fill-accent">
-								<path
-									d="M9.592 3.2a5.727 5.727 0 0 1-.495.399c-.298.2-.633.338-.985.408c-.153.03-.313.043-.632.068c-.801.064-1.202.096-1.536.214a2.713 2.713 0 0 0-1.655 1.655c-.118.334-.15.735-.214 1.536a5.707 5.707 0 0 1-.068.632c-.07.352-.208.687-.408.985c-.087.13-.191.252-.399.495c-.521.612-.782.918-.935 1.238c-.353.74-.353 1.6 0 2.34c.153.32.414.626.935 1.238c.208.243.312.365.399.495c.2.298.338.633.408.985c.03.153.043.313.068.632c.064.801.096 1.202.214 1.536a2.713 2.713 0 0 0 1.655 1.655c.334.118.735.15 1.536.214c.319.025.479.038.632.068c.352.07.687.209.985.408c.13.087.252.191.495.399c.612.521.918.782 1.238.935c.74.353 1.6.353 2.34 0c.32-.153.626-.414 1.238-.935c.243-.208.365-.312.495-.399c.298-.2.633-.338.985-.408c.153-.03.313-.043.632-.068c.801-.064 1.202-.096 1.536-.214a2.713 2.713 0 0 0 1.655-1.655c.118-.334.15-.735.214-1.536c.025-.319.038-.479.068-.632c.07-.352.209-.687.408-.985c.087-.13.191-.252.399-.495c.521-.612.782-.918.935-1.238c.353-.74.353-1.6 0-2.34c-.153-.32-.414-.626-.935-1.238a5.574 5.574 0 0 1-.399-.495a2.713 2.713 0 0 1-.408-.985a5.72 5.72 0 0 1-.068-.632c-.064-.801-.096-1.202-.214-1.536a2.713 2.713 0 0 0-1.655-1.655c-.334-.118-.735-.15-1.536-.214a5.707 5.707 0 0 1-.632-.068a2.713 2.713 0 0 1-.985-.408a5.73 5.73 0 0 1-.495-.399c-.612-.521-.918-.782-1.238-.935a2.713 2.713 0 0 0-2.34 0c-.32.153-.626.414-1.238.935Z"
-									opacity=".5" />
-								<path
-									d="M15.83 8.17a.814.814 0 0 1 0 1.151l-6.51 6.51a.814.814 0 0 1-1.151-1.15l6.51-6.511a.814.814 0 0 1 1.152 0Zm-.032 6.544a1.085 1.085 0 1 1-2.17 0a1.085 1.085 0 0 1 2.17 0Zm-6.511-4.341a1.085 1.085 0 1 0 0-2.17a1.085 1.085 0 0 0 0 2.17Z" />
-							</g>
-						</svg></div>
-					<p class="flex flex-col">
-						<span class="text-xl font-bold">GHC {{ totalSales }}.00</span>
-						<span class="text-sm text-neutral-500 dark:text-neutral-800">Total Sales</span>
-					</p>
-				</div>
-				<div
-					class="flex justify-center items-center gap-3 p-5 flex-1 bg-neutral-900 dark:bg-yellow-200 min-h-[8rem] rounded-xl shadow-xl">
-					<div class="p-3 rounded-full bg-secondary bg-opacity-30 w-16 aspect-square"><svg
-							xmlns="http://www.w3.org/2000/svg" class="w-full" viewBox="0 0 24 24">
-							<path class="fill-secondary"
-								d="M12 22.575q-.2 0-.375-.062T11.3 22.3L9 20H5q-.825 0-1.413-.588T3 18V4q0-.825.588-1.413T5 2h14q.825 0 1.413.588T21 4v14q0 .825-.588 1.413T19 20h-4l-2.3 2.3q-.15.15-.325.213t-.375.062ZM5 16.85q1.35-1.325 3.138-2.087T12 14q2.075 0 3.863.763T19 16.85V4H5v12.85ZM12 12q1.45 0 2.475-1.025T15.5 8.5q0-1.45-1.025-2.475T12 5q-1.45 0-2.475 1.025T8.5 8.5q0 1.45 1.025 2.475T12 12Zm0-2q-.625 0-1.063-.438T10.5 8.5q0-.625.438-1.063T12 7q.625 0 1.063.438T13.5 8.5q0 .625-.438 1.063T12 10Zm0 10.2l2.2-2.2H17v-.25q-1.05-.875-2.325-1.312T12 16q-1.4 0-2.675.438T7 17.75V18h2.8l2.2 2.2Zm0-9.775Z" />
-						</svg></div>
-					<p class="flex flex-col">
-						<span class="text-xl font-bold">{{curr_location == 'all' ? daily_applicants.length :
-							daily_applicants.filter(apl => apl.location == curr_location).length}}</span>
-						<span class="text-sm text-neutral-500 dark:text-neutral-800">Daily Applicants</span>
-					</p>
-				</div>
-				<div
-					class="flex justify-center items-center gap-3 p-5 flex-1 bg-neutral-900 dark:bg-green-200 min-h-[8rem] rounded-xl shadow-xl">
-					<div class="p-3 rounded-full bg-green-300 bg-opacity-30 w-16 aspect-square"><svg
-							xmlns="http://www.w3.org/2000/svg" class="w-full" viewBox="0 0 24 24">
-							<g class="fill-green-900">
-								<path class="dark:stroke-green-900 stroke-green-500" stroke-width="1.5"
-									d="M9.781 3.89c.564-.48.846-.72 1.14-.861a2.5 2.5 0 0 1 2.157 0c.295.14.577.38 1.14.861c.225.192.337.287.457.367a2.5 2.5 0 0 0 .908.376c.141.028.288.04.582.064c.739.058 1.108.088 1.416.197a2.5 2.5 0 0 1 1.525 1.524c.109.309.138.678.197 1.416c.023.294.035.441.063.583c.064.324.192.633.376.907c.08.12.176.232.367.457c.48.564.721.846.862 1.14a2.5 2.5 0 0 1 0 2.157c-.14.294-.381.576-.862 1.14a5.25 5.25 0 0 0-.367.457a2.497 2.497 0 0 0-.376.907c-.028.142-.04.289-.063.583c-.059.738-.088 1.108-.197 1.416a2.5 2.5 0 0 1-1.525 1.524c-.308.11-.677.139-1.416.197c-.294.024-.44.036-.582.064a2.5 2.5 0 0 0-.908.376a5.25 5.25 0 0 0-.456.367c-.564.48-.846.72-1.14.861a2.5 2.5 0 0 1-2.157 0c-.295-.14-.577-.38-1.14-.861a5.263 5.263 0 0 0-.457-.367a2.5 2.5 0 0 0-.908-.376a5.277 5.277 0 0 0-.582-.064c-.739-.058-1.108-.088-1.416-.197a2.5 2.5 0 0 1-1.525-1.524c-.109-.308-.138-.678-.197-1.416a5.186 5.186 0 0 0-.063-.583a2.5 2.5 0 0 0-.376-.907c-.08-.12-.176-.232-.367-.457c-.48-.564-.721-.846-.862-1.14a2.5 2.5 0 0 1 0-2.157c.141-.294.381-.576.862-1.14c.191-.225.287-.337.367-.457a2.5 2.5 0 0 0 .376-.907c.028-.142.04-.289.063-.583c.059-.738.088-1.107.197-1.416A2.5 2.5 0 0 1 6.42 4.894c.308-.109.677-.139 1.416-.197c.294-.024.44-.036.582-.064a2.5 2.5 0 0 0 .908-.376c.12-.08.232-.175.456-.367Z"
-									opacity=".5" />
-								<path class="dark:stroke-green-900 stroke-green-700" stroke-linecap="round"
-									stroke-width="1.5" d="m9 15l6-6" />
-								<path class="dark:fill-green-900 fill-green-700"
-									d="M15.5 14.5a1 1 0 1 1-2 0a1 1 0 0 1 2 0Zm-5-5a1 1 0 1 1-2 0a1 1 0 0 1 2 0Z" />
-							</g>
-						</svg></div>
-					<p class="flex flex-col">
-						<span class="text-xl font-bold">GHC {{ today_sales_admin }}.00</span>
-						<span class="text-sm text-neutral-500 dark:text-neutral-800">Daily Sales</span>
-					</p>
+
+				<!-- statistics -->
+				<div :class="['grid w-2/3 gap-5 grid-cols-2', ISM ? 'grid-cols-' : 'grid-cols-']">
+					<div
+						class="flex justify-center items-center gap-3 p-5 flex-1 bg-neutral-900 dark:bg-purple-200 min-h-[8rem] rounded-xl shadow-xl">
+						<div class="p-3 rounded-full bg-purple-600 bg-opacity-30 w-16 aspect-square"><svg
+								xmlns="http://www.w3.org/2000/svg" class="w-full" viewBox="0 0 24 24">
+								<path class="fill-purple-700"
+									d="M12 22.575q-.2 0-.375-.062T11.3 22.3L9 20H5q-.825 0-1.413-.588T3 18V4q0-.825.588-1.413T5 2h14q.825 0 1.413.588T21 4v14q0 .825-.588 1.413T19 20h-4l-2.3 2.3q-.15.15-.325.213t-.375.062ZM12 12q1.45 0 2.475-1.025T15.5 8.5q0-1.45-1.025-2.475T12 5q-1.45 0-2.475 1.025T8.5 8.5q0 1.45 1.025 2.475T12 12Zm0 8.2l2.2-2.2H19v-1.15q-1.35-1.325-3.138-2.087T12 14q-2.075 0-3.863.763T5 16.85V18h4.8l2.2 2.2Z" />
+							</svg></div>
+						<p class="flex flex-col">
+							<span class="text-xl font-bold">{{curr_location == 'all' ? total_apls.length :
+								total_apls.filter(apl => apl.location == curr_location).length}}</span>
+							<span class="text-sm text-neutral-500 dark:text-neutral-800">Total Applicants</span>
+						</p>
+					</div>
+					<div v-if="shown"
+						class="flex justify-center items-center gap-3 p-5 flex-1 bg-neutral-900 dark:bg-fuchsia-200 min-h-[8rem] rounded-xl shadow-xl">
+						<div class="p-3 rounded-full bg-accent bg-opacity-30 w-16 aspect-square"><svg
+								xmlns="http://www.w3.org/2000/svg" class="w-full" viewBox="0 0 24 24">
+								<g class="fill-accent">
+									<path
+										d="M9.592 3.2a5.727 5.727 0 0 1-.495.399c-.298.2-.633.338-.985.408c-.153.03-.313.043-.632.068c-.801.064-1.202.096-1.536.214a2.713 2.713 0 0 0-1.655 1.655c-.118.334-.15.735-.214 1.536a5.707 5.707 0 0 1-.068.632c-.07.352-.208.687-.408.985c-.087.13-.191.252-.399.495c-.521.612-.782.918-.935 1.238c-.353.74-.353 1.6 0 2.34c.153.32.414.626.935 1.238c.208.243.312.365.399.495c.2.298.338.633.408.985c.03.153.043.313.068.632c.064.801.096 1.202.214 1.536a2.713 2.713 0 0 0 1.655 1.655c.334.118.735.15 1.536.214c.319.025.479.038.632.068c.352.07.687.209.985.408c.13.087.252.191.495.399c.612.521.918.782 1.238.935c.74.353 1.6.353 2.34 0c.32-.153.626-.414 1.238-.935c.243-.208.365-.312.495-.399c.298-.2.633-.338.985-.408c.153-.03.313-.043.632-.068c.801-.064 1.202-.096 1.536-.214a2.713 2.713 0 0 0 1.655-1.655c.118-.334.15-.735.214-1.536c.025-.319.038-.479.068-.632c.07-.352.209-.687.408-.985c.087-.13.191-.252.399-.495c.521-.612.782-.918.935-1.238c.353-.74.353-1.6 0-2.34c-.153-.32-.414-.626-.935-1.238a5.574 5.574 0 0 1-.399-.495a2.713 2.713 0 0 1-.408-.985a5.72 5.72 0 0 1-.068-.632c-.064-.801-.096-1.202-.214-1.536a2.713 2.713 0 0 0-1.655-1.655c-.334-.118-.735-.15-1.536-.214a5.707 5.707 0 0 1-.632-.068a2.713 2.713 0 0 1-.985-.408a5.73 5.73 0 0 1-.495-.399c-.612-.521-.918-.782-1.238-.935a2.713 2.713 0 0 0-2.34 0c-.32.153-.626.414-1.238.935Z"
+										opacity=".5" />
+									<path
+										d="M15.83 8.17a.814.814 0 0 1 0 1.151l-6.51 6.51a.814.814 0 0 1-1.151-1.15l6.51-6.511a.814.814 0 0 1 1.152 0Zm-.032 6.544a1.085 1.085 0 1 1-2.17 0a1.085 1.085 0 0 1 2.17 0Zm-6.511-4.341a1.085 1.085 0 1 0 0-2.17a1.085 1.085 0 0 0 0 2.17Z" />
+								</g>
+							</svg></div>
+						<p class="flex flex-col">
+							<span class="text-xl font-bold">GHC {{ totalSales }}.00</span>
+							<span class="text-sm text-neutral-500 dark:text-neutral-800">Total Sales</span>
+						</p>
+					</div>
+					<div
+						class="flex justify-center items-center gap-3 p-5 flex-1 bg-neutral-900 dark:bg-yellow-200 min-h-[8rem] rounded-xl shadow-xl">
+						<div class="p-3 rounded-full bg-secondary bg-opacity-30 w-16 aspect-square"><svg
+								xmlns="http://www.w3.org/2000/svg" class="w-full" viewBox="0 0 24 24">
+								<path class="fill-secondary"
+									d="M12 22.575q-.2 0-.375-.062T11.3 22.3L9 20H5q-.825 0-1.413-.588T3 18V4q0-.825.588-1.413T5 2h14q.825 0 1.413.588T21 4v14q0 .825-.588 1.413T19 20h-4l-2.3 2.3q-.15.15-.325.213t-.375.062ZM5 16.85q1.35-1.325 3.138-2.087T12 14q2.075 0 3.863.763T19 16.85V4H5v12.85ZM12 12q1.45 0 2.475-1.025T15.5 8.5q0-1.45-1.025-2.475T12 5q-1.45 0-2.475 1.025T8.5 8.5q0 1.45 1.025 2.475T12 12Zm0-2q-.625 0-1.063-.438T10.5 8.5q0-.625.438-1.063T12 7q.625 0 1.063.438T13.5 8.5q0 .625-.438 1.063T12 10Zm0 10.2l2.2-2.2H17v-.25q-1.05-.875-2.325-1.312T12 16q-1.4 0-2.675.438T7 17.75V18h2.8l2.2 2.2Zm0-9.775Z" />
+							</svg></div>
+						<p class="flex flex-col">
+							<span class="text-xl font-bold">{{curr_location == 'all' ? daily_applicants.length :
+								daily_applicants.filter(apl => apl.location == curr_location).length}}</span>
+							<span class="text-sm text-neutral-500 dark:text-neutral-800">Daily Applicants</span>
+						</p>
+					</div>
+					<div
+						class="flex justify-center items-center gap-3 p-5 flex-1 bg-neutral-900 dark:bg-green-200 min-h-[8rem] rounded-xl shadow-xl">
+						<div class="p-3 rounded-full bg-green-300 bg-opacity-30 w-16 aspect-square"><svg
+								xmlns="http://www.w3.org/2000/svg" class="w-full" viewBox="0 0 24 24">
+								<g class="fill-green-900">
+									<path class="dark:stroke-green-900 stroke-green-500" stroke-width="1.5"
+										d="M9.781 3.89c.564-.48.846-.72 1.14-.861a2.5 2.5 0 0 1 2.157 0c.295.14.577.38 1.14.861c.225.192.337.287.457.367a2.5 2.5 0 0 0 .908.376c.141.028.288.04.582.064c.739.058 1.108.088 1.416.197a2.5 2.5 0 0 1 1.525 1.524c.109.309.138.678.197 1.416c.023.294.035.441.063.583c.064.324.192.633.376.907c.08.12.176.232.367.457c.48.564.721.846.862 1.14a2.5 2.5 0 0 1 0 2.157c-.14.294-.381.576-.862 1.14a5.25 5.25 0 0 0-.367.457a2.497 2.497 0 0 0-.376.907c-.028.142-.04.289-.063.583c-.059.738-.088 1.108-.197 1.416a2.5 2.5 0 0 1-1.525 1.524c-.308.11-.677.139-1.416.197c-.294.024-.44.036-.582.064a2.5 2.5 0 0 0-.908.376a5.25 5.25 0 0 0-.456.367c-.564.48-.846.72-1.14.861a2.5 2.5 0 0 1-2.157 0c-.295-.14-.577-.38-1.14-.861a5.263 5.263 0 0 0-.457-.367a2.5 2.5 0 0 0-.908-.376a5.277 5.277 0 0 0-.582-.064c-.739-.058-1.108-.088-1.416-.197a2.5 2.5 0 0 1-1.525-1.524c-.109-.308-.138-.678-.197-1.416a5.186 5.186 0 0 0-.063-.583a2.5 2.5 0 0 0-.376-.907c-.08-.12-.176-.232-.367-.457c-.48-.564-.721-.846-.862-1.14a2.5 2.5 0 0 1 0-2.157c.141-.294.381-.576.862-1.14c.191-.225.287-.337.367-.457a2.5 2.5 0 0 0 .376-.907c.028-.142.04-.289.063-.583c.059-.738.088-1.107.197-1.416A2.5 2.5 0 0 1 6.42 4.894c.308-.109.677-.139 1.416-.197c.294-.024.44-.036.582-.064a2.5 2.5 0 0 0 .908-.376c.12-.08.232-.175.456-.367Z"
+										opacity=".5" />
+									<path class="dark:stroke-green-900 stroke-green-700" stroke-linecap="round"
+										stroke-width="1.5" d="m9 15l6-6" />
+									<path class="dark:fill-green-900 fill-green-700"
+										d="M15.5 14.5a1 1 0 1 1-2 0a1 1 0 0 1 2 0Zm-5-5a1 1 0 1 1-2 0a1 1 0 0 1 2 0Z" />
+								</g>
+							</svg></div>
+						<p class="flex flex-col">
+							<span class="text-xl font-bold">GHC {{ today_sales_admin }}.00</span>
+							<span class="text-sm text-neutral-500 dark:text-neutral-800">Daily Sales</span>
+						</p>
+					</div>
 				</div>
 			</section>
+
 
 			<!-- graphs -->
 			<section class="grid grid-cols-4 w-full gap-5 mb-3">
@@ -152,13 +227,43 @@ import { useProfileStore } from '@/store/profile'
 import { useViewAplStore } from '@/store/viewApl';
 import { BarChart, LineChart } from 'vue-chart-3';
 import { ChartData, ChartOptions } from 'chart.js';
+import { useAplStore } from '~/store/apl';
+import { useRequestStore } from '~/store/requests';
 
 const { is_mobile: ISM, total_apls, dark_mode, locations
 } = storeToRefs(useAppStore())
 const { profiles, role, profile } = storeToRefs(useProfileStore())
+const { requests } = storeToRefs(useRequestStore())
 const date = ref<Date>(new Date())
 const shown = ref(false)
 const curr_location = ref('circle')
+const { transactions } = storeToRefs(useAplStore())
+const todays_transactions = computed(() => {
+	return transactions.value.filter(tr => new Date(tr.created_at!).toDateString() == date.value.toDateString()).sort(
+		(a, b) =>
+			new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime())
+	console.log(todays_transactions.value);
+})
+
+onMounted(async () => {
+	await useAplStore().getTransactions()
+	console.log(transactions.value);
+})
+
+const transactions_total = computed(() => {
+	const amounts: number[] = todays_transactions.value.map(tr => {
+		if (tr.type == 'delete') {
+			return 0
+		} else if (tr.type == 'discount' || tr.type == 'entry') {
+			return tr.balance_after
+		} else if (tr.type == 'edit') {
+			return (tr?.balance_after - tr?.balance_before) > 0 ?
+				tr?.balance_after - tr?.balance_before : 0
+		}
+	})
+
+	return amounts!.reduce((a, b) => a + b, 0)
+})
 
 const admin = computed(() => {
 	if (profile.value?.email == 'topsquad3552@gmail.com') {
@@ -185,6 +290,9 @@ const asor_locations = computed(() => {
 const nana_locations = computed(() => {
 	return locations.value.filter(loc => ['circle'].includes(loc))
 })
+const lertty_locations = computed(() => {
+	return locations.value.filter(loc => ['circle'].includes(loc))
+})
 
 const locationz = computed(() => {
 	if (profile.value?.email == 'lizzymadina@gmail.com') {
@@ -193,6 +301,8 @@ const locationz = computed(() => {
 		return asor_locations.value
 	} else if (profile.value?.email == 'ebbysgold@gmail.com') {
 		return nana_locations.value
+	} else if (profile.value?.email == 'lertty@gmail.com') {
+		return lertty_locations.value
 	}
 	else {
 		return locations.value
@@ -268,8 +378,7 @@ const today_sales_admin = computed(() => {
 const normal_users = computed(() => {
 	const filterFn = (user: any) =>
 		(
-			(!user.role && user.fullname != null) ||
-			(user.email === 'gertrude16h@gmail.com')
+			(!user.role && user.fullname != null)
 		) &&
 		(curr_location.value === 'all' || user.location == curr_location.value);
 
@@ -329,8 +438,8 @@ const userNames = computed(() => {
 				}
 			})
 			.sort(function (a, b) {
-				if (a.email < b.email) { return -1; }
-				if (a.email > b.email) { return 1; } return 0;
+				if (a.fullname < b.fullname) { return -1; }
+				if (a.fullname > b.fullname) { return 1; } return 0;
 			})
 			.map(user => {
 				if (!user.fullname) return 'User'
@@ -341,8 +450,8 @@ const userNames = computed(() => {
 			.filter(user => !user.role && user.fullname != null)
 			.filter(user => user.location == curr_location.value)
 			.sort(function (a, b) {
-				if (a.email < b.email) { return -1; }
-				if (a.email > b.email) { return 1; } return 0;
+				if (a.fullname < b.fullname) { return -1; }
+				if (a.fullname > b.fullname) { return 1; } return 0;
 			})
 			.map(user => {
 				if (!user.fullname) return 'User'
@@ -352,15 +461,28 @@ const userNames = computed(() => {
 })
 
 const amountOfAplsByUser = computed(() => {
-	const filteredProfiles = profiles.value
-		.filter(user => !user.role && user.fullname || user.email === 'gertrude16h@gmail.com')
-		.filter(user => curr_location.value === 'all' || user.location === curr_location.value)
-		.sort((a, b) => a.email.localeCompare(b.email));
+	// const filteredProfiles = profiles.value
+	// 	.filter(user => !user.role && user.fullname)
+	// 	.filter(user => curr_location.value === 'all' || user.location === curr_location.value)
+	// 	.sort((a, b) => a.email.localeCompare(b.email));
 
-	return filteredProfiles.map(user => {
-		const userApls = total_apls.value.filter(apl => apl.user_id === user.id);
-		return userApls.reduce((sum, apl) => sum + (isNaN(apl.totalPayment) ? 0 : apl.totalPayment), 0);
-	});
+	return profiles.value
+		.filter(user => !user.role && user.fullname != null)
+		.filter(user => {
+			if (curr_location.value == 'all') {
+				return true
+			} else {
+				return user.location == curr_location.value
+			}
+		})
+		.sort(function (a, b) {
+			if (a.fullname < b.fullname) { return -1; }
+			if (a.fullname > b.fullname) { return 1; } return 0;
+		})
+		.map(user => {
+			const userApls = total_apls.value.filter(apl => apl.user_id === user.id);
+			return userApls.reduce((sum, apl) => sum + (isNaN(apl.totalPayment) ? 0 : apl.totalPayment), 0);
+		});
 });
 
 function getTotalPaymentByDay(num: number) {

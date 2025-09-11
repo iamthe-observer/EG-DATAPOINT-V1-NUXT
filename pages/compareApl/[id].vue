@@ -561,6 +561,7 @@ onMounted(() => {
 });
 
 async function deleteApplicant(req: Requests) {
+	console.log(req);
 	try {
 		let { data, error } = await useNuxtApp().$SB.from('applicants').delete().eq('apl_id', req.apl_id)
 		if (error) throw error
@@ -575,6 +576,7 @@ async function updateRequestType(req: Requests, type: string) {
 	try {
 		let { data, error } = await useNuxtApp().$SB.from('requests').update({ status: type }).eq('id', req.id)
 		if (error) throw error
+
 		return data
 	} catch (error) {
 		console.log(error);
@@ -623,48 +625,8 @@ async function updateApplicant(req: Requests) {
 	}
 }
 
-
-// async function updateApplicant(req: Requests) {
-// 	let req_apl = req.modified_apl
-// 	let apl = total_apls.value.find(apl => apl.apl_id == req.apl_id)
-
-// 	const diff = $deepCompareObjects(apl!, req_apl!);
-
-// 	const APL: Partial<Applicant> = {}
-// 	let data = diff.map(apl => {
-// 		return {
-// 			key: apl.key, value: apl.value2
-// 		}
-// 	})
-
-// 	function mergeArrayOfObjects(arr: { key: string, value: any }[]): Record<string, any> {
-// 		const mergedObject: Record<string, any> = {};
-
-// 		for (const entry of arr) {
-// 			mergedObject[entry.key] = entry.value;
-// 		}
-
-// 		return mergedObject;
-// 	}
-
-// 	console.log(mergeArrayOfObjects(data));
-
-// 	// try {
-// 	// 	let { data: dat, error } = await $SB
-// 	// 		.from('applicants')
-// 	// 		.update(mergeArrayOfObjects(data))
-// 	// 		.eq('apl_id', req.apl_id)
-// 	// 		.select()
-// 	// 	if (error) throw error
-// 	// 	await updateRequestType(req, 'approved')
-// 	// 	console.log(dat);
-// 	// 	return dat
-// 	// } catch (error) {
-// 	// 	console.log(error);
-// 	// }
-// }
-
 const loading = ref(false)
+
 async function handleApprove(req: Requests) {
 	loading.value = true
 	// type of request
@@ -673,16 +635,21 @@ async function handleApprove(req: Requests) {
 	if (ty == 'delete') {
 		await deleteApplicant(req)
 		await updateRequestType(req, 'approved')
+		await apl_.sendTransaction(apl!, req.modified_apl!, ty, req.id)
+
 		if_ap.value = true
 		loading.value = false
 	} else if (ty == 'discount') {
 		await approveDiscount(req)
 		await updateRequestType(req, 'approved')
+		await apl_.sendTransaction(apl!, req.modified_apl!, ty, req.id)
+
 		if_ap.value = true
 		loading.value = false
 	} else if (ty == 'edit') {
 		await updateApplicant(req)
 		await updateRequestType(req, 'approved')
+		await apl_.sendTransaction(apl!, req.modified_apl!, ty, req.id)
 		if_ap.value = true
 		loading.value = false
 	}

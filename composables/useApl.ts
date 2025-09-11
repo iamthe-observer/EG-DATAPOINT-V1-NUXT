@@ -1,11 +1,6 @@
 // @ts-ignore
 import { v4 as uuidv4 } from "uuid";
-import {
-  Applicant,
-  FileWithAplType,
-  Requests,
-  WardsApplicant,
-} from "@/interfaces/interfaces";
+import { Applicant, Requests, WardsApplicant } from "@/interfaces/interfaces";
 import { storeToRefs } from "pinia";
 import { useAppStore } from "@/store/app";
 import { useProfileStore } from "@/store/profile";
@@ -29,10 +24,6 @@ export const useApl = (id?: string) => {
   const prime_image = ref();
   const sec_image = ref();
   const wards_image = ref<any[]>([]);
-  const prime_file = ref<FileWithAplType>();
-  const sec_file = ref<FileWithAplType>();
-  const wards_file = ref<FileWithAplType[]>([]);
-  const curr_ward_file = ref<FileWithAplType>();
 
   const request = ref<Requests>({
     apl_id: "",
@@ -641,6 +632,8 @@ export const useApl = (id?: string) => {
     if_req_sent,
     curr_compared_request,
     loadUrl,
-    prime_image,sec_image,wards_image
+    prime_image,
+    sec_image,
+    wards_image,
   };
 };

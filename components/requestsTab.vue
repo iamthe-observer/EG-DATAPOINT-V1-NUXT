@@ -214,11 +214,13 @@ import { useRequestStore } from '@/store/requests';
 import { Applicant, Requests } from '@/interfaces/interfaces';
 import { useProfileStore } from '@/store/profile';
 import { useAplStore } from '@/store/apl';
+import { useAppStore } from '~/store/app';
 
 const { $SB } = useNuxtApp()
 defineProps<{
 	curr_page: string
 }>()
+const { total_apls } = storeToRefs(useAppStore())
 const { requests, my_requests, } = storeToRefs(useRequestStore())
 const { role, profiles } = storeToRefs(useProfileStore())
 
@@ -330,14 +332,19 @@ async function handleApprove(req: Requests) {
 	if (ty == 'delete') {
 		await deleteApplicant(req)
 		await updateRequestType(req, 'approved')
+		await useAplStore().sendTransaction(req.modified_apl!, total_apls.value.find(apl => apl.apl_id == req.apl_id)!, ty, req.id)
 
 	} else if (ty == 'discount') {
 		await approveDiscount(req)
 		await updateRequestType(req, 'approved')
+		await useAplStore().sendTransaction(req.modified_apl!, total_apls.value.find(apl => apl.apl_id == req.apl_id)!, ty, req.id)
+
 
 	} else if (ty == 'edit') {
 		await updateApplicant(req)
 		await updateRequestType(req, 'approved')
+		await useAplStore().sendTransaction(req.modified_apl!, total_apls.value.find(apl => apl.apl_id == req.apl_id)!, ty, req.id)
+
 	}
 }
 

@@ -4,7 +4,12 @@ import { v4 as uuidv4 } from "uuid";
 import { defineStore, storeToRefs } from "pinia";
 import { required, numeric } from "@vuelidate/validators";
 import useVuelidate, { Validation } from "@vuelidate/core";
-import { Applicant, Requests, WardsApplicant } from "@/interfaces/interfaces";
+import {
+  Applicant,
+  Requests,
+  Transactions,
+  WardsApplicant,
+} from "@/interfaces/interfaces";
 import { useImageStore } from "./images";
 import { useAppStore } from "./app";
 import { useProfileStore } from "./profile";
@@ -249,7 +254,7 @@ export const useAplStore = defineStore(
       return val;
     }
 
-    async function submitApl(apl: Applicant) {
+    async function sendApl(apl: Applicant) {
       apl_sending.value = true;
       console.log(apl.aplImg_path.wardsPath);
       try {
@@ -284,6 +289,8 @@ export const useAplStore = defineStore(
             .insert([$trimStringProperties(apl)]);
 
           if (error) throw error;
+          await sendTransaction(apl, apl, "entry");
+
           if_sent.value = true;
           apl_sending.value = false;
           resetAplData();
@@ -419,12 +426,70 @@ export const useAplStore = defineStore(
       }
     }
 
+    async function sendTransaction(
+      apl_info: Applicant,
+      old_apl_info?: Applicant,
+      type?: string,
+      requestID?: string,
+    ) {
+      try {
+        if (type == "entry") {
+          const { error } = await $SB.from("transactions").insert([
+            {
+              apl_id: apl_info.apl_id,
+              type,
+              balance_before: apl_info.totalPayment,
+              balance_after: apl_info.totalPayment,
+              user_id: apl_info.user_id,
+            },
+          ]);
+          if (error) throw error;
+        } else if (type == "discount") {
+          const { error } = await $SB.from("transactions").insert([
+            {
+              apl_id: apl_info.apl_id,
+              type,
+              balance_before: apl_info?.totalPayment,
+              balance_after: apl_info.totalPayment,
+              user_id: apl_info.user_id,
+              requestID,
+            },
+          ]);
+          if (error) throw error;
+        } else {
+          const { error } = await $SB.from("transactions").insert([
+            {
+              apl_id: apl_info.apl_id,
+              type,
+              balance_before: old_apl_info?.totalPayment,
+              balance_after: apl_info.totalPayment,
+              user_id: apl_info.user_id,
+              requestID,
+            },
+          ]);
+          if (error) throw error;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    const transactions = ref<Transactions[]>([]);
+    async function getTransactions() {
+      try {
+        let { data, error } = await $SB.from("transactions").select("*");
+        if (error) throw error;
+        transactions.value = data!;
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
     async function sendApplicant(apl_info: any) {
       apl_info.location = profile.value?.location;
       receiptData.value = { ...apl_info };
-      console.log(receiptData.value, "receiptData");
 
-      await submitApl(apl_info);
+      await sendApl(apl_info);
       console.log("done");
     }
 
@@ -640,6 +705,8 @@ export const useAplStore = defineStore(
     };
 
     return {
+      getTransactions,
+      sendTransaction,
       receiptData,
       typeOfApl,
       reset_data,
@@ -663,6 +730,7 @@ export const useAplStore = defineStore(
       if_req_sent,
       curr_compared_request,
       val_err_msg,
+      transactions,
     };
   },
   {

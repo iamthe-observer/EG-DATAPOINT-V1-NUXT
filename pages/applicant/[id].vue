@@ -251,7 +251,7 @@
 							<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1" />
 						</circle>
 					</svg>
-					Are you sure you want to send this request?
+					Are you sure you want to send this edit request?
 				</h3>
 				<textarea v-model="request.body"
 					class="textarea textarea-bordered w-full bg-black dark:bg-neutral-200 dark:text-black dark:border-none text-white mt-3"

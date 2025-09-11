@@ -425,6 +425,17 @@ export const useAppStore = defineStore("app", () => {
     .subscribe();
 
   $SB
+    .channel("transactions-channel")
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "transactions" },
+      async (payload) => {
+        await useAplStore().getTransactions();
+      },
+    )
+    .subscribe();
+
+  $SB
     .channel("prices-channel")
     .on(
       "postgres_changes",

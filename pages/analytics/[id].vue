@@ -5,7 +5,7 @@
 
 
 			<h1 v-if="!ISM" class="w-full flex justify-between items-center">
-				<span class="font-bold text-3xl">Overview: {{ profiles.find(user => user.id == id)?.fullname }} ({{
+				<span class="font-bold text-3xl">Overview: {{profiles.find(user => user.id == id)?.fullname}} ({{
 					total_daily_applicants.length }})</span>
 
 				<DatePicker dark :color="'purple'" is-dark v-model="date" mode="date">
@@ -20,7 +20,7 @@
 			</h1>
 
 			<h1 v-else class="w-full flex justify-between items-center">
-				<span class="font-bold text-md">Overview: {{ profiles.find(user => user.id == id)?.fullname }} ({{
+				<span class="font-bold text-md">Overview: {{profiles.find(user => user.id == id)?.fullname}} ({{
 					total_daily_applicants.length }})</span>
 
 				<DatePicker dark :color="'purple'" is-dark v-model="date" mode="date">
