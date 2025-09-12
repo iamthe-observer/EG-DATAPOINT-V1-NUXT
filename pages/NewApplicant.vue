@@ -61,7 +61,7 @@
 				<button v-if="!apl_sending" @click="async () => {
 					await useAplStore().handleSend()
 					// curr_page = 'prime'
-				}" class="btn outline outline-4 outline-neutral-600 rounded-xl text-white group hover:bg-yellow-500 hover:text-black font-normal hover:border-none group">
+				}" class="btn btn-outline rounded-xl text-white group btn-ghost font-normal hover:bg-purple-900 hover:text-white group">
 					SUBMIT
 					<SvgsCedis
 						class="w-4 aspect-square stroke-white fill-white transition-all duration-150 ease-linear group-hover:fill-white" />

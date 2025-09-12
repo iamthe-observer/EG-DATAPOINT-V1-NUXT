@@ -1,21 +1,34 @@
 <template>
-	<p class="flex flex-col text-white w-full rounded-xl bg-neutral-700 dark:text-neutral-900 dark:font-semibold dark:bg-neutral-200
-	dark:outline
-		dark:outline-2 dark:outline-neutral-400 dark:shadow-lg">
-		<span :class="[
-			'heading font-normal bg-neutral-900 dark:bg-neutral-400 dark:text-black',
-			edit_mode ? 'dark:text-accent text-secondary dark:bg-neutral-300' : 'text-neutral-400',
+	<p class="relative w-full h-full rounded-xl dark:font-semibold flex flex-col">
+
+
+	<div class="flex w-full">
+		<div :class="[
+			'top-box dark:after:bg-[radial-gradient(circle_at_0%_0%,_transparent_10px,_#d4d4d4_10px)] after:bg-[radial-gradient(circle_at_0%_0%,_transparent_10px,_#00000045_10px)] relative whitespace-nowrap w-fit min-h-[20px] bg-black/0 font-normal flex p-1 rounded-br-lg',
+			edit_mode ? 'dark:text-gold-800 text-secondary' : 'text-purple-300 dark:text-purple-800',
 		]">
-			{{ heading }}
-		</span>
-		<span v-if="!edit_mode" class="info">{{ value ? $formatDateWords(new Date(value!)) : '' }}</span>
-		<DatePicker v-else dark :color="'purple'" is-dark v-model="value" mode="date">
-			<template #default="{ togglePopover }">
-				<span @click="togglePopover" class="info_edit dark:bg-neutral-100">{{ value ? $formatDateWords(new Date(value!)) :
-					''
-				}}</span>
-			</template>
-		</DatePicker>
+
+			<span :class="['w-full h-full px-2 py-0 text-xs rounded-md dark:outline-none outline outline-2 outline-black/60',
+				edit_mode ? 'dark:bg-yellow-300 bg-black/50' : 'dark:bg-purple-300 bg-black/50']">
+				{{ heading }}
+			</span>
+		</div>
+
+		<span class="w-full rounded-t-xl dark:bg-neutral-300 bg-black/30"></span>
+	</div>
+
+
+	<!-- content -->
+	<div
+		class="w-full h-full dark:bg-neutral-300 bg-black/30 text-white dark:text-neutral-800 rounded-b-xl rounded-tl-xl flex items-center">
+
+		<span v-if="!edit_mode" class="info truncate">{{ modelValue }}</span>
+
+		<input v-else-if="edit_mode && !disabled" v-model="value" type="text"
+			class="info_edit w-full rounded-xl h-full bg-black/20" :placeholder="placeholder ? placeholder : ''">
+
+	</div>
+
 	</p>
 </template>
 
@@ -27,7 +40,7 @@ const { edit_mode } = storeToRefs(useViewAplStore())
 
 const emit = defineEmits(['update:modelValue'])
 const props = defineProps<{
-	modelValue: Date | null
+	modelValue: string
 	heading: string
 	placeholder?: string
 	disabled?: boolean
@@ -35,10 +48,10 @@ const props = defineProps<{
 
 const value = computed({
 	get() {
-		return props.modelValue!
+		return props.modelValue
 	},
-	set(value: Date) {
-		emit('update:modelValue', value)
+	set(value: string) {
+		emit('update:modelValue', value.toUpperCase())
 	}
 })
 </script>
@@ -53,17 +66,12 @@ const value = computed({
 	border-radius: 10px;
 }
 
-.heading {
-	@apply w-full rounded-t-xl px-3 py-1 text-sm;
-}
-
 .info {
 	@apply p-3;
 	@apply h-full;
 }
 
 .info_edit {
-	@applyll;
 	@apply p-3 rounded-b-xl;
 }
 </style>

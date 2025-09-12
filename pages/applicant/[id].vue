@@ -9,6 +9,10 @@
 					<span class="text-sm">Created At: {{ $formatDateWords(new Date(applicant.created_at!)) }}</span>
 				</span>
 
+				<span v-if="edit_mode"
+					class="btn-sm rounded-xl dark:text-white bg-gold-500 text-black dark:bg-purple-800 font-semibold mr-5">Edit
+					Mode</span>
+
 				<div class="join join-vertical lg:join-horizontal">
 					<button v-if="edit_mode" onclick="my_modal_1.showModal()"
 						class="btn btn-outline btn-sm rounded-xl text-white hover:text-green-500 dark:hover:text-green-200 join-item bg-none hover:btn-ghost">
@@ -108,7 +112,7 @@
 					}}<br />Location:
 					{{ applicant?.location?.toUpperCase() }}
 				</span>
-				<div v-else class="flex gap-3">
+				<div v-else class="flex gap-3 dark:text-black">
 					<TextInput v-model="applicant.plastName">Last Name</TextInput>
 					<TextInput v-model="applicant.pfirstName">First Name</TextInput>
 					<TextInput v-model="applicant.potherName">Other Name</TextInput>

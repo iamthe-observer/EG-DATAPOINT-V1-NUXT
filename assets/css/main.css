@@ -25,8 +25,8 @@
     @apply rounded-xl bg-neutral-800 dark:bg-neutral-50 dark:shadow-xl;
   }
 
-  .top-box::after {
-    /* visibility: hidden; */
+  /* .top-box::after {
+    visibility: hidden;
     @apply border-black/20 bg-transparent;
     content: "";
     right: 0;
@@ -38,7 +38,22 @@
       transparent 10px,
       #00000050 10px
     );
-  }
+  } */
+}
+
+.top-box::after {
+  @apply border-black/20 bg-transparent;
+  content: "";
+  right: 0;
+  bottom: 0;
+  width: 10px;
+  aspect-ratio: 1;
+  position: absolute;
+  background-image: radial-gradient(
+    circle at 0% 0%,
+    transparent 10px,
+    #00000050 10px
+  );
 }
 
 * {

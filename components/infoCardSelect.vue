@@ -1,27 +1,36 @@
 <template>
-	<p class="flex flex-col text-white w-full h-fit rounded-xl bg-neutral-700 dark:text-neutral-900 dark:font-semibold dark:bg-neutral-200
-	dark:outline
-		dark:outline-2 dark:outline-neutral-400 dark:shadow-lg">
-		<span :class="[
-			'heading font-normal bg-neutral-900 dark:bg-neutral-400 dark:text-black',
-			edit_mode ? 'dark:text-accent text-secondary dark:bg-neutral-300' : 'text-neutral-400',
+	<p class="relative w-full h-full rounded-xl dark:font-semibold flex flex-col">
+
+	<div class="flex w-full">
+		<div :class="[
+			'top-box dark:after:bg-[radial-gradient(circle_at_0%_0%,_transparent_10px,_#d4d4d4_10px)] after:bg-[radial-gradient(circle_at_0%_0%,_transparent_10px,_#00000045_10px)] relative whitespace-nowrap w-fit min-h-[20px] bg-black/0 font-normal flex p-1 rounded-br-lg',
+			edit_mode ? 'dark:text-gold-800 text-secondary' : 'text-purple-300 dark:text-purple-800',
 		]">
-			{{ heading }}
-		</span>
+
+			<span :class="['w-full h-full px-2 py-0 text-xs rounded-md dark:outline-none outline outline-2 outline-black/60',
+				edit_mode ? 'dark:bg-yellow-300 bg-black/50' : 'dark:bg-purple-300 bg-black/50']">
+				{{ heading }}
+			</span>
+		</div>
+
+		<span class="w-full rounded-t-xl dark:bg-neutral-300 bg-black/30"></span>
+	</div>
+
+	<div
+		class="w-full h-full dark:bg-neutral-300 bg-black/30 text-white dark:text-neutral-800 rounded-b-xl rounded-tl-xl flex items-center">
+
 		<span v-if="!edit_mode" class="info truncate">{{ modelValue }}</span>
 
-		<!-- <input v-else-if="edit_mode && !disabled" v-model="value" type="text"
-			class="info_edit bg-neutral-700 dark:bg-neutral-100" :placeholder="placeholder ? placeholder : ''"> -->
-
-		<select v-else-if="edit_mode && !disabled"
-			class="select w-full bg-neutral-600 dark:bg-neutral-300 rounded-b-xl rounded-t-none" v-model="value">
+		<select v-else-if="edit_mode && !disabled" class="select bg-black/20 rounded-xl w-full h-full" v-model="value">
 			<option v-if="options" disabled selected>Pick one</option>
 			<option v-if="num_options" disabled selected>Pick number</option>
-			<option v-if="options" v-for="(option, i) in  options" :key="i" :value="option.toUpperCase()">{{
+			<option v-if="options" v-for="(option, i) in options" :key="i" :value="option.toUpperCase()">{{
 				option.toUpperCase() }}</option>
-			<option v-if="num_options" v-for="(option, i) in  num_options" :key="i" :value="option">{{ option }}</option>
+			<option v-if="num_options" v-for="(option, i) in num_options" :key="i" :value="option">{{ option }}
+			</option>
 		</select>
 
+	</div>
 	</p>
 </template>
 
@@ -68,9 +77,5 @@ const value = computed({
 
 .info_edit {
 	@apply p-3 rounded-b-xl;
-}
-
-.heading {
-	@apply w-full rounded-t-xl px-3 py-1 text-sm;
 }
 </style>

@@ -6,7 +6,7 @@
 			<div class="flex flex-col gap-2">
 				<div class="indicator">
 					<span :class="['indicator-item indicator-top indicator-center badge',
-						!edit_mode ? 'badge-primary' : 'badge-primary']">Primary Applicant</span>
+						!edit_mode ? 'badge-primary' : 'badge-warning']">Primary Applicant</span>
 					<AvatarSelect :classer="`w-[300px] h-[300px]`" :src="prime_image" />
 				</div>
 				<div class="flex w-full gap-2 items-end">
@@ -16,7 +16,7 @@
 						<span v-else>Update</span>
 					</button>
 					<input v-if="edit_mode" @change="e => viewApl.handleFile(e, 'prime')" type="file"
-						class="file-input file-input-xs file-input-primary w-full mt-2" />
+						class="file-input file-input-xs file-input-warning w-full mt-2 bg-transparent" />
 				</div>
 			</div>
 
@@ -52,7 +52,7 @@
 			<div class="flex flex-col gap-2">
 				<div class="indicator">
 					<span :class="['indicator-item indicator-top indicator-center badge',
-						!edit_mode ? 'badge-primary' : 'badge-primary']">Secondary Applicant</span>
+						!edit_mode ? 'badge-primary' : 'badge-warning']">Secondary Applicant</span>
 					<AvatarSelect :classer="`w-[300px] h-[300px]`" :src="sec_image" />
 				</div>
 				<div class="flex w-full gap-2 items-end">
@@ -62,15 +62,15 @@
 						<span v-else>Update</span>
 					</button>
 					<input v-if="edit_mode" @change="e => viewApl.handleFile(e, 'sec')" type="file"
-						class="file-input file-input-xs file-input-primary w-full mt-2" />
+						class="file-input file-input-xs file-input-warning w-full mt-2 bg-transparent" />
 				</div>
 			</div>
 
 			<!-- info -->
 			<div class="grid grid-cols-3 gap-2 w-full h-fit">
 				<h2 class="col-span-full py-3 text-2xl font-bold flex justify-between items-center">
-					<span>Spouse Information</span>
-					<span v-if="!edit_mode" class="font-normal">{{
+					<!-- <span>Spouse Information</span> -->
+					<span v-if="!edit_mode" class="font-bold text-2xl">{{
 						`${apl.slastName} ${apl.sfirstName}
 						${apl.sotherName}`.trimEnd() }}
 					</span>
@@ -102,7 +102,7 @@
 				<div class="flex flex-col gap-2">
 					<div class="indicator">
 						<span :class="['indicator-item indicator-top indicator-center badge',
-							!edit_mode ? 'badge-primary' : 'badge-primary']">Ward Applicant {{ i + 1
+							!edit_mode ? 'badge-primary' : 'badge-warning']">Ward Applicant {{ i + 1
 							}}</span>
 						<AvatarSelect :classer="`w-[300px] h-[300px]`" :src="wards_image[ward.index!]" />
 					</div>
@@ -114,7 +114,7 @@
 							<span v-else>Update</span>
 						</button>
 						<input v-if="edit_mode" @change="e => viewApl.handleFile(e, `ward${i}`, i)" type="file"
-							class="file-input file-input-xs file-input-primary w-full mt-2" />
+							class="file-input file-input-xs file-input-warning w-full mt-2 bg-transparent" />
 					</div>
 				</div>
 
@@ -122,8 +122,8 @@
 				<!-- wards -->
 				<div class="flex-1 grid grid-cols-2 gap-2 col-span-full h-fit">
 					<h2 class="col-span-full py-3 text-2xl font-bold flex justify-between items-center w-full">
-						<span>Ward #{{ ward.index! + 1 }}</span>
-						<span v-if="!edit_mode" class="font-normal">{{ `${ward.wlastName} ${ward.wfirstName}
+						<!-- <span>Ward #{{ ward.index! + 1 }}</span> -->
+						<span v-if="!edit_mode" class="font-bold text-2xl">{{ `${ward.wlastName} ${ward.wfirstName}
 							${ward.wotherName}`.trimEnd() }}
 						</span>
 						<div v-else class="flex gap-3 w-2/3">

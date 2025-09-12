@@ -35,7 +35,7 @@
 					<h1 class="text-2xl font-bold flex justify-between items-center">Transactions [{{
 						todays_transactions.length }}]
 
-						<span class="text-sm text-neutral-500">{{ transactions_total }}</span>
+						<!-- <span class="text-sm text-neutral-500">{{ transactions_total }}</span> -->
 					</h1>
 
 					<div class="flex flex-col gap-2 w-full h-full bg-neutral-800 p-2 rounded-lg overflow-y-auto"
@@ -161,7 +161,9 @@
 								</g>
 							</svg></div>
 						<p class="flex flex-col">
-							<span class="text-xl font-bold">GHC {{ today_sales_admin }}.00</span>
+							<!-- <span class="text-xl font-bold">GHC {{ today_sales_admin }}.00</span> -->
+							<span class="text-xl font-bold">GHC {{ transactions_total }}.00</span>
+
 							<span class="text-sm text-neutral-500 dark:text-neutral-800">Daily Sales</span>
 						</p>
 					</div>
