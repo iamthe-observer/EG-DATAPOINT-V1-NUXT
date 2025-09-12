@@ -270,13 +270,20 @@ const { profiles, role, profile } = storeToRefs(useProfileStore())
 const { requests } = storeToRefs(useRequestStore())
 const date = ref<Date>(new Date())
 const shown = ref(false)
-const curr_location = ref('circle')
+const curr_location = useLocalStorage('curr_location', 'all')
 const { transactions } = storeToRefs(useAplStore())
+
 const todays_transactions = computed(() => {
 	return transactions.value.filter(tr => new Date(tr.created_at!).toDateString() == date.value.toDateString()).sort(
 		(a, b) =>
-			new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime())
-	console.log(todays_transactions.value);
+			new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime()).filter(tr => {
+				let apl = total_apls.value.find(p => p.apl_id == tr.apl_id)
+				if (curr_location.value == 'all') {
+					return true
+				} else {
+					return apl?.location == curr_location.value
+				}
+			})
 })
 
 onMounted(async () => {
