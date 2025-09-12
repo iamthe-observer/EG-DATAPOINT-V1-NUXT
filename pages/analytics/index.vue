@@ -29,16 +29,18 @@
 			</div>
 
 
-			<section class="flex gap-3 w-full max-h-[400px]">
+			<section class="lg:flex-row flex-col flex gap-3 w-full">
 				<!-- transactions -->
-				<div class="w-1/3 bg-neutral-900 shadow-xl rounded-xl p-3 flex flex-col gap-2">
+				<div :class="['max-h-[400px] bg-neutral-900 shadow-xl rounded-xl p-3 flex flex-col gap-2', ISM ? 'w-full' : 'w-1/3'
+				]">
 					<h1 class="text-2xl font-bold flex justify-between items-center">Transactions [{{
 						todays_transactions.length }}]
 
 						<!-- <span class="text-sm text-neutral-500">{{ transactions_total }}</span> -->
 					</h1>
 
-					<div class="flex flex-col gap-2 w-full h-full bg-neutral-800 p-2 rounded-lg overflow-y-auto"
+					<div v-if="todays_transactions.length"
+						class="flex flex-col gap-2 w-full h-full bg-neutral-800 p-2 rounded-lg overflow-y-auto"
 						id="style-2">
 
 
@@ -99,10 +101,40 @@
 						</p>
 
 					</div>
+
+					<div v-else class="w-full h-full flex flex-col items-center justify-center">
+
+						<svg xmlns="http://www.w3.org/2000/svg" class="w-20 aspect-square" viewBox="0 0 24 24">
+							<g stroke="#888888" stroke-linecap="round" stroke-width="2">
+								<path fill="#888888" fill-opacity="0" stroke-dasharray="60" stroke-dashoffset="60"
+									d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z">
+									<animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0" />
+									<animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s"
+										values="0;0.3" />
+								</path>
+								<path fill="none" stroke-dasharray="14" stroke-dashoffset="14"
+									d="M8 16C8.5 15 9.79086 14 12 14C14.2091 14 15.5 15 16 16">
+									<animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s"
+										values="14;0" />
+								</path>
+							</g>
+							<g fill="#888888" fill-opacity="0">
+								<ellipse cx="9" cy="9.5" rx="1" ry="1.5">
+									<animate fill="freeze" attributeName="fill-opacity" begin="0.6s" dur="0.2s"
+										values="0;1" />
+								</ellipse>
+								<ellipse cx="15" cy="9.5" rx="1" ry="1.5">
+									<animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.2s"
+										values="0;1" />
+								</ellipse>
+							</g>
+						</svg>
+						None Yet
+					</div>
 				</div>
 
 				<!-- statistics -->
-				<div :class="['grid w-2/3 gap-5 grid-cols-2', ISM ? 'grid-cols-' : 'grid-cols-']">
+				<div :class="['grid gap-5', ISM ? 'grid-cols-1 w-full' : 'grid-cols-2 w-2/3']">
 					<div
 						class="flex justify-center items-center gap-3 p-5 flex-1 bg-neutral-900 dark:bg-purple-200 min-h-[8rem] rounded-xl shadow-xl">
 						<div class="p-3 rounded-full bg-purple-600 bg-opacity-30 w-16 aspect-square"><svg
