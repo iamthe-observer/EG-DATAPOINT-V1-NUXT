@@ -69,7 +69,7 @@
 						price }}.00
 				</button>
 				<button v-else class="btn btn-ghost rounded-xl text-white">
-					<span class="loading loading-spinner"></span>
+					<span class="loading loading-spinner disabled"></span>
 					loading
 				</button>
 			</div>
