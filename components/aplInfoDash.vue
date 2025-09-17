@@ -217,7 +217,7 @@ function getAplNumByDay(num: number) {
 	// num == number of days from today
 	const today = new Date();
 	const yesterday = new Date(today);
-	yesterday.setDate(today.getDate() - num);
+	yesterday.setDate(today.getUTCDate() - num);
 
 	const yesterdayFormatted = useNuxtApp().$formatDate(yesterday);
 
@@ -231,7 +231,7 @@ function getAplNumByDay(num: number) {
 function getTotalPaymentByDay(num: number) {
 	const today = new Date();
 	const numDaysAgo = new Date(today);
-	numDaysAgo.setDate(today.getDate() - num);
+	numDaysAgo.setDate(today.getUTCDate() - num);
 
 	let totalPayments = total_apls.value.filter(apl => $formatDate(new Date(apl.created_at!)) == $formatDate(numDaysAgo)).map(apl => apl.totalPayment)
 
@@ -247,7 +247,7 @@ function getTotalPaymentByDay(num: number) {
 const getMaxDay = computed(() => {
 	const today = new Date();
 	const fiveDaysAgo = new Date(today);
-	fiveDaysAgo.setDate(today.getDate() - 5);
+	fiveDaysAgo.setDate(today.getUTCDate() - 5);
 
 	const aplsByDay: { [date: string]: number } = {}; // Object to store counts by date
 

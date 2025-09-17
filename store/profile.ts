@@ -24,6 +24,7 @@ export const useProfileStore = defineStore(
         if (error) throw error;
         profile.value = data![0];
         loading.value = false;
+        console.log("profile loaded");
         return data!;
       } catch (error) {
         console.log(error);
@@ -37,6 +38,7 @@ export const useProfileStore = defineStore(
         if (error) throw error;
         // console.log(data)
         profiles.value = data!;
+        console.log("profiles loaded");
         return data;
       } catch (error) {
         console.log(error);

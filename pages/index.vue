@@ -21,7 +21,7 @@ import { useProfileStore } from '@/store/profile';
 import { useRequestStore } from '@/store/requests';
 import { useTasksStore } from '@/store/tasks';
 
-const { $router, $SB, _route } = useNuxtApp()
+const { $router, $SB } = useNuxtApp()
 const img = ref()
 const { roll, tilt } = useParallax(img)
 
@@ -113,60 +113,4 @@ const loadAppData = async () => {
 		});
 	}
 };
-
-function toRegister() {
-	setTimeout(() => {
-		gsap.to('.r-slide', {
-			width: 0,
-			opacity: 0,
-			duration: 1
-		})
-		gsap.to('.l-slide', {
-			width: 400,
-			opacity: 1,
-			delay: .5,
-			duration: 1
-		})
-		setTimeout(() => {
-			gsap.to('.__register', {
-				opacity: 1,
-				duration: 1
-			})
-		}, 1000);
-	}, 500);
-
-	// @ts-ignore
-	gsap.to('.__login', {
-		opacity: 0,
-		duration: .5
-	})
-}
-function toLogin() {
-	setTimeout(() => {
-		gsap.to('.r-slide', {
-			width: 400,
-			opacity: 1,
-			delay: .5,
-			duration: 1
-		})
-		gsap.to('.l-slide', {
-			width: 0,
-			opacity: 0,
-			duration: 1
-		})
-		setTimeout(() => {
-			gsap.to('.__login', {
-				opacity: 1,
-				duration: 1
-			})
-		}, 1000);
-	}, 500);
-
-	// @ts-ignore
-	gsap.to('.__register', {
-		opacity: 0,
-		duration: .5
-	})
-}
-
 </script>

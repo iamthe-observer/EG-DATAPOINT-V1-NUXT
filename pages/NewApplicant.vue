@@ -61,7 +61,7 @@
 				<button v-if="!apl_sending" @click="async () => {
 					await useAplStore().handleSend()
 					// curr_page = 'prime'
-				}" class="btn btn-outline rounded-xl text-white group btn-ghost font-normal hover:bg-purple-900 hover:text-white group">
+				}" :class="['btn btn- rounded-xl text-white group btn-black font-normal hover:bg-purple-900 hover:border-none hover:drop-shadow-lg hover:text-white group', disabled ? 'btn-disabled bg-yellow-500' : '']">
 					SUBMIT
 					<SvgsCedis
 						class="w-4 aspect-square stroke-white fill-white transition-all duration-150 ease-linear group-hover:fill-white" />
@@ -223,6 +223,7 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
 const imageUrl = ref('');
+const { disabled } = useAplStore();
 const image = ref<HTMLImageElement | null>(null);
 // const loading = ref(true);
 

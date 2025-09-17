@@ -54,6 +54,9 @@ export const useAppStore = defineStore("app", () => {
   const _filter_recent = ref(true);
   const _filter_registered = ref(false);
   const _filter_unregistered = ref(false);
+  const page_index = ref(1);
+  const step = ref(50);
+  const curr_user = ref("all");
 
   const price = computed(() => {
     const pp = prices.value;
@@ -139,6 +142,7 @@ export const useAppStore = defineStore("app", () => {
       all_my_apls.value = data!.filter(
         (apl) => apl.user_id == useSupabaseUser().value?.id,
       );
+      console.log("applicants loaded");
       return data;
     } catch (err: any) {
       console.log(err);
@@ -221,6 +225,7 @@ export const useAppStore = defineStore("app", () => {
         >();
       if (error) throw error;
 
+      console.log("prices loaded");
       const PP = data?.find(
         (location_price) => location_price.location == user![0].location,
       );
@@ -447,6 +452,9 @@ export const useAppStore = defineStore("app", () => {
     .subscribe();
 
   return {
+    page_index,
+    step,
+    curr_user,
     restricted_user,
     locations,
     dark_mode,

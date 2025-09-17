@@ -144,7 +144,7 @@ function getDaysArrayWithTodayAtEnd() {
 function getTotalPaymentByDay(num: number) {
 	const today = new Date();
 	const numDaysAgo = new Date(today);
-	numDaysAgo.setDate(today.getDate() - num);
+	numDaysAgo.setDate(today.getUTCDate() - num);
 
 	let totalPayments = total_applicants.value.filter(apl => useNuxtApp().$formatDate(new Date(apl.created_at!)) == useNuxtApp().$formatDate(numDaysAgo)).map(apl => apl.totalPayment)
 

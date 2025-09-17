@@ -27,6 +27,7 @@ export const useAplStore = defineStore(
     const if_req_sent = ref<boolean>(false);
     const apl_sending = ref(false);
     const if_val_err = ref(false);
+    const disabled = ref(false);
     let val_err_msg =
       "Error! Validation Failed. (Go over and check if all the fields have been filled.)";
     const request = ref<Requests>({
@@ -278,6 +279,7 @@ export const useAplStore = defineStore(
             .insert([$trimStringProperties(apl)]);
 
           if (error) throw error;
+          disabled.value = false;
           if_sent.value = true;
           apl_sending.value = false;
           resetAplData();
@@ -289,6 +291,7 @@ export const useAplStore = defineStore(
             .insert([$trimStringProperties(apl)]);
 
           if (error) throw error;
+          disabled.value = false;
           await sendTransaction(apl, apl, "entry");
 
           if_sent.value = true;
@@ -333,6 +336,7 @@ export const useAplStore = defineStore(
     }
 
     async function handleSend() {
+      disabled.value = true;
       await useAppStore().getPrices();
       applicant.value.apl_id = uuidv4();
       applicant.value.fullName = `${applicant.value.plastName} ${applicant.value.pfirstName} ${applicant.value.potherName}`;
@@ -731,6 +735,7 @@ export const useAplStore = defineStore(
       curr_compared_request,
       val_err_msg,
       transactions,
+      disabled,
     };
   },
   {

@@ -528,7 +528,7 @@ const amountOfAplsByUser = computed(() => {
 
 function getTotalPaymentByDay(num: number) {
 	const targetDate = new Date();
-	targetDate.setDate(targetDate.getDate() - num);
+	targetDate.setDate(targetDate.getUTCDate() - num);
 
 	const payments = total_apls.value
 		.filter(apl => curr_location.value === 'all' || apl.location === curr_location.value)

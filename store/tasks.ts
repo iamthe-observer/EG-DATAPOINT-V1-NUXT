@@ -21,6 +21,7 @@ export const useTasksStore = defineStore("tasks", () => {
         .eq("user_id", currentSession.data.session!.user.id);
 
       if (error) throw error;
+      console.log("tasks loaded");
       _tasks.value = data!;
       return data;
     } catch (error) {

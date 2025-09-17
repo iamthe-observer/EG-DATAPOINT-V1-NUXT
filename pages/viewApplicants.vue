@@ -204,7 +204,7 @@
 										<div class="font-semibold">{{ apl.fullName }}</div>
 										<div class="text-sm text-neutral-400 z-0">{{ apl.pconf_code ? apl.pconf_code :
 											'No Confirmation Code'
-											}}
+										}}
 										</div>
 									</div>
 								</div>
@@ -314,7 +314,7 @@
 										<div class="font-semibold">{{ apl.fullName }}</div>
 										<div class="text-sm text-neutral-400 z-0">{{ apl.pconf_code ? apl.pconf_code :
 											'No Confirmation Code'
-											}}
+										}}
 										</div>
 									</div>
 								</div>
@@ -343,7 +343,7 @@
 										==
 										apl.user_id)[0].fullname ||
 										'User'
-										}}</span>
+									}}</span>
 									<span class="text-neutral-300 dark:text-neutral-700">{{ useNuxtApp().$formatDate(new
 										Date(apl.created_at!)) }}</span>
 									<span class="text-neutral-300 dark:text-neutral-700">{{ new
@@ -461,7 +461,7 @@
 					</span>
 					<span class="text-2xl">[ <span class="text-2xl text-green-500 dark:text-white">{{
 						total_apls_ex.filter(apl =>
-							apl.pconf_code).length }}</span> / <span class="text-2xl text-secondary dark:text-white">{{
+							apl.pconf_code).length}}</span> / <span class="text-2xl text-secondary dark:text-white">{{
 								total_apls_ex.length }}</span>
 						]</span> ||
 					<span class="text-2xl">GHC {{ today_sales_ex }}</span>
@@ -528,7 +528,7 @@
 										<div class="font-semibold">{{ apl.fullName }}</div>
 										<div class="text-sm text-neutral-400 z-0">{{ apl.pconf_code ? apl.pconf_code :
 											'No Confirmation Code'
-											}}
+										}}
 										</div>
 									</div>
 								</div>
@@ -557,7 +557,7 @@
 										==
 										apl.user_id)[0].fullname ||
 										'User'
-										}}</span>
+									}}</span>
 									<span class="text-neutral-300 dark:text-neutral-700">{{ useNuxtApp().$formatDate(new
 										Date(apl.created_at!)) }}</span>
 									<span class="text-neutral-300 dark:text-neutral-700">{{ new
@@ -660,11 +660,11 @@ const {
 	_filter_recent,
 	_filter_unregistered,
 	_filter_registered: ex_registered,
+	page_index,
+	step,
+	curr_user
 } = storeToRefs(useAppStore())
 const { role, profiles, profile } = storeToRefs(useProfileStore())
-const page_index = ref(1)
-const step = ref(50)
-const curr_user = ref('all')
 const scroll_container = ref<HTMLDivElement>()
 const scroll_container_admin = ref<HTMLDivElement>()
 const if_apls_ex = ref(false)

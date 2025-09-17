@@ -25,6 +25,7 @@ export const useAnnStore = defineStore("announcements", () => {
         .select("*")
         .returns<Announcement[]>();
       if (error) throw error;
+      console.log("announcements loaded");
       announcements.value = data!;
       return data;
     } catch (error) {
