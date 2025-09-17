@@ -18,9 +18,12 @@ export default defineNuxtPlugin((nuxtApp) => {
   pinia.use(piniaPluginPersistedstate);
 
   function formatDateWords(date: Date): string {
-    const day = date.getDate();
-    const month = date.toLocaleString("default", { month: "long" });
-    const year = date.getFullYear();
+    const day = date.getUTCDate();
+    const month = date.toLocaleString("default", {
+      month: "long",
+      timeZone: "UTC",
+    });
+    const year = date.getUTCFullYear();
 
     const ordinalSuffix = getOrdinalSuffix(day);
     const formattedDate = `${day}${ordinalSuffix} ${month}, ${year}`;
