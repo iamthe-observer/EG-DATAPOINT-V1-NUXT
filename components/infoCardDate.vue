@@ -22,11 +22,22 @@
 	<div
 		class="w-full h-full dark:bg-neutral-300 bg-black/30 text-white dark:text-neutral-800 rounded-b-xl rounded-tl-xl flex items-center">
 
-		<span v-if="!edit_mode" class="info truncate">{{ modelValue }}</span>
+		<span v-if="!edit_mode" class="info truncate">{{ $formatDateWords(new Date(modelValue)) }}</span>
 
-		<input v-else-if="edit_mode && !disabled" v-model="value" type="text"
-			class="info_edit w-full rounded-xl h-full bg-black/20" :placeholder="placeholder ? placeholder : ''">
+		<DatePicker v-else-if="edit_mode && !disabled" dark :color="'purple'" is-dark v-model="value" mode="date">
+			<template #default="{ togglePopover }">
+				<span @click="togglePopover"
+					class="input flex items-center w-full border-none dark:bg-neutral-400 dark:font-semibold rounded-xl font-semibold bg-neutral-900">{{
+						value ?
+							$formatDateWords(new Date(value!)) :
+							''
+					}}</span>
+			</template>
+		</DatePicker>
 
+		<!-- <input v-model="value" type="text" class="info_edit w-full rounded-xl h-full bg-black/20"
+			:placeholder="placeholder ? placeholder : ''">
+ -->
 	</div>
 
 	</p>
