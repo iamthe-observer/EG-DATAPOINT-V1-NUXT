@@ -22,7 +22,18 @@
 
 			<!-- info -->
 			<div class="grid grid-cols-3 gap-2 w-full h-fit">
-				<InfoCardDate heading="Date of Birth" v-model="apl.pdob" />
+				<InfoCardDate heading="Date of Birth" v-model="apl.pdob">
+					<DatePicker dark :color="'purple'" is-dark v-model="apl.pdob" mode="date">
+						<template #default="{ togglePopover }">
+							<span @click="togglePopover"
+								class="input flex items-center w-full border-none dark:bg-neutral-400 dark:font-semibold rounded-xl font-semibold bg-neutral-900">{{
+									apl.pdob ?
+										$formatDateWords(new Date(apl.pdob!)) :
+										''
+								}}</span>
+						</template>
+					</DatePicker>
+				</InfoCardDate>
 				<InfoCard heading="City of Birth" v-model="apl.pcity_ob" />
 				<InfoCardSelect :options="$countries" heading="Country of Birth" v-model="apl.pcountry_ob" />
 				<InfoCardSelect :options="['MALE', 'FEMALE']" heading="Gender" v-model="apl.pgender" />
@@ -30,7 +41,19 @@
 				<InfoCard heading="Next of Kin Contact" v-model="apl.pother_contact" />
 				<InfoCard heading="Email" v-model="apl.pemail" />
 				<InfoCard heading="Passport Number" v-model="apl.ppassport_number" />
-				<InfoCardDate heading="Passport Expiration Date" v-model="apl.passport_ex" />
+				<InfoCardDate heading="Passport Expiration Date" v-model="apl.passport_ex">
+					<DatePicker dark :color="'purple'" is-dark v-model="apl.passport_ex" mode="date">
+						<template #default="{ togglePopover }">
+							<span @click="togglePopover"
+								class="input flex items-center w-full border-none dark:bg-neutral-400 dark:font-semibold rounded-xl font-semibold bg-neutral-900">{{
+									apl.passport_ex ?
+										$formatDateWords(new Date(apl.passport_ex!)) :
+										''
+								}}</span>
+						</template>
+					</DatePicker>
+				</InfoCardDate>
+
 				<InfoCard heading="Residential Address" v-model="apl.ppostal" />
 				<InfoCardSelect :options="$countries" heading="Country You Live in Today"
 					v-model="apl.pcountry_live_today" />
@@ -87,7 +110,18 @@
 					</div>
 				</h2>
 
-				<InfoCardDate heading="Date of Birth" v-model="apl.sdob" />
+				<InfoCardDate heading="Date of Birth" v-model="apl.sdob">
+					<DatePicker dark :color="'purple'" is-dark v-model="apl.sdob" mode="date">
+						<template #default="{ togglePopover }">
+							<span @click="togglePopover"
+								class="input flex items-center w-full border-none dark:bg-neutral-400 dark:font-semibold rounded-xl font-semibold bg-neutral-900">{{
+									apl.sdob ?
+										$formatDateWords(new Date(apl.sdob!)) :
+										''
+								}}</span>
+						</template>
+					</DatePicker>
+				</InfoCardDate>
 				<InfoCardSelect :options="['MALE', 'FEMALE']" heading="Gender" v-model="apl.sgender" />
 				<InfoCard heading="City of Birth" v-model="apl.scity_ob" />
 				<InfoCardSelect :options="$countries" heading="Country of Birth" v-model="apl.scountry_ob" />
@@ -136,7 +170,18 @@
 						</div>
 					</h2>
 
-					<InfoCardDate v-model="ward.wdob" :heading="'Date of Birth'" />
+					<InfoCardDate v-model="ward.wdob" :heading="'Date of Birth'">
+						<DatePicker dark :color="'purple'" is-dark v-model="ward.wdob" mode="date">
+							<template #default="{ togglePopover }">
+								<span @click="togglePopover"
+									class="input flex items-center w-full border-none dark:bg-neutral-400 dark:font-semibold rounded-xl font-semibold bg-neutral-900">{{
+										ward.wdob ?
+											$formatDateWords(new Date(ward.wdob!)) :
+											''
+									}}</span>
+							</template>
+						</DatePicker>
+					</InfoCardDate>
 					<InfoCardSelect :options="['MALE', 'FEMALE']" v-model="ward.wgender" :heading="'Gender'" />
 					<InfoCard v-model="ward.wcity_ob" :heading="'City of Birth'" />
 					<InfoCardSelect :options="$countries" v-model="ward.wcountry_ob" :heading="'Country of Birth'" />
@@ -162,7 +207,7 @@
 
 		<!-- primary apl -->
 
-		<div class="flex flex-col gap-1 mb-8">
+		<div class="flex flex-col gap-2 mb-8">
 			<!-- image -->
 			<AvatarSelect class="" :classer="`w-[100%] apsect-square`" :src="prime_image" />
 			<InfoCard heading="Last Name" v-model="apl.plastName" />
