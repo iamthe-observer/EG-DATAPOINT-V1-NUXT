@@ -3,7 +3,7 @@ import { useStorage } from "@vueuse/core";
 import { v4 as uuidv4 } from "uuid";
 import { defineStore, storeToRefs } from "pinia";
 import { required, numeric } from "@vuelidate/validators";
-import useVuelidate, { Validation } from "@vuelidate/core";
+import useVuelidate from "@vuelidate/core";
 import {
   Applicant,
   Requests,
@@ -285,6 +285,8 @@ export const useAplStore = defineStore(
           resetAplData();
           alert("done");
           return "done";
+
+          // if user is not me
         } else {
           const { error } = await $SB
             .from("applicants")

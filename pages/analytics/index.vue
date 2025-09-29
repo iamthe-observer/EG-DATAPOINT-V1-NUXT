@@ -292,7 +292,7 @@ onMounted(async () => {
 })
 
 const transactions_total = computed(() => {
-	const amounts: number[] = todays_transactions.value.map(tr => {
+	const amounts: (number | undefined)[] = todays_transactions.value.map(tr => {
 		if (tr.type == 'delete') {
 			return 0
 		} else if (tr.type == 'discount' || tr.type == 'entry') {
