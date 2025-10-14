@@ -7,7 +7,8 @@
 			</path>
 			<path :fill="state.fill2"
 				d="M12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7C16 9.20914 14.2091 11 12 11Z">
-				<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.5s" dur="0.4s" values="28;0"></animate>
+				<animate fill="freeze" attributeName="stroke-dashoffset" begin="0.5s" dur="0.4s" values="28;0">
+				</animate>
 			</path>
 		</g>
 	</svg>
@@ -15,9 +16,11 @@
 
 <script setup lang="ts">
 const svg = ref<SVGElement>()
+const ifLink = computed(() => useRoute().path == '/newApplicant')
+
 const isHover = useElementHover(svg)
 const state = computed(() => {
-	if (isHover.value) {
+	if (isHover.value || ifLink.value) {
 		// hovered
 		return {
 			fill1: '#a020f03f',

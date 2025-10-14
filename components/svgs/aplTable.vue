@@ -10,10 +10,13 @@
 </template>
 
 <script setup lang="ts">
+import { useRoute } from 'vue-router'
+
 const svg = ref<SVGElement>()
+const ifLink = computed(() => useRoute().path == '/viewApplicants')
 const isHover = useElementHover(svg)
 const state = computed(() => {
-	if (isHover.value) {
+	if (isHover.value || ifLink.value) {
 		// hovered
 		return {
 			fill1: '#a020f0',

@@ -309,6 +309,8 @@ export const useAplStore = defineStore(
     }
 
     async function handleValidationError() {
+      apl_sending.value = false;
+
       if_val_err.value = true;
 
       if (applicant_type.value == "single") {
@@ -338,7 +340,7 @@ export const useAplStore = defineStore(
     }
 
     async function handleSend() {
-      disabled.value = true;
+      apl_sending.value = true;
       await useAppStore().getPrices();
       applicant.value.apl_id = uuidv4();
       applicant.value.fullName = `${applicant.value.plastName} ${applicant.value.pfirstName} ${applicant.value.potherName}`;
