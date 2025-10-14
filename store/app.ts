@@ -134,7 +134,10 @@ export const useAppStore = defineStore("app", () => {
 
   async function getTotalApls() {
     try {
-      let { data, error } = await $SB.from("applicants").select("*");
+      let { data, error } = await $SB
+        .from("applicants")
+        .select("*")
+        .range(0, 10000);
 
       if (error) throw error;
       total_apls.value = data!;

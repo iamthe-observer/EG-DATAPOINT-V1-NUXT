@@ -22,7 +22,8 @@
 	<div
 		class="w-full h-full dark:bg-neutral-300 bg-black/30 text-white dark:text-neutral-800 rounded-b-xl rounded-tl-xl flex items-center">
 
-		<span v-if="!edit_mode" class="info truncate">{{ $formatDateWords(new Date(modelValue)) }}</span>
+		<span v-if="!edit_mode" class="info truncate">{{ modelValue ? $formatDateWords(new Date(modelValue)) : ''
+		}}</span>
 
 		<slot class="" v-else-if="edit_mode && !disabled"></slot>
 

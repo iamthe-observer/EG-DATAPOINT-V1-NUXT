@@ -3,7 +3,7 @@ import { useStorage } from "@vueuse/core";
 import { v4 as uuidv4 } from "uuid";
 import { defineStore, storeToRefs } from "pinia";
 import { required, numeric } from "@vuelidate/validators";
-import useVuelidate, { Validation } from "@vuelidate/core";
+import useVuelidate from "@vuelidate/core";
 import {
   Applicant,
   Requests,
@@ -285,6 +285,8 @@ export const useAplStore = defineStore(
           resetAplData();
           alert("done");
           return "done";
+
+          // if user is not me
         } else {
           const { error } = await $SB
             .from("applicants")
@@ -307,6 +309,8 @@ export const useAplStore = defineStore(
     }
 
     async function handleValidationError() {
+      apl_sending.value = false;
+
       if_val_err.value = true;
 
       if (applicant_type.value == "single") {
@@ -336,7 +340,7 @@ export const useAplStore = defineStore(
     }
 
     async function handleSend() {
-      disabled.value = true;
+      apl_sending.value = true;
       await useAppStore().getPrices();
       applicant.value.apl_id = uuidv4();
       applicant.value.fullName = `${applicant.value.plastName} ${applicant.value.pfirstName} ${applicant.value.potherName}`;

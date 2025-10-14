@@ -220,20 +220,85 @@ const { $SB } = useNuxtApp()
 defineProps<{
 	curr_page: string
 }>()
-const { total_apls } = storeToRefs(useAppStore())
+const { total_apls, locations } = storeToRefs(useAppStore())
 const { requests, my_requests, } = storeToRefs(useRequestStore())
-const { role, profiles } = storeToRefs(useProfileStore())
-
+const { role, profiles, profile } = storeToRefs(useProfileStore())
+const currDate = ref<Date>();
+const dateTries = ref(0);
 const filter_val = ref('pending')
+
+const lizzy_locations = computed(() => {
+	return locations.value.filter(loc => ['madina', 'kwashieman', 'manet'].includes(loc))
+})
+const asor_locations = computed(() => {
+	return locations.value.filter(loc => ['spintex', 'ashaiman'].includes(loc))
+})
+const nana_locations = computed(() => {
+	return locations.value.filter(loc => ['circle'].includes(loc))
+})
+const lertty_locations = computed(() => {
+	return locations.value.filter(loc => ['circle'].includes(loc))
+})
+
+onMounted(() => {
+	console.log(lizzy_locations.value);
+})
+
+const locationz = computed(() => {
+	if (profile.value?.email == 'lizzymadina@gmail.com') {
+		return lizzy_locations.value
+	} else if (profile.value?.email == 'asorlarbi@gmail.com') {
+		return asor_locations.value
+	} else if (profile.value?.email == 'ebbysgold@gmail.com') {
+		return nana_locations.value
+	} else if (profile.value?.email == 'lertty@gmail.com') {
+		return lertty_locations.value
+	}
+	else {
+		return locations.value
+	}
+})
+
+async function fetchCurrentDate() {
+	try {
+		const res = await fetch('https://worldtimeapi.org/api/timezone/Africa/Accra');
+		const data = await res.json();
+		// const dateObj = new Date(data.datetime);
+		currDate.value = new Date(data.datetime) // format: DD/MM/YYYY
+		console.log('Current Date:', currDate.value);
+
+	} catch (e) {
+		// currDate.value = new Date().toLocaleDateString('en-GB');
+		if (dateTries.value < 3) {
+			dateTries.value++;
+			console.error('Error fetching date, retrying...', e);
+			await fetchCurrentDate();
+		} else {
+			dateTries.value = 0;
+			currDate.value = new Date(); // fallback to local date
+			console.error('Failed to fetch date after multiple attempts, using local date:', currDate.value);
+		}
+	}
+}
+
+onBeforeMount(() => {
+	fetchCurrentDate();
+	let requestz = requests.value.filter(req => locationz.value.includes(req.modified_apl!.location!))
+	console.log(requestz);
+
+});
+
 const curr_filtered_req = computed(() => {
+	let requestz = requests.value.filter(req => locationz.value.includes(req.modified_apl!.location!))
+
 	if (role.value) {
-		if (filter_val.value == 'all') return requests.value
-		if (filter_val.value == 'pending') return requests.value.filter(req => req.status == 'pending')
-		if (filter_val.value == 'rejected') return requests.value.filter(req => req.status == 'rejected')
-		if (filter_val.value == 'approved') return requests.value.filter(req => req.status == 'approved')
-		if (filter_val.value == 'edit') return requests.value.filter(req => req.modify_type == 'edit')
-		if (filter_val.value == 'delete') return requests.value.filter(req => req.modify_type == 'delete')
-		if (filter_val.value == 'discount') return requests.value.filter(req => req.modify_type == 'discount')
+		if (filter_val.value == 'all') return requestz
+		if (filter_val.value == 'pending') return requestz.filter(req => req.status == 'pending')
+		if (filter_val.value == 'rejected') return requestz.filter(req => req.status == 'rejected')
+		if (filter_val.value == 'approved') return requestz.filter(req => req.status == 'approved')
+		if (filter_val.value == 'edit') return requestz.filter(req => req.modify_type == 'edit')
+		if (filter_val.value == 'delete') return requestz.filter(req => req.modify_type == 'delete')
+		if (filter_val.value == 'discount') return requestz.filter(req => req.modify_type == 'discount')
 	} else {
 		if (filter_val.value == 'all') return my_requests.value
 		if (filter_val.value == 'pending') return my_requests.value.filter(req => req.status == 'pending')
@@ -328,6 +393,8 @@ async function updateApplicant(req: Requests) {
 async function handleApprove(req: Requests) {
 	// type of request
 	let ty = req.modify_type
+	req.modified_apl!.updated_at = currDate.value
+
 
 	if (ty == 'delete') {
 		await deleteApplicant(req)
@@ -337,12 +404,14 @@ async function handleApprove(req: Requests) {
 	} else if (ty == 'discount') {
 		await approveDiscount(req)
 		await updateRequestType(req, 'approved')
+		updateMeta(req.apl_id)
 		await useAplStore().sendTransaction(req.modified_apl!, total_apls.value.find(apl => apl.apl_id == req.apl_id)!, ty, req.id)
 
 
 	} else if (ty == 'edit') {
 		await updateApplicant(req)
 		await updateRequestType(req, 'approved')
+		updateMeta(req.apl_id)
 		await useAplStore().sendTransaction(req.modified_apl!, total_apls.value.find(apl => apl.apl_id == req.apl_id)!, ty, req.id)
 
 	}
@@ -369,7 +438,16 @@ async function handleOpen(req: Requests) {
 	console.log(req.modified_apl?.fullName);
 }
 
-// TODO add delete and update ann
+async function updateMeta(aplID: string) {
+	console.log(aplID);
+	try {
+		let { error } = await useNuxtApp().$SB.from('applicants').update({ meta: { oldPrice: total_apls.value.find(apl => apl.apl_id == aplID)!.totalPayment } }).eq('apl_id', aplID)
+		if (error) throw error
+		console.log('meta updated');
+	} catch (error) {
+		console.log(error);
+	}
+}
 </script>
 
 <style scoped></style>

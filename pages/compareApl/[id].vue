@@ -511,6 +511,34 @@ const { $SB, $deepCompareObjects } = useNuxtApp()
 const if_rej = ref(false)
 const if_ap = ref(false)
 let apl = total_apls.value.find(apl => apl.apl_id == request.value.apl_id)
+const currDate = ref<Date>();
+const dateTries = ref(0);
+
+async function fetchCurrentDate() {
+	try {
+		const res = await fetch('https://worldtimeapi.org/api/timezone/Africa/Accra');
+		const data = await res.json();
+		// const dateObj = new Date(data.datetime);
+		currDate.value = new Date(data.datetime) // format: DD/MM/YYYY
+		console.log('Current Date:', currDate.value);
+
+	} catch (e) {
+		// currDate.value = new Date().toLocaleDateString('en-GB');
+		if (dateTries.value < 3) {
+			dateTries.value++;
+			console.error('Error fetching date, retrying...', e);
+			await fetchCurrentDate();
+		} else {
+			dateTries.value = 0;
+			currDate.value = new Date(); // fallback to local date
+			console.error('Failed to fetch date after multiple attempts, using local date:', currDate.value);
+		}
+	}
+}
+
+onBeforeMount(() => {
+	fetchCurrentDate();
+});
 
 console.log(is_mobile.value, 'is_mobile');
 
@@ -631,6 +659,8 @@ async function handleApprove(req: Requests) {
 	loading.value = true
 	// type of request
 	let ty = req.modify_type
+	req.modified_apl!.updated_at = currDate.value
+
 
 	if (ty == 'delete') {
 		await deleteApplicant(req)

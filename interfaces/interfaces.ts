@@ -45,7 +45,6 @@ export interface WardsApplicant {
   wcountry_ob: string;
   index: number | null;
 }
-
 export interface SecApplicant {
   slastName: string;
   sfirstName: string;
@@ -56,22 +55,14 @@ export interface SecApplicant {
   sgender: string;
   sdob: Date | null;
 }
-
-export interface Task {
-  id?: string;
-  created_at?: string;
-  body: string;
-  user_id: string;
-  done?: boolean;
-}
-
 export interface PrimeApplicant {
-  created_at?: Date;
+  updated_at?: Date | string;
+  created_at?: Date | string;
   apl_id?: string;
   plastName: string;
   pfirstName: string;
   potherName: string;
-  pdob: Date | null;
+  pdob: Date | string;
   // pdob_Date: number>
   // pdob_Date: number>
   pcity_ob: string;
@@ -80,7 +71,7 @@ export interface PrimeApplicant {
   pconf_code: string;
   pemail: string;
   ppassport_number: string;
-  passport_ex: Date | null;
+  passport_ex: Date | string;
   // passport_ex_month: number>
   // passport_ex_year: number>
   pcountry_live_today: string;
@@ -108,9 +99,9 @@ export interface PrimeApplicant {
   };
   location?: string;
 }
-
 export interface Applicant {
-  created_at?: Date;
+  updated_at?: Date | string;
+  created_at?: Date | string;
   apl_id?: string;
   plastName: string;
   pfirstName: string;
@@ -155,6 +146,14 @@ export interface Applicant {
   location?: string;
 }
 
+export interface Task {
+  id?: string;
+  created_at?: string;
+  body: string;
+  user_id: string;
+  done?: boolean;
+}
+
 export interface SupervisorInfo {
   created_at?: Date;
   name: string;
@@ -162,6 +161,7 @@ export interface SupervisorInfo {
   phone_number: string;
   whatsapp_number: string;
 }
+
 export interface UserSignIn {
   id: string;
   created_at?: Date;

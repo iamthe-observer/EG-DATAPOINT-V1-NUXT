@@ -10,9 +10,11 @@
 
 <script setup lang="ts">
 const svg = ref<SVGElement>()
+const ifLink = computed(() => useRoute().path == '/database')
+
 const isHover = useElementHover(svg)
 const state = computed(() => {
-	if (isHover.value) {
+	if (isHover.value || ifLink.value) {
 		// hovered
 		return {
 			fill: '#a020f04f',
